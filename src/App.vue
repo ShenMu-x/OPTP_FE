@@ -3,8 +3,14 @@ import HelloWorld from './components/HelloWorld.vue';
 </script>
 
 <template>
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
+    <div id='nav'>
+        <router-link class="link" to='/home'>Home</router-link> |
+        <router-link class="link" to='/user'>User </router-link>
+    </div>
+    <div>
+        <img alt="Vue logo" src="./assets/logo.png" />
+    </div>
+    <router-view></router-view>
 </template>
 
 <style>
