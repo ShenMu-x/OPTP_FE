@@ -11,12 +11,14 @@ function pathResolve(dir:string){
 // https://www.jianshu.com/p/fabbcc385ee6
 // https://juejin.cn/post/7039879176534360077
 export default defineConfig({
-    plugins: [vue()],
+    plugins: [
+        vue(),
+    ],
     resolve: {
         alias: {
             '/@': pathResolve('src'),
         },
-        extensions: ['.mjs','.js','.ts','.jsx','.tsx','.json']
+        extensions: ['.mjs','.js','.ts','.jsx','.tsx','.json','.vue']
     },
      // 强制预构建插件包
      optimizeDeps: {

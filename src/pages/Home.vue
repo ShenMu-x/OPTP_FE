@@ -1,12 +1,10 @@
-<script lang="ts">
+<script lang="ts" setup>
 import UserInfo from '../components/UserInfo.vue';
 import FooterVue from '../components/Footer.vue';
-export default {
-    components: {
-        UserInfo,
-        FooterVue,
-    }
-}
+import { ref } from 'vue';
+const count = ref(0);
+const props = defineProps<{msg?: string}>();
+
 </script>
 
 <template>

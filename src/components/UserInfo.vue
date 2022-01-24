@@ -1,15 +1,12 @@
 <script lang="ts" setup>
-
-    const clickHandler = () => {
-        // $router.replace('./login');
-    }
+    
 </script>
 
 <template>
     <div class="userInfoCt">
         <div class="avatar"></div>
         <div class="username">userName</div>
-        <el-button type="primary" size="large" @click="clickHandler">登录</el-button>
+        <router-link to="/login"> <el-button type="primary" size="large">登录</el-button></router-link>
     </div>
 </template>
 

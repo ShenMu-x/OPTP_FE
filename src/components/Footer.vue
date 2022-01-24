@@ -12,11 +12,15 @@ const count = ref(0);
 
 <style scoped>
 .footer {
-    height: 80px;
-    border-top: 2px solid #c5b673;
-    position: absolute;
-    left: 0;
-    right: 0;
+    position: fixed;
     bottom: 0;
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #002d54;
+    color: #FFFFFF;
+    font-size: 10px;
 }
 </style>

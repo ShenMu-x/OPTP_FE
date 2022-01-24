@@ -6,7 +6,6 @@ defineProps<{ msg?: string }>();
 </script>
 
 <template>
-    <div class="bg-img"></div>
     <router-view></router-view>
 </template>
 
@@ -16,16 +15,15 @@ defineProps<{ msg?: string }>();
     padding: 0;
     box-sizing: border-box;
 }
-html{
-    height: 100%;
-    width: 100%;
-}
 #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 </style>
 

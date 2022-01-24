@@ -1,12 +1,22 @@
 // @ts-nocheck
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory  } from "vue-router";
 
 const router = new createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory (),
     routes: [
         {
             path: '/',
-            redirect: '/home'
+            component: () => import("../layout/index.vue"),
+            children: [
+                {
+                    path: '/home',
+                    component: () => import('../pages/Home.vue')
+                },
+                {
+                    path: '/',
+                    component: () => import('../pages/404.vue')
+                },
+            ]
         },
         {
             path: '/login',
