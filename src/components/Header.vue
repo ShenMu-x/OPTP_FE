@@ -5,7 +5,6 @@ import SCNULogo from '../assets/scnulogo.png';
 import { HomeFilled, ArrowLeftBold, Avatar } from '@element-plus/icons-vue';
 
 const router = useRouter();
-const route = useRoute();
 
 const toHome = (command: string | number | object) => {
     if(command === 'toHome') {
@@ -34,14 +33,6 @@ const toHome = (command: string | number | object) => {
                 </el-dropdown-menu>
             </template>
         </el-dropdown>
-        <!-- <div class="user"  @mouseover="showPanel" @mouseout="closePanel">
-            
-            <div class="userPanel" v-show="isShowPanel">
-                <template v-for="item in userPanel" :key="item.key">
-                    <div class="option">{{item.title}}</div>
-                </template>
-            </div>
-        </div> -->
   </div>
 </template>
 

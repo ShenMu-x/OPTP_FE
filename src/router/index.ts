@@ -1,41 +1,51 @@
 // @ts-nocheck
 import { createRouter, createWebHistory  } from "vue-router";
-
+import { getToken } from "../utils/storage";
 const router = new createRouter({
     history: createWebHistory (),
     routes: [
+        {
+            path: '/login',
+            component: () => import('../pages/login/Login.vue')
+        },
+        {
+            path:'/register',
+            component: () => import( '../pages/login/Register.vue'),
+        },
         {
             path: '/',
             component: () => import("../layout/index.vue"),
             children: [
                 {
-                    path: '/home',
-                    component: () => import('../pages/Home.vue')
+                    path: '/userCenter',
+                    component: () => import('../pages/user/userCenter.vue')
                 },
                 {
                     path: '/',
-                    component: () => import('../pages/404.vue')
+                    component: () => import('../pages/user/userCenter.vue')
                 },
             ]
-        },
-        {
-            path: '/login',
-            component: () => import('../pages/Login.vue')
-        },
-        {
-            path: '/home',
-            component: () => import('../pages/Home.vue')
-        },
-        {
-            path: '/user',
-            component: () => import('../pages/User.vue')
         },
     ]
 });
 
 router.beforeEach((to, from, next) => {
-    console.log(to, from, 111);
-    next();
-});
+    let token = getToken();
+    const canNoLoginPath = ['/login', '/change_pwd', '/register'];
+    
+    if(!token && !canNoLoginPath.includes(to.path)){
+        // next('./login');
+        next('./register');
+        return;
+    }
+
+    // 强制跳转
+    if (to.path === '/') {
+        next('/user_center')
+        return
+    }
+    next()
+    return
+})
 
 export default router;
