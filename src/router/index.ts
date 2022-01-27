@@ -21,12 +21,8 @@ const router = new createRouter({
             component: () => import("../layout/index.vue"),
             children: [
                 {
-                    path: '/userCenter',
-                    component: () => import('../pages/user/userCenter.vue')
-                },
-                {
-                    path: '/',
-                    component: () => import('../pages/user/userCenter.vue')
+                    path: '/usercenter',
+                    component: () => import('../pages/user/UserCenter.vue')
                 },
             ]
         },
@@ -38,14 +34,13 @@ router.beforeEach((to, from, next) => {
     const canNoLoginPath = ['/login', '/authentication', '/register'];
     
     if(!token && !canNoLoginPath.includes(to.path)){
-        // next('./login');
-        next('./register');
+        next('./login');
         return;
     }
 
     // 强制跳转
     if (to.path === '/') {
-        next('/user_center')
+        next('/usercenter')
         return
     }
     next()

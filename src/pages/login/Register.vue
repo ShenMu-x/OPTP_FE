@@ -1,7 +1,7 @@
 <template>
   <Layout>
     <div class="formCt registerFormCt">
-      <el-button class="textBtnInForm returnBtn" :icon="DArrowLeft" @click="redirect('login')" type="text">返回</el-button>
+      <el-button class="textBtnInForm returnBtn" :icon="DArrowLeft" @click="redirect('/login')" type="text">返回</el-button>
       <p class="formTitle">用户注册</p>
       <el-form label-position="top" class="registerForm" :model="registerModel" :rules="rules">
         <el-form-item label="邮箱" prop="email">
@@ -39,7 +39,7 @@
           </el-radio-group>
         </el-form-item>
         <el-button type="primary" class="rectBtnHover registerBtn" @click="registerHandler">点击注册</el-button>
-        <div class="registerBtnCt">已有账号？<span class="textBtnInForm" @click="redirect('./login')">点击登录</span></div>
+        <div class="registerBtnCt">已有账号？<span class="textBtnInForm" @click="redirect('/login')">点击登录</span></div>
       </el-form>
     </div>
   </Layout>

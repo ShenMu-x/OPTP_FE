@@ -7,7 +7,7 @@ import Header from '../components/Header.vue';
 <template>
     <div class="layout">
         <Header />
-        <main><router-view /></main>
+        <main class="layoutMain"><router-view /></main>
         <Footer />
     </div>
 </template>
@@ -16,5 +16,13 @@ import Header from '../components/Header.vue';
 .layout {
     display: flex;
     flex-direction: column;
+    height: 100%;
+
+    .layoutMain {
+        background-color: #e9eef3;
+        min-height: calc(100% - 60px - 30px);
+    }
 }
+
+
 </style>
