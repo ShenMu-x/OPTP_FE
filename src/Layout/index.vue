@@ -20,7 +20,6 @@ import Header from '../components/Header.vue';
 
     .layoutMain {
         background-color: #e9eef3;
-        min-height: calc(100% - 60px - 30px);
     }
 }
 

@@ -55,7 +55,7 @@ import { ElMessage } from 'element-plus';
 const router = useRouter();
 const isGettingCode = ref(false);
 const count = ref(2);
-let interval = null;
+let interval: any = null;
 const registerModel = reactive({
   email: '',
   verificationCode: '',
