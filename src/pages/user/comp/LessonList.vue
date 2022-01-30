@@ -6,24 +6,29 @@
                     <Lesson :lesson="item" />
                 </template>
             </template>
-            <div class="noData" v-else>
-                暂无数据
-            </div>
+            <div class="noData" v-else>暂无数据</div>
         </div>
-    <el-pagination v-model:currentPage="current" layout="prev, pager, next" :total="props.lessons?.length" :page-size="pageSize" hide-on-single-page></el-pagination>
-  </div>
+        <el-pagination
+            v-if="props?.lessons?.length ?? 0 > 0"
+            v-model:currentPage="current"
+            layout="prev, pager, next"
+            :total="props?.lessons?.length"
+            :page-size="pageSize"
+            hide-on-single-page
+        ></el-pagination>
+    </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, computed, toRefs, onMounted } from 'vue';
 import Lesson from './Lesson.vue';
-import { LessonListType } from '../type';
-const props = defineProps<{lessons?: LessonListType}>();
+import { LessonListType } from '@/type';
+const props = defineProps<{ lessons?: LessonListType }>();
 const current = ref(1)
 const pageSize = ref(6);
 
 const currentIdx = computed(() => (current.value - 1) * pageSize.value)
-const content = computed(() => props?.lessons?.slice(currentIdx.value , currentIdx.value + pageSize.value));
+const content = computed(() => props?.lessons?.slice(currentIdx.value, currentIdx.value + pageSize.value));
 
 </script>
 
@@ -32,11 +37,11 @@ const content = computed(() => props?.lessons?.slice(currentIdx.value , currentI
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    height: 480px;
+    min-height: 480px;
     padding-top: 20px;
 }
 
-.noData{
+.noData {
     flex: 1;
     text-align: center;
 }

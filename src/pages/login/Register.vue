@@ -1,7 +1,12 @@
 <template>
   <Layout>
     <div class="formCt registerFormCt">
-      <el-button class="textBtnInForm returnBtn" :icon="DArrowLeft" @click="redirect('/login')" type="text">返回</el-button>
+      <el-button
+        class="textBtnInForm returnBtn"
+        :icon="DArrowLeft"
+        @click="redirect('/login')"
+        type="text"
+      >返回</el-button>
       <p class="formTitle">用户注册</p>
       <el-form label-position="top" class="registerForm" :model="registerModel" :rules="rules">
         <el-form-item label="邮箱" prop="email">
@@ -9,9 +14,18 @@
         </el-form-item>
         <el-form-item label="验证码" prop="verificationCode">
           <div class="codeInpCt">
-            <el-input class="codeInput"  placeholder="请输入验证码" v-model="registerModel.verificationCode"/>
-            <el-button class="rectBtnHover" type="primary" @click="getVerificationCode" v-show="!isGettingCode">获取验证码</el-button>
-            <el-button type="primary" disabled v-show="isGettingCode">{{count}}s后重新获取</el-button>
+            <el-input
+              class="codeInput"
+              placeholder="请输入验证码"
+              v-model="registerModel.verificationCode"
+            />
+            <el-button
+              class="rectBtnHover"
+              type="primary"
+              @click="getVerificationCode"
+              v-show="!isGettingCode"
+            >获取验证码</el-button>
+            <el-button type="primary" disabled v-show="isGettingCode">{{ count }}s后重新获取</el-button>
           </div>
         </el-form-item>
         <el-form-item label="真实姓名" prop="userName">
@@ -26,20 +40,23 @@
         <el-form-item label="单位" prop="organization">
           <el-input v-model="registerModel.organization" clearable></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password" >
+        <el-form-item label="密码" prop="password">
           <el-input v-model="registerModel.password" clearable show-password></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="passwordCheck">
           <el-input v-model="registerModel.passwordCheck" clearable show-password></el-input>
         </el-form-item>
-        <el-form-item label="性别" class="flex justify-start" >
+        <el-form-item label="性别" class="flex justify-start">
           <el-radio-group v-model="registerModel.sex">
             <el-radio :label="0">男</el-radio>
             <el-radio :label="1">女</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-button type="primary" class="rectBtnHover registerBtn" @click="registerHandler">点击注册</el-button>
-        <div class="registerBtnCt">已有账号？<span class="textBtnInForm" @click="redirect('/login')">点击登录</span></div>
+        <div class="registerBtnCt">
+          已有账号？
+          <span class="textBtnInForm" @click="redirect('/login')">点击登录</span>
+        </div>
       </el-form>
     </div>
   </Layout>
@@ -49,7 +66,7 @@
 import { reactive, ref } from 'vue';
 import Layout from './index.vue';
 import { DArrowLeft } from '@element-plus/icons-vue';
-import { validateEmail } from './vaildateRules';
+import { validateEmail } from '../../utils/helper/validate';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 const router = useRouter();
@@ -85,14 +102,14 @@ const rules = reactive({
       message: '请输入邮箱',
       trigger: 'blur',
     },
-    { 
+    {
       pattern: '^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$',
-      message: '请输入正确格式的邮箱', 
-      trigger: 'blur' 
+      message: '请输入正确格式的邮箱',
+      trigger: 'blur'
     },
-    { 
+    {
       validator: validateEmail,
-      trigger: 'blur' 
+      trigger: 'blur'
     }
   ],
   verificationCode: [
@@ -142,9 +159,9 @@ const rules = reactive({
       message: '请再次输入密码',
       trigger: 'blur',
     },
-    { 
+    {
       validator: validatePass,
-      trigger: 'blur' 
+      trigger: 'blur'
     }
   ],
 })
@@ -156,13 +173,13 @@ const redirect = (url: string) => {
 const getVerificationCode = () => {
   console.log('xh--> get code');
   isGettingCode.value = true;
-  if(interval) {
+  if (interval) {
     clearInterval(interval);
     interval = null;
-  } 
+  }
   interval = setInterval(() => {
     count.value--;
-    if(count.value <= 0) {
+    if (count.value <= 0) {
       clearInterval(interval);
       interval = null;
       isGettingCode.value = false;
@@ -178,7 +195,7 @@ const registerHandler = () => {
     type: 'success',
     duration: 1000
   });
-  
+
 }
 
 
@@ -216,7 +233,7 @@ const registerHandler = () => {
   position: relative;
 }
 
-.codeInpCt{
+.codeInpCt {
   display: flex;
   width: 100%;
 
@@ -225,7 +242,7 @@ const registerHandler = () => {
     margin-right: 40px;
   }
 }
-.forgetBtn{
+.forgetBtn {
   position: absolute;
   line-height: 22px;
   top: -34px;

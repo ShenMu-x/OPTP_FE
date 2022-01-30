@@ -1,11 +1,6 @@
 import { defineConfig } from 'vite';
-import { resolve } from 'path';
+import path from "path";
 import vue from '@vitejs/plugin-vue';
-
-// 获取绝对路径
-function pathResolve(dir:string){
-    return resolve(__dirname, '.',dir);
-}
 
 // https://vitejs.dev/config/
 // https://www.jianshu.com/p/fabbcc385ee6
@@ -16,7 +11,7 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '/@': pathResolve('src'),
+            "@": path.resolve(__dirname, "src"),
         },
         extensions: ['.mjs','.js','.ts','.jsx','.tsx','.json','.vue']
     },

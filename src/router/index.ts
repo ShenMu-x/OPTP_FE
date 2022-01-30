@@ -24,6 +24,10 @@ const router = new createRouter({
                     path: '/usercenter',
                     component: () => import('../pages/user/UserCenter.vue')
                 },
+                {
+                    path: '/editinfo',
+                    component: () => import('../pages/user/EditInfo.vue')
+                }
             ]
         },
     ]

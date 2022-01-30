@@ -13,7 +13,7 @@
         <div class="lessonsInfo">
             <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
                 <el-tab-pane label="已创建课程" name="coursesCreated">
-                    <LessonList />
+                    <LessonList :lessons="mockData" />
                 </el-tab-pane>
                 <el-tab-pane label="已加入课程" name="coursesJoin">
                     <LessonList />
@@ -42,23 +42,53 @@
 .userInfo, .codeStatistics, .lessonsInfo {
     background-color: #fff;
     margin-top: 20px;
-     padding: 20px;
+    padding: 20px;
 }
 .statTitle {
     font-size: 20px;
     text-align: left;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 </style>
 
 <script lang="ts" setup>
-import UserInfo from './UserInfo.vue';
+import { reactive, ref } from 'vue';
+import UserInfo from './comp/UserInfo.vue';
 import CodingTimeTable from './comp/CodingTimeTable.vue';
-import { ref, reactive } from 'vue';
 import LessonList from './comp/LessonList.vue';
+import { LessonListType } from '@/type';
+
+const activeName = ref('coursesCreated');
+
+const mockData = reactive<LessonListType>([
+    {
+        courseId: '1',
+        courseName: '一节课ddddddddddddddddddddddddddd',
+        isClose: 1,
+        description: '',
+        createdAt: Date.now(),
+        coverUrl: ''
+    },
+    {
+        courseId: '2',
+        courseName: '一节课',
+        isClose: 0,
+        description: '门店名称撒dons从你我是怕陈年往门店名称撒dons从你我是怕陈年往事的农产品按产品十大女仆南师大VS的女仆四年事的农产品按产品十大女仆南师大VS的女仆四年',
+        createdAt: Date.now(),
+        coverUrl: ''
+    },{
+        courseId: '3',
+        courseName: '一节课',
+        isClose: 0,
+        description: '年往门店名称撒dons从你我是怕陈年往事的年往门店名称撒dons从你我是怕陈年往事的',
+        createdAt: new Date().toDateString(),
+        coverUrl: ''
+    }
+])
+
 const handleTabClick = (obj: any) => {
     console.log(obj?.props?.label);
-}
-const activeName = ref('coursesCreated')
+};
+
 </script>

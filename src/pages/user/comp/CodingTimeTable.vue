@@ -4,7 +4,7 @@
 
 <style lang="less" scoped>
 #statEChartCt {
-    height: 200px;
+    height: 180px;
     width: 100%;
 }
 </style>

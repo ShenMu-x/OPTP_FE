@@ -1,9 +1,25 @@
+export const validateName = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('请输入真实姓名'));
+  } else {
+    callback();
+  }
+};
+
+export const validateMajor = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('请输入真实专业'));
+  } else {
+    callback();
+  }
+};
+
 export const validateEmail = (rule: any, value: any, callback: any) => {
-    if (value === '') {
-      callback(new Error('请输入邮箱'));
-    } else {
-        callback();
-        // 邮箱校验
+  if (value === '') {
+    callback(new Error('请输入真实姓名'));
+  } else {
+    callback();
+    // 邮箱校验
     //   let self = this
     //   this.axios({
     //     method: "get",
@@ -20,5 +36,5 @@ export const validateEmail = (rule: any, value: any, callback: any) => {
     //         }
     //       }
     //   );
-    }
-  };
+  }
+};
