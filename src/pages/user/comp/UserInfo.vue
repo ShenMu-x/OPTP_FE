@@ -3,15 +3,13 @@ import { Edit } from '@element-plus/icons-vue';
 import { reactive } from 'vue-demi';
 import { userInfoType } from '@/type';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 const router = useRouter();
+const store = useStore();
 
 // 从用户存储中取出
-const userInfo: userInfoType = reactive({
-    email: 'xxx@111.com',
-    userName: '用户名',
-    uid: '123456789'
-})
+const userInfo: userInfoType = reactive(store.state.user);
 
 const handlerEditInfo = () => {
     // 跳转修改用户信息页

@@ -8,7 +8,10 @@ const store = createStore({
             user: {
                 email: 'xxx@111.com',
                 userName: '用户名',
-                uid: '123456789'
+                uid: '123456789',
+                major: '计算机科学与技术',
+                organization: '华南师范大学',
+                sex: 1
             } as userInfoType
         }
     },

@@ -1,6 +1,11 @@
 <template>
     <div class="editCt">
-        <el-button class="returnBtn" :icon="DArrowLeft" type="text" @click="router.push('/usercenter')">返回</el-button>
+        <el-button
+            class="returnBtn"
+            :icon="DArrowLeft"
+            type="text"
+            @click="router.push('/usercenter')"
+        >返回</el-button>
         <p class="formTitle">修改信息</p>
         <el-form label-position="top" class="editInfoForm" :model="editModel" :rules="rules">
             <el-form-item label="头像" prop="avatar">
@@ -51,6 +56,12 @@
 .avatarUploader {
     cursor: pointer;
 }
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    display: block;
+}
 .noImg {
     font-size: 50px;
     line-height: 100px;
@@ -67,11 +78,6 @@
     &.el-upload:focus {
         color: #aaa;
     }
-}
-.avatar {
-    width: 100px;
-    height: 100px;
-    display: block;
 }
 
 .returnBtn {
@@ -92,13 +98,6 @@
     margin-bottom: 20px;
 }
 
-.title {
-    margin-left: 20px;
-    align-self: flex-start;
-    font-weight: bold;
-    font-size: 16px;
-}
-
 .editInfoForm {
     padding: 10px 30px;
 }
@@ -114,7 +113,7 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { DArrowLeft } from '@element-plus/icons-vue';
 import type {
     UploadFile,
@@ -123,7 +122,7 @@ import type {
 } from 'element-plus/es/components/upload/src/upload.type'
 import { validateName, validateMajor } from '../../utils/helper/validate';
 import { useRouter } from 'vue-router';
-import { useStore } from 'vuex'
+import { useStore } from 'vuex';
 
 const router = useRouter();
 const store = useStore();
@@ -146,17 +145,29 @@ const beforeAvatarUpload = (file: ElFile) => {
 }
 
 const editHandler = () => {
-    //
+    ElMessageBox.confirm(
+        '确定提交？',
+        '修改提交确认',
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'success',
+            lockScroll: false,
+        }
+    )
+        .then(() => {
+            ElMessage({
+                type: 'success',
+                message: '修改成功',
+            })
+        })
+        .catch(() => {
+            //
+        })
 }
 
-const editModel = reactive({
-    avatar: '',
-    userName: '',
-    uid: '',
-    major: '',
-    organization: '',
-    sex: 0,
-});
+
+const editModel = reactive(store.state.user);
 
 const rules = reactive({
     userName: [

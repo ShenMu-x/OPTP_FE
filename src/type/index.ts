@@ -15,5 +15,6 @@ export type userInfoType = {
     uid: string,
     major?: string,
     organization?: string,
-    sex?: string,
+    sex?: number,
+    avatar?: string,
 }
