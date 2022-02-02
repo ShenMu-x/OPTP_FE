@@ -21,13 +21,15 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { LessonType } from '@/type';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const props = defineProps<{ lesson: LessonType }>();
 
 const isClose = ref(props.lesson.isClose === 1);
 
 const toLesson = () => {
-
+    router.push(`/lessonDetail/${props.lesson.courseId}`);
 }
 </script>
 
@@ -45,6 +47,10 @@ const toLesson = () => {
     justify-content: flex-start;
     align-items: flex-start;
     padding: 20px;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 .lessonMain {
@@ -117,20 +123,4 @@ const toLesson = () => {
     color: #f56c6c;
 }
 
-// 适配
-@media screen and (max-width: 1350px) {
-    .lessonCt {
-        height: 200px;
-        flex-basis: 48%;
-        width: 48%;
-    }
-}
-
-@media screen and (max-width: 920px) {
-    .lessonCt {
-        height: 200px;
-        flex-basis: 100%;
-        width: 100%;
-    }
-}
 </style>

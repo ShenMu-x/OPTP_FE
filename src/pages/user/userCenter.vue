@@ -56,7 +56,7 @@
 import { reactive, ref } from 'vue';
 import UserInfo from './comp/UserInfo.vue';
 import CodingTimeTable from './comp/CodingTimeTable.vue';
-import LessonList from './comp/LessonList.vue';
+import LessonList from '@/components/lesson/LessonList.vue';
 import { LessonListType } from '@/type';
 import { mockLessonsData } from './mockdata';
 

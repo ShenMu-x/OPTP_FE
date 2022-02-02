@@ -3,7 +3,7 @@
         <div class="lessonsCt">
             <template v-if="content?.length && content.length > 0">
                 <template v-for="item in content" :key="item.id">
-                    <Lesson :lesson="item" />
+                    <Lesson :lesson="item" class="lessonCt" />
                 </template>
             </template>
             <div class="noData" v-else>暂无数据</div>
@@ -33,6 +33,7 @@ const content = computed(() => props?.lessons?.slice(currentIdx.value, currentId
 </script>
 
 <style lang="less" scoped>
+@import url('@/styles/var.less');
 .lessonsCt {
     display: flex;
     flex-wrap: wrap;
@@ -44,5 +45,25 @@ const content = computed(() => props?.lessons?.slice(currentIdx.value, currentId
 .noData {
     flex: 1;
     text-align: center;
+}
+
+.lessonCt {
+    flex-basis: 100%;
+    width: 100%;
+}
+
+@media screen and (min-width: @min-width) {
+    .lessonCt {
+        flex-basis: 48%;
+        width: 48%;
+    }
+}
+
+// 适配
+@media screen and (min-width: @middle-width) {
+    .lessonCt {
+        flex-basis: 30%;
+        width: 30%;
+    }
 }
 </style>

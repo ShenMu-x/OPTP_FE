@@ -27,6 +27,10 @@ const router = new createRouter({
                 {
                     path: '/editinfo',
                     component: () => import('../pages/user/EditInfo.vue')
+                },
+                {
+                    path: '/lessonDetail/:courseId',
+                    component: () => import('../pages/lesson/LessonDetail.vue')
                 }
             ]
         },

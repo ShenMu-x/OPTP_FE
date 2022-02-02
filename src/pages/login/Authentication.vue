@@ -31,7 +31,7 @@
 import { reactive, ref } from 'vue';
 import Layout from './index.vue';
 import { DArrowLeft } from '@element-plus/icons-vue';
-import { validateEmail } from './vaildateRules';
+import { validateEmail } from '@/utils/helper/validate';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 const router = useRouter();

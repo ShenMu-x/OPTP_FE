@@ -16,10 +16,11 @@ import Header from '../components/Header.vue';
 .layout {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    background-color: #e9eef3;
+    min-height: 100%;
 
     .layoutMain {
-        background-color: #e9eef3;
+        position: relative;
     }
 }
 
