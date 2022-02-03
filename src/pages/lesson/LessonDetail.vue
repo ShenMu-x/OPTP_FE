@@ -6,23 +6,38 @@
             <div class="title">课程详情</div>
         </div>
         <div class="bodyCt">
-            <div class="lessonCard">课程详情卡片</div>
-            <div class="teacherCard">教师信息卡片</div>
+            <div class="leftCt">
+                <Lesson :lesson="lessonMock" class="lessonCard" />
+                <div class="leftInnerCt">
+                    <TeacherNotice />
+                </div>
+                <div class="qaCard">课程回答组件</div>
+            </div>
+            <div class="rightCt">
+                <TeacherNotice />
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue-demi';
-import { useRouter, useRoute } from 'vue-router';
+import { reactive, ref } from 'vue-demi';
+import { useRoute } from 'vue-router';
 import ReturnBtn from '@/components/ReturnBtn.vue';
 import Lesson from '@/components/lesson/Lesson.vue';
+import { lesson } from './mock';
+import TeacherNotice from './comp/TeacherNotice.vue';
 const route = useRoute();
-// {{courseId}}
+
 const courseId = ref(route.params);
+
+// fetch lesson message
+
+const lessonMock = reactive(lesson);
 </script>
 
 <style lang="less" scoped>
+@import url("@/styles/var.less");
 .detailCt {
     margin: 20px;
 }
@@ -46,21 +61,50 @@ const courseId = ref(route.params);
 }
 
 .bodyCt {
-    margin-top: 20px;
-    margin: 20px 80px;
+    margin: 20px 80px 80px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+}
 
+.leftCt {
+    width: 100%;
     .lessonCard {
-        height: 300px;
-        width: 65%;
+        height: 200px;
         background-color: #fff;
     }
 
-    .teacherCard {
-        margin-left: 40px;
-        width: 33%;
+    .qaCard {
+        margin-top: 20px;
+        height: 600px;
         background-color: #fff;
+    }
+}
+
+.rightCt {
+    display: none;
+}
+
+.leftInnerCt {
+    display: block;
+}
+
+@media screen and (min-width: @min-width) {
+    .bodyCt {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .leftCt {
+        width: 70%;
+    }
+    .rightCt {
+        display: block;
+        margin-top: 0;
+        margin-left: 40px;
+        width: 28%;
+    }
+
+    .leftInnerCt {
+        display: none;
     }
 }
 </style>

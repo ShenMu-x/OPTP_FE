@@ -50,6 +50,14 @@ const content = computed(() => props?.lessons?.slice(currentIdx.value, currentId
 .lessonCt {
     flex-basis: 100%;
     width: 100%;
+
+    background-image: linear-gradient( 135deg, #72eef21e 10%, #5151e51e 100%);
+    border: 1px solid #c8cace;
+    border-radius: 4px;
+    &:hover {
+        cursor: pointer;
+        box-shadow: 0 0 20px #5151e51e;
+    }
 }
 
 @media screen and (min-width: @min-width) {

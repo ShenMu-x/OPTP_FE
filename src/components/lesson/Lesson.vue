@@ -36,21 +36,14 @@ const toLesson = () => {
 <style lang="less" scoped>
 .lessonCt {
     height: 200px;
-    flex-basis: 30%;
-    width: 30%;
-    background-image: linear-gradient( 135deg, #72eef21e 10%, #5151e51e 100%);
-    border: 1px solid #c8cace;
-    border-radius: 4px;
+    flex-basis: 100%;
+    width: 100%;
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
     padding: 20px;
-
-    &:hover {
-        cursor: pointer;
-    }
 }
 
 .lessonMain {
