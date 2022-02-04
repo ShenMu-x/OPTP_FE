@@ -2,40 +2,43 @@
 import { resolve } from "path";
 import { createRouter, createWebHistory } from "vue-router";
 import { getToken } from "../utils/storage";
+
+const routes = [
+    {
+        path: '/login',
+        component: () => import('../pages/login/Login.vue')
+    },
+    {
+        path: '/register',
+        component: () => import('../pages/login/Register.vue'),
+    },
+    {
+        path: '/authentication',
+        component: () => import('../pages/login/Authentication.vue'),
+    },
+    {
+        path: '/',
+        component: () => import("../layout/index.vue"),
+        children: [
+            {
+                path: '/usercenter',
+                component: () => import('../pages/user/UserCenter.vue')
+            },
+            {
+                path: '/editinfo',
+                component: () => import('../pages/user/EditInfo.vue')
+            },
+            {
+                path: '/lessonDetail/:courseId',
+                component: () => import('../pages/lesson/LessonDetail.vue')
+            }
+        ]
+    },
+],
+
 const router = new createRouter({
     history: createWebHistory(),
-    routes: [
-        {
-            path: '/login',
-            component: () => import('../pages/login/Login.vue')
-        },
-        {
-            path: '/register',
-            component: () => import('../pages/login/Register.vue'),
-        },
-        {
-            path: '/authentication',
-            component: () => import('../pages/login/Authentication.vue'),
-        },
-        {
-            path: '/',
-            component: () => import("../layout/index.vue"),
-            children: [
-                {
-                    path: '/usercenter',
-                    component: () => import('../pages/user/UserCenter.vue')
-                },
-                {
-                    path: '/editinfo',
-                    component: () => import('../pages/user/EditInfo.vue')
-                },
-                {
-                    path: '/lessonDetail/:courseId',
-                    component: () => import('../pages/lesson/LessonDetail.vue')
-                }
-            ]
-        },
-    ],
+    routes,
 });
 
 router.beforeEach((to, from, next) => {
