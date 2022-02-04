@@ -1,7 +1,7 @@
 <template>
     <div class="lessonCt" @click="toLesson">
         <div class="lessonMain">
-            <div class="cover">cover</div>
+            <Avatar type="large" class="cover"/>
             <div class="lessonInfo">
                 <div
                     class="lessonTitle"
@@ -22,6 +22,7 @@
 import { ref } from 'vue';
 import { LessonType } from '@/type';
 import { useRouter } from 'vue-router';
+import Avatar from '../user/Avatar.vue';
 
 const router = useRouter();
 const props = defineProps<{ lesson: LessonType }>();
@@ -29,6 +30,7 @@ const props = defineProps<{ lesson: LessonType }>();
 const isClose = ref(props.lesson.isClose === 1);
 
 const toLesson = () => {
+    console.log('tolesson', props.lesson.courseId)
     router.push(`/lessonDetail/${props.lesson.courseId}`);
 }
 </script>

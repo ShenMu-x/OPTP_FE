@@ -4,6 +4,7 @@ import { reactive } from 'vue-demi';
 import { userInfoType } from '@/type';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import Avatar from '@/components/user/Avatar.vue';
 
 const router = useRouter();
 const store = useStore();
@@ -23,7 +24,7 @@ const handlerLogOut = () => {
 
 <template>
     <div class="userInfoCt">
-        <div class="avatar"></div>
+        <Avatar type="large"/>
         <div class="info">
             <div class="username">
                 {{userInfo.userName}}
@@ -42,11 +43,7 @@ const handlerLogOut = () => {
     display: flex;
     align-items: center;
 }
-.avatar{
-    height: 100px;
-    width: 100px;
-    background-color: #9f9f9f;
-}
+
 .username{
     font-size: 30px;
     font-weight: 500;
@@ -54,7 +51,7 @@ const handlerLogOut = () => {
 }
 
 .info {
-    height: 100px;
+    height: 80px;
     margin-left: 20px;
     flex: 1;
     display: flex;

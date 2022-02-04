@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router';
 import { Back } from '@element-plus/icons-vue';
 const router = useRouter();
 const handlerReturn = () => {
-    router.go(-1);
+    router.back();
 };
 </script>
 

@@ -9,31 +9,51 @@
             <div class="leftCt">
                 <Lesson :lesson="lessonMock" class="lessonCard" />
                 <div class="leftInnerCt">
-                    <TeacherNotice />
+                    <TeacherNotice :teacherInfo="teacherInfo" />
                 </div>
-                <div class="qaCard">课程回答组件</div>
+                <div class="qaCard">
+                    <div class="qaTitle">课程问答(条)</div>
+                    <CommentInput title="提出我的问题" :submitComment="submitComment" />
+                    <Comment />
+                </div>
             </div>
             <div class="rightCt">
-                <TeacherNotice />
+                <TeacherNotice :teacherInfo="teacherInfo" />
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue-demi';
+import { onMounted, reactive, ref } from 'vue-demi';
 import { useRoute } from 'vue-router';
 import ReturnBtn from '@/components/ReturnBtn.vue';
 import Lesson from '@/components/lesson/Lesson.vue';
-import { lesson } from './mock';
+import Comment from '@/components/comment/Comment.vue';
+import { lesson, teacher } from './mock';
 import TeacherNotice from './comp/TeacherNotice.vue';
+import CommentInput from './comp/CommentInput.vue';
+import { scrollToPos } from '@/utils/helper/scrollToPos';
+
+scrollToPos();
+
 const route = useRoute();
 
 const courseId = ref(route.params);
 
 // fetch lesson message
+// fetch teacher message
 
 const lessonMock = reactive(lesson);
+const teacherInfo = reactive(teacher);
+
+const inpQuestion = ref('');
+const submitComment = (comment: string) => {
+    console.log('提交', comment);
+    // 提交成功 / 失败
+}
+
+
 </script>
 
 <style lang="less" scoped>
@@ -75,8 +95,13 @@ const lessonMock = reactive(lesson);
 
     .qaCard {
         margin-top: 20px;
-        height: 600px;
+        padding: 20px;
         background-color: #fff;
+
+        .qaTitle {
+            text-align: left;
+            font-size: 25px;
+        }
     }
 }
 

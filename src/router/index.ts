@@ -1,20 +1,21 @@
 // @ts-nocheck
-import { createRouter, createWebHistory  } from "vue-router";
+import { resolve } from "path";
+import { createRouter, createWebHistory } from "vue-router";
 import { getToken } from "../utils/storage";
 const router = new createRouter({
-    history: createWebHistory (),
+    history: createWebHistory(),
     routes: [
         {
             path: '/login',
             component: () => import('../pages/login/Login.vue')
         },
         {
-            path:'/register',
-            component: () => import( '../pages/login/Register.vue'),
+            path: '/register',
+            component: () => import('../pages/login/Register.vue'),
         },
         {
-            path:'/authentication',
-            component: () => import( '../pages/login/Authentication.vue'),
+            path: '/authentication',
+            component: () => import('../pages/login/Authentication.vue'),
         },
         {
             path: '/',
@@ -34,14 +35,14 @@ const router = new createRouter({
                 }
             ]
         },
-    ]
+    ],
 });
 
 router.beforeEach((to, from, next) => {
     let token = getToken();
     const canNoLoginPath = ['/login', '/authentication', '/register'];
-    
-    if(!token && !canNoLoginPath.includes(to.path)){
+
+    if (!token && !canNoLoginPath.includes(to.path)) {
         next('./login');
         return;
     }
@@ -51,6 +52,7 @@ router.beforeEach((to, from, next) => {
         next('/usercenter')
         return
     }
+
     next()
     return
 })
