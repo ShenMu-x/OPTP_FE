@@ -1,5 +1,30 @@
+<script lang="ts" setup>
+import { ref } from 'vue';
+import SumbitBtn from '@/components/common/SumbitBtn.vue';
+const props = defineProps<{
+    title: string,
+    submitComment: (comment: string) => void,
+    placeHolder?: string,
+    blurHandler?: () => void,
+}>();
+const commentInput = ref('');
+const submitWrap = () => {
+    // 合法性判断
+    props.submitComment(commentInput.value)
+}
+
+const resetInput = () => {
+    commentInput.value = '';
+}
+
+defineExpose({
+    resetInput,
+})
+
+</script>
+
 <template>
-    <div class="commentInpCt">
+    <div class="commentInpCt" @click.stop="" >
         <div class="inpTitle">
             {{
                 props.title
@@ -9,7 +34,7 @@
             <el-form-item>
                 <el-input
                     type="textarea"
-                    placeholder="请输入内容"
+                    :placeholder="props.placeHolder ?? '请输入内容'"
                     v-model="commentInput"
                     maxlength="150"
                     show-word-limit
@@ -19,28 +44,14 @@
             </el-form-item>
         </el-form>
         <div class="submitBtn">
-            <el-button type="primary" @click="submitWrap">提交</el-button>
+            <SumbitBtn :post-api="submitWrap" :param="{text: commentInput}"/>
         </div>
     </div>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue';
-const props = defineProps<{
-    title: string,
-    submitComment: (comment: string) => void
-}>();
-const commentInput = ref('');
-const submitWrap = () => {
-    // 合法性判断
-    props.submitComment(commentInput.value)
-}
-</script>
-
 <style lang="less" scoped>
 .commentInpCt {
-    margin: 20px;
-    padding-bottom: 60px;
+    padding-bottom: 40px;
     position: relative;
     .inpTitle {
         height: 36px;

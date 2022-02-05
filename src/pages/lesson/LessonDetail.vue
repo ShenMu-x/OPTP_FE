@@ -1,42 +1,18 @@
-<template>
-    <div class="detailCt">
-        <div class="headerTitle">
-            <ReturnBtn />
-            <div class="divider"></div>
-            <div class="title">课程详情</div>
-        </div>
-        <div class="bodyCt">
-            <div class="leftCt">
-                <Lesson :lesson="lessonMock" class="lessonCard" />
-                <div class="leftInnerCt">
-                    <TeacherNotice :teacherInfo="teacherInfo" />
-                </div>
-                <div class="qaCard">
-                    <div class="qaTitle">课程问答(条)</div>
-                    <CommentInput title="提出我的问题" :submitComment="submitComment" />
-                    <Comment />
-                </div>
-            </div>
-            <div class="rightCt">
-                <TeacherNotice :teacherInfo="teacherInfo" />
-            </div>
-        </div>
-    </div>
-</template>
-
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue-demi';
 import { useRoute } from 'vue-router';
-import ReturnBtn from '@/components/ReturnBtn.vue';
+import ReturnBtn from '@/components/common/ReturnBtn.vue';
 import Lesson from '@/components/lesson/Lesson.vue';
-import Comment from '@/components/comment/Comment.vue';
 import { lesson, teacher } from './mock';
 import TeacherNotice from './comp/TeacherNotice.vue';
 import CommentInput from './comp/CommentInput.vue';
+import Comment from './comp/Comment.vue';
+import SumbitBtn from '@/components/common/SumbitBtn.vue';
 import { scrollToPos } from '@/utils/helper/scrollToPos';
+import { fetchComment } from '@/utils/services';
 
-scrollToPos();
-
+scrollToPos(0);
+fetchComment();
 const route = useRoute();
 
 const courseId = ref(route.params);
@@ -53,8 +29,53 @@ const submitComment = (comment: string) => {
     // 提交成功 / 失败
 }
 
+const refCommentEl = ref<any>(null);
+
+const blurHandler = () => {
+    refCommentEl.value?.blurHandler?.();
+}
+
+const coursePswInput = ref('');
 
 </script>
+
+<template>
+    <div class="detailCt" @click="blurHandler">
+        <div class="headerTitle">
+            <ReturnBtn />
+            <div class="divider"></div>
+            <div class="title">课程详情</div>
+        </div>
+        <div class="bodyCt">
+            <div class="leftCt">
+                <Lesson :lesson="lessonMock" class="lessonCard" />
+                <div class="courseChooseCard">
+                    <div class="cardTitle">自主选课</div>
+                    <div class="coursePsw">
+                        请输入6位选课密码:
+                        <input type="text" maxlength="6" minlength="6" class="pswInput" v-model="coursePswInput" />
+                    </div>
+                    <SumbitBtn class="submitChooseCourse" title="选课"/>
+                </div>
+                <div class="leftInnerCt">
+                    <TeacherNotice :teacherInfo="teacherInfo" />
+                </div>
+                <div class="qaCard">
+                    <div class="cardTitle">课程问答(条)</div>
+                    <CommentInput
+                        title="提出我的问题"
+                        :submitComment="submitComment"
+                        class="questionInp"
+                    />
+                    <Comment ref="refCommentEl" />
+                </div>
+            </div>
+            <div class="rightCt">
+                <TeacherNotice :teacherInfo="teacherInfo" />
+            </div>
+        </div>
+    </div>
+</template>
 
 <style lang="less" scoped>
 @import url("@/styles/var.less");
@@ -93,14 +114,37 @@ const submitComment = (comment: string) => {
         background-color: #fff;
     }
 
+    .courseChooseCard {
+        margin: 20px 0;
+        padding: 20px;
+        height: 140px;
+        background-color: #fff;
+        text-align: left;
+
+        .pswInput {
+            margin-left: 10px;
+            line-height: 1em;
+            padding: 0 5px;
+        }
+
+        .submitChooseCourse {
+            float: right;
+            margin-right: 20px;
+        }
+    }
+
+    .cardTitle {
+        font-size: 25px;
+        margin-bottom: 10px;
+    }
+
     .qaCard {
         margin-top: 20px;
         padding: 20px;
         background-color: #fff;
 
-        .qaTitle {
-            text-align: left;
-            font-size: 25px;
+        .questionInp {
+            margin: 20px;
         }
     }
 }

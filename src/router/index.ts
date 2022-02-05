@@ -34,7 +34,7 @@ const routes = [
             }
         ]
     },
-],
+];
 
 const router = new createRouter({
     history: createWebHistory(),
