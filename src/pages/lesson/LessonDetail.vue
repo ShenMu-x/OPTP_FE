@@ -3,13 +3,14 @@ import { onMounted, reactive, ref } from 'vue-demi';
 import { useRoute } from 'vue-router';
 import ReturnBtn from '@/components/common/ReturnBtn.vue';
 import Lesson from '@/components/lesson/Lesson.vue';
-import { lesson, teacher } from './mock';
+import { lesson, teacher, commentsMock } from './mock';
 import TeacherNotice from './comp/TeacherNotice.vue';
-import CommentInput from './comp/CommentInput.vue';
-import Comment from './comp/Comment.vue';
+import CommentInput from '@/components/comment/CommentInput.vue';
+import CommentList from '@/components/comment/CommentList.vue';
 import SumbitBtn from '@/components/common/SumbitBtn.vue';
 import { scrollToPos } from '@/utils/helper/scrollToPos';
 import { fetchComment } from '@/utils/services';
+import { commentsType } from '@/type';
 
 scrollToPos(0);
 fetchComment();
@@ -19,9 +20,10 @@ const courseId = ref(route.params);
 
 // fetch lesson message
 // fetch teacher message
-
+// fetch comments
 const lessonMock = reactive(lesson);
 const teacherInfo = reactive(teacher);
+const comments = reactive<commentsType>(commentsMock);
 
 const inpQuestion = ref('');
 const submitComment = (comment: string) => {
@@ -29,18 +31,12 @@ const submitComment = (comment: string) => {
     // 提交成功 / 失败
 }
 
-const refCommentEl = ref<any>(null);
-
-const blurHandler = () => {
-    refCommentEl.value?.blurHandler?.();
-}
-
 const coursePswInput = ref('');
 
 </script>
 
 <template>
-    <div class="detailCt" @click="blurHandler">
+    <div class="detailCt">
         <div class="headerTitle">
             <ReturnBtn />
             <div class="divider"></div>
@@ -67,7 +63,7 @@ const coursePswInput = ref('');
                         :submitComment="submitComment"
                         class="questionInp"
                     />
-                    <Comment ref="refCommentEl" />
+                    <CommentList :comments="comments" />
                 </div>
             </div>
             <div class="rightCt">

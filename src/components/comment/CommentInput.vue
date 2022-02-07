@@ -3,14 +3,15 @@ import { ref } from 'vue';
 import SumbitBtn from '@/components/common/SumbitBtn.vue';
 const props = defineProps<{
     title: string,
-    submitComment: (comment: string) => void,
+    submitComment: (params: any) => void,
     placeHolder?: string,
     blurHandler?: () => void,
+    params?: any
 }>();
 const commentInput = ref('');
-const submitWrap = () => {
+const submitWrap = (params : {commentText: string}) => {
     // 合法性判断
-    props.submitComment(commentInput.value)
+    props.submitComment(params);
 }
 
 const resetInput = () => {
@@ -24,7 +25,7 @@ defineExpose({
 </script>
 
 <template>
-    <div class="commentInpCt" @click.stop="" >
+    <div class="commentInpCt">
         <div class="inpTitle">
             {{
                 props.title
@@ -44,7 +45,7 @@ defineExpose({
             </el-form-item>
         </el-form>
         <div class="submitBtn">
-            <SumbitBtn :post-api="submitWrap" :param="{text: commentInput}"/>
+            <SumbitBtn :postApi="submitWrap" :params="{...props.params, commentText: commentInput}"/>
         </div>
     </div>
 </template>

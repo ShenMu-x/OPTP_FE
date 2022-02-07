@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ElMessage } from 'element-plus'
 const props = defineProps<{
-    param?: any,
+    params?: any,
     postApi?: any,
     successAction?: () => void,
     failAction?: () => void,
@@ -10,8 +10,12 @@ const props = defineProps<{
     failText?: string,
 }>();
 
-const submitHandler = async (params: any, postApi: any) => {
+const submitHandler = async () => {
+    const params = props.params;
+    const postApi = props.postApi;
+
     // const res = await postApi(params);
+    postApi(params);
     const res = { statusCode: 1 };
     const { statusCode } = res;
     if (statusCode === 0) {
@@ -35,5 +39,5 @@ const submitHandler = async (params: any, postApi: any) => {
 </script>
 
 <template>
-    <el-button type="primary" @click="submitHandler">{{props.title ?? '提交'}}</el-button>
+    <el-button type="primary" @click="submitHandler()">{{props.title ?? '提交'}}</el-button>
 </template>
