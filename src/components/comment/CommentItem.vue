@@ -61,7 +61,7 @@ const sumbitReplyComment = (params: any) => {
                 <span v-show="isReplying">收起</span>
                 <span v-show="!isReplying">回复</span>
             </div>
-            <div class="btn replyBtn" v-if="hasReplys" @click="showReplys">
+            <div class="btn replyBtn" v-if="!isReply && hasReplys" @click="showReplys">
                 <span v-show="isReplysShow">收起回复列表</span>
                 <span v-show="!isReplysShow">展开回复列表</span>
             </div>
