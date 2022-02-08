@@ -49,9 +49,15 @@ const coursePswInput = ref('');
                     <div class="cardTitle">自主选课</div>
                     <div class="coursePsw">
                         请输入6位选课密码:
-                        <input type="text" maxlength="6" minlength="6" class="pswInput" v-model="coursePswInput" />
+                        <input
+                            type="text"
+                            maxlength="6"
+                            minlength="6"
+                            class="pswInput"
+                            v-model="coursePswInput"
+                        />
                     </div>
-                    <SumbitBtn class="submitChooseCourse" title="选课"/>
+                    <SumbitBtn class="submitChooseCourse" title="选课" />
                 </div>
                 <div class="leftInnerCt">
                     <TeacherNotice :teacherInfo="teacherInfo" />

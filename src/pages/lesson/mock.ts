@@ -30,7 +30,7 @@ export const commentsMock = [
             replyUsername: 'mock',
             commentText: 'reply_text',
             createdAt: '2022-05-06',
-        },{
+        }, {
             replyId: '12355',
             username: 'mock_reply',
             replyUsername: 'mock',

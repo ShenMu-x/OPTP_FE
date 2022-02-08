@@ -1,12 +1,12 @@
 <template>
-    <router-view></router-view>
+  <router-view></router-view>
 </template>
 
-<style>
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+<style lang="less">
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -17,5 +17,18 @@
   position: absolute;
   width: 100%;
   height: 100%;
+}
+
+.rectBtn {
+  border: 0;
+  background: #002d54;
+  color: #fff;
+  &:hover,
+  &:active,
+  &:focus {
+    border: 0;
+    background: #335776;
+    color: #fff;
+  }
 }
 </style>

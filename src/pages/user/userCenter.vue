@@ -4,12 +4,13 @@ import UserInfo from './comp/UserInfo.vue';
 import CodingTimeTable from './comp/CodingTimeTable.vue';
 import LessonList from '@/components/lesson/LessonList.vue';
 import LabList from '@/components/lesson/LabList.vue';
-import { LessonListType } from '@/type';
-import { mockLessonsData } from './mockdata';
+import { LessonListType, labsType } from '@/type';
+import { mockLessonsData, mockLab } from './mockdata';
 
 const activeName = ref('coursesCreated');
 
 const mockData = reactive<LessonListType>(mockLessonsData);
+const labs = reactive<labsType>(mockLab);
 
 const handleTabClick = (obj: any) => {
     console.log(obj?.props?.label);
@@ -37,7 +38,7 @@ const handleTabClick = (obj: any) => {
                     <LessonList />
                 </el-tab-pane>
                 <el-tab-pane label="我的实验" name="experiments">
-                    <LabList />
+                    <LabList :labList="labs"/>
                 </el-tab-pane>
             </el-tabs>
         </div>
