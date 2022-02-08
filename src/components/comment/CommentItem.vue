@@ -1,43 +1,5 @@
-<script lang="ts" setup>
-import Avatar from '@/components/user/Avatar.vue';
-import { CaretRight } from '@element-plus/icons-vue';
-import { reactive, ref, toRefs } from 'vue-demi';
-import CommentInput from './CommentInput.vue';
-import { commentItemType, commentReplyType } from '@/type';
-
-const props = defineProps<{
-    commentItem?: commentItemType,
-    replyItem?: commentReplyType,
-    isLast?: boolean
-}>();
-
-const isReply = ref(Boolean(props.replyItem));
-const hasReplys = ref(Boolean(props.commentItem?.replyComments));
-const commentItemRef = reactive(props.commentItem ?? {} as commentItemType);
-const replyItemRef = reactive(props.replyItem ?? {} as commentReplyType);
-
-const isReplying = ref(false);
-const isReplysShow = ref(false);
-const isSelf = ref(true);
-
-
-const replyPanelClickHandler = () => {
-    isReplying.value = !isReplying.value;
-}
-
-const showReplys = () => {
-    isReplysShow.value = !isReplysShow.value;
-}
-
-const sumbitReplyComment = (params: any) => {
-    // 提交回复, posi api
-    console.log('submit', params);
-}
-
-</script>
-
 <template>
-    <div :class="['commentCt', props.isLast ? 'borderBottomNone' : '']">
+    <div :class="['commentCt', props.isLast ? 'borderBottomNone' : '', isReply ? 'replysCt' : '']">
         <div class="avatar">
             <Avatar type="small" />
         </div>
@@ -76,16 +38,50 @@ const sumbitReplyComment = (params: any) => {
                 />
             </div>
             <div v-show="hasReplys && isReplysShow" class="replysCt">
-                <CommentItem
-                    v-for="replyItem in commentItemRef?.replyComments"
-                    :key="replyItem.replyId"
-                    :replyItem="replyItem"
-                    class="replyItem"
-                />
+                <CommentList :replys="commentItemRef?.replyComments" />
             </div>
         </div>
     </div>
 </template>
+
+<script lang="ts" setup>
+import Avatar from '@/components/user/Avatar.vue';
+import { CaretRight } from '@element-plus/icons-vue';
+import { reactive, ref, toRefs } from 'vue-demi';
+import CommentInput from './CommentInput.vue';
+import { commentItemType, commentReplyType } from '@/type';
+import CommentList from './CommentList.vue';
+
+const props = defineProps<{
+    commentItem?: commentItemType,
+    replyItem?: commentReplyType,
+    isLast?: boolean,
+}>();
+
+const isReply = ref(Boolean(props.replyItem));
+const hasReplys = ref(Boolean(props.commentItem?.replyComments));
+const commentItemRef = reactive(props.commentItem ?? {} as commentItemType);
+const replyItemRef = reactive(props.replyItem ?? {} as commentReplyType);
+
+const isReplying = ref(false);
+const isReplysShow = ref(false);
+const isSelf = ref(true);
+
+
+const replyPanelClickHandler = () => {
+    isReplying.value = !isReplying.value;
+}
+
+const showReplys = () => {
+    isReplysShow.value = !isReplysShow.value;
+}
+
+const sumbitReplyComment = (params: any) => {
+    // 提交回复, posi api
+    console.log('submit', params);
+}
+
+</script>
 
 <style lang="less" scoped>
 .commentCt {
@@ -98,11 +94,9 @@ const sumbitReplyComment = (params: any) => {
 
 .replysCt {
     margin-top: 40px;
-    .replyItem {
-        width: 100%;
-        margin: 10px 0;
-        border: 0;
-    }
+    width: 100%;
+    margin: 10px 0;
+    border: 0;
 }
 
 .borderBottomNone {

@@ -45,10 +45,10 @@ router.beforeEach((to, from, next) => {
     let token = getToken();
     const canNoLoginPath = ['/login', '/authentication', '/register'];
 
-    if (!token && !canNoLoginPath.includes(to.path)) {
-        next('./login');
-        return;
-    }
+    // if (!token && !canNoLoginPath.includes(to.path)) {
+    //     next('./login');
+    //     return;
+    // }
 
     // 强制跳转
     if (to.path === '/') {

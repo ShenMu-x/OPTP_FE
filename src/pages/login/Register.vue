@@ -1,3 +1,72 @@
+<script lang="ts" setup>
+import { reactive, ref } from 'vue';
+import { DArrowLeft } from '@element-plus/icons-vue';
+import { useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
+import Layout from './index.vue';
+import getRules from './formRules';
+import { stuRegister, getVerificationCodeApi } from '@/utils/services';
+
+const router = useRouter();
+const isGettingCode = ref(false);
+const count = ref(60);
+let interval: any = null;
+const registerModel = reactive({
+  email: '',
+  verificationCode: '',
+  userName: '',
+  uid: '',
+  major: '',
+  organization: '',
+  password: '',
+  passwordCheck: '',
+  sex: '',
+});
+
+const rules = reactive(getRules({ pswCheck: registerModel.password }))
+
+const redirect = (url: string) => {
+  router.replace(url);
+};
+
+const getVerificationCode = () => {
+  getVerificationCodeApi({ email: 'shemmu0710@163.com' });
+  isGettingCode.value = true;
+  if (interval) {
+    clearInterval(interval);
+    interval = null;
+  }
+  interval = setInterval(() => {
+    count.value--;
+    if (count.value <= 0) {
+      clearInterval(interval);
+      interval = null;
+      isGettingCode.value = false;
+      count.value = 60;
+    }
+  }, 1000);
+};
+
+const registerHandler = () => {
+  ElMessage({
+    message: '注册成功！ 请登录。',
+    type: 'success',
+    duration: 1000
+  });
+  stuRegister({
+    email: 'shemmu0710@163.com',
+    realName: '测试号',
+    num: '20182131000',
+    gender: 1,
+    password: '123456',
+    major: '计算机',
+    organization: '华南师范大学',
+    verificationCode: 'bni1yd',
+  })
+}
+
+</script>
+
 <template>
   <Layout>
     <div class="formCt registerFormCt">
@@ -16,7 +85,7 @@
           <div class="codeInpCt">
             <el-input
               class="codeInput"
-              placeholder="请输入验证码"
+              placeholder="请输入6位验证码"
               v-model="registerModel.verificationCode"
             />
             <el-button
@@ -62,147 +131,7 @@
   </Layout>
 </template>
 
-<script lang="ts" setup>
-import { reactive, ref } from 'vue';
-import Layout from './index.vue';
-import { DArrowLeft } from '@element-plus/icons-vue';
-import { validateEmail } from '../../utils/helper/validate';
-import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
-const router = useRouter();
-const isGettingCode = ref(false);
-const count = ref(2);
-let interval: any = null;
-const registerModel = reactive({
-  email: '',
-  verificationCode: '',
-  userName: '',
-  uid: '',
-  major: '',
-  organization: '',
-  password: '',
-  passwordCheck: '',
-  sex: '',
-});
 
-const validatePass = (rule: any, value: any, callback: any) => {
-  if (value === '') {
-    callback(new Error('请再次输入密码'))
-  } else if (value !== registerModel.password) {
-    callback(new Error("密码确认错误"))
-  } else {
-    callback()
-  }
-};
-
-const rules = reactive({
-  email: [
-    {
-      required: true,
-      message: '请输入邮箱',
-      trigger: 'blur',
-    },
-    {
-      pattern: '^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$',
-      message: '请输入正确格式的邮箱',
-      trigger: 'blur'
-    },
-    {
-      validator: validateEmail,
-      trigger: 'blur'
-    }
-  ],
-  verificationCode: [
-    {
-      required: true,
-      message: '请输入验证码',
-      trigger: 'blur',
-    },
-    {
-      min: 4,
-      max: 4,
-      message: '请输入4位验证码',
-      trigger: 'blur',
-    },
-  ],
-  userName: [
-    {
-      required: true,
-      message: '请输入真实姓名',
-      trigger: 'blur',
-    },
-  ],
-  major: [
-    {
-      required: true,
-      message: '请输入专业名称',
-      trigger: 'blur',
-    },
-  ],
-  uid: [
-    {
-      required: true,
-      message: '请输入学号',
-      trigger: 'blur',
-    },
-  ],
-  password: [
-    {
-      required: true,
-      message: '请输入密码，6-8位，包含字母与数字',
-      trigger: 'blur',
-    },
-  ],
-  passwordCheck: [
-    {
-      required: true,
-      message: '请再次输入密码',
-      trigger: 'blur',
-    },
-    {
-      validator: validatePass,
-      trigger: 'blur'
-    }
-  ],
-})
-
-const redirect = (url: string) => {
-  router.replace(url);
-};
-
-const getVerificationCode = () => {
-  console.log('xh--> get code');
-  isGettingCode.value = true;
-  if (interval) {
-    clearInterval(interval);
-    interval = null;
-  }
-  interval = setInterval(() => {
-    count.value--;
-    if (count.value <= 0) {
-      clearInterval(interval);
-      interval = null;
-      isGettingCode.value = false;
-      count.value = 60;
-    }
-  }, 1000);
-};
-
-const registerHandler = () => {
-  console.log('xh--> register', registerModel.email);
-  ElMessage({
-    message: '注册成功！ 请登录。',
-    type: 'success',
-    duration: 1000
-  });
-
-}
-
-
-
-
-
-</script>
 
 <style lang="less" scoped>
 .registerFormCt {

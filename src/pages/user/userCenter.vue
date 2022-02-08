@@ -1,25 +1,43 @@
+<script lang="ts" setup>
+import { reactive, ref } from 'vue';
+import UserInfo from './comp/UserInfo.vue';
+import CodingTimeTable from './comp/CodingTimeTable.vue';
+import LessonList from '@/components/lesson/LessonList.vue';
+import LabList from '@/components/lesson/LabList.vue';
+import { LessonListType } from '@/type';
+import { mockLessonsData } from './mockdata';
+
+const activeName = ref('coursesCreated');
+
+const mockData = reactive<LessonListType>(mockLessonsData);
+
+const handleTabClick = (obj: any) => {
+    console.log(obj?.props?.label);
+};
+
+</script>
+
 <template>
     <div class="userCenterCt">
-        <div class="pageTitle">
-            我的主页
-        </div>
+        <div class="pageTitle">我的主页</div>
         <div class="userInfo">
             <UserInfo />
         </div>
         <div class="codeStatistics">
-            <div class="statTitle">我的编码时长统计（min）</div> 
+            <div class="statTitle">我的编码时长统计（min）</div>
             <CodingTimeTable />
         </div>
         <div class="lessonsInfo">
             <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
-                <el-tab-pane label="已创建课程" name="coursesCreated">
+                <el-tab-pane label="我的课程" name="coursesCreated">
                     <LessonList :lessons="mockData" />
                 </el-tab-pane>
-                <el-tab-pane label="已加入课程" name="coursesJoin">
+                <el-tab-pane label="搜索课程" name="coursesJoin">
+                    <div>放一个搜索框</div>
                     <LessonList />
                 </el-tab-pane>
                 <el-tab-pane label="我的实验" name="experiments">
-                    <LessonList />
+                    <LabList />
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -39,7 +57,9 @@
     align-self: flex-start;
 }
 
-.userInfo, .codeStatistics, .lessonsInfo {
+.userInfo,
+.codeStatistics,
+.lessonsInfo {
     background-color: #fff;
     margin-top: 20px;
     padding: 20px;
@@ -49,23 +69,4 @@
     text-align: left;
     margin-bottom: 20px;
 }
-
 </style>
-
-<script lang="ts" setup>
-import { reactive, ref } from 'vue';
-import UserInfo from './comp/UserInfo.vue';
-import CodingTimeTable from './comp/CodingTimeTable.vue';
-import LessonList from '@/components/lesson/LessonList.vue';
-import { LessonListType } from '@/type';
-import { mockLessonsData } from './mockdata';
-
-const activeName = ref('coursesCreated');
-
-const mockData = reactive<LessonListType>(mockLessonsData);
-
-const handleTabClick = (obj: any) => {
-    console.log(obj?.props?.label);
-};
-
-</script>

@@ -10,11 +10,12 @@ const props = defineProps<{
     failText?: string,
 }>();
 
-const submitHandler = async () => {
+const submitHandler = () => {
     const params = props.params;
     const postApi = props.postApi;
 
-    // const res = await postApi(params);
+    // 兼容ie 不使用await async
+    // const res = postApi(params);
     postApi(params);
     const res = { statusCode: 1 };
     const { statusCode } = res;
