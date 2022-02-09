@@ -6,6 +6,10 @@ const props = defineProps<{
     labInfo: labInfoType
 }>();
 
+const toEditIDE = () => {
+    
+}
+
 
 </script>
 
@@ -29,7 +33,7 @@ const props = defineProps<{
         </div>
         <div>
             <div class="title">开始实验</div>
-            <el-button class="rectBtn btn">开始实验</el-button>
+            <el-button class="rectBtn btn" @click="toEditIDE">开始实验</el-button>
         </div>
         <div>
             <div class="title">提交实验报告</div>

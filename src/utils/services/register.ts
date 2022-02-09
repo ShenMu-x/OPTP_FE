@@ -1,4 +1,5 @@
 import _axios from "./axios";
+import { setToken } from '@/utils/storage';
 
 type stuRegisterParamsType = {
     email: string;
@@ -46,4 +47,38 @@ export const getVerificationCodeApi: (params: { email: string }) => Promise<veri
                 data: false
             }
         })
+}
+
+export const checkEmailUnique: (params: { email: string }) => Promise<any> = (params) => {
+    console.log(params);
+    return _axios.get('/web/user/email?email=' + encodeURI(params.email)).then(value => console.log(value)).catch(err => console.log(err))
+    // return _axios({
+    //     method: "get",
+    //     url: '/web/user/email',
+    //     data: {
+    //         email: params.email
+    //     }
+    // }).then(value => console.log(value))
+}
+
+export const login: (params: { username: string, password: string }) => Promise<any> = (params) => {
+    return _axios.post('/web/login', params)
+        .then(value => {
+            const res = {
+                statusCode: value.data.code ?? -1,
+                data: {
+                    role: value.data.data.role,
+                    token: value.data.data.token
+                }
+            }
+
+            if (res.statusCode === 0) {
+                setToken(res.data.token);
+            }
+            console.log(res);
+            return res;
+        })
+        .catch((err: Error) => {
+            console.log(err.message);
+        });
 }

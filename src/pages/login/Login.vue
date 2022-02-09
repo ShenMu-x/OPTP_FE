@@ -1,19 +1,27 @@
 <template>
   <Layout>
     <div class="formCt loginFormCt">
-        <p class="formTitle">请登录您的账号</p>
-          <el-form label-position="top" class="loginForm" :model="user">
-            <el-form-item label="用户名" size="large">
-              <el-input v-model="user.name" placeholder="请输入用户名"></el-input>
-            </el-form-item>
-            <el-form-item label="密码" size="large" class="psw">
-              <span class="textBtnInForm forgetBtn" @click="toAuthentication">忘记密码?</span>
-              <el-input v-model="user.password" show-password placeholder="请输入密码" @keyup.enter="loginHandler"></el-input>
-            </el-form-item>
-            <el-button type="primary" class="rectBtnHover loginBtn" @click="loginHandler">立即登录</el-button>
-            <div class="registerBtnCt">还没有账号？<span class="textBtnInForm" @click="toRegister">点击注册</span></div>
-          </el-form>
-      </div>
+      <p class="formTitle">请登录您的账号</p>
+      <el-form label-position="top" class="loginForm" :model="user">
+        <el-form-item label="邮箱" size="large">
+          <el-input v-model="user.name" placeholder="请输入邮箱"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" size="large" class="psw">
+          <span class="textBtnInForm forgetBtn" @click="toAuthentication">忘记密码?</span>
+          <el-input
+            v-model="user.password"
+            show-password
+            placeholder="请输入密码"
+            @keyup.enter="loginHandler"
+          ></el-input>
+        </el-form-item>
+        <el-button type="primary" class="rectBtnHover loginBtn" @click="loginHandler">立即登录</el-button>
+        <div class="registerBtnCt">
+          还没有账号？
+          <span class="textBtnInForm" @click="toRegister">点击注册</span>
+        </div>
+      </el-form>
+    </div>
   </Layout>
 </template>
 
@@ -22,6 +30,7 @@ import { ElMessage } from 'element-plus';
 import { reactive, ref } from 'vue';
 import Layout from './index.vue';
 import { useRouter } from 'vue-router';
+import { login } from '@/utils/services'
 
 const router = useRouter();
 
@@ -31,7 +40,7 @@ const user = reactive({
 });
 
 const loginHandler = () => {
-  console.log('xh-->login', user);
+  login({username: 'cs18bxiehan@163.com', password: '12346'});
 };
 
 const toRegister = () => {
@@ -64,7 +73,7 @@ const toAuthentication = () => {
 .psw {
   position: relative;
 }
-.forgetBtn{
+.forgetBtn {
   position: absolute;
   line-height: 22px;
   top: -34px;

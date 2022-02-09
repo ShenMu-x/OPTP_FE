@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import Layout from './index.vue';
 import getRules from './formRules';
-import { stuRegister, getVerificationCodeApi } from '@/utils/services';
+import { stuRegister, getVerificationCodeApi, checkEmailUnique } from '@/utils/services';
 
 const router = useRouter();
 const isGettingCode = ref(false);
@@ -30,7 +30,8 @@ const redirect = (url: string) => {
 };
 
 const getVerificationCode = () => {
-  getVerificationCodeApi({ email: 'shemmu0710@163.com' });
+  checkEmailUnique({ email: 'cs18bxiehan@163.com' })
+  // getVerificationCodeApi({ email: 'cs18bxiehan@163.com' });
   isGettingCode.value = true;
   if (interval) {
     clearInterval(interval);
@@ -54,14 +55,14 @@ const registerHandler = () => {
     duration: 1000
   });
   stuRegister({
-    email: 'shemmu0710@163.com',
+    email: 'cs18bxiehan@163.com',
     realName: '测试号',
     num: '20182131000',
     gender: 1,
     password: '123456',
     major: '计算机',
     organization: '华南师范大学',
-    verificationCode: 'bni1yd',
+    verificationCode: 'DVg5GZ',
   })
 }
 

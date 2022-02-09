@@ -17,6 +17,10 @@ const routes = [
         component: () => import('../pages/login/Authentication.vue'),
     },
     {
+        path: '/editide',
+        component: () => import('../pages/lesson/EditIDE'),
+    },
+    {
         path: '/',
         component: () => import("../layout/index.vue"),
         children: [
