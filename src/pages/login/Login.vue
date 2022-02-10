@@ -1,3 +1,34 @@
+<script lang="ts" setup>
+import { ElMessage } from 'element-plus';
+import { reactive, ref } from 'vue';
+import Layout from './index.vue';
+import { useRouter } from 'vue-router';
+import { login } from '@/utils/services';
+import { mockStuInfo } from './mock';
+
+const router = useRouter();
+
+const user = reactive({
+  name: '',
+  password: ''
+});
+
+const loginHandler = () => {
+  login({ username: user.name, password: user.password });
+};
+
+const toRegister = () => {
+  console.log('xh--> register');
+  router.push('./register');
+};
+
+const toAuthentication = () => {
+  console.log('xh--> toAuthentication');
+  router.push('./authentication');
+};
+
+</script>
+
 <template>
   <Layout>
     <div class="formCt loginFormCt">
@@ -24,36 +55,6 @@
     </div>
   </Layout>
 </template>
-
-<script lang="ts" setup>
-import { ElMessage } from 'element-plus';
-import { reactive, ref } from 'vue';
-import Layout from './index.vue';
-import { useRouter } from 'vue-router';
-import { login } from '@/utils/services'
-
-const router = useRouter();
-
-const user = reactive({
-  name: '',
-  password: ''
-});
-
-const loginHandler = () => {
-  login({username: 'cs18bxiehan@163.com', password: '12346'});
-};
-
-const toRegister = () => {
-  console.log('xh--> register');
-  router.push('./register');
-};
-
-const toAuthentication = () => {
-  console.log('xh--> toAuthentication');
-  router.push('./authentication');
-};
-
-</script>
 
 <style lang="less" scoped>
 .loginFormCt {

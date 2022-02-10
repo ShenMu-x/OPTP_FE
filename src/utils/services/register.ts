@@ -49,16 +49,35 @@ export const getVerificationCodeApi: (params: { email: string }) => Promise<veri
         })
 }
 
-export const checkEmailUnique: (params: { email: string }) => Promise<any> = (params) => {
-    console.log(params);
-    return _axios.get('/web/user/email?email=' + encodeURI(params.email)).then(value => console.log(value)).catch(err => console.log(err))
-    // return _axios({
-    //     method: "get",
-    //     url: '/web/user/email',
-    //     data: {
-    //         email: params.email
-    //     }
-    // }).then(value => console.log(value))
+type emailUniqueReq = {
+    statusCode: number,
+    isUnique?: boolean,
+    error?: {
+        message: string
+    }
+}
+
+export const checkEmailUnique: (params: { email: string }) => Promise<emailUniqueReq> = (params) => {
+    return _axios({
+        method: "GET",
+        url: '/web/user/email',
+        params: {
+            email: encodeURIComponent(params.email)
+        }
+    }).then(value => {
+        console.log(value);
+        return {
+            statusCode: value.data.code,
+            isUnique: value.data.data
+        }
+    }).catch((err: Error) => {
+        return {
+            statusCode: -1,
+            error: {
+                message: err.message
+            }
+        }
+    })
 }
 
 export const login: (params: { username: string, password: string }) => Promise<any> = (params) => {
