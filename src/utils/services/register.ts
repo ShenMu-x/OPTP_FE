@@ -80,7 +80,16 @@ export const checkEmailUnique: (params: { email: string }) => Promise<emailUniqu
     })
 }
 
-export const login: (params: { username: string, password: string }) => Promise<any> = (params) => {
+type loginReqType = {
+    statusCode: number,
+    data: {
+        role?: 0 | 1,
+        token?: string,
+        message?: string,
+    }
+}
+
+export const loginApi: (params: { username: string, password: string }) => Promise<loginReqType> = (params) => {
     return _axios.post('/web/login', params)
         .then(value => {
             const res = {
@@ -94,10 +103,32 @@ export const login: (params: { username: string, password: string }) => Promise<
             if (res.statusCode === 0) {
                 setToken(res.data.token);
             }
-            console.log(res);
             return res;
         })
-        .catch((err: Error) => {
-            console.log(err.message);
+        .catch((err: any) => {
+            let errorMsg = '';
+            switch (err.response?.data?.code) {
+                case -19998: {
+                    errorMsg = '账号或密码过长，请重新输入';
+                    break;
+                }
+                case -19999: {
+                    errorMsg = '账号或密码不为空，请重新输入';
+                    break;
+                }
+                case 10002: {
+                    errorMsg = '验证失败，账号或密码输入错误';
+                    break
+                }
+                default: {
+                    errorMsg = '验证出错，请稍后再试'
+                }
+            }
+            return {
+                statusCode: err.response?.data?.code,
+                data: {
+                    message: errorMsg,
+                }
+            }
         });
 }

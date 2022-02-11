@@ -5,6 +5,10 @@ export const getToken = () => {
 }
 
 export const setToken = (token: string) => {
-    localStorage.setItem(LocalVal.Token, token);
+    localStorage.setItem(LocalVal.Token, token ?? '');
     return token;
+}
+
+export const rmToken = () => {
+    localStorage.removeItem(LocalVal.Token);
 }

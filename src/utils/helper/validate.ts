@@ -16,7 +16,7 @@ export const validateMajor = (rule: any, value: any, callback: any) => {
 
 export const validateEmail = (rule: any, value: any, callback: any) => {
   if (value === '') {
-    callback(new Error('请输入真实姓名'));
+    callback(new Error('请输入真实邮箱'));
   } else {
     callback();
     // 邮箱校验

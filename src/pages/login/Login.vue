@@ -3,27 +3,66 @@ import { ElMessage } from 'element-plus';
 import { reactive, ref } from 'vue';
 import Layout from './index.vue';
 import { useRouter } from 'vue-router';
-import { login } from '@/utils/services';
+import { loginApi } from '@/utils/services';
 import { mockStuInfo } from './mock';
 
 const router = useRouter();
+const refFomeEl = ref();
 
 const user = reactive({
-  name: '',
-  password: ''
+  userName: mockStuInfo.username,
+  password: mockStuInfo.password
 });
 
+const rules = reactive({
+  userName: [
+    {
+      required: true,
+      message: '请输入邮箱',
+      trigger: 'blur',
+    },
+    {
+      pattern: '^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$',
+      message: '请输入正确格式的邮箱',
+      trigger: 'blur'
+    },
+  ],
+  password: [
+    {
+      required: true,
+      message: '请输入密码',
+      trigger: 'blur',
+    },
+  ]
+})
+
 const loginHandler = () => {
-  login({ username: user.name, password: user.password });
+  refFomeEl.value.validate((isPass: boolean, obj: any) => {
+    if (isPass) {
+      loginApi({ username: user.userName, password: user.password })
+        .then(value => {
+          if (value.statusCode === 0) {
+            router.replace('./usercenter');
+          } else {
+            ElMessage({
+              showClose: false,
+              message: value.data.message,
+              type: 'error',
+              duration: 2000,
+            })
+          }
+          console.log(value);
+        });
+    } 
+  });
+
 };
 
 const toRegister = () => {
-  console.log('xh--> register');
   router.push('./register');
 };
 
 const toAuthentication = () => {
-  console.log('xh--> toAuthentication');
   router.push('./authentication');
 };
 
@@ -33,11 +72,11 @@ const toAuthentication = () => {
   <Layout>
     <div class="formCt loginFormCt">
       <p class="formTitle">请登录您的账号</p>
-      <el-form label-position="top" class="loginForm" :model="user">
-        <el-form-item label="邮箱" size="large">
-          <el-input v-model="user.name" placeholder="请输入邮箱"></el-input>
+      <el-form label-position="top" class="loginForm" :model="user" :rules="rules" ref="refFomeEl">
+        <el-form-item label="邮箱" size="large" prop="userName">
+          <el-input v-model="user.userName" placeholder="请输入邮箱"></el-input>
         </el-form-item>
-        <el-form-item label="密码" size="large" class="psw">
+        <el-form-item label="密码" size="large" class="psw" prop="password">
           <span class="textBtnInForm forgetBtn" @click="toAuthentication">忘记密码?</span>
           <el-input
             v-model="user.password"

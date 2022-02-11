@@ -1,8 +1,8 @@
 <template>
   <div class="loginCt">
     <div class="title">
-        <div class="school">华南师范大学</div>
-        <div class="webName">在线编程教学平台</div>
+      <div class="school">华南师范大学</div>
+      <div class="webName">在线编程教学平台</div>
     </div>
     <slot></slot>
   </div>
@@ -20,22 +20,21 @@
 }
 
 .title {
-  color: #FFFFFF;
+  color: #ffffff;
   margin-top: 40px;
-  .school{
+  .school {
     font-size: 25px;
   }
-  .webName{
+  .webName {
     font-size: 30px;
   }
 }
-
 </style>
 
 <style lang="less">
 .textBtnInForm {
   font-size: 14px;
-  color: #3F9EFF;
+  color: #3f9eff;
   &:hover {
     cursor: pointer;
     color: #1f88f1;
@@ -45,18 +44,20 @@
 .rectBtnHover {
   border: 0;
   background: #002d54;
-  &:hover,&:active,&:focus{
+  &:hover,
+  &:active,
+  &:focus {
     border: 0;
     background: #335776;
   }
 }
 
-.formTitle{
+.formTitle {
   font-size: 32px;
 }
 
 .formCt {
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0px 0px 15px 0px #504d5f;
   display: flex;
   flex-direction: column;
