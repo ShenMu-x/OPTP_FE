@@ -6,6 +6,10 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import Avatar from '@/components/user/Avatar.vue';
 
+const props = defineProps<{
+    role?: 0 | 1;
+}>();
+
 const router = useRouter();
 const store = useStore();
 
@@ -31,7 +35,7 @@ const handlerLogOut = () => {
                 <el-button type="text" :icon="Edit" class="editBtn" @click="handlerEditInfo">编辑个人信息</el-button>  
             </div>
             <div>
-                学号: {{userInfo.uid}}
+                {{props.role === 1 ? '职工号' : '学号'}}: {{userInfo.uid}}
             </div>
         </div>
         <el-button type="primary" @click="handlerLogOut">退出登录</el-button>

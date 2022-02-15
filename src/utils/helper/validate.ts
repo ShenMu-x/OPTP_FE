@@ -1,3 +1,5 @@
+import { checkEmailUnique } from '@/utils/services';
+
 export const validateName = (rule: any, value: any, callback: any) => {
   if (value === '') {
     callback(new Error('请输入真实姓名'));
@@ -19,6 +21,10 @@ export const validateEmail = (rule: any, value: any, callback: any) => {
     callback(new Error('请输入真实邮箱'));
   } else {
     callback();
+    checkEmailUnique({ email: value })
+      .then(value => {
+        console.log(value);
+      })
     // 邮箱校验
     //   let self = this
     //   this.axios({
@@ -36,5 +42,25 @@ export const validateEmail = (rule: any, value: any, callback: any) => {
     //         }
     //       }
     //   );
+  }
+};
+
+export const validateCourseName = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('请输入课程名称'));
+  } else if (value.length > 30) {
+    callback(new Error('课程名称限制在30字以内'));
+  } else {
+    callback();
+  }
+};
+
+export const validateCoursePsw = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('请输入选课密码'));
+  } else if (value.length !== 6) {
+    callback(new Error('选课密码为6位'));
+  } else {
+    callback();
   }
 };

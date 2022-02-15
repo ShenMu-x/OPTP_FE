@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from 'vue-demi';
+import { reactive, ref } from 'vue-demi';
 import { useRoute } from 'vue-router';
 import ReturnBtn from '@/components/common/ReturnBtn.vue';
 import Lesson from '@/components/lesson/Lesson.vue';
 import { lesson, teacher, commentsMock } from './mock';
+import ChooseCourse from './comp/ChooseCourse.vue';
 import TeacherNotice from './comp/TeacherNotice.vue';
 import CommentInput from '@/components/comment/CommentInput.vue';
 import CommentList from '@/components/comment/CommentList.vue';
-import SumbitBtn from '@/components/common/SumbitBtn.vue';
 import { scrollToPos } from '@/utils/helper/scrollToPos';
 import { fetchComment } from '@/utils/services';
 import { commentsType } from '@/type';
@@ -31,7 +31,6 @@ const submitComment = (comment: string) => {
     // 提交成功 / 失败
 }
 
-const coursePswInput = ref('');
 
 </script>
 
@@ -45,20 +44,7 @@ const coursePswInput = ref('');
         <div class="bodyCt">
             <div class="leftCt">
                 <Lesson :lesson="lessonMock" class="lessonCard" />
-                <div class="courseChooseCard">
-                    <div class="cardTitle">自主选课</div>
-                    <div class="coursePsw">
-                        请输入6位选课密码:
-                        <input
-                            type="text"
-                            maxlength="6"
-                            minlength="6"
-                            class="pswInput"
-                            v-model="coursePswInput"
-                        />
-                    </div>
-                    <SumbitBtn class="submitChooseCourse" title="选课" />
-                </div>
+                <ChooseCourse />
                 <div class="leftInnerCt">
                     <TeacherNotice :teacherInfo="teacherInfo" />
                 </div>
@@ -114,25 +100,6 @@ const coursePswInput = ref('');
     .lessonCard {
         height: 200px;
         background-color: #fff;
-    }
-
-    .courseChooseCard {
-        margin: 20px 0;
-        padding: 20px;
-        height: 140px;
-        background-color: #fff;
-        text-align: left;
-
-        .pswInput {
-            margin-left: 10px;
-            line-height: 1em;
-            padding: 0 5px;
-        }
-
-        .submitChooseCourse {
-            float: right;
-            margin-right: 20px;
-        }
     }
 
     .cardTitle {

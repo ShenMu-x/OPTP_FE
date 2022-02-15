@@ -29,12 +29,20 @@ const routes = [
                 component: () => import('../pages/user/UserCenter.vue')
             },
             {
+                path: '/teachercenter',
+                component: () => import('../pages/user/TeacCenter.vue')
+            },
+            {
                 path: '/editinfo',
                 component: () => import('../pages/user/EditInfo.vue')
             },
             {
                 path: '/lessonDetail/:courseId',
                 component: () => import('../pages/lesson/LessonDetail.vue')
+            },
+            {
+                path: '/teacher/lessonDetail/:lessonId',
+                component: () => import('../pages/teach/LessonManage.vue')
             }
         ]
     },
@@ -56,7 +64,7 @@ router.beforeEach((to, from, next) => {
 
     // 强制跳转
     if (to.path === '/') {
-        next('/usercenter')
+        next('/teachercenter')
         return
     }
 

@@ -31,8 +31,6 @@ type verificationCodeResType = {
 export const getVerificationCodeApi: (params: { email: string }) => Promise<verificationCodeResType> = (params) => {
     return _axios.post('/web/user/verificationCode', params)
         .then(res => {
-            // const res = { data: { code: 0, data: true } }
-
             const packRes = {
                 code: res.data.code,
                 data: res.data.data

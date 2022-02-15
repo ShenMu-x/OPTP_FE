@@ -5,6 +5,7 @@ const getRules = (params: {
     pswCheck: string
 }) => {
     return {
+        role: [],
         email: [
             {
                 required: true,

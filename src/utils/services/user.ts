@@ -1,21 +1,13 @@
 import _axios from "./axios";
+import { userInfoType } from '@/type';
 
-type userInfoType = {
+type getUserInfoReq = {
     statusCode: number,
-    data?: {
-        userId: number,
-        email: string,
-        uid: string,
-        userName: string,
-        avatar: string,
-        gender: number,
-        major: string,
-        organization: string
-    },
+    data?: userInfoType,
     error?: string
 }
 
-const getUser: () => Promise<userInfoType> = () => {
+export const getUserInfo: () => Promise<getUserInfoReq> = () => {
     return _axios({
         method: 'GET',
         url: '/web/user'

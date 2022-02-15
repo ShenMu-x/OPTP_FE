@@ -5,13 +5,15 @@ import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import Layout from './index.vue';
 import getRules from './formRules';
-import { stuRegister, getVerificationCodeApi, checkEmailUnique } from '@/utils/services';
+import { stuRegister, getVerificationCodeApi } from '@/utils/services';
 
 const router = useRouter();
+const refFormEl = ref();
 const isGettingCode = ref(false);
 const count = ref(60);
 let interval: any = null;
 const registerModel = reactive({
+  role: 0,
   email: '',
   verificationCode: '',
   userName: '',
@@ -20,18 +22,23 @@ const registerModel = reactive({
   organization: '',
   password: '',
   passwordCheck: '',
-  sex: '',
+  gender: 0,
 });
 
-const rules = reactive(getRules({ pswCheck: registerModel.password }))
+const rules = reactive(getRules({
+  pswCheck: registerModel.password,
+}))
 
 const redirect = (url: string) => {
   router.replace(url);
 };
 
+const changeRole = (role: number) => {
+  console.log(role);
+}
+
 const getVerificationCode = () => {
-  checkEmailUnique({ email: 'cs18bxiehan@163.com' })
-  // getVerificationCodeApi({ email: 'cs18bxiehan@163.com' });
+  getVerificationCodeApi({ email: registerModel.email })
   isGettingCode.value = true;
   if (interval) {
     clearInterval(interval);
@@ -49,22 +56,33 @@ const getVerificationCode = () => {
 };
 
 const registerHandler = () => {
-  ElMessage({
-    message: '注册成功！ 请登录。',
-    type: 'success',
-    duration: 1000
-  });
-  stuRegister({
-    email: 'cs18bxiehan@163.com',
-    realName: '测试号',
-    num: '20182131000',
-    gender: 1,
-    password: '123456',
-    major: '计算机',
-    organization: '华南师范大学',
-    verificationCode: 'DVg5GZ',
+  refFormEl.value.validate((isPass: boolean, obj: any) => {
+    if (isPass) {
+      stuRegister({
+        email: registerModel.email,
+        realName: registerModel.userName,
+        num: registerModel.uid,
+        gender: registerModel.gender,
+        password: registerModel.password,
+        major: registerModel.major,
+        organization: registerModel.organization,
+        verificationCode: registerModel.verificationCode,
+      }).then(value => {
+        if (value.statusCode === 0) {
+          ElMessage({
+            message: '注册成功！ 请登录。',
+            type: 'success',
+            duration: 1000
+          });
+
+          router.replace('/login');
+        }
+      })
+    }
   })
 }
+
+
 
 </script>
 
@@ -78,7 +96,19 @@ const registerHandler = () => {
         type="text"
       >返回</el-button>
       <p class="formTitle">用户注册</p>
-      <el-form label-position="top" class="registerForm" :model="registerModel" :rules="rules">
+      <el-form
+        label-position="top"
+        class="registerForm"
+        :model="registerModel"
+        ref="refFormEl"
+        :rules="rules"
+      >
+        <el-form-item label="身份">
+          <el-radio-group v-model="registerModel.role" size="large" @change="changeRole">
+            <el-radio :label="0" border>我是学生</el-radio>
+            <el-radio :label="1" border>我是老师</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="registerModel.email" clearable></el-input>
         </el-form-item>
@@ -116,8 +146,8 @@ const registerHandler = () => {
         <el-form-item label="确认密码" prop="passwordCheck">
           <el-input v-model="registerModel.passwordCheck" clearable show-password></el-input>
         </el-form-item>
-        <el-form-item label="性别" class="flex justify-start">
-          <el-radio-group v-model="registerModel.sex">
+        <el-form-item label="性别">
+          <el-radio-group v-model="registerModel.gender">
             <el-radio :label="0">男</el-radio>
             <el-radio :label="1">女</el-radio>
           </el-radio-group>

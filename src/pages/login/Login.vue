@@ -42,7 +42,8 @@ const loginHandler = () => {
       loginApi({ username: user.userName, password: user.password })
         .then(value => {
           if (value.statusCode === 0) {
-            router.replace('./usercenter');
+            // router.replace('./usercenter');
+            router.replace('./teaccenter');
           } else {
             ElMessage({
               showClose: false,
