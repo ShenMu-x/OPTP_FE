@@ -1,42 +1,49 @@
 <template>
-    <div class="lessonCt" @click="toLesson">
-        <div class="lessonMain">
-            <Avatar type="large" class="cover"/>
-            <div class="lessonInfo">
+    <div class="courseCt" @click="toCourseDetail">
+        <div class="courseMain">
+            <Avatar type="large" class="cover" />
+            <div class="courseInfo">
                 <div
-                    class="lessonTitle"
-                    :title="props.lesson.courseName"
-                >{{ props.lesson.courseName }}</div>
-                <div class="lessonStart">{{ props.lesson.createdAt }}</div>
+                    class="courseTitle"
+                    :title="props.course.courseName"
+                >{{ props.course.courseName }}</div>
+                <div class="courseStart">{{ props.course.createdAt }}</div>
                 <div :class="{ 'endTag': true, 'isClose': isClose }">
-                    <span v-if="props.lesson.isClose === 1">已结束</span>
+                    <span v-if="props.course.isClose === 1">已结束</span>
                     <span v-else>进行中</span>
                 </div>
             </div>
         </div>
-        <div class="lessonDes" :title="props.lesson?.description !== '' ? props.lesson?.description : ''">课程描述: {{ props.lesson?.description !== '' ? props.lesson?.description : '暂无描述'}}</div>
+        <div
+            class="courseDes"
+            :title="props.course?.description !== '' ? props.course?.description : ''"
+        >课程描述: {{ props.course?.description !== '' ? props.course?.description : '暂无描述' }}</div>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { LessonType } from '@/type';
+import { CourseType } from '@/type';
 import { useRouter } from 'vue-router';
 import Avatar from '../user/Avatar.vue';
+import { isTeacher } from '@/utils/helper/is';
 
 const router = useRouter();
-const props = defineProps<{ lesson: LessonType }>();
+const props = defineProps<{ course: CourseType }>();
 
-const isClose = ref(props.lesson.isClose === 1);
+const isClose = ref(props.course.isClose === 1);
 
-const toLesson = () => {
-    console.log('tolesson', props.lesson.courseId)
-    router.push(`/lessonDetail/${props.lesson.courseId}`);
+const toCourseDetail = () => {
+    if (isTeacher()) {
+        router.push(`/teach/courseDetail/${props.course.courseId}`);
+    } else {
+        router.push(`/courseDetail/${props.course.courseId}`);
+    }
 }
 </script>
 
 <style lang="less" scoped>
-.lessonCt {
+.courseCt {
     height: 200px;
     flex-basis: 100%;
     width: 100%;
@@ -48,7 +55,7 @@ const toLesson = () => {
     padding: 20px;
 }
 
-.lessonMain {
+.courseMain {
     width: 100%;
     .cover {
         float: left;
@@ -60,7 +67,7 @@ const toLesson = () => {
         margin-right: 20px;
     }
 
-    .lessonInfo {
+    .courseInfo {
         width: calc(100% - 80px - 20px);
         float: left;
         display: flex;
@@ -68,8 +75,8 @@ const toLesson = () => {
         justify-content: space-around;
         align-items: flex-start;
 
-        .lessonTitle,
-        .lessonStart {
+        .courseTitle,
+        .courseStart {
             width: 100%;
             line-height: 26px;
             height: 26px;
@@ -81,14 +88,14 @@ const toLesson = () => {
             white-space: nowrap;
         }
 
-        .lessonStart {
+        .courseStart {
             color: #aaa;
             font-size: 14px;
         }
     }
 }
 
-.lessonDes {
+.courseDes {
     margin-top: 20px;
     height: 60px;
     line-height: 30px;
@@ -117,5 +124,4 @@ const toLesson = () => {
     border-color: #fde2e2;
     color: #f56c6c;
 }
-
 </style>

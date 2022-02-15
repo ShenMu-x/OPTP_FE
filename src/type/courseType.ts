@@ -1,4 +1,4 @@
-export type LessonType = {
+export type CourseType = {
     courseId: string,
     courseName: string,
     isClose?: number,
@@ -7,4 +7,4 @@ export type LessonType = {
     coverUrl?: string
 }
 
-export type LessonListType = Array<LessonType>
+export type CourseListType = Array<CourseType>

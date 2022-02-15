@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { resolve } from "path";
 import { createRouter, createWebHistory } from "vue-router";
 import { getToken } from "../utils/storage";
+import { isTeacher } from "@/utils/helper/is";
 
 const routes = [
     {
@@ -18,7 +18,7 @@ const routes = [
     },
     {
         path: '/editide',
-        component: () => import('../pages/lesson/EditIDE'),
+        component: () => import('../pages/course/EditIDE'),
     },
     {
         path: '/',
@@ -26,23 +26,23 @@ const routes = [
         children: [
             {
                 path: '/usercenter',
-                component: () => import('../pages/user/UserCenter.vue')
-            },
-            {
-                path: '/teachercenter',
-                component: () => import('../pages/user/TeacCenter.vue')
+                component: () => import('../pages/user/StudCenter.vue')
             },
             {
                 path: '/editinfo',
                 component: () => import('../pages/user/EditInfo.vue')
             },
             {
-                path: '/lessonDetail/:courseId',
-                component: () => import('../pages/lesson/LessonDetail.vue')
+                path: '/courseDetail/:courseId',
+                component: () => import('../pages/course/CourseDetail.vue')
             },
             {
-                path: '/teacher/lessonDetail/:lessonId',
-                component: () => import('../pages/teach/LessonManage.vue')
+                path: '/teach/usercenter',
+                component: () => import('../pages/user/TeacherCenter.vue')
+            },
+            {
+                path: '/teach/courseDetail/:courseId',
+                component: () => import('../pages/teach/CourseDetail.vue')
             }
         ]
     },
@@ -64,7 +64,11 @@ router.beforeEach((to, from, next) => {
 
     // 强制跳转
     if (to.path === '/') {
-        next('/teachercenter')
+        if(isTeacher()) {
+            next('/teach/usercenter')
+        } else {
+            next('usercenter')
+        }
         return
     }
 

@@ -8,6 +8,7 @@ export const lesson = {
 };
 
 export const teacher = {
+    userId: 1,
     email: 'xxx@111.com',
     userName: '用户名',
     uid: '123456789',

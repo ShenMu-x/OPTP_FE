@@ -2,7 +2,7 @@
 import { reactive, ref } from 'vue-demi';
 import { useRoute } from 'vue-router';
 import ReturnBtn from '@/components/common/ReturnBtn.vue';
-import Lesson from '@/components/lesson/Lesson.vue';
+import CourseItem from '@/components/course/CourseItem.vue';
 import { lesson, teacher, commentsMock } from './mock';
 import ChooseCourse from './comp/ChooseCourse.vue';
 import TeacherNotice from './comp/TeacherNotice.vue';
@@ -18,10 +18,10 @@ const route = useRoute();
 
 const courseId = ref(route.params);
 
-// fetch lesson message
+// fetch course message
 // fetch teacher message
 // fetch comments
-const lessonMock = reactive(lesson);
+const courseMock = reactive(lesson);
 const teacherInfo = reactive(teacher);
 const comments = reactive<commentsType>(commentsMock);
 
@@ -43,7 +43,7 @@ const submitComment = (comment: string) => {
         </div>
         <div class="bodyCt">
             <div class="leftCt">
-                <Lesson :lesson="lessonMock" class="lessonCard" />
+                <CourseItem :course="courseMock" class="courseCard" />
                 <ChooseCourse />
                 <div class="leftInnerCt">
                     <TeacherNotice :teacherInfo="teacherInfo" />
@@ -97,7 +97,7 @@ const submitComment = (comment: string) => {
 
 .leftCt {
     width: 100%;
-    .lessonCard {
+    .courseCard {
         height: 200px;
         background-color: #fff;
     }

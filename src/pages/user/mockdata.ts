@@ -1,6 +1,6 @@
-import { LessonListType } from "@/type";
+import { CourseListType } from "@/type";
 
-export const mockLessonsData: LessonListType = [
+export const mockLessonsData: CourseListType = [
     {
         courseId: '1',
         courseName: '一节课ddddddddddddddddddddddddddd',

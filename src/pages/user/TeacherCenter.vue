@@ -4,12 +4,12 @@ import { Plus } from '@element-plus/icons-vue';
 
 import UserInfo from './comp/UserInfo.vue';
 import CourseCreateForm from './comp/CourseCreateForm.vue';
-import LessonList from '@/components/lesson/LessonList.vue';
+import CourseList from '@/components/course/CourseList.vue';
 
-import { LessonListType } from '@/type';
+import { CourseListType } from '@/type';
 import { mockLessonsData } from './mockdata';
 
-const mockData = reactive<LessonListType>(mockLessonsData);
+const mockData = reactive<CourseListType>(mockLessonsData);
 const activeTabName = ref('coursesCreated');
 const refCourseFormEl = ref();
 
@@ -37,13 +37,13 @@ const resetHandler = () => {
         <div class="userInfo">
             <UserInfo :role="1" />
         </div>
-        <div class="lessonsInfo">
+        <div class="coursesInfo">
             <el-tabs v-model="activeTabName" type="card">
                 <el-tab-pane label="我的课程" name="coursesCreated">
                     <div class="btnCt">
                         <el-button :icon="Plus" class="floatLeft" @click="openDialog">创建课程</el-button>
                     </div>
-                    <LessonList :lessons="mockData" />
+                    <CourseList :courses="mockData" />
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -73,7 +73,7 @@ const resetHandler = () => {
 }
 
 .userInfo,
-.lessonsInfo {
+.coursesInfo {
     background-color: #fff;
     margin-top: 20px;
     padding: 20px;

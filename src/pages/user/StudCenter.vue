@@ -2,14 +2,14 @@
 import { reactive, ref } from 'vue';
 import UserInfo from './comp/UserInfo.vue';
 import CodingTimeTable from './comp/CodingTimeTable.vue';
-import LessonList from '@/components/lesson/LessonList.vue';
-import LabList from '@/components/lesson/LabList.vue';
-import { LessonListType, labsType } from '@/type';
+import CourseList from '@/components/course/CourseList.vue';
+import LabList from '@/components/course/LabList.vue';
+import { CourseListType, labsType } from '@/type';
 import { mockLessonsData, mockLab } from './mockdata';
 
 const activeName = ref('coursesCreated');
 
-const mockData = reactive<LessonListType>(mockLessonsData);
+const mockData = reactive<CourseListType>(mockLessonsData);
 const labs = reactive<labsType>(mockLab);
 
 const handleTabClick = (obj: any) => {
@@ -28,14 +28,14 @@ const handleTabClick = (obj: any) => {
             <div class="statTitle">我的编码时长统计（min）</div>
             <CodingTimeTable />
         </div>
-        <div class="lessonsInfo">
+        <div class="coursesInfo">
             <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
                 <el-tab-pane label="我的课程" name="coursesCreated">
-                    <LessonList :lessons="mockData" />
+                    <CourseList :courses="mockData" />
                 </el-tab-pane>
                 <el-tab-pane label="搜索课程" name="coursesJoin">
                     <div>放一个搜索框</div>
-                    <LessonList />
+                    <CourseList />
                 </el-tab-pane>
                 <el-tab-pane label="我的实验" name="experiments">
                     <LabList :labList="labs"/>
@@ -60,7 +60,7 @@ const handleTabClick = (obj: any) => {
 
 .userInfo,
 .codeStatistics,
-.lessonsInfo {
+.coursesInfo {
     background-color: #fff;
     margin-top: 20px;
     padding: 20px;

@@ -1,18 +1,18 @@
 <template>
     <div class="block">
-        <div class="lessonsCt">
+        <div class="coursesCt">
             <template v-if="content?.length && content.length > 0">
                 <template v-for="item in content" :key="item.id">
-                    <Lesson :lesson="item" class="lessonCt" />
+                    <CourseItem :course="item" class="courseCt" />
                 </template>
             </template>
             <div class="noData" v-else>暂无数据</div>
         </div>
         <el-pagination
-            v-if="props?.lessons?.length ?? 0 > 0"
+            v-if="props?.courses?.length ?? 0 > 0"
             v-model:currentPage="current"
             layout="prev, pager, next"
-            :total="props?.lessons?.length"
+            :total="props?.courses?.length"
             :page-size="pageSize"
             hide-on-single-page
         ></el-pagination>
@@ -20,21 +20,21 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, computed, toRefs, onMounted } from 'vue';
-import Lesson from './Lesson.vue';
-import { LessonListType } from '@/type';
-const props = defineProps<{ lessons?: LessonListType }>();
+import { ref, computed } from 'vue';
+import CourseItem from './CourseItem.vue';
+import { CourseListType } from '@/type';
+const props = defineProps<{ courses?: CourseListType }>();
 const current = ref(1)
 const pageSize = ref(6);
 
 const currentIdx = computed(() => (current.value - 1) * pageSize.value)
-const content = computed(() => props?.lessons?.slice(currentIdx.value, currentIdx.value + pageSize.value));
+const content = computed(() => props?.courses?.slice(currentIdx.value, currentIdx.value + pageSize.value));
 
 </script>
 
 <style lang="less" scoped>
 @import url('@/styles/var.less');
-.lessonsCt {
+.coursesCt {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -47,7 +47,7 @@ const content = computed(() => props?.lessons?.slice(currentIdx.value, currentId
     text-align: center;
 }
 
-.lessonCt {
+.courseCt {
     flex-basis: 100%;
     width: 100%;
 
@@ -61,7 +61,7 @@ const content = computed(() => props?.lessons?.slice(currentIdx.value, currentId
 }
 
 @media screen and (min-width: @min-width) {
-    .lessonCt {
+    .courseCt {
         flex-basis: 48%;
         width: 48%;
     }
@@ -69,7 +69,7 @@ const content = computed(() => props?.lessons?.slice(currentIdx.value, currentId
 
 // 适配
 @media screen and (min-width: @middle-width) {
-    .lessonCt {
+    .courseCt {
         flex-basis: 30%;
         width: 30%;
     }
