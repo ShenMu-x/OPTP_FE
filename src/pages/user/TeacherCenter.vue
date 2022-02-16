@@ -3,7 +3,7 @@ import { reactive, ref } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 
 import UserInfo from './comp/UserInfo.vue';
-import CourseCreateForm from './comp/CourseCreateForm.vue';
+import CourseCreateForm from '../teach/comp/CourseCreateForm.vue';
 import CourseList from '@/components/course/CourseList.vue';
 
 import { CourseListType } from '@/type';
