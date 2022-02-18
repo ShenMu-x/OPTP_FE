@@ -47,9 +47,19 @@ const routes = [
             {
                 path: '/teach/labDetail/:labId',
                 component: () => import('../pages/teach/LabDetail.vue')
-            }
+            },
+            {
+                path: '/404',
+                component: () => import('../pages/404.vue')
+            },
         ]
     },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        redirect: '/404'
+    },
+
 ];
 
 const router = new createRouter({
