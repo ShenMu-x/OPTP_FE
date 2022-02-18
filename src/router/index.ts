@@ -43,6 +43,10 @@ const routes = [
             {
                 path: '/teach/courseDetail/:courseId',
                 component: () => import('../pages/teach/CourseDetail.vue')
+            },
+            {
+                path: '/teach/labDetail/:labId',
+                component: () => import('../pages/teach/LabDetail.vue')
             }
         ]
     },
@@ -64,7 +68,7 @@ router.beforeEach((to, from, next) => {
 
     // 强制跳转
     if (to.path === '/') {
-        if(isTeacher()) {
+        if (isTeacher()) {
             next('/teach/usercenter')
         } else {
             next('usercenter')

@@ -3,10 +3,11 @@ import { reactive, ref } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 
 import UserInfo from './comp/UserInfo.vue';
-import CourseCreateForm from '../teach/comp/CourseCreateForm.vue';
+import CourseForm from '../teach/comp/form/CourseForm.vue';
 import CourseList from '@/components/course/CourseList.vue';
 
 import { CourseListType } from '@/type';
+import { createCourse } from '@/utils/services/course';
 import { mockLessonsData } from './mockdata';
 
 const mockData = reactive<CourseListType>(mockLessonsData);
@@ -41,14 +42,14 @@ const resetHandler = () => {
             <el-tabs v-model="activeTabName" type="card">
                 <el-tab-pane label="我的课程" name="coursesCreated">
                     <div class="btnCt">
-                        <el-button :icon="Plus" class="floatLeft" @click="openDialog">创建课程</el-button>
+                        <el-button :icon="Plus" @click="openDialog">创建课程</el-button>
                     </div>
                     <CourseList :courses="mockData" />
                 </el-tab-pane>
             </el-tabs>
         </div>
         <el-dialog v-model="dialogFormVisible" title="创建课程" :fullscreen="true">
-            <CourseCreateForm ref="refCourseFormEl" :closeDialog="closeDialog" />
+            <CourseForm :fetchApi="createCourse" ref="refCourseFormEl" :closeDialog="closeDialog" />
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="resetHandler">取消</el-button>

@@ -121,6 +121,7 @@ const registerHandler = () => {
             />
             <el-button
               class="rectBtnHover"
+              color="#002D54"
               type="primary"
               @click="getVerificationCode"
               v-show="!isGettingCode"
@@ -152,7 +153,7 @@ const registerHandler = () => {
             <el-radio :label="1">女</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-button type="primary" class="rectBtnHover registerBtn" @click="registerHandler">点击注册</el-button>
+        <el-button type="primary" color="#002D54" class="rectBtnHover registerBtn" @click="registerHandler">点击注册</el-button>
         <div class="registerBtnCt">
           已有账号？
           <span class="textBtnInForm" @click="redirect('/login')">点击登录</span>

@@ -10,7 +10,7 @@
         <el-form-item label="验证码" prop="verificationCode">
           <div class="codeInpCt">
             <el-input class="codeInput"  placeholder="请输入验证码" v-model="changePswModel.verificationCode"/>
-            <el-button class="rectBtnHover" type="primary" @click="getVerificationCode" v-show="!isGettingCode">获取验证码</el-button>
+            <el-button class="rectBtnHover" color="#002D54" type="primary" @click="getVerificationCode" v-show="!isGettingCode">获取验证码</el-button>
             <el-button type="primary" disabled v-show="isGettingCode">{{count}}s后重新获取</el-button>
           </div>
         </el-form-item>
@@ -20,7 +20,7 @@
         <el-form-item label="确认密码" prop="passwordCheck">
           <el-input v-model="changePswModel.passwordCheck" clearable show-password></el-input>
         </el-form-item>
-        <el-button type="primary" class="rectBtnHover registerBtn" @click="registerHandler">确认修改</el-button>
+        <el-button type="primary" color="#002D54" class="rectBtnHover registerBtn" @click="registerHandler">确认修改</el-button>
         <div class="registerBtnCt">已有账号？<span class="textBtnInForm" @click="redirect('./login')">点击登录</span></div>
       </el-form>
     </div>

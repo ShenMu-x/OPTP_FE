@@ -2,11 +2,14 @@
 import { reactive, ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import UploadAvatar from '@/components/common/UploadAvatar.vue';
-import { validateCourseName } from '@/utils/helper/validate';
+import { courseRules } from './rule';
+import { CourseType } from '@/type';
 
 const refFormEl = ref();
 const props = defineProps<{
-    closeDialog?: () => void
+    closeDialog?: () => void,
+    fetchApi: any,
+    data?: CourseType
 }>();
 
 // config
@@ -14,39 +17,13 @@ const formLabelWidth = '80px';
 
 // model
 const form = reactive({
-    courseName: '',
-    description: '',
+    courseName: props.data?.courseName ?? '',
+    description: props.data?.description ?? '',
     password: '',
-    language: 1
+    language: ''
 })
 
-const formRules = reactive({
-    courseName: [
-        {
-            required: true,
-            message: '请输入课程名称',
-            trigger: 'blur',
-        },
-        {
-            validator: validateCourseName,
-            trigger: 'blur'
-        }
-    ],
-    description: [
-        {
-            required: true,
-            message: '请输入课程介绍',
-            trigger: 'blur',
-        },
-    ],
-    password: [
-        {
-            required: true,
-            message: '请输入选课密码',
-            trigger: 'blur',
-        },
-    ]
-});
+const formRules = reactive(courseRules);
 
 const commitForm = () => {
     refFormEl.value.validate((isPass: boolean, obj: any) => {
@@ -63,12 +40,17 @@ const commitForm = () => {
                 }
             )
                 .then(() => {
-                    ElMessage({
-                        type: 'success',
-                        message: '修改成功',
+                    props.fetchApi?.().then((value: any) => {
+                        if (value.code === 0) {
+                            ElMessage({
+                                type: 'success',
+                                message: '修改成功',
+                            })
+
+                            props.closeDialog?.();
+                        }
                     })
 
-                    props.closeDialog?.();
                 })
                 .catch(() => {
                     // 取消提交

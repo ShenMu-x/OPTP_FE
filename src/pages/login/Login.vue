@@ -4,6 +4,7 @@ import { reactive, ref } from 'vue';
 import Layout from './index.vue';
 import { useRouter } from 'vue-router';
 import { loginApi } from '@/utils/services';
+import { isTeacher } from '@/utils/helper';
 import { mockStuInfo } from './mock';
 
 const router = useRouter();
@@ -42,8 +43,12 @@ const loginHandler = () => {
       loginApi({ username: user.userName, password: user.password })
         .then(value => {
           if (value.statusCode === 0) {
-            // router.replace('./usercenter');
-            router.replace('./teaccenter');
+            if (isTeacher()) {
+              router.replace('/teach/usercenter');
+            } else {
+              router.replace('/usercenter');
+            }
+
           } else {
             ElMessage({
               showClose: false,
@@ -54,7 +59,7 @@ const loginHandler = () => {
           }
           console.log(value);
         });
-    } 
+    }
   });
 
 };
@@ -86,7 +91,12 @@ const toAuthentication = () => {
             @keyup.enter="loginHandler"
           ></el-input>
         </el-form-item>
-        <el-button type="primary" class="rectBtnHover loginBtn" @click="loginHandler">立即登录</el-button>
+        <el-button
+          type="primary"
+          class="rectBtnHover loginBtn"
+          color="#002D54"
+          @click="loginHandler"
+        >立即登录</el-button>
         <div class="registerBtnCt">
           还没有账号？
           <span class="textBtnInForm" @click="toRegister">点击注册</span>

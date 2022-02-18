@@ -1,5 +1,5 @@
 import _axios from "./axios";
-import { setToken } from '@/utils/storage';
+import { setToken,setRole } from '@/utils/storage';
 
 type stuRegisterParamsType = {
     email: string;
@@ -78,7 +78,7 @@ export const checkEmailUnique: (params: { email: string }) => Promise<emailUniqu
     })
 }
 
-type loginReqType = {
+type loginResType = {
     statusCode: number,
     data: {
         role?: 0 | 1,
@@ -87,7 +87,7 @@ type loginReqType = {
     }
 }
 
-export const loginApi: (params: { username: string, password: string }) => Promise<loginReqType> = (params) => {
+export const loginApi: (params: { username: string, password: string }) => Promise<loginResType> = (params) => {
     return _axios.post('/web/login', params)
         .then(value => {
             const res = {
@@ -100,7 +100,10 @@ export const loginApi: (params: { username: string, password: string }) => Promi
 
             if (res.statusCode === 0) {
                 setToken(res.data.token);
+                setRole(res.data.role);
             }
+
+            console.log(res);
             return res;
         })
         .catch((err: any) => {

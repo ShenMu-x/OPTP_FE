@@ -8,17 +8,16 @@ import type {
     ElFile,
 } from 'element-plus/es/components/upload/src/upload.type'
 
-import { getToken } from '@/utils/storage';
+import { wrapHeaderWithToken } from '@/utils/helper';
 
 const props = defineProps<{
     avatarurl?: string,
     uploadurl?: string
 }>()
 
-const uploadReqHeader = {
-    'ContentType': 'multipart/form-data',
-    'Authorization': `Bearer ${getToken()}`
-};
+const uploadReqHeader = wrapHeaderWithToken({
+    'ContentType': 'multipart/form-data'
+});
 
 const imageUrl = ref(props.avatarurl ?? '')
 const handleAvatarSuccess = (res: ElUploadProgressEvent, file: UploadFile) => {

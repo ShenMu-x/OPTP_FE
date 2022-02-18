@@ -47,9 +47,9 @@ export const validateEmail = (rule: any, value: any, callback: any) => {
 
 export const validateCourseName = (rule: any, value: any, callback: any) => {
   if (value === '') {
-    callback(new Error('请输入课程名称'));
+    callback(new Error('请输入名称'));
   } else if (value.length > 30) {
-    callback(new Error('课程名称限制在30字以内'));
+    callback(new Error('名称限制在30字以内'));
   } else {
     callback();
   }

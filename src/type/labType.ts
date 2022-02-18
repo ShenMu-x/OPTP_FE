@@ -12,3 +12,12 @@ export type labInfoType = {
 }
 
 export type labsType = Array<labInfoType>;
+
+export type labStatus = {
+    uid: string,
+    name: string,
+    codeTime: number,
+    isFinish: number,
+    review: string,
+    score: number
+}

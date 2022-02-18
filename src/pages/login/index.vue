@@ -43,13 +43,6 @@
 
 .rectBtnHover {
   border: 0;
-  background: #002d54;
-  &:hover,
-  &:active,
-  &:focus {
-    border: 0;
-    background: #335776;
-  }
 }
 
 .formTitle {
