@@ -9,10 +9,10 @@ import type {
 } from 'element-plus/es/components/upload/src/upload.type'
 
 import { wrapHeaderWithToken } from '@/utils/helper';
+import { UPLOAD_PIC_URL } from '@/utils/helper';
 
 const props = defineProps<{
     avatarurl?: string,
-    uploadurl?: string
 }>()
 
 const uploadReqHeader = wrapHeaderWithToken({
@@ -22,6 +22,7 @@ const uploadReqHeader = wrapHeaderWithToken({
 const imageUrl = ref(props.avatarurl ?? '')
 const handleAvatarSuccess = (res: ElUploadProgressEvent, file: UploadFile) => {
     imageUrl.value = URL.createObjectURL(file.raw)
+    console.log(imageUrl.value);
 }
 const beforeAvatarUpload = (file: ElFile) => {
     const isJPG = file.type === 'image/jpeg'
@@ -40,7 +41,7 @@ const beforeAvatarUpload = (file: ElFile) => {
 <template>
     <el-upload
         class="avatarUploader"
-        :action="props.uploadurl"
+        :action="UPLOAD_PIC_URL"
         name="pic"
         :headers="uploadReqHeader"
         :data="{ width: '256' }"
