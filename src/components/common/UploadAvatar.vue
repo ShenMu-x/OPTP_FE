@@ -8,21 +8,28 @@ import type {
     ElFile,
 } from 'element-plus/es/components/upload/src/upload.type'
 
-import { wrapHeaderWithToken } from '@/utils/helper';
-import { UPLOAD_PIC_URL } from '@/utils/helper';
+import { wrapHeaderWithToken, UPLOAD_PIC_URL } from '@/utils/helper';
+import { } from '@/utils/helper';
+import { showSuccess, showFail } from '@/utils/helper';
 
 const props = defineProps<{
-    avatarurl?: string,
-}>()
+    avatarUrl?: string,
+    submitApi?: any,
+}>();
 
-const uploadReqHeader = wrapHeaderWithToken({
-    'ContentType': 'multipart/form-data'
-});
+console.log('avatar upload', props.avatarUrl);
 
-const imageUrl = ref(props.avatarurl ?? '')
-const handleAvatarSuccess = (res: ElUploadProgressEvent, file: UploadFile) => {
+const uploadReqHeader = wrapHeaderWithToken();
+
+const imageUrl = ref(props.avatarUrl ?? '');
+const resUrl = ref('');
+const handleAvatarSuccess = (res: { code: number, data: { url: string } }, file: UploadFile) => {
+    resUrl.value = res.data.url;
     imageUrl.value = URL.createObjectURL(file.raw)
-    console.log(imageUrl.value);
+    props.submitApi?.({ avatar_url: imageUrl.value }).then((value: any) => {
+        if (value.code === 0) showSuccess();
+        else showFail();
+    })
 }
 const beforeAvatarUpload = (file: ElFile) => {
     const isJPG = file.type === 'image/jpeg'
@@ -36,6 +43,13 @@ const beforeAvatarUpload = (file: ElFile) => {
     }
     return isJPG && isLt2M
 }
+const getImage = () => {
+    return imageUrl.value;
+}
+
+defineExpose({
+    getImage,
+})
 </script>
 
 <template>
@@ -65,6 +79,17 @@ const beforeAvatarUpload = (file: ElFile) => {
     width: 100px;
     height: 100px;
     display: block;
+    object-fit: cover;
+
+    // &:hover::after {
+    //     content: "上传";
+    //     height: 100px;
+    //     width: 100px;
+    //     position: absolute;
+    //     top: 0;
+    //     left: 0;
+    //     background-color: #00000011;
+    // }
 }
 .noImg {
     background-color: #fefefe;

@@ -1,69 +1,43 @@
 <script lang="ts" setup>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import UploadAvatar from '@/components/common/UploadAvatar.vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { DArrowLeft } from '@element-plus/icons-vue';
-import { validateName, validateMajor } from '../../utils/helper/validate';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { userInfoType } from '@/type';
+import { editRules } from './rules';
+import { comfirm } from '@/utils/helper';
+import { editUserInfo } from '@/utils/services';
 
 const router = useRouter();
 const store = useStore();
 
+const toCenter = () => {
+    router.push('/usercenter')
+}
+
+const refUploadImgEl = ref();
 const editHandler = () => {
-    ElMessageBox.confirm(
-        '确定提交？',
-        '修改提交确认',
-        {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'success',
-            lockScroll: false,
-        }
-    )
-        .then(() => {
-            ElMessage({
-                type: 'success',
-                message: '修改成功',
-            })
-        })
-        .catch(() => {
-            //
-        })
+    comfirm({
+        type: 'edit',
+        onSuccTipClose: toCenter,
+        fetchApi: editUserInfo
+    });
 }
 
 
-const editModel = reactive(store.state.user);
-
-const rules = reactive({
-    userName: [
-        { validator: validateName, trigger: 'blur' }
-    ],
-    major: [
-        { validator: validateMajor, trigger: 'blur' }
-    ],
-    uid: [
-        {
-            required: true,
-            message: '请输入学号',
-            trigger: 'blur',
-        },
-    ],
-});
+const editModel = reactive<userInfoType>(store.state.user);
+const rules = reactive(editRules);
 </script>
 
 <template>
     <div class="editCt">
-        <el-button
-            class="returnBtn"
-            :icon="DArrowLeft"
-            type="text"
-            @click="router.push('/usercenter')"
-        >返回</el-button>
+        <el-button class="returnBtn" :icon="DArrowLeft" type="text" @click="toCenter">返回</el-button>
         <p class="formTitle">修改信息</p>
         <el-form label-position="top" class="editInfoForm" :model="editModel" :rules="rules">
             <el-form-item label="头像" prop="avatar">
-                <UploadAvatar />
+                <UploadAvatar :avatarurl="editModel.avatarUrl ?? ''" :submit-api="editUserInfo" />
             </el-form-item>
             <el-form-item label="真实姓名" prop="userName">
                 <el-input v-model="editModel.userName" clearable></el-input>
@@ -78,7 +52,7 @@ const rules = reactive({
                 <el-input v-model="editModel.organization" clearable></el-input>
             </el-form-item>
             <el-form-item label="性别" class="flex justify-start">
-                <el-radio-group v-model="editModel.sex">
+                <el-radio-group v-model="editModel.gender">
                     <el-radio :label="0">男</el-radio>
                     <el-radio :label="1">女</el-radio>
                 </el-radio-group>

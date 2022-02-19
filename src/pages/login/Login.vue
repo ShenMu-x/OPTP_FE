@@ -3,7 +3,7 @@ import { ElMessage } from 'element-plus';
 import { reactive, ref } from 'vue';
 import Layout from './index.vue';
 import { useRouter } from 'vue-router';
-import { loginApi } from '@/utils/services';
+import { loginApi, getUserInfoByTk } from '@/utils/services';
 import { isTeacher } from '@/utils/helper';
 import { mockStuInfo } from './mock';
 
@@ -39,16 +39,22 @@ const rules = reactive({
 
 const loginHandler = () => {
   refFomeEl.value.validate((isPass: boolean, obj: any) => {
+    // 通过表单检查
     if (isPass) {
+      // 请求登录
       loginApi({ username: user.userName, password: user.password })
         .then(value => {
           if (value.statusCode === 0) {
-            if (isTeacher()) {
-              router.replace('/teach/usercenter');
-            } else {
-              router.replace('/usercenter');
-            }
-
+            // 登录成功，请求用户信息
+            getUserInfoByTk().then(userInfo => {
+              if (userInfo.code === 0) {
+                if (isTeacher()) {
+                  router.replace('/teach/usercenter');
+                } else {
+                  router.replace('/usercenter');
+                }
+              }
+            })
           } else {
             ElMessage({
               showClose: false,
@@ -61,7 +67,6 @@ const loginHandler = () => {
         });
     }
   });
-
 };
 
 const toRegister = () => {

@@ -50,13 +50,13 @@ const content = computed(() => props?.courses?.slice(currentIdx.value, currentId
 .courseCt {
     flex-basis: 100%;
     width: 100%;
-
-    background-image: linear-gradient( 135deg, #72eef21e 10%, #5151e51e 100%);
+    background-color: #fff;
     border: 1px solid #c8cace;
     border-radius: 4px;
     &:hover {
         cursor: pointer;
-        box-shadow: 0 0 20px #5151e51e;
+        box-shadow: 0 0 5px #5151e51e;
+        background-color: rgb(252, 252, 252);
     }
 }
 

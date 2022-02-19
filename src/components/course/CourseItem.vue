@@ -1,31 +1,9 @@
-<template>
-    <div class="courseCt" @click="toCourseDetail">
-        <div class="courseMain">
-            <Avatar type="large" class="cover" />
-            <div class="courseInfo">
-                <div
-                    class="courseTitle"
-                    :title="props.course.courseName"
-                >{{ props.course.courseName }}</div>
-                <div class="courseStart">{{ props.course.createdAt }}</div>
-                <div :class="{ 'endTag': true, 'isClose': isClose }">
-                    <span v-if="props.course.isClose === 1">已结束</span>
-                    <span v-else>进行中</span>
-                </div>
-            </div>
-        </div>
-        <div
-            class="courseDes"
-            :title="props.course?.description !== '' ? props.course?.description : ''"
-        >课程描述: {{ props.course?.description !== '' ? props.course?.description : '暂无描述' }}</div>
-    </div>
-</template>
-
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { CourseType } from '@/type';
 import { useRouter } from 'vue-router';
 import Avatar from '../user/Avatar.vue';
+import Tag from '../common/Tag.vue';
 import { isTeacher } from '@/utils/helper/is';
 
 const router = useRouter();
@@ -41,6 +19,26 @@ const toCourseDetail = () => {
     }
 }
 </script>
+
+<template>
+    <div class="courseCt" @click="toCourseDetail">
+        <div class="courseMain">
+            <Avatar type="large" class="cover" />
+            <div class="courseInfo">
+                <div
+                    class="courseTitle"
+                    :title="props.course.courseName"
+                >{{ props.course.courseName }}</div>
+                <div class="courseStart">{{ props.course.createdAt }}</div>
+                <Tag :type="props.course.isClose ? 'red' : 'green'" />
+            </div>
+        </div>
+        <div
+            class="courseDes"
+            :title="props.course?.description !== '' ? props.course?.description : ''"
+        >课程描述: {{ props.course?.description !== '' ? props.course?.description : '暂无描述' }}</div>
+    </div>
+</template>
 
 <style lang="less" scoped>
 .courseCt {
@@ -105,23 +103,5 @@ const toCourseDetail = () => {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     text-align: left;
-}
-
-.endTag {
-    display: inline-block;
-    height: 26px;
-    padding: 0 10px;
-    line-height: 26px;
-    font-size: 12px;
-    border-width: 1px solid #e1f3d8;
-    border-radius: 4px;
-    background-color: #f0f9eb;
-    color: #67c23a;
-}
-
-.isClose {
-    background-color: #fef0f0;
-    border-color: #fde2e2;
-    color: #f56c6c;
 }
 </style>
