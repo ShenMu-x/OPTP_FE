@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 
 import UserInfo from './comp/UserInfo.vue';
@@ -7,7 +7,7 @@ import CourseForm from '../teach/comp/form/CourseForm.vue';
 import CourseList from '@/components/course/CourseList.vue';
 
 import { CourseListType } from '@/type';
-import { createCourse } from '@/utils/services/course';
+import { createCourse, getUserInfoByTk } from '@/utils/services';
 import { mockLessonsData } from './mockdata';
 
 const mockData = reactive<CourseListType>(mockLessonsData);
@@ -29,6 +29,8 @@ const resetHandler = () => {
     refCourseFormEl.value.resetForm();
     closeDialog();
 }
+
+onMounted(() => { getUserInfoByTk() })
 
 </script>
 

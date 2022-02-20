@@ -2,16 +2,17 @@
 import { reactive, ref } from 'vue';
 import { DArrowLeft } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
 import Layout from './index.vue';
 import getRules from './formRules';
-import { stuRegister, getVerificationCodeApi } from '@/utils/services';
+import { stuRegister, getCode } from '@/utils/services';
+import { showFailWrap, showSuccessWrap } from '@/utils/helper';
 
 const router = useRouter();
 const refFormEl = ref();
 const isGettingCode = ref(false);
 const count = ref(60);
 let interval: any = null;
+
 const registerModel = reactive({
   role: 0,
   email: '',
@@ -34,11 +35,12 @@ const redirect = (url: string) => {
 };
 
 const changeRole = (role: number) => {
+  // 根据用户身份切换表单
   console.log(role);
 }
 
-const getVerificationCode = () => {
-  getVerificationCodeApi({ email: registerModel.email })
+const clickGetCode = () => {
+  // 倒计时
   isGettingCode.value = true;
   if (interval) {
     clearInterval(interval);
@@ -53,6 +55,12 @@ const getVerificationCode = () => {
       count.value = 60;
     }
   }, 1000);
+
+  // 请求验证码
+  getCode({ email: registerModel.email }).then(value => {
+    if (value.code === 0) showSuccessWrap({ text: '验证码已发送' })
+    else showFailWrap({ text: value.error?.message })
+  })
 };
 
 const registerHandler = () => {
@@ -69,20 +77,13 @@ const registerHandler = () => {
         verificationCode: registerModel.verificationCode,
       }).then(value => {
         if (value.code === 0) {
-          ElMessage({
-            message: '注册成功！ 请登录。',
-            type: 'success',
-            duration: 1000
-          });
-
+          showSuccessWrap({ text: '注册成功！ 请登录。' })
           router.replace('/login');
         }
       })
     }
   })
 }
-
-
 
 </script>
 
@@ -123,7 +124,7 @@ const registerHandler = () => {
               class="rectBtnHover"
               color="#002D54"
               type="primary"
-              @click="getVerificationCode"
+              @click="clickGetCode"
               v-show="!isGettingCode"
             >获取验证码</el-button>
             <el-button type="primary" disabled v-show="isGettingCode">{{ count }}s后重新获取</el-button>
@@ -153,7 +154,12 @@ const registerHandler = () => {
             <el-radio :label="1">女</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-button type="primary" color="#002D54" class="rectBtnHover registerBtn" @click="registerHandler">点击注册</el-button>
+        <el-button
+          type="primary"
+          color="#002D54"
+          class="rectBtnHover registerBtn"
+          @click="registerHandler"
+        >点击注册</el-button>
         <div class="registerBtnCt">
           已有账号？
           <span class="textBtnInForm" @click="redirect('/login')">点击登录</span>

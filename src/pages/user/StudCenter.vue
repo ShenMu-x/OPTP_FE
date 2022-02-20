@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import UserInfo from './comp/UserInfo.vue';
 import CodingTimeTable from './comp/CodingTimeTable.vue';
 import CourseList from '@/components/course/CourseList.vue';
 import LabList from '@/components/course/LabList.vue';
 import { CourseListType, labsType } from '@/type';
+import { getUserInfoByTk } from '@/utils/services';
 import { mockLessonsData, mockLab } from './mockdata';
 
 const activeName = ref('coursesCreated');
@@ -15,6 +16,8 @@ const labs = reactive<labsType>(mockLab);
 const handleTabClick = (obj: any) => {
     console.log(obj?.props?.label);
 };
+
+onMounted(() => { getUserInfoByTk() })
 
 </script>
 
@@ -38,7 +41,7 @@ const handleTabClick = (obj: any) => {
                     <CourseList />
                 </el-tab-pane>
                 <el-tab-pane label="我的实验" name="experiments">
-                    <LabList :labList="labs"/>
+                    <LabList :labList="labs" />
                 </el-tab-pane>
             </el-tabs>
         </div>

@@ -3,8 +3,8 @@ import { ElMessage } from 'element-plus';
 import { reactive, ref } from 'vue';
 import Layout from './index.vue';
 import { useRouter } from 'vue-router';
-import { loginApi, getUserInfoByTk } from '@/utils/services';
-import { isTeacher } from '@/utils/helper';
+import { login } from '@/utils/services';
+import { isTeacher, showFailWrap } from '@/utils/helper';
 import { mockStuInfo } from './mock';
 
 const router = useRouter();
@@ -42,28 +42,13 @@ const loginHandler = () => {
     // 通过表单检查
     if (isPass) {
       // 请求登录
-      loginApi({ username: user.userName, password: user.password })
-        .then(value => {
-          if (value.code === 0) {
-            // 登录成功，请求用户信息
-            getUserInfoByTk().then(userInfo => {
-              if (userInfo.code === 0) {
-                if (isTeacher()) {
-                  router.replace('/teach/usercenter');
-                } else {
-                  router.replace('/usercenter');
-                }
-              }
-            })
+      login({ username: user.userName, password: user.password })
+        .then(res => {
+          if (res.code === 0) {
+            isTeacher()? router.replace('/teach/usercenter') : router.replace('/usercenter')
           } else {
-            ElMessage({
-              showClose: false,
-              message: value.data.message,
-              type: 'error',
-              duration: 2000,
-            })
+            showFailWrap({ text: res.error?.message })
           }
-          console.log(value);
         });
     }
   });
