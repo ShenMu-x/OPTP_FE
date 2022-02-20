@@ -1,5 +1,6 @@
 import _axios from "./axios";
 import { setToken,setRole } from '@/utils/storage';
+import { ResponseType } from './type';
 
 type stuRegisterParamsType = {
     email: string;
@@ -48,7 +49,7 @@ export const getVerificationCodeApi: (params: { email: string }) => Promise<veri
 }
 
 type emailUniqueReq = {
-    statusCode: number,
+    code: number,
     isUnique?: boolean,
     error?: {
         message: string
@@ -65,12 +66,12 @@ export const checkEmailUnique: (params: { email: string }) => Promise<emailUniqu
     }).then(value => {
         console.log(value);
         return {
-            statusCode: value.data.code,
+            code: value.data.code,
             isUnique: value.data.data
         }
     }).catch((err: Error) => {
         return {
-            statusCode: -1,
+            code: -1,
             error: {
                 message: err.message
             }
@@ -79,7 +80,7 @@ export const checkEmailUnique: (params: { email: string }) => Promise<emailUniqu
 }
 
 type loginResType = {
-    statusCode: number,
+    code: number,
     data: {
         role?: 0 | 1,
         token?: string,
@@ -91,14 +92,14 @@ export const loginApi: (params: { username: string, password: string }) => Promi
     return _axios.post('/web/login', params)
         .then(value => {
             const res = {
-                statusCode: value.data.code ?? -1,
+                code: value.data.code ?? -1,
                 data: {
                     role: value.data.data.role,
                     token: value.data.data.token
                 }
             }
 
-            if (res.statusCode === 0) {
+            if (res.code === 0) {
                 setToken(res.data.token);
                 setRole(res.data.role);
             }
@@ -126,7 +127,7 @@ export const loginApi: (params: { username: string, password: string }) => Promi
                 }
             }
             return {
-                statusCode: err.response?.data?.code,
+                code: err.response?.data?.code,
                 data: {
                     message: errorMsg,
                 }

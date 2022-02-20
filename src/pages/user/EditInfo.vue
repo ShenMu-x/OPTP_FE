@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
-import UploadAvatar from '@/components/common/UploadAvatar.vue';
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { DArrowLeft } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -17,7 +15,6 @@ const toCenter = () => {
     router.push('/usercenter')
 }
 
-const refUploadImgEl = ref();
 const editHandler = () => {
     comfirm({
         type: 'edit',
@@ -36,9 +33,6 @@ const rules = reactive(editRules);
         <el-button class="returnBtn" :icon="DArrowLeft" type="text" @click="toCenter">返回</el-button>
         <p class="formTitle">修改信息</p>
         <el-form label-position="top" class="editInfoForm" :model="editModel" :rules="rules">
-            <el-form-item label="头像" prop="avatar">
-                <UploadAvatar :avatarurl="editModel.avatarUrl ?? ''" :submit-api="editUserInfo" />
-            </el-form-item>
             <el-form-item label="真实姓名" prop="userName">
                 <el-input v-model="editModel.userName" clearable></el-input>
             </el-form-item>

@@ -7,27 +7,26 @@ import type {
     ElUploadProgressEvent,
     ElFile,
 } from 'element-plus/es/components/upload/src/upload.type'
+import { wrapHeaderWithToken, UPLOAD_PIC_URL, showSuccess, showFail } from '@/utils/helper';
 
-import { wrapHeaderWithToken, UPLOAD_PIC_URL } from '@/utils/helper';
-import { } from '@/utils/helper';
-import { showSuccess, showFail } from '@/utils/helper';
 
 const props = defineProps<{
     avatarUrl?: string,
     submitApi?: any,
+    afterUpload?: any,
 }>();
-
-console.log('avatar upload', props.avatarUrl);
 
 const uploadReqHeader = wrapHeaderWithToken();
 
-const imageUrl = ref(props.avatarUrl ?? '');
-const resUrl = ref('');
+const imageUrl = ref(props.avatarUrl);
+
 const handleAvatarSuccess = (res: { code: number, data: { url: string } }, file: UploadFile) => {
-    resUrl.value = res.data.url;
     imageUrl.value = URL.createObjectURL(file.raw)
-    props.submitApi?.({ avatar_url: imageUrl.value }).then((value: any) => {
-        if (value.code === 0) showSuccess();
+    props.submitApi?.({ avatar_url: res.data.url }).then((value: any) => {
+        if (value.code === 0) {
+            showSuccess();
+            props.afterUpload?.(res.data.url);
+        }
         else showFail();
     })
 }

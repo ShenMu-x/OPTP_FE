@@ -68,7 +68,7 @@ const registerHandler = () => {
         organization: registerModel.organization,
         verificationCode: registerModel.verificationCode,
       }).then(value => {
-        if (value.statusCode === 0) {
+        if (value.code === 0) {
           ElMessage({
             message: '注册成功！ 请登录。',
             type: 'success',

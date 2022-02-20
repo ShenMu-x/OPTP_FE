@@ -44,7 +44,7 @@ const loginHandler = () => {
       // 请求登录
       loginApi({ username: user.userName, password: user.password })
         .then(value => {
-          if (value.statusCode === 0) {
+          if (value.code === 0) {
             // 登录成功，请求用户信息
             getUserInfoByTk().then(userInfo => {
               if (userInfo.code === 0) {

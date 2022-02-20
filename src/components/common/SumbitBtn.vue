@@ -14,12 +14,10 @@ const submitHandler = () => {
     const params = props.params;
     const postApi = props.postApi;
 
-    // 兼容ie 不使用await async
-    // const res = postApi(params);
     postApi(params);
-    const res = { statusCode: 1 };
-    const { statusCode } = res;
-    if (statusCode === 0) {
+    const res = { code: 1 };
+    const { code } = res;
+    if (code === 0) {
         props.successAction?.();
         ElMessage({
             showClose: true,

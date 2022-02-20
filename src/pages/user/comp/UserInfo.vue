@@ -3,7 +3,6 @@ import { reactive } from 'vue-demi';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { Edit } from '@element-plus/icons-vue';
-import Avatar from '@/components/user/Avatar.vue';
 import UploadAvatar from '@/components/common/UploadAvatar.vue';
 import { editUserAvatar } from '@/utils/services';
 import { rmToken, rmRole } from '@/utils/storage';
@@ -24,6 +23,10 @@ const handlerEditInfo = () => {
     router.push('/editinfo');
 }
 
+const refreshAvatar = (url: string) => {
+    store.commit('setUserInfo', { avatar_url: url })
+}
+
 const handlerLogOut = () => {
     rmToken();
     rmRole();
@@ -36,15 +39,14 @@ const handlerLogOut = () => {
     })
 };
 
-console.log(DEFAULT_AVATAR)
 </script>
 
 <template>
     <div class="userInfoCt">
-        <!-- <Avatar type="large" /> -->
         <UploadAvatar
             :avatarUrl="userInfo.avatarUrl === '' ? DEFAULT_AVATAR : userInfo.avatarUrl"
             :submit-api="editUserAvatar"
+            :afterUpload="refreshAvatar"
         />
         <div class="info">
             <div class="username">

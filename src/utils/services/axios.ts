@@ -23,7 +23,7 @@ _axios.interceptors.request.use(
     function (error) {
         // req出错时报错
         error.response.data = {
-            statusCode: 500,
+            code: 500,
             data: {
                 message: '服务器异常, 请稍后重试'
             }
@@ -55,7 +55,7 @@ _axios.interceptors.response.use(
                 case 500: {
                     // 500 服务器异常
                     error.response.data = {
-                        statusCode: 500,
+                        code: 500,
                         data: {
                             message: '服务器异常, 请稍后重试'
                         }
