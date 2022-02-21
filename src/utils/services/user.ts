@@ -40,81 +40,57 @@ interface editReq {
     gender: number;
 }
 
-interface editRes {
-    code: number,
-    data?: any,
-    message?: string
-}
-export const editUserInfo: (params: editReq) => Promise<editRes> = (params) => {
+export const editUserInfo: (params: editReq) => ResType<''> = (params) => {
     return _axios({
         method: 'PUT',
         url: '/web/user',
         data: params
-    }).then(value => {
-        console.log('editUserInfo', value.data);
-        if (value.data.code === 0) {
-            return {
-                code: value.data.code,
-            }
-        } else {
-            return {
-                code: value.data.code,
-                message: value.data.response?.message
-            }
-        }
     })
+        .then(_ => ({ code: 0 })
+        ).catch(err => ({
+            code: err.data.code,
+            message: err.data.response?.message
+        }))
 }
 
-export const editUserAvatar: (params: { avatar_url: string }) => Promise<editRes> = (params) => {
+export const editUserAvatar: (params: { avatar_url: string }) => ResType<''> = (params) => {
     return _axios({
         method: 'PUT',
         url: '/web/user/avatar',
         data: params
-    }).then(value => {
-        console.log('editAvatar', value.data);
-        if (value.data.code === 0) {
-            return { code: 0 }
-        } else {
-            return {
-                code: value.data.code,
-                message: value.data.response?.message
-            }
-        }
     })
+        .then(_ => ({ code: 0 }))
+        .catch(err => ({
+            code: err.data.code,
+            message: err.data.response?.message
+        }))
 }
 
 interface costTimeRes {
-    code: number,
-    data?: {
-        userId: number,
-        userName: string,
-        uid: string,
-        codingTime: null | Array<any>;
-    },
-    message?: string
+    userId: number,
+    name: string,
+    number: string,
+    codingTime: Array<any>;
 }
 
-export const getUserCodingTime: () => Promise<costTimeRes> = () => {
+export const getUserCodingTime: () => ResType<costTimeRes> = () => {
     return _axios({
         method: 'GET',
         url: '/web/coding_time'
-    }).then(value => {
-        console.log('codingTime', value.data);
-        if (value.data.code === 0) {
+    })
+        .then(value => {
             return {
-                code: value.data.code,
+                code: 0,
                 data: {
                     userId: value.data.data.user_id,
-                    userName: value.data.data.name,
-                    uid: value.data.data.number,
-                    codingTime: value.data.data.coding_time
+                    name: value.data.data.name,
+                    number: value.data.data.number,
+                    codingTime: value.data.data.coding_time ?? []
                 }
             }
-        } else {
-            return {
-                code: value.data.code,
-                message: value.data.response?.message
-            }
-        }
-    })
+        })
+        .catch(err => ({
+            code: err.data.code,
+            message: err.data.response?.message
+        }))
 }
