@@ -13,7 +13,7 @@ export const getUserInfoByTk: () => ResType<userInfoType> = () => {
             userId: value.data.data.user_id,
             num: value.data.data.num,
             realName: value.data.data.real_name,
-            avatar: value.data.data.avatar_url,
+            avatarUrl: value.data.data.avatar_url,
             gender: value.data.data.gender,
             major: value.data.data.major,
             organization: value.data.data.organization

@@ -1,6 +1,6 @@
 export type ResType<T> = Promise<{
     code: number,
-    data?: any & T,
+    data?: T,
     error?: {
         message: string
     }

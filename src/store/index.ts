@@ -1,6 +1,7 @@
 
 import { createStore } from 'vuex';
 import { userInfoType } from '@/type';
+import { DEFAULT_AVATAR } from '@/utils/helper';
 
 const store = createStore({
     state() {
@@ -13,21 +14,39 @@ const store = createStore({
                 major: "",
                 organization: "",
                 gender: 0,
-                avatarUrl: '',
+                avatarUrl: DEFAULT_AVATAR
             }
         }
     },
     mutations: {
         setUserInfo(state: { user: userInfoType; }, payload: { user: userInfoType }) {
-            state.user.userId = payload.user.userId ?? state.user.userId;
-            state.user.avatarUrl = payload.user.avatarUrl ?? state.user.avatarUrl;
-            state.user.email = payload.user.email ?? state.user.email;
-            state.user.num = payload.user.num ?? state.user.num;
-            state.user.realName = payload.user.realName ?? state.user.realName;
-            state.user.major = payload.user.major ?? state.user.major;
-            state.user.organization = payload.user.organization ?? state.user.organization;
-            state.user.gender = payload.user.gender ?? state.user.gender;
+            state.user.userId = payload.user.userId;
+            state.user.avatarUrl = payload.user.avatarUrl;
+            state.user.email = payload.user.email;
+            state.user.num = payload.user.num;
+            state.user.realName = payload.user.realName;
+            state.user.major = payload.user.major;
+            state.user.organization = payload.user.organization;
+            state.user.gender = payload.user.gender;
         },
+
+        setUserAvatar(state: { user: userInfoType; }, payload: { url: string }) {
+            if (payload.url) {
+                state.user.avatarUrl = payload.url
+            }
+        },
+
+        editUserInfo(state: { user: userInfoType; }, payload: {
+            realName: string,
+            major: string,
+            organization: string,
+            gender: number
+        }) {
+            state.user.realName = payload.realName;
+            state.user.major = payload.major;
+            state.user.organization = payload.organization;
+            state.user.gender = payload.gender;
+        }
     }
 })
 

@@ -1,16 +1,14 @@
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import UserInfo from './comp/UserInfo.vue';
 import CodingTimeTable from './comp/CodingTimeTable.vue';
 import CourseList from '@/components/course/CourseList.vue';
 import LabList from '@/components/course/LabList.vue';
-import { CourseListType, labsType } from '@/type';
-import { getUserInfoByTk } from '@/utils/services';
-import { mockLessonsData, mockLab } from './mockdata';
+import { labsType } from '@/type';
+import { getUserInfoByTk, getCourseList } from '@/utils/services';
+import { mockLab } from './mockdata';
 
 const activeName = ref('coursesCreated');
-
-const mockData = reactive<CourseListType>(mockLessonsData);
 const labs = reactive<labsType>(mockLab);
 
 const handleTabClick = (obj: any) => {
@@ -23,9 +21,7 @@ getUserInfoByTk()
 <template>
     <div class="userCenterCt">
         <div class="pageTitle">我的主页</div>
-        <div class="userInfo">
-            <UserInfo />
-        </div>
+        <UserInfo class="infoCard"/>
         <div class="codeStatistics">
             <div class="statTitle">我的编码时长统计（min）</div>
             <CodingTimeTable />
@@ -33,7 +29,7 @@ getUserInfoByTk()
         <div class="coursesInfo">
             <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
                 <el-tab-pane label="我的课程" name="coursesCreated">
-                    <CourseList :courses="mockData" />
+                    <CourseList :fetchData="getCourseList" />
                 </el-tab-pane>
                 <el-tab-pane label="搜索课程" name="coursesJoin">
                     <div>放一个搜索框</div>
@@ -60,7 +56,7 @@ getUserInfoByTk()
     align-self: flex-start;
 }
 
-.userInfo,
+.infoCard,
 .codeStatistics,
 .coursesInfo {
     background-color: #fff;

@@ -16,9 +16,7 @@ const props = defineProps<{
     afterUpload?: any,
 }>();
 
-const uploadReqHeader = wrapHeaderWithToken();
-
-const imageUrl = ref(props.avatarUrl);
+const imageUrl = ref('');
 
 const handleAvatarSuccess = (res: { code: number, data: { url: string } }, file: UploadFile) => {
     imageUrl.value = URL.createObjectURL(file.raw)
@@ -42,13 +40,6 @@ const beforeAvatarUpload = (file: ElFile) => {
     }
     return isJPG && isLt2M
 }
-const getImage = () => {
-    return imageUrl.value;
-}
-
-defineExpose({
-    getImage,
-})
 </script>
 
 <template>
@@ -56,13 +47,14 @@ defineExpose({
         class="avatarUploader"
         :action="UPLOAD_PIC_URL"
         name="pic"
-        :headers="uploadReqHeader"
+        :headers="wrapHeaderWithToken()"
         :data="{ width: '256' }"
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
         :before-upload="beforeAvatarUpload"
     >
-        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+        <img v-if="props.avatarUrl && !imageUrl" :src="props.avatarUrl" class="avatar" />
+        <img v-else-if="imageUrl" :src="imageUrl" class="avatar" />
         <div v-else class="noImg">
             <Plus style="height: 2em; width: 2em;" />
         </div>

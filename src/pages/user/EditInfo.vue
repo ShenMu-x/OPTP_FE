@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 import { DArrowLeft } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -12,19 +12,38 @@ const router = useRouter();
 const store = useStore();
 
 const back = () => {
-    router.go(-1)
+    router.back()
+}
+
+const refresh = () => {
+    store.commit('editUserInfo', {
+        realName: editModel.realName,
+        major: editModel.major,
+        organization: editModel.organization,
+        gender: editModel.gender
+    })
 }
 
 const editHandler = () => {
     comfirm({
         type: 'edit',
-        onSuccTipClose: back,
-        fetchApi: editUserInfo
+        onSuccTipClose: () => {
+            refresh();
+            back();
+        },
+        fetchApi: editUserInfo,
+        params: {
+            real_name: editModel.realName,
+            major: editModel.major,
+            organization: editModel.organization,
+            gender: editModel.gender
+        }
     });
 }
 
 
 const editModel = reactive<userInfoType>({ ...store.state.user });
+console.log('editModel' ,editModel);
 const rules = reactive(editRules);
 </script>
 

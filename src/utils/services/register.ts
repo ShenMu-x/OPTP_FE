@@ -15,7 +15,7 @@ interface stuRegisterReq {
 
 export const stuRegister: (params: stuRegisterReq) => ResType<''> = (params) => {
     return _axios.post('/web/user/signup/stu', params)
-        .then(value => ({ code: 0 }))
+        .then(_ => ({ code: 0 }))
         .catch(err => ({
             code: err.response.data.code,
             error: { message: err.response?.data.message }

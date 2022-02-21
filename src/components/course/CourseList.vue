@@ -1,39 +1,94 @@
-<template>
-    <div class="block">
-        <div class="coursesCt">
-            <template v-if="content?.length && content.length > 0">
-                <template v-for="item in content" :key="item.id">
-                    <CourseItem :course="item" class="courseCt" />
-                </template>
-            </template>
-            <div class="noData" v-else>暂无数据</div>
-        </div>
-        <el-pagination
-            v-if="props?.courses?.length ?? 0 > 0"
-            v-model:currentPage="current"
-            layout="prev, pager, next"
-            :total="props?.courses?.length"
-            :page-size="pageSize"
-            hide-on-single-page
-        ></el-pagination>
-    </div>
-</template>
-
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
+import { ref, watch, computed, reactive, onMounted } from 'vue';
 import CourseItem from './CourseItem.vue';
 import { CourseListType } from '@/type';
-const props = defineProps<{ courses?: CourseListType }>();
-const current = ref(1)
-const pageSize = ref(6);
+import { ElLoading } from 'element-plus'
+import { courses } from './mock';
+import { showFailWrap } from '@/utils/helper';
 
-const currentIdx = computed(() => (current.value - 1) * pageSize.value)
-const content = computed(() => props?.courses?.slice(currentIdx.value, currentIdx.value + pageSize.value));
+const props = defineProps<{
+    fetchData?: any,
+    common?: {
+        emptyDes?: string
+    }
+}>();
+const data = reactive<{
+    courses: CourseListType
+}>({
+    courses: []
+});
+
+const pageSize = 6;
+const current = ref(1)
+const total = ref(courses.length);
+const refEl = ref();
+const isLoading = ref(false);
+const ins = ref();
+
+const currentIdx = computed(() => (current.value - 1) * pageSize)
+const content = computed(() => data.courses?.slice(currentIdx.value, currentIdx.value + pageSize));
+watch(current, (newVal, _) => {
+    fetch(newVal);
+})
+
+const fetch = (current: number) => {
+    isLoading.value = true;
+    if (refEl.value) {
+        ins.value = ElLoading.service({
+            target: refEl.value,
+            fullscreen: false,
+            background: 'transparent'
+        })
+    }
+
+    props.fetchData?.({
+        pageSize: pageSize,
+        pageCurrent: current
+    })
+        .then((res: any) => {
+            isLoading.value = false;
+            ins.value.close?.();
+            console.log(res);
+            if (res.code === 0) {
+                data.courses = res.data.records;
+                total.value = res.data.pageInfo.total;
+            } else {
+                showFailWrap({ text: '获取课程列表失败,请稍后再试' })
+            }
+        })
+}
+
+onMounted(() => fetch(1));
 
 </script>
 
+<template>
+    <div class="coursesCt" ref="refEl">
+        <template v-if="content?.length > 0 && !isLoading">
+            <CourseItem
+                v-for="item in content"
+                :key="item.courseId"
+                :course="item"
+                class="courseCt"
+            />
+        </template>
+        <el-empty
+            v-if="!content?.length && !isLoading"
+            :description="props.common?.emptyDes ?? '暂无数据'"
+            style="flex: 1"
+        />
+    </div>
+    <el-pagination
+        v-model:currentPage="current"
+        layout="prev, pager, next"
+        :total="total"
+        :page-size="pageSize"
+        hide-on-single-page
+    ></el-pagination>
+</template>
+
 <style lang="less" scoped>
-@import url('@/styles/var.less');
+@import url("@/styles/var.less");
 .coursesCt {
     display: flex;
     flex-wrap: wrap;
@@ -42,21 +97,15 @@ const content = computed(() => props?.courses?.slice(currentIdx.value, currentId
     padding-top: 20px;
 }
 
-.noData {
-    flex: 1;
-    text-align: center;
-}
-
 .courseCt {
     flex-basis: 100%;
     width: 100%;
     background-color: #fff;
-    border: 1px solid #c8cace;
+    border: 1px solid #e4e7ed;
     border-radius: 4px;
     &:hover {
         cursor: pointer;
         box-shadow: 0 0 5px #5151e51e;
-        background-color: rgb(252, 252, 252);
     }
 }
 
