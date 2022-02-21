@@ -49,11 +49,11 @@ const handlerLogOut = () => {
             :afterUpload="refreshAvatar"
         />
         <div class="info">
-            <div class="username">
-                {{ userInfo.userName }}
+            <div class="name">
+                {{ userInfo.realName }}
                 <el-button type="text" :icon="Edit" class="editBtn" @click="handlerEditInfo">编辑个人信息</el-button>
             </div>
-            <div>{{ props.role === 1 ? '职工号' : '学号' }}: {{ userInfo.uid }}</div>
+            <div>{{ props.role === 1 ? '职工号' : '学号' }}: {{ userInfo.num }}</div>
         </div>
         <el-button type="primary" @click="handlerLogOut">退出登录</el-button>
     </div>
@@ -65,7 +65,7 @@ const handlerLogOut = () => {
     align-items: center;
 }
 
-.username {
+.name {
     font-size: 30px;
     font-weight: 500;
     margin-bottom: 10px;

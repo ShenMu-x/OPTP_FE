@@ -17,8 +17,7 @@ const handleTabClick = (obj: any) => {
     console.log(obj?.props?.label);
 };
 
-onMounted(() => { getUserInfoByTk() })
-
+getUserInfoByTk()
 </script>
 
 <template>

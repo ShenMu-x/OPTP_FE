@@ -1,8 +1,8 @@
 export type userInfoType = {
     userId?: number,
     email?: string,
-    uid?: string,
-    userName?: string,
+    num?: string,
+    realName?: string,
     major?: string,
     organization?: string,
     gender?: number,

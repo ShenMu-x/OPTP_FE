@@ -1,14 +1,9 @@
 import _axios from "./axios";
+import { ResType } from "./type";
 import { userInfoType } from '@/type';
 import store from '@/store';
 
-type getUserInfoReq = {
-    code: number,
-    data?: userInfoType,
-    error?: string
-}
-
-export const getUserInfoByTk: () => Promise<getUserInfoReq> = () => {
+export const getUserInfoByTk: () => ResType<userInfoType> = () => {
     return _axios({
         method: 'GET',
         url: '/web/user'
@@ -16,8 +11,8 @@ export const getUserInfoByTk: () => Promise<getUserInfoReq> = () => {
         const res = {
             email: value.data.data.email,
             userId: value.data.data.user_id,
-            uid: value.data.data.num,
-            userName: value.data.data.real_name,
+            num: value.data.data.num,
+            realName: value.data.data.real_name,
             avatar: value.data.data.avatar_url,
             gender: value.data.data.gender,
             major: value.data.data.major,
@@ -30,10 +25,10 @@ export const getUserInfoByTk: () => Promise<getUserInfoReq> = () => {
             code: value.data.code,
             data: res
         }
-    }).catch((err: Error) => {
+    }).catch(err => {
         return {
-            code: -1,
-            error: err.message
+            code: err.response.data.code,
+            error: err.response.data.message
         }
     })
 }

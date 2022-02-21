@@ -8,8 +8,8 @@ const store = createStore({
             user: {
                 userId: -1,
                 email: '',
-                uid: "",
-                userName: "",
+                num: "",
+                realName: "",
                 major: "",
                 organization: "",
                 gender: 0,
@@ -22,8 +22,8 @@ const store = createStore({
             state.user.userId = payload.user.userId ?? state.user.userId;
             state.user.avatarUrl = payload.user.avatarUrl ?? state.user.avatarUrl;
             state.user.email = payload.user.email ?? state.user.email;
-            state.user.uid = payload.user.uid ?? state.user.uid;
-            state.user.userName = payload.user.userName ?? state.user.userName;
+            state.user.num = payload.user.num ?? state.user.num;
+            state.user.realName = payload.user.realName ?? state.user.realName;
             state.user.major = payload.user.major ?? state.user.major;
             state.user.organization = payload.user.organization ?? state.user.organization;
             state.user.gender = payload.user.gender ?? state.user.gender;

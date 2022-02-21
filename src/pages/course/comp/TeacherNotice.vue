@@ -1,9 +1,9 @@
 <template>
     <div class="teacherCard">
         <Avatar type="middle" />
-        <div class="teacherInfo" :title="props.teacherInfo.userName">
+        <div class="teacherInfo" :title="props.teacherInfo.realName">
             任课老师:
-            <b>{{ props.teacherInfo.userName }}</b>
+            <b>{{ props.teacherInfo.realName }}</b>
         </div>
         <div class="teacherInfo" :title="props.teacherInfo.email">联系邮箱: {{ props.teacherInfo.email }}</div>
         <div

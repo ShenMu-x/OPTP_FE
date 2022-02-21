@@ -1,7 +1,6 @@
 import _axios from "./axios";
 import { ResType } from './type';
 import { setToken, setRole } from '@/utils/storage';
-import { getUserInfoByTk } from './user';
 
 interface stuRegisterReq {
     email: string;

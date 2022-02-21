@@ -30,7 +30,7 @@ const resetHandler = () => {
     closeDialog();
 }
 
-onMounted(() => { getUserInfoByTk() })
+getUserInfoByTk()
 
 </script>
 

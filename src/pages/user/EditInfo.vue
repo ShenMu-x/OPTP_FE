@@ -11,33 +11,30 @@ import { editUserInfo } from '@/utils/services';
 const router = useRouter();
 const store = useStore();
 
-const toCenter = () => {
-    router.push('/usercenter')
+const back = () => {
+    router.go(-1)
 }
 
 const editHandler = () => {
     comfirm({
         type: 'edit',
-        onSuccTipClose: toCenter,
+        onSuccTipClose: back,
         fetchApi: editUserInfo
     });
 }
 
 
-const editModel = reactive<userInfoType>(store.state.user);
+const editModel = reactive<userInfoType>({ ...store.state.user });
 const rules = reactive(editRules);
 </script>
 
 <template>
     <div class="editCt">
-        <el-button class="returnBtn" :icon="DArrowLeft" type="text" @click="toCenter">返回</el-button>
+        <el-button class="returnBtn" :icon="DArrowLeft" type="text" @click="back">返回</el-button>
         <p class="formTitle">修改信息</p>
         <el-form label-position="top" class="editInfoForm" :model="editModel" :rules="rules">
-            <el-form-item label="真实姓名" prop="userName">
-                <el-input v-model="editModel.userName" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="学号" prop="num">
-                <el-input v-model="editModel.uid" clearable></el-input>
+            <el-form-item label="真实姓名" prop="realName">
+                <el-input v-model="editModel.realName" clearable></el-input>
             </el-form-item>
             <el-form-item label="专业" prop="major">
                 <el-input v-model="editModel.major" clearable></el-input>
@@ -72,10 +69,10 @@ const rules = reactive(editRules);
     justify-self: flex-start;
     width: fit-content;
     font-size: 14px;
-    color: #3f9eff;
+    color: #002d54;
     &:hover {
         cursor: pointer;
-        color: #1f88f1;
+        color: #03437a;
     }
 }
 
