@@ -1,4 +1,4 @@
-import { validateName, validateMajor } from '@/utils/helper/validate';
+import { validateName, validateMajor, validateOrganization } from '@/utils/helper/validate';
 
 export const editRules = {
     realName: [
@@ -6,5 +6,8 @@ export const editRules = {
     ],
     major: [
         { validator: validateMajor, trigger: 'blur' }
+    ],
+    organization: [
+        { validator: validateOrganization, trigger: 'blur' }
     ]
 }

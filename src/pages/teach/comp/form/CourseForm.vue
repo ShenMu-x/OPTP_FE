@@ -4,6 +4,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import UploadAvatar from '@/components/common/UploadAvatar.vue';
 import { courseRules } from './rule';
 import { CourseType } from '@/type';
+import { comfirm } from '@/utils/helper';
 
 const refFormEl = ref();
 const props = defineProps<{
@@ -29,32 +30,46 @@ const commitForm = () => {
     refFormEl.value.validate((isPass: boolean, obj: any) => {
         if (isPass) {
             // todo
-            ElMessageBox.confirm(
-                '确定提交？',
-                '课程信息提交确认',
-                {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'success',
-                    lockScroll: false,
-                }
-            )
-                .then(() => {
-                    props.fetchApi?.().then((value: any) => {
-                        if (value.code === 0) {
-                            ElMessage({
-                                type: 'success',
-                                message: '修改成功',
-                            })
+            // comfirm({
+            //     type: 'edit',
+            //     onSuccTipClose: () => {
+            //         refresh();
+            //         back();
+            //     },
+            //     fetchApi: editUserInfo,
+            //     params: {
+            //         real_name: editModel.realName,
+            //         major: editModel.major,
+            //         organization: editModel.organization,
+            //         gender: editModel.gender
+            //     }
+            // });
+            // ElMessageBox.confirm(
+            //     '确定提交？',
+            //     '课程信息提交确认',
+            //     {
+            //         confirmButtonText: '确定',
+            //         cancelButtonText: '取消',
+            //         type: 'success',
+            //         lockScroll: false,
+            //     }
+            // )
+            //     .then(() => {
+            //         props.fetchApi?.().then((value: any) => {
+            //             if (value.code === 0) {
+            //                 ElMessage({
+            //                     type: 'success',
+            //                     message: '修改成功',
+            //                 })
 
-                            props.closeDialog?.();
-                        }
-                    })
+            //                 props.closeDialog?.();
+            //             }
+            //         })
 
-                })
-                .catch(() => {
-                    // 取消提交
-                })
+            //     })
+            //     .catch(() => {
+            //         // 取消提交
+            //     })
         }
     });
 }

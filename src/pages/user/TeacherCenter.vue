@@ -7,7 +7,7 @@ import CourseForm from '../teach/comp/form/CourseForm.vue';
 import CourseList from '@/components/course/CourseList.vue';
 
 import { CourseListType } from '@/type';
-import { createCourse, getUserInfoByTk } from '@/utils/services';
+import { createCourse, getUserInfoByTk, getCoursesCreated } from '@/utils/services';
 import { mockLessonsData } from './mockdata';
 
 const mockData = reactive<CourseListType>(mockLessonsData);
@@ -46,11 +46,11 @@ getUserInfoByTk()
                     <div class="btnCt">
                         <el-button :icon="Plus" @click="openDialog">创建课程</el-button>
                     </div>
-                    <CourseList :courses="mockData" />
+                    <CourseList :fetchData="getCoursesCreated" />
                 </el-tab-pane>
             </el-tabs>
         </div>
-        <el-dialog v-model="dialogFormVisible" title="创建课程" :fullscreen="true">
+        <el-dialog v-model="dialogFormVisible" title="创建课程" :lock-scroll="false">
             <CourseForm :fetchApi="createCourse" ref="refCourseFormEl" :closeDialog="closeDialog" />
             <template #footer>
                 <span class="dialog-footer">

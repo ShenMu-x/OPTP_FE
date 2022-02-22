@@ -16,6 +16,15 @@ export const validateMajor = (rule: any, value: any, callback: any) => {
   }
 };
 
+export const validateOrganization = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('请输入所属组织'));
+  } else {
+    callback();
+  }
+};
+
+
 export const validateEmail = (rule: any, value: any, callback: any) => {
   if (value === '') callback(new Error('请输入真实邮箱'));
   else checkEmailUnique({ email: value })

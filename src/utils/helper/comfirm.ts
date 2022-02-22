@@ -44,6 +44,7 @@ export const showFailWrap = ({ text, closeCb }: {
 
 interface comfirmParams {
     type: 'edit' | 'submit',
+    refEl: any,
     cilckCancle?: any
     fetchApi?: any,
     params?: any,
@@ -55,6 +56,7 @@ interface comfirmParams {
 
 export const comfirm = ({
     type,
+    refEl,
     cilckCancle,
     failCb,
     successCb,
@@ -63,34 +65,38 @@ export const comfirm = ({
     fetchApi,
     params
 }: comfirmParams) => {
-    ElMessageBox.confirm(
-        type === 'edit' ? '确认修改?' : '确定提交?',
-        type === 'edit' ? '修改提交确认' : '提交确认',
-        {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'success',
-            lockScroll: false,
-        }
-    )
-        .then(() => {
-            fetchApi(params).then((value: any) => {
-                if (value.code === 0) {
-                    showSuccessWrap?.({
-                        closeCb: onSuccTipClose
-                    });
-                    successCb?.(value);
-                } else {
-                    showFailWrap({
-                        text: value.message,
-                        closeCb: onFailTipClose
-                    });
-                    failCb?.(value);
+    refEl.value.validate((isPass: boolean, obj: any) => {
+        if (isPass) {
+            ElMessageBox.confirm(
+                type === 'edit' ? '确认修改?' : '确定提交?',
+                type === 'edit' ? '修改提交确认' : '提交确认',
+                {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'success',
+                    lockScroll: false,
                 }
+            )
+                .then(() => {
+                    fetchApi(params).then((value: any) => {
+                        if (value.code === 0) {
+                            showSuccessWrap?.({
+                                closeCb: onSuccTipClose
+                            });
+                            successCb?.(value);
+                        } else {
+                            showFailWrap({
+                                text: value.message,
+                                closeCb: onFailTipClose
+                            });
+                            failCb?.(value);
+                        }
 
-            })
-        })
-        .catch(() => {
-            cilckCancle?.()
-        })
+                    })
+                })
+                .catch(() => {
+                    cilckCancle?.()
+                })
+        }
+    })
 }

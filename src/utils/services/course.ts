@@ -16,9 +16,13 @@ export const createCourse: (params: createCourseReq) => ResType<any> = (params) 
         data: params,
     })
         .then(value => {
+            console.log(value.data);
             return { code: 0 }
         })
-        .catch(err => ({ code: -1 }))
+        .catch(err => {
+            console.log(err.response);
+            return { code: -1 }
+        })
 }
 
 export const editCourse: (params: createCourseReq) => ResType<any> = (params) => {
@@ -45,7 +49,7 @@ interface ListRes {
     }
 }
 
-export const getCourseAll: (params: {
+export const getCoursesAll: (params: {
     pageCurrent: number,
     pageSize: number
 }) => ResType<ListRes> = (params) => {
@@ -64,6 +68,56 @@ export const getCourseAll: (params: {
                 code: err.response.data.code,
                 error: {
                     message: err.response.data.message,
+                }
+            }
+        })
+}
+
+export const getCoursesStudy: (params: {
+    pageCurrent: number,
+    pageSize: number
+}) => ResType<ListRes> = (params) => {
+    return _axios.get(`/web/course/study?pageCurrent=${params.pageCurrent}&pageSize=${params.pageSize}`)
+        .then(value => {
+            return {
+                code: 0,
+                data: {
+                    records: value.data.data.records,
+                    pageInfo: value.data.data.page_info
+                }
+            }
+        })
+        .catch(err => {
+            return {
+                code: err.response.data.code,
+                error: {
+                    message: err.response.data.message,
+                }
+            }
+        })
+}
+
+export const getCoursesCreated: (params: {
+    pageCurrent: number,
+    pageSize: number
+}) => ResType<ListRes> = (params) => {
+    return _axios.get(`/web/course/setup?pageCurrent=${params.pageCurrent}&pageSize=${params.pageSize}`)
+        .then(value => {
+            console.log('success')
+            return {
+                code: 0,
+                data: {
+                    records: value.data.data?.records ?? [],
+                    pageInfo: value.data.data?.page_info ?? {}
+                }
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            return {
+                code: -1,
+                error: {
+                    message: '',
                 }
             }
         })
