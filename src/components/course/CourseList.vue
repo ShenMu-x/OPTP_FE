@@ -27,6 +27,8 @@ const ins = ref();
 
 const currentIdx = computed(() => (current.value - 1) * pageSize)
 const content = computed(() => data.courses?.slice(currentIdx.value, currentIdx.value + pageSize));
+
+// 监听页面变化
 watch(current, (newVal, _) => {
     fetch(newVal);
 })

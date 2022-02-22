@@ -5,7 +5,7 @@ import CodingTimeTable from './comp/CodingTimeTable.vue';
 import CourseList from '@/components/course/CourseList.vue';
 import LabList from '@/components/course/LabList.vue';
 import { labsType } from '@/type';
-import { getUserInfoByTk, getCourseList } from '@/utils/services';
+import { getUserInfoByTk, getCoursesAll } from '@/utils/services';
 import { mockLab } from './mockdata';
 
 const activeName = ref('coursesCreated');
@@ -29,7 +29,7 @@ getUserInfoByTk()
         <div class="coursesInfo">
             <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
                 <el-tab-pane label="我的课程" name="coursesCreated">
-                    <CourseList :fetchData="getCourseList" />
+                    <CourseList :fetchData="getCoursesAll" />
                 </el-tab-pane>
                 <el-tab-pane label="搜索课程" name="coursesJoin">
                     <div>放一个搜索框</div>

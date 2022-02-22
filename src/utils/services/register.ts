@@ -2,7 +2,7 @@ import _axios from "./axios";
 import { ResType } from './type';
 import { setToken, setRole } from '@/utils/storage';
 
-interface stuRegisterReq {
+interface RegisterReq {
     email: string;
     realName: string;
     num: string;
@@ -13,8 +13,17 @@ interface stuRegisterReq {
     verificationCode: string;
 }
 
-export const stuRegister: (params: stuRegisterReq) => ResType<''> = (params) => {
+export const stuRegister: (params: RegisterReq) => ResType<''> = (params) => {
     return _axios.post('/web/user/signup/stu', params)
+        .then(_ => ({ code: 0 }))
+        .catch(err => ({
+            code: err.response.data.code,
+            error: { message: err.response?.data.message }
+        }));
+}
+
+export const teachRegister: (params: RegisterReq) => ResType<''> = (params) => {
+    return _axios.post('web/user/signup/teacher', params)
         .then(_ => ({ code: 0 }))
         .catch(err => ({
             code: err.response.data.code,
@@ -41,7 +50,7 @@ export const checkEmailUnique: (params: { email: string }) => ResType<{ isUnique
         params: {
             email: encodeURIComponent(params.email)
         }
-    }).then(value => ({ code: 0, isUnique: value.data.data })
+    }).then(value => ({ code: 0, data: { isUnique: value.data.data } })
     ).catch(err => {
         const code = err.response.data.code;
         let message = err.response.data.message;

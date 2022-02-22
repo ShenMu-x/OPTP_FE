@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref, toRef } from 'vue';
 import { ElMessage } from 'element-plus';
 import { Plus } from '@element-plus/icons-vue';
 import type {
@@ -16,7 +16,13 @@ const props = defineProps<{
     afterUpload?: any,
 }>();
 
+const avatar = toRef(props, 'avatarUrl');
 const imageUrl = ref('');
+const avatarUrl = computed(() => {
+    if (imageUrl.value !== '') return imageUrl.value;
+    else if (avatar.value) return avatar.value;
+    else return '';
+})
 
 const handleAvatarSuccess = (res: { code: number, data: { url: string } }, file: UploadFile) => {
     imageUrl.value = URL.createObjectURL(file.raw)
@@ -53,8 +59,7 @@ const beforeAvatarUpload = (file: ElFile) => {
         :on-success="handleAvatarSuccess"
         :before-upload="beforeAvatarUpload"
     >
-        <img v-if="props.avatarUrl && !imageUrl" :src="props.avatarUrl" class="avatar" />
-        <img v-else-if="imageUrl" :src="imageUrl" class="avatar" />
+        <img v-if="avatarUrl" :src="avatarUrl" class="avatar" />
         <div v-else class="noImg">
             <Plus style="height: 2em; width: 2em;" />
         </div>
@@ -71,16 +76,17 @@ const beforeAvatarUpload = (file: ElFile) => {
     height: 100px;
     display: block;
     object-fit: cover;
+    position: relative;
 
-    // &:hover::after {
-    //     content: "上传";
-    //     height: 100px;
-    //     width: 100px;
-    //     position: absolute;
-    //     top: 0;
-    //     left: 0;
-    //     background-color: #00000011;
-    // }
+    &:hover::after {
+        content: "上传aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        height: 100px;
+        width: 100px;
+        // position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #000;
+    }
 }
 .noImg {
     background-color: #fefefe;

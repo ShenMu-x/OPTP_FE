@@ -4,7 +4,7 @@ import { DArrowLeft } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router';
 import Layout from './index.vue';
 import getRules from './formRules';
-import { stuRegister, getCode } from '@/utils/services';
+import { stuRegister, teachRegister, getCode } from '@/utils/services';
 import { showFailWrap, showSuccessWrap } from '@/utils/helper';
 
 const router = useRouter();
@@ -17,8 +17,8 @@ const registerModel = reactive({
   role: 0,
   email: '',
   verificationCode: '',
-  userName: '',
-  uid: '',
+  realName: '',
+  num: '',
   major: '',
   organization: '',
   password: '',
@@ -27,8 +27,10 @@ const registerModel = reactive({
 });
 
 const rules = reactive(getRules({
-  pswCheck: registerModel.password,
+  pswCheck: () => {return registerModel.password}
 }))
+
+let register = stuRegister;
 
 const redirect = (url: string) => {
   router.replace(url);
@@ -36,7 +38,7 @@ const redirect = (url: string) => {
 
 const changeRole = (role: number) => {
   // 根据用户身份切换表单
-  console.log(role);
+  register = role === 1 ? teachRegister : stuRegister;
 }
 
 const clickGetCode = () => {
@@ -66,10 +68,10 @@ const clickGetCode = () => {
 const registerHandler = () => {
   refFormEl.value.validate((isPass: boolean, obj: any) => {
     if (isPass) {
-      stuRegister({
+      register({
         email: registerModel.email,
-        realName: registerModel.userName,
-        num: registerModel.uid,
+        realName: registerModel.realName,
+        num: registerModel.num,
         gender: registerModel.gender,
         password: registerModel.password,
         major: registerModel.major,
@@ -130,11 +132,11 @@ const registerHandler = () => {
             <el-button type="primary" disabled v-show="isGettingCode">{{ count }}s后重新获取</el-button>
           </div>
         </el-form-item>
-        <el-form-item label="真实姓名" prop="userName">
-          <el-input v-model="registerModel.userName" clearable></el-input>
+        <el-form-item label="真实姓名" prop="realName">
+          <el-input v-model="registerModel.realName" clearable></el-input>
         </el-form-item>
         <el-form-item label="学号" prop="num">
-          <el-input v-model="registerModel.uid" clearable></el-input>
+          <el-input v-model="registerModel.num" clearable></el-input>
         </el-form-item>
         <el-form-item label="专业" prop="major">
           <el-input v-model="registerModel.major" clearable></el-input>

@@ -21,7 +21,7 @@ const store = createStore({
     mutations: {
         setUserInfo(state: { user: userInfoType; }, payload: { user: userInfoType }) {
             state.user.userId = payload.user.userId;
-            state.user.avatarUrl = payload.user.avatarUrl;
+            state.user.avatarUrl = payload.user.avatarUrl === '' ? DEFAULT_AVATAR : payload.user.avatarUrl;
             state.user.email = payload.user.email;
             state.user.num = payload.user.num;
             state.user.realName = payload.user.realName;

@@ -9,29 +9,31 @@ interface createCourseReq {
     language: number,
 }
 
-// export const createCourse: (params: createCourseReq) => ResType<any> = (params) => {
-//     return _axios({
-//         method: "POST",
-//         url: "/web/course",
-//         data: params,
-//     })
-//         .then(value => {
+export const createCourse: (params: createCourseReq) => ResType<any> = (params) => {
+    return _axios({
+        method: "POST",
+        url: "/web/course",
+        data: params,
+    })
+        .then(value => {
+            return { code: 0 }
+        })
+        .catch(err => ({ code: -1 }))
+}
 
-//         })
-//         .catch(err => { })
-// }
-
-// export const editCourse: (params: createCourseReq) => ResType<any> = (params) => {
-//     return _axios({
-//         method: "PUT",
-//         url: "/web/course",
-//         data: params,
-//     })
-//         .then(value => {
-
-//         })
-//         .catch(err => { })
-// }
+export const editCourse: (params: createCourseReq) => ResType<any> = (params) => {
+    return _axios({
+        method: "PUT",
+        url: "/web/course",
+        data: params,
+    })
+        .then(value => {
+            return {
+                code: 0
+            }
+        })
+        .catch(err => { return { code: -1 } })
+}
 
 interface ListRes {
     records: Array<any>,
@@ -43,7 +45,7 @@ interface ListRes {
     }
 }
 
-export const getCourseList: (params: {
+export const getCourseAll: (params: {
     pageCurrent: number,
     pageSize: number
 }) => ResType<ListRes> = (params) => {

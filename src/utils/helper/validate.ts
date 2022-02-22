@@ -20,7 +20,7 @@ export const validateEmail = (rule: any, value: any, callback: any) => {
   if (value === '') callback(new Error('请输入真实邮箱'));
   else checkEmailUnique({ email: value })
     .then(res => {
-      if (res.code === 0 && !res.data.isUnique) callback('该邮箱已被注册，请更换邮箱或直接登录');
+      if (res.code === 0 && !res.data?.isUnique) callback('该邮箱已被注册，请更换邮箱或直接登录');
       if (res.code !== 0) callback(res.error?.message);
       callback();
     })

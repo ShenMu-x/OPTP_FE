@@ -2,7 +2,7 @@ import { validateEmail } from '../../utils/helper/validate';
 
 
 const getRules = (params: {
-    pswCheck: string
+    pswCheck: any
 }) => {
     return {
         email: [
@@ -28,13 +28,13 @@ const getRules = (params: {
                 trigger: 'blur',
             },
             {
-                min: 4,
-                max: 4,
-                message: '请输入4位验证码',
+                min: 6,
+                max: 6,
+                message: '请输入6位验证码',
                 trigger: 'blur',
             },
         ],
-        userName: [
+        realName: [
             {
                 required: true,
                 message: '请输入真实姓名',
@@ -48,7 +48,7 @@ const getRules = (params: {
                 trigger: 'blur',
             },
         ],
-        uid: [
+        num: [
             {
                 required: true,
                 message: '请输入学号',
@@ -72,7 +72,7 @@ const getRules = (params: {
                 validator: (rule: any, value: any, callback: any) => {
                     if (value === '') {
                         callback(new Error('请再次输入密码'))
-                    } else if (value !== params.pswCheck) {
+                    } else if (value !== params.pswCheck?.()) {
                         callback(new Error("密码确认错误"))
                     } else {
                         callback()

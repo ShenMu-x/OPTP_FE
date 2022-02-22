@@ -11,8 +11,8 @@ const router = useRouter();
 const refFomeEl = ref();
 
 const user = reactive({
-  userName: mockStuInfo.username,
-  password: mockStuInfo.password
+  userName: '',
+  password: ''
 });
 
 const rules = reactive({
