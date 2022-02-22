@@ -42,7 +42,7 @@ const handlerLogOut = () => {
         <UploadAvatar
             :avatarUrl="store.state.user.avatarUrl"
             :submit-api="editUserAvatar"
-            :afterUpload="refreshAvatar"
+            :afterSubmit="refreshAvatar"
         />
         <div class="info">
             <div class="name">

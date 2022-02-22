@@ -2,28 +2,25 @@
 import { ref } from 'vue';
 import { CourseType } from '@/type';
 import { useRouter } from 'vue-router';
-import Avatar from '../user/Avatar.vue';
+import Avatar from '../common/Avatar.vue';
 import Tag from '../common/Tag.vue';
 import { isTeacher } from '@/utils/helper/is';
 
 const router = useRouter();
 const props = defineProps<{ course: CourseType }>();
 
-const isClose = ref(props.course.isClose === 1);
+console.log('course', props.course)
 
 const toCourseDetail = () => {
-    if (isTeacher()) {
-        router.push(`/teach/courseDetail/${props.course.courseId}`);
-    } else {
-        router.push(`/courseDetail/${props.course.courseId}`);
-    }
+    if (isTeacher()) router.push(`/teach/courseDetail/${props.course.courseId}`);
+    else router.push(`/courseDetail/${props.course.courseId}`);
 }
 </script>
 
 <template>
     <div class="courseCt" @click="toCourseDetail">
         <div class="courseMain">
-            <Avatar type="large" class="cover" />
+            <Avatar type="large" class="cover" :src="props.course.picUrl" />
             <div class="courseInfo">
                 <div
                     class="courseTitle"
@@ -35,8 +32,8 @@ const toCourseDetail = () => {
         </div>
         <div
             class="courseDes"
-            :title="props.course?.description !== '' ? props.course?.description : ''"
-        >课程描述: {{ props.course?.description !== '' ? props.course?.description : '暂无描述' }}</div>
+            :title="props.course?.courseDes || ''"
+        >课程描述: {{ props.course?.courseDes || '暂无描述' }}</div>
     </div>
 </template>
 

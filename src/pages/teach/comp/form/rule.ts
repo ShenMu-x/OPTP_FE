@@ -40,14 +40,14 @@ export const courseRules = {
             trigger: 'blur'
         }
     ],
-    description: [
+    courseDes: [
         {
             required: true,
             message: '请输入课程介绍',
             trigger: 'blur',
         },
     ],
-    password: [
+    secretKey: [
         {
             required: true,
             message: '请输入选课密码',

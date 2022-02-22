@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { UploadFilled } from '@element-plus/icons-vue';
 import { UPLOAD_PDF_URL, UPLOAD_ATTACHMENT_URL, wrapHeaderWithToken } from '@/utils/helper';
-import { onMounted } from 'vue-demi';
 
 const props = defineProps<{
     type: 'attachment' | 'report';
@@ -10,14 +9,10 @@ const props = defineProps<{
 const uploadUrl = props.type === 'report' ? UPLOAD_PDF_URL : UPLOAD_ATTACHMENT_URL;
 const fileType = props.type === 'report' ? 'pdf' : 'docx/pdf/txt/rar'
 
-const headers = wrapHeaderWithToken({
-    'ContentType': 'multipart/form-data'
-})
-
 </script>
 
 <template>
-    <el-upload class="upload-demo" drag :action="uploadUrl" multiple :headers="headers">
+    <el-upload class="upload-demo" drag :action="uploadUrl" multiple :headers="wrapHeaderWithToken()">
         <el-icon class="el-icon--upload">
             <upload-filled />
         </el-icon>

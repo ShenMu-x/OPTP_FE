@@ -1,5 +1,27 @@
 import _axios from './axios';
 import { ResType } from './type';
+import { CourseType } from '@/type';
+import { fmatDate } from '../helper';
+
+const packCourse = (course: any) => {
+    return {
+        courseId: course.course_id,
+        teacherId: course.teacher_id,
+        teacherName: course.teacher_name,
+        courseName: course.course_name,
+        courseDes: course.course_des,
+        picUrl: course.pic_url,
+        secretKey: course.secret_key,
+        isClose: course.is_close,
+        language: course.language,
+        createdAt: fmatDate(course.created_at),
+        updatedAt: fmatDate(course.updated_at)
+    }
+}
+
+const packRecords = (list: Array<any>) => {
+    return list.map?.(course => packCourse(course));
+}
 
 interface createCourseReq {
     courseDes: string,
@@ -40,7 +62,7 @@ export const editCourse: (params: createCourseReq) => ResType<any> = (params) =>
 }
 
 interface ListRes {
-    records: Array<any>,
+    records: Array<CourseType>,
     pageInfo: {
         total: number,
         size: number,
@@ -58,7 +80,7 @@ export const getCoursesAll: (params: {
             return {
                 code: 0,
                 data: {
-                    records: value.data.data.records,
+                    records: packRecords(value.data.data.records),
                     pageInfo: value.data.data.page_info
                 }
             }
@@ -82,7 +104,7 @@ export const getCoursesStudy: (params: {
             return {
                 code: 0,
                 data: {
-                    records: value.data.data.records,
+                    records: packRecords(value.data.data.records),
                     pageInfo: value.data.data.page_info
                 }
             }
@@ -100,24 +122,48 @@ export const getCoursesStudy: (params: {
 export const getCoursesCreated: (params: {
     pageCurrent: number,
     pageSize: number
-}) => ResType<ListRes> = (params) => {
+}) => ResType<ListRes> = async (params) => {
+    await new Promise(res => setTimeout(() => {
+        res(1)
+    }, 4000))
     return _axios.get(`/web/course/setup?pageCurrent=${params.pageCurrent}&pageSize=${params.pageSize}`)
         .then(value => {
-            console.log('success')
             return {
                 code: 0,
                 data: {
-                    records: value.data.data?.records ?? [],
-                    pageInfo: value.data.data?.page_info ?? {}
+                    records: packRecords(value.data.data.records),
+                    pageInfo: value.data.data?.page_info
                 }
             }
         })
         .catch(err => {
-            console.log(err);
             return {
-                code: -1,
+                code: err.response.data.code,
                 error: {
-                    message: '',
+                    message: err.response.data.message,
+                }
+            }
+        })
+}
+
+export const getCourseById: (params: {
+    courseId: number
+}) => ResType<ListRes> = (params) => {
+    return _axios.get(`/web/course/${params.courseId}`)
+        .then(value => {
+            return {
+                code: 0,
+                data: {
+                    records: packRecords(value.data.data?.records),
+                    pageInfo: value.data.data?.page_info
+                }
+            }
+        })
+        .catch(err => {
+            return {
+                code: err.response.data.code,
+                error: {
+                    message: err.response.data.message,
                 }
             }
         })

@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { ref, watch, computed, reactive, onMounted } from 'vue';
+import { ElLoading } from 'element-plus';
 import CourseItem from './CourseItem.vue';
 import { CourseListType } from '@/type';
-import { ElLoading } from 'element-plus'
 import { courses } from './mock';
-import { showFailWrap } from '@/utils/helper';
+import { showSuccessWrap, showFailWrap } from '@/utils/helper';
 
 const props = defineProps<{
     fetchData?: any,
@@ -12,18 +12,18 @@ const props = defineProps<{
         emptyDes?: string
     }
 }>();
-const data = reactive<{
-    courses: CourseListType
-}>({
-    courses: []
-});
+const data = reactive<{ courses: CourseListType }>({ courses: [] });
 
 const pageSize = 6;
 const current = ref(1)
 const total = ref(courses.length);
+
 const refEl = ref();
 const isLoading = ref(false);
 const ins = ref();
+
+const isReload = ref(false);
+const emits = defineEmits(['reloadend']);
 
 const currentIdx = computed(() => (current.value - 1) * pageSize)
 const content = computed(() => data.courses?.slice(currentIdx.value, currentIdx.value + pageSize));
@@ -34,6 +34,7 @@ watch(current, (newVal, _) => {
 })
 
 const fetch = (current: number) => {
+    console.log('fetch');
     isLoading.value = true;
     if (refEl.value) {
         ins.value = ElLoading.service({
@@ -48,19 +49,36 @@ const fetch = (current: number) => {
         pageCurrent: current
     })
         .then((res: any) => {
-            isLoading.value = false;
-            ins.value.close?.();
-            console.log(res);
             if (res.code === 0) {
                 data.courses = res.data.records;
                 total.value = res.data.pageInfo.total;
             } else {
                 showFailWrap({ text: '获取课程列表失败,请稍后再试' })
             }
+            if (isReload.value) {
+                emits('reloadend');
+                res.code === 0 && showSuccessWrap({ text: '已刷新' })
+                isReload.value = false
+            }
+            isLoading.value = false;
+            ins.value.close?.();
         })
 }
 
-onMounted(() => fetch(1));
+const reload = () => {
+    console.log('reload');
+    current.value = 1;
+    fetch(1);
+    isReload.value = true;
+}
+
+onMounted(() => {
+    fetch(1);
+});
+
+defineExpose({
+    reload
+})
 
 </script>
 

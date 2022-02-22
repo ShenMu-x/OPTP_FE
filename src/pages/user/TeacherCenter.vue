@@ -1,19 +1,16 @@
 <script lang="ts" setup>
-import { reactive, ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
-
 import UserInfo from './comp/UserInfo.vue';
 import CourseForm from '../teach/comp/form/CourseForm.vue';
 import CourseList from '@/components/course/CourseList.vue';
-
-import { CourseListType } from '@/type';
+import LoadBtn from '@/components/common/LoadBtn.vue';
 import { createCourse, getUserInfoByTk, getCoursesCreated } from '@/utils/services';
-import { mockLessonsData } from './mockdata';
 
-const mockData = reactive<CourseListType>(mockLessonsData);
 const activeTabName = ref('coursesCreated');
-const refCourseFormEl = ref();
 
+// form
+const refCourseFormEl = ref();
 const dialogFormVisible = ref(false);
 const openDialog = () => {
     dialogFormVisible.value = true;
@@ -21,13 +18,23 @@ const openDialog = () => {
 const closeDialog = () => {
     dialogFormVisible.value = false;
 }
-
 const commitHandler = () => {
     refCourseFormEl.value.commitForm();
 }
 const resetHandler = () => {
     refCourseFormEl.value.resetForm();
     closeDialog();
+}
+
+// reload
+const isLoading = ref(false);
+const refListEl = ref();
+const reloadHandler = () => {
+    isLoading.value = true;
+    refListEl.value.reload?.();
+}
+const finishReload = () => {
+    isLoading.value = false;
 }
 
 getUserInfoByTk()
@@ -45,8 +52,9 @@ getUserInfoByTk()
                 <el-tab-pane label="我的课程" name="coursesCreated">
                     <div class="btnCt">
                         <el-button :icon="Plus" @click="openDialog">创建课程</el-button>
+                        <LoadBtn @reload="reloadHandler" :is-loding="isLoading" />
                     </div>
-                    <CourseList :fetchData="getCoursesCreated" />
+                    <CourseList :fetchData="getCoursesCreated" ref="refListEl" @reloadend="finishReload" />
                 </el-tab-pane>
             </el-tabs>
         </div>

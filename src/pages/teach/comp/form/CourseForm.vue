@@ -1,81 +1,56 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
 import UploadAvatar from '@/components/common/UploadAvatar.vue';
 import { courseRules } from './rule';
 import { CourseType } from '@/type';
 import { comfirm } from '@/utils/helper';
+import { createCourse } from '@/utils/services';
 
-const refFormEl = ref();
+const refEl = ref();
 const props = defineProps<{
     closeDialog?: () => void,
     fetchApi: any,
     data?: CourseType
 }>();
 
-// config
 const formLabelWidth = '80px';
 
-// model
 const form = reactive({
-    courseName: props.data?.courseName ?? '',
-    description: props.data?.description ?? '',
-    password: '',
-    language: ''
+    courseName: props.data?.courseName || '',
+    courseDes: props.data?.courseDes || '',
+    secretKey: props.data?.secretKey || '',
+    picUrl: props.data?.secretKey || '',
+    language: props.data?.language || 0
 })
 
 const formRules = reactive(courseRules);
+const getUrl = (url: string) => { form.picUrl = url; console.log(form) }
 
 const commitForm = () => {
-    refFormEl.value.validate((isPass: boolean, obj: any) => {
+    refEl.value.validate((isPass: boolean, obj: any) => {
         if (isPass) {
             // todo
-            // comfirm({
-            //     type: 'edit',
-            //     onSuccTipClose: () => {
-            //         refresh();
-            //         back();
-            //     },
-            //     fetchApi: editUserInfo,
-            //     params: {
-            //         real_name: editModel.realName,
-            //         major: editModel.major,
-            //         organization: editModel.organization,
-            //         gender: editModel.gender
-            //     }
-            // });
-            // ElMessageBox.confirm(
-            //     '确定提交？',
-            //     '课程信息提交确认',
-            //     {
-            //         confirmButtonText: '确定',
-            //         cancelButtonText: '取消',
-            //         type: 'success',
-            //         lockScroll: false,
-            //     }
-            // )
-            //     .then(() => {
-            //         props.fetchApi?.().then((value: any) => {
-            //             if (value.code === 0) {
-            //                 ElMessage({
-            //                     type: 'success',
-            //                     message: '修改成功',
-            //                 })
-
-            //                 props.closeDialog?.();
-            //             }
-            //         })
-
-            //     })
-            //     .catch(() => {
-            //         // 取消提交
-            //     })
+            comfirm({
+                type: 'submit',
+                refEl: refEl,
+                onSuccTipClose: () => {
+                    props.closeDialog?.();
+                },
+                fetchApi: createCourse,
+                params: {
+                    courseName: form.courseName,
+                    courseDes: form.courseDes,
+                    secretKey: form.secretKey,
+                    picUrl: form.picUrl,
+                    language: form.language,
+                }
+            });
         }
     });
 }
 
 const resetForm = () => {
-    refFormEl.value.resetFields();
+    refEl.value.resetFields();
 }
 
 defineExpose({
@@ -87,13 +62,13 @@ defineExpose({
 </script>
 
 <template>
-    <el-form :model="form" :rules="formRules" ref="refFormEl">
+    <el-form :model="form" :rules="formRules" ref="refEl">
         <el-form-item label="课程名称" :label-width="formLabelWidth" prop="courseName">
             <el-input v-model="form.courseName" autocomplete="off" placeholder="请输入课程名称"></el-input>
         </el-form-item>
-        <el-form-item label="课程描述" :label-width="formLabelWidth" prop="description">
+        <el-form-item label="课程描述" :label-width="formLabelWidth" prop="courseDes">
             <el-input
-                v-model="form.description"
+                v-model="form.courseDes"
                 type="textarea"
                 :autosize="{ minRows: 2, maxRows: 6 }"
                 placeholder="请输入课程描述"
@@ -101,18 +76,17 @@ defineExpose({
                 show-word-limit
             ></el-input>
         </el-form-item>
-        <el-form-item label="加入密码" :label-width="formLabelWidth" prop="password">
-            <el-input v-model="form.password" autocomplete="off" placeholder="请输入课程加入密码（6位）"></el-input>
+        <el-form-item label="加入密码" :label-width="formLabelWidth" prop="secretKey">
+            <el-input v-model="form.secretKey" autocomplete="off" placeholder="请输入课程加入密码（6位）"></el-input>
         </el-form-item>
         <el-form-item label="课程封面" :label-width="formLabelWidth">
-            <UploadAvatar />
+            <UploadAvatar :after-upload="getUrl" />
         </el-form-item>
         <el-form-item label="课程语言" :label-width="formLabelWidth">
             <el-radio-group v-model="form.language">
-                <el-radio :label="1">cpp</el-radio>
+                <el-radio :label="0">python</el-radio>
+                <el-radio :label="1">c++</el-radio>
                 <el-radio :label="2">java</el-radio>
-                <el-radio :label="3">python</el-radio>
-                <el-radio :label="4">js/ts</el-radio>
             </el-radio-group>
         </el-form-item>
     </el-form>

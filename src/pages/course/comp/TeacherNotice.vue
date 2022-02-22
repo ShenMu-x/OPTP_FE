@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import Avatar from '@/components/user/Avatar.vue';
+import Avatar from '@/components/common/Avatar.vue';
 import { userInfoType } from '@/type';
 const props = defineProps<{ teacherInfo: userInfoType }>();
 </script>

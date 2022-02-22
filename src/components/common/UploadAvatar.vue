@@ -9,10 +9,10 @@ import type {
 } from 'element-plus/es/components/upload/src/upload.type'
 import { wrapHeaderWithToken, UPLOAD_PIC_URL, showSuccess, showFail } from '@/utils/helper';
 
-
 const props = defineProps<{
     avatarUrl?: string,
     submitApi?: any,
+    afterSubmit?: any,
     afterUpload?: any,
 }>();
 
@@ -25,11 +25,12 @@ const avatarUrl = computed(() => {
 })
 
 const handleAvatarSuccess = (res: { code: number, data: { url: string } }, file: UploadFile) => {
-    imageUrl.value = URL.createObjectURL(file.raw)
+    imageUrl.value = URL.createObjectURL(file.raw);
+    props.afterUpload?.(res.data.url);
     props.submitApi?.({ avatar_url: res.data.url }).then((value: any) => {
         if (value.code === 0) {
             showSuccess();
-            props.afterUpload?.(res.data.url);
+            props.afterSubmit?.(res.data.url);
         }
         else showFail();
     })
