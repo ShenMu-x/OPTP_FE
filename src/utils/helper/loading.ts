@@ -5,7 +5,7 @@ export const useLoader = (refEl: any) => {
     const isLoading = ref(false);
     const ins = ref();
     const showLoading = () => {
-        if (refEl.value) {
+        if (refEl?.value) {
             ins.value = ElLoading.service({
                 target: refEl.value,
                 fullscreen: false,

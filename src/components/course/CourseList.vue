@@ -1,97 +1,53 @@
 <script lang="ts" setup>
-import { ref, watch, computed, reactive, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import CourseItem from './CourseItem.vue';
 import { CourseListType } from '@/type';
-import { showSuccessWrap, showFailWrap, useLoader } from '@/utils/helper';
-import { courses } from './mock';
+import { usePageList } from '@/utils/helper';
 
 const props = defineProps<{
     fetchData?: any,
 }>();
-const data = reactive<{ courses: CourseListType }>({ courses: [] });
 
 const pageSize = 6;
-const current = ref(1)
-const total = ref(courses.length);
-
-// 加载
 const refEl = ref();
-const {
-    isLoading,
-    showLoading,
-    closeLoading
-} = useLoader(refEl);
-
-const isReload = ref(false);
 const emits = defineEmits(['reloadend']);
+const emitReload = () => { emits('reloadend') }
 
-const currentIdx = computed(() => (current.value - 1) * pageSize)
-const content = computed(() => data.courses?.slice(currentIdx.value, currentIdx.value + pageSize));
-
-// 监听页面变化
-watch(current, (newVal, _) => {
-    fetch(newVal);
-})
-
-const fetch = (current: number) => {
-    console.log('fetch');
-    isLoading.value = true;
-    showLoading();
-
-    props.fetchData?.({
-        pageSize: pageSize,
-        pageCurrent: current
-    })
-        .then((res: any) => {
-            if (res.code === 0) {
-                data.courses = res.data.records;
-                total.value = res.data.pageInfo.total;
-            } else {
-                showFailWrap({ text: '获取课程列表失败,请稍后再试' })
-            }
-            if (isReload.value) {
-                emits('reloadend');
-                res.code === 0 && showSuccessWrap({ text: '已刷新' })
-                isReload.value = false
-            }
-            closeLoading()
-        })
-}
-
-const reload = () => {
-    console.log('reload');
-    current.value = 1;
-    fetch(1);
-    isReload.value = true;
-}
-
-onMounted(() => {
-    fetch(1);
+const {
+    current,
+    isLoading,
+    isReload,
+    total,
+    list,
+    reload,
+    fetch,
+} = usePageList({
+    size: pageSize,
+    fetchData: props.fetchData,
+    failText: '获取课程列表失败,请稍后再试',
+    refEl,
+    emitReload
 });
 
 defineExpose({
     reload
 })
 
+onMounted(() => {
+    fetch(1);
+});
+
 </script>
 
 <template>
     <div class="coursesCt" ref="refEl">
-        <template v-if="content?.length > 0 && !isLoading">
-            <CourseItem
-                v-for="item in content"
-                :key="item.courseId"
-                :course="item"
-                class="courseCt"
-            />
+        <template v-if="list?.length > 0">
+            <CourseItem v-for="item in list" :key="item.courseId" :course="item" class="courseCt" />
         </template>
-        <el-empty
-            v-if="!content?.length && !isLoading"
-            description="暂无课程"
-            style="flex: 1"
-        />
+        <el-empty v-else v-show="!isLoading" description="暂无课程" style="flex: 1" />
     </div>
     <el-pagination
+        v-show="!isLoading"
         v-model:currentPage="current"
         layout="prev, pager, next"
         :total="total"
@@ -125,6 +81,7 @@ defineExpose({
     .courseCt {
         flex-basis: 48%;
         width: 48%;
+        margin-right: 2%;
     }
 }
 

@@ -9,7 +9,7 @@ import { isTeacher } from '@/utils/helper/is';
 const router = useRouter();
 const props = defineProps<{ course: CourseType }>();
 const course = toRef(props, 'course');
-console.log('item', course.value)
+console.log('course', course.value)
 
 const toCourseDetail = () => {
     if (isTeacher()) router.push(`/teach/courseDetail/${course.value.courseId}`);

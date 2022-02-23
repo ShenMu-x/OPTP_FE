@@ -17,14 +17,13 @@ interface commentReq {
     pageSize: number,
     courseId: number
 }
-export const fetchComment: (params: commentReq) => ResType<ListRes<any>> = (params) => {
+export const fetchCourseComment: (params: commentReq) => ResType<ListRes<any>> = (params) => {
     return _axios({
         method: "GET",
         url: `/web/comment/course`,
         params,
     })
         .then(value => {
-            console.log(value);
             return {
                 code: 0,
                 data: {

@@ -1,90 +1,106 @@
 <script lang="ts" setup>
-import Avatar from '../common/Avatar.vue';
+import { computed, reactive, ref, toRefs } from 'vue';
 import { CaretRight } from '@element-plus/icons-vue';
-import { reactive, ref, toRefs } from 'vue-demi';
+import Avatar from '../common/Avatar.vue';
 import CommentInput from './CommentInput.vue';
 import { commentItemType, commentReplyType } from '@/type';
-import CommentList from './CommentList.vue';
+// import ReplyList from './ReplyList.vue';
+import { useFolder } from '@/utils/helper';
 
 const props = defineProps<{
     commentItem?: commentItemType,
-    replyItem?: commentReplyType,
-    isLast?: boolean,
+    isLast?: boolean
 }>();
 
-const isReply = ref(Boolean(props.replyItem));
-const hasReplys = ref(Boolean(props.commentItem?.replyComments));
-const commentItemRef = reactive(props.commentItem ?? {} as commentItemType);
-const replyItemRef = reactive(props.replyItem ?? {} as commentReplyType);
+const { commentItem, isLast } = toRefs(props);
 
-const isReplying = ref(false);
-const isReplysShow = ref(false);
+// 回复面板
+const {
+    isFold: isReplyPanelShow,
+    click: handleReplyPanel
+} = useFolder();
+// 评论列表面板
+const {
+    isFold: isListShow,
+    click: handleListPanel
+} = useFolder();
+
 const isSelf = ref(true);
+const hasReplys = computed(() => (commentItem?.value?.replyComments?.length ?? 0) > 0)
 
-
-const replyPanelClickHandler = () => {
-    isReplying.value = !isReplying.value;
-}
-
-const showReplys = () => {
-    isReplysShow.value = !isReplysShow.value;
-}
-
-const sumbitReplyComment = (params: any) => {
+const submitReply = (params: any) => {
     // 提交回复, posi api
     console.log('submit', params);
 }
 
+// const isReply = ref(Boolean(props.replyItem));
+// const hasReplys = ref(Boolean(props.commentItem?.replyComments));
+// const commentItemRef = reactive(props.commentItem ?? {} as commentItemType);
+// const replyItemRef = reactive(props.replyItem ?? {} as commentReplyType);
+
+// const isReplying = ref(false);
+// const isReplysShow = ref(false);
+// const isSelf = ref(true);
+
+
+// const replyPanelClickHandler = () => {
+//     isReplying.value = !isReplying.value;
+// }
+
+// const showReplys = () => {
+//     isReplysShow.value = !isReplysShow.value;
+// }
+
+// const submitReply = (params: any) => {
+//     // 提交回复, posi api
+//     console.log('submit', params);
+// }
+
 </script>
 
 <template>
-    <div :class="['commentCt', props.isLast ? 'borderBottomNone' : '', isReply ? 'replysCt' : '']">
+    <div :class="['ct', { 'noBorder': isLast }]">
         <div class="avatar">
             <Avatar type="small" />
         </div>
         <div class="rightCt">
-            <div class="commentInfo">
+            <div class="info">
+                <span class="name">{{ commentItem?.comment.userName }}</span>
+            </div>
+            <div class="commentText">{{ commentItem?.comment.commentText }}</div>
+            <div class="btnCt">
+                <div class="btn blue" @click="handleReplyPanel">
+                    <span v-show="isReplyPanelShow">收起</span>
+                    <span v-show="!isReplyPanelShow">回复</span>
+                </div>
                 <div
-                    class="userName"
-                >{{ isReply ? replyItemRef?.username : commentItemRef?.comment.userName }}</div>
-                <template v-if="isReply">
-                    <CaretRight class="caretIcon" />
-                    <span class="userName">{{ replyItemRef.replyUsername }}</span>
-                </template>
-                <span
-                    class="timeStamp"
-                >{{ isReply ? replyItemRef?.createdAt : commentItemRef?.comment.createdAt }}</span>
+                    class="btn blue"
+                    v-if="hasReplys"
+                    @click="handleListPanel"
+                >
+                    <span v-show="isListShow">收起回复列表</span>
+                    <span v-show="!isListShow">展开回复列表</span>
+                </div>
+                <div class="btn red" v-if="isSelf">删除</div>
             </div>
-            <div
-                class="commentText"
-            >{{ isReply ? replyItemRef?.commentText : commentItemRef?.comment.commentText }}</div>
-            <div class="btn replyBtn" @click="replyPanelClickHandler">
-                <span v-show="isReplying">收起</span>
-                <span v-show="!isReplying">回复</span>
-            </div>
-            <div class="btn replyBtn" v-if="!isReply && hasReplys" @click="showReplys">
-                <span v-show="isReplysShow">收起回复列表</span>
-                <span v-show="!isReplysShow">展开回复列表</span>
-            </div>
-            <div class="btn deleteBtn" v-if="isSelf">删除</div>
-            <div class="replyInputCt" v-show="isReplying">
+            <div class="replyInputCt" v-show="isReplyPanelShow">
                 <CommentInput
                     title="输入你的回复"
-                    :submitComment="sumbitReplyComment"
+                    :submitComment="submitReply"
                     :params="{
-                        userName: isReply ? replyItemRef?.username : commentItemRef?.comment.userName
+                        userName: commentItem?.comment.userName
                     }"
                 />
             </div>
-            <div v-show="hasReplys && isReplysShow" class="replysCt">
-                <CommentList :replys="commentItemRef?.replyComments" />
+            <div v-show="hasReplys" class="replyListCt">
+                <ReplyList />
             </div>
         </div>
     </div>
 </template>
 
 <style lang="less" scoped>
-.commentCt {
+.ct {
     min-height: 100px;
     margin: 20px;
     padding-bottom: 20px;
@@ -92,14 +108,14 @@ const sumbitReplyComment = (params: any) => {
     overflow: hidden;
 }
 
-.replysCt {
+.replyListCt {
     margin-top: 40px;
     width: 100%;
     margin: 10px 0;
     border: 0;
 }
 
-.borderBottomNone {
+.noBorder {
     border-bottom: none;
 }
 
@@ -113,7 +129,7 @@ const sumbitReplyComment = (params: any) => {
     width: calc(100% - 40px - 20px);
     overflow: hidden;
 }
-.commentInfo {
+.info {
     height: 30px;
     line-height: 30px;
     color: #2c3e50;
@@ -126,7 +142,7 @@ const sumbitReplyComment = (params: any) => {
         margin: 6px 5px;
     }
 
-    .userName {
+    .name {
         display: inline-block;
         font-weight: 600;
         font-size: 20px;
@@ -147,24 +163,26 @@ const sumbitReplyComment = (params: any) => {
     text-align: left;
 }
 
-.btn {
-    float: right;
-    margin: 10px;
-    margin-bottom: 0;
+.btnCt {
+    & > div {
+        float: right;
+        margin: 10px;
+        margin-bottom: 0;
 
-    &:hover {
-        cursor: pointer;
+        &:hover {
+            cursor: pointer;
+        }
     }
 }
 
-.deleteBtn {
+.red {
     color: #e42b50;
     &:hover {
         color: #af1e3b;
     }
 }
 
-.replyBtn {
+.blue {
     color: #3f9eff;
     &:hover {
         color: #1f88f1;

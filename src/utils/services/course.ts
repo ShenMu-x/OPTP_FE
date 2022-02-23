@@ -112,7 +112,10 @@ export const getCoursesStudy: (params: {
 export const getCoursesCreated: (params: {
     pageCurrent: number,
     pageSize: number
-}) => ResType<ListRes<CourseType>> = (params) => {
+}) => ResType<ListRes<CourseType>> = async (params) => {
+    await new Promise(res => setTimeout(() => {
+        res(1);
+    }, 2000))
     return _axios.get(`/web/course/setup?pageCurrent=${params.pageCurrent}&pageSize=${params.pageSize}`)
         .then(value => {
             return {
