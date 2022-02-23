@@ -1,28 +1,56 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue-demi';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import ReturnBtn from '@/components/common/ReturnBtn.vue';
 import CourseItem from '@/components/course/CourseItem.vue';
-import { lesson, teacher, commentsMock } from './mock';
+import { commentsMock } from './mock';
 import ChooseCourse from './comp/ChooseCourse.vue';
 import TeacherNotice from './comp/TeacherNotice.vue';
 import CommentInput from '@/components/comment/CommentInput.vue';
 import CommentList from '@/components/comment/CommentList.vue';
 import { scrollToPos } from '@/utils/helper/scrollToPos';
-import { fetchComment } from '@/utils/services';
-import { commentsType } from '@/type';
+import { fetchComment, getCourseById, getUserInfoById } from '@/utils/services';
+import { commentsType, CourseType, userInfoType } from '@/type';
 
 scrollToPos(0);
-fetchComment();
+
 const route = useRoute();
+const router = useRouter();
 
-const courseId = ref(route.params);
+const data = reactive<{
+    course: CourseType,
+    teacherInfo: userInfoType
+}>({
+    course: {},
+    teacherInfo: {}
+})
 
-// fetch course message
+const courseId = parseInt(route.params?.courseId?.[0]);
+
+if (isNaN(courseId)) {
+    router.replace('/404');
+} else {
+    getCourseById({ courseId })
+        .then(res => {
+            if (res.code === 0 && res.data) {
+                Object.assign(data.course, res.data.course);
+                getUserInfoById({ userId: data.course.teacherId ?? -1 })
+                    .then(infoRes => {
+                        if (infoRes.code === 0) {
+                            Object.assign(data.teacherInfo, infoRes.data);
+                        }
+                    })
+
+            } else {
+
+            }
+        })
+}
+
+
 // fetch teacher message
 // fetch comments
-const courseMock = reactive(lesson);
-const teacherInfo = reactive(teacher);
+
 const comments = reactive<commentsType>(commentsMock);
 
 const inpQuestion = ref('');
@@ -30,7 +58,6 @@ const submitComment = (comment: string) => {
     console.log('提交', comment);
     // 提交成功 / 失败
 }
-
 
 </script>
 
@@ -43,10 +70,13 @@ const submitComment = (comment: string) => {
         </div>
         <div class="bodyCt">
             <div class="leftCt">
-                <CourseItem :course="courseMock" class="courseCard" />
-                <ChooseCourse />
+                <CourseItem :course="data.course" class="courseCard" />
+                <ChooseCourse
+                    :courseId="data.course.courseId ?? -1"
+                    :secret="data.course.secretKey ?? ''"
+                />
                 <div class="leftInnerCt">
-                    <TeacherNotice :teacherInfo="teacherInfo" />
+                    <TeacherNotice :info="data.teacherInfo" />
                 </div>
                 <div class="qaCard">
                     <div class="cardTitle">课程问答(条)</div>
@@ -59,7 +89,9 @@ const submitComment = (comment: string) => {
                 </div>
             </div>
             <div class="rightCt">
-                <TeacherNotice :teacherInfo="teacherInfo" />
+                <el-affix :offset="0">
+                    <TeacherNotice :info="data.teacherInfo" />
+                </el-affix>
             </div>
         </div>
     </div>

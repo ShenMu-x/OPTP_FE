@@ -9,7 +9,8 @@ export type CourseType = {
     isClose?: boolean,
     language?: number,
     createdAt?: string,
-    updatedAt?: string
+    updatedAt?: string,
+    isEnroll?: boolean
 }
 
 export type CourseListType = Array<CourseType>

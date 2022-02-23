@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive } from "vue-demi";
+import { reactive, toRefs } from "vue";
 import { DEFAULT_AVATAR } from "@/utils/helper";
 
 const props = defineProps<{
@@ -9,20 +9,13 @@ const props = defineProps<{
     alt?: string,
     style?: string
 }>();
-
-const data = reactive({
-    type: props.type ?? 'middle',
-    size: props.size ?? 60,
-    src: props.src ?? DEFAULT_AVATAR,
-    alt: props.alt ?? '头像',
-    style: props.style ?? ''
-});
+const { type, size, src, alt, style } = toRefs(props);
 
 </script>
 
 <template>
-    <div :class="`avatar avatar-${data.type}`" :style="data.style">
-        <img :src="data.src" :alt="data.src" class="avatar-image" />
+    <div :class="`avatar avatar-${type ?? 'middle'}`" :style="style ?? ''">
+        <img :src="src ?? DEFAULT_AVATAR" :alt="alt ?? '头像'" class="avatar-image" />
     </div>
 </template>
 

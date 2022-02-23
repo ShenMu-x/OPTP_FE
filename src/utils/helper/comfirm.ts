@@ -1,5 +1,4 @@
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { vLoading } from 'element-plus/es/components/loading/src/directive'
 
 export const showSuccess = () => {
     ElMessage({

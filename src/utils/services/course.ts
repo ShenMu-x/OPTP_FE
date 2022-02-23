@@ -1,9 +1,9 @@
 import _axios from './axios';
-import { ResType } from './type';
+import { ResType, ListRes } from './type';
 import { CourseType } from '@/type';
 import { fmatDate } from '../helper';
 
-const packCourse = (course: any) => {
+const packCourse = (course: any): CourseType => {
     return {
         courseId: course.course_id,
         teacherId: course.teacher_id,
@@ -61,20 +61,10 @@ export const editCourse: (params: createCourseReq) => ResType<any> = (params) =>
         .catch(err => { return { code: -1 } })
 }
 
-interface ListRes {
-    records: Array<CourseType>,
-    pageInfo: {
-        total: number,
-        size: number,
-        current: number,
-        pages: number
-    }
-}
-
 export const getCoursesAll: (params: {
     pageCurrent: number,
     pageSize: number
-}) => ResType<ListRes> = (params) => {
+}) => ResType<ListRes<CourseType>> = (params) => {
     return _axios.get(`/web/course?pageCurrent=${params.pageCurrent}&pageSize=${params.pageSize}`)
         .then(value => {
             return {
@@ -98,7 +88,7 @@ export const getCoursesAll: (params: {
 export const getCoursesStudy: (params: {
     pageCurrent: number,
     pageSize: number
-}) => ResType<ListRes> = (params) => {
+}) => ResType<ListRes<CourseType>> = (params) => {
     return _axios.get(`/web/course/study?pageCurrent=${params.pageCurrent}&pageSize=${params.pageSize}`)
         .then(value => {
             return {
@@ -122,10 +112,7 @@ export const getCoursesStudy: (params: {
 export const getCoursesCreated: (params: {
     pageCurrent: number,
     pageSize: number
-}) => ResType<ListRes> = async (params) => {
-    await new Promise(res => setTimeout(() => {
-        res(1)
-    }, 4000))
+}) => ResType<ListRes<CourseType>> = (params) => {
     return _axios.get(`/web/course/setup?pageCurrent=${params.pageCurrent}&pageSize=${params.pageSize}`)
         .then(value => {
             return {
@@ -148,14 +135,13 @@ export const getCoursesCreated: (params: {
 
 export const getCourseById: (params: {
     courseId: number
-}) => ResType<ListRes> = (params) => {
+}) => ResType<{ course: CourseType }> = (params) => {
     return _axios.get(`/web/course/${params.courseId}`)
         .then(value => {
             return {
                 code: 0,
                 data: {
-                    records: packRecords(value.data.data?.records),
-                    pageInfo: value.data.data?.page_info
+                    course: packCourse(value.data.data)
                 }
             }
         })
@@ -166,5 +152,22 @@ export const getCourseById: (params: {
                     message: err.response.data.message,
                 }
             }
+        })
+}
+
+export const attendCourse: (params: {
+    courseId: number,
+    secretKey: string,
+}) => ResType<any> = (params) => {
+    return _axios({
+        method: "POST",
+        url: "/web/course/attend",
+        data: params
+    })
+        .then(value => {
+            return { code: 0 }
+        })
+        .catch(err => {
+            return { code: -1 }
         })
 }

@@ -4,6 +4,7 @@ import CommentItem from './CommentItem.vue';
 import { commentsType, replyCommentsType } from '@/type';
 
 const props = defineProps<{
+    fetchComment?: any,
     comments?: commentsType,
     replys?: replyCommentsType,
 }>();
@@ -22,11 +23,7 @@ const current = ref(1);
         />
     </template>
     <template v-if="props.replys">
-        <CommentItem
-            v-for="reply in props.replys"
-            :key="reply.replyId"
-            :replyItem="reply"
-        />
+        <CommentItem v-for="reply in props.replys" :key="reply.replyId" :replyItem="reply" />
     </template>
     <el-pagination
         v-if="true"

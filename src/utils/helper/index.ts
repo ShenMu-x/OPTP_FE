@@ -6,3 +6,4 @@ export * from './getUploadUrl';
 export * from './comfirm';
 export * from './config';
 export * from './format';
+export * from './loading';

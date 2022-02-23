@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, toRef } from 'vue';
 import { CourseType } from '@/type';
 import { useRouter } from 'vue-router';
 import Avatar from '../common/Avatar.vue';
@@ -8,32 +8,32 @@ import { isTeacher } from '@/utils/helper/is';
 
 const router = useRouter();
 const props = defineProps<{ course: CourseType }>();
-
-console.log('course', props.course)
+const course = toRef(props, 'course');
+console.log('item', course.value)
 
 const toCourseDetail = () => {
-    if (isTeacher()) router.push(`/teach/courseDetail/${props.course.courseId}`);
-    else router.push(`/courseDetail/${props.course.courseId}`);
+    if (isTeacher()) router.push(`/teach/courseDetail/${course.value.courseId}`);
+    else router.push(`/courseDetail/${course.value.courseId}`);
 }
 </script>
 
 <template>
     <div class="courseCt" @click="toCourseDetail">
         <div class="courseMain">
-            <Avatar type="large" class="cover" :src="props.course.picUrl" />
+            <Avatar type="large" class="cover" :src="course.picUrl" />
             <div class="courseInfo">
                 <div
                     class="courseTitle"
-                    :title="props.course.courseName"
-                >{{ props.course.courseName }}</div>
-                <div class="courseStart">{{ props.course.createdAt }}</div>
-                <Tag :type="props.course.isClose ? 'red' : 'green'" />
+                    :title="course.courseName"
+                >{{ course.courseName }}</div>
+                <div class="courseStart">{{ course.createdAt }}</div>
+                <Tag :type="course.isClose ? 'red' : 'green'" />
             </div>
         </div>
         <div
             class="courseDes"
-            :title="props.course?.courseDes || ''"
-        >课程描述: {{ props.course?.courseDes || '暂无描述' }}</div>
+            :title="course?.courseDes || ''"
+        >课程描述: {{ course?.courseDes || '暂无描述' }}</div>
     </div>
 </template>
 

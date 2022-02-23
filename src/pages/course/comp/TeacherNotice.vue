@@ -1,15 +1,15 @@
 <template>
     <div class="teacherCard">
-        <Avatar type="middle" />
-        <div class="teacherInfo" :title="props.teacherInfo.realName">
+        <Avatar type="middle" :src="props.info.avatarUrl" />
+        <div class="info" :title="props.info.realName">
             任课老师:
-            <b>{{ props.teacherInfo.realName }}</b>
+            <b>{{ props.info.realName }}</b>
         </div>
-        <div class="teacherInfo" :title="props.teacherInfo.email">联系邮箱: {{ props.teacherInfo.email }}</div>
+        <div class="info" :title="props.info.email">联系邮箱: {{ props.info.email }}</div>
         <div
-            class="teacherInfo"
-            :title="props.teacherInfo.organization"
-        >所属组织: {{ props.teacherInfo.organization }}</div>
+            class="info"
+            :title="props.info.organization"
+        >所属组织: {{ props.info.organization }}</div>
     </div>
     <div class="noticeCard">公告卡片</div>
 </template>
@@ -17,7 +17,7 @@
 <script lang="ts" setup>
 import Avatar from '@/components/common/Avatar.vue';
 import { userInfoType } from '@/type';
-const props = defineProps<{ teacherInfo: userInfoType }>();
+const props = defineProps<{ info: userInfoType }>();
 </script>
 
 <style lang="less" scoped>
@@ -31,7 +31,7 @@ const props = defineProps<{ teacherInfo: userInfoType }>();
         margin: 10px auto;
     }
 
-    .teacherInfo {
+    .info {
         margin: 0 20px;
         overflow: hidden;
         white-space: nowrap;

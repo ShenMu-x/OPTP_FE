@@ -33,6 +33,33 @@ export const getUserInfoByTk: () => ResType<userInfoType> = () => {
     })
 }
 
+export const getUserInfoById: (params: { userId: number }) => ResType<userInfoType> = (params) => {
+    return _axios({
+        method: 'GET',
+        url: `/web/user/${params.userId}`
+    }).then(value => {
+        const res = {
+            email: value.data.data.email,
+            userId: value.data.data.user_id,
+            num: value.data.data.num,
+            realName: value.data.data.real_name,
+            avatarUrl: value.data.data.avatar_url,
+            gender: value.data.data.gender,
+            major: value.data.data.major,
+            organization: value.data.data.organization
+        };
+        return {
+            code: value.data.code,
+            data: res,
+        }
+    }).catch(err => {
+        return {
+            code: err.response.data.code,
+            error: err.response.data.message
+        }
+    })
+}
+
 interface editReq {
     real_name: string;
     major: string;

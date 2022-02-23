@@ -1,16 +1,12 @@
 <script lang="ts" setup>
 import { ref, watch, computed, reactive, onMounted } from 'vue';
-import { ElLoading } from 'element-plus';
 import CourseItem from './CourseItem.vue';
 import { CourseListType } from '@/type';
+import { showSuccessWrap, showFailWrap, useLoader } from '@/utils/helper';
 import { courses } from './mock';
-import { showSuccessWrap, showFailWrap } from '@/utils/helper';
 
 const props = defineProps<{
     fetchData?: any,
-    common?: {
-        emptyDes?: string
-    }
 }>();
 const data = reactive<{ courses: CourseListType }>({ courses: [] });
 
@@ -18,9 +14,13 @@ const pageSize = 6;
 const current = ref(1)
 const total = ref(courses.length);
 
+// 加载
 const refEl = ref();
-const isLoading = ref(false);
-const ins = ref();
+const {
+    isLoading,
+    showLoading,
+    closeLoading
+} = useLoader(refEl);
 
 const isReload = ref(false);
 const emits = defineEmits(['reloadend']);
@@ -36,13 +36,7 @@ watch(current, (newVal, _) => {
 const fetch = (current: number) => {
     console.log('fetch');
     isLoading.value = true;
-    if (refEl.value) {
-        ins.value = ElLoading.service({
-            target: refEl.value,
-            fullscreen: false,
-            background: 'transparent'
-        })
-    }
+    showLoading();
 
     props.fetchData?.({
         pageSize: pageSize,
@@ -60,8 +54,7 @@ const fetch = (current: number) => {
                 res.code === 0 && showSuccessWrap({ text: '已刷新' })
                 isReload.value = false
             }
-            isLoading.value = false;
-            ins.value.close?.();
+            closeLoading()
         })
 }
 
@@ -94,7 +87,7 @@ defineExpose({
         </template>
         <el-empty
             v-if="!content?.length && !isLoading"
-            :description="props.common?.emptyDes ?? '暂无数据'"
+            description="暂无课程"
             style="flex: 1"
         />
     </div>
@@ -112,7 +105,6 @@ defineExpose({
 .coursesCt {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
     min-height: 480px;
     padding-top: 20px;
 }
@@ -141,6 +133,7 @@ defineExpose({
     .courseCt {
         flex-basis: 30%;
         width: 30%;
+        margin-right: 3%;
     }
 }
 </style>

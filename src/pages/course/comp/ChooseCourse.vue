@@ -1,9 +1,36 @@
 <script lang="ts" setup>
 import { ref } from 'vue-demi';
-import SumbitBtn from '@/components/common/SumbitBtn.vue';
-const coursePswInput = ref('');
+import { attendCourse } from '@/utils/services';
+import { showFailWrap, showSuccessWrap } from '@/utils/helper';
 
-// 选课 courseId secretKey
+const props = defineProps<{
+    courseId: number,
+    secret: string
+}>();
+const inp = ref('');
+
+const submit = () => {
+    if (inp.value !== props.secret) {
+        showFailWrap({
+            text: '选课密码不正确'
+        })
+    } else {
+        attendCourse({
+            courseId: props.courseId,
+            secretKey: props.secret
+        }).then(res => {
+            if (res.code === 0) {
+                showSuccessWrap({
+                    text: '选课申请已发送'
+                })
+            } else {
+                showFailWrap({
+                    text: res.error?.message || '服务器出现问题，请稍后重试'
+                })
+            }
+        })
+    }
+}
 
 </script>
 
@@ -12,15 +39,9 @@ const coursePswInput = ref('');
         <div class="cardTitle">自主选课</div>
         <div class="coursePsw">
             请输入6位选课密码:
-            <input
-                type="text"
-                maxlength="6"
-                minlength="6"
-                class="pswInput"
-                v-model="coursePswInput"
-            />
+            <input type="text" maxlength="6" minlength="6" class="pswInput" v-model="inp" />
         </div>
-        <SumbitBtn class="submitBtn" title="选课" />
+        <el-button class="submitBtn" type="primary" @click="submit">选课</el-button>
     </div>
 </template>
 
@@ -31,21 +52,21 @@ const coursePswInput = ref('');
     height: 140px;
     background-color: #fff;
     text-align: left;
+}
 
-    .pswInput {
-        margin-left: 10px;
-        line-height: 1em;
-        padding: 0 5px;
-    }
+.pswInput {
+    margin-left: 10px;
+    line-height: 1em;
+    padding: 0 5px;
+}
 
-    .submitBtn {
-        float: right;
-        margin-right: 20px;
-    }
+.submitBtn {
+    float: right;
+    margin-right: 20px;
+}
 
-    .cardTitle {
-        font-size: 25px;
-        margin-bottom: 10px;
-    }
+.cardTitle {
+    font-size: 25px;
+    margin-bottom: 10px;
 }
 </style>

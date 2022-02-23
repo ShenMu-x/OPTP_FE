@@ -13,6 +13,7 @@ const count = ref(0);
 <style scoped>
 .footer {
     position: fixed;
+    z-index: 999;
     bottom: 0;
     width: 100%;
     height: 30px;
