@@ -53,5 +53,12 @@ export const courseRules = {
             message: '请输入选课密码',
             trigger: 'blur',
         },
+    ],
+    language: [
+        {
+            required: true,
+            message: '请选择课程语言',
+            trigger: 'blur',
+        },
     ]
 };

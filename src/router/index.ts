@@ -81,11 +81,19 @@ router.beforeEach((to, from, next) => {
         if (isTeacher()) {
             next('/teach/usercenter')
         } else {
-            next('usercenter')
+            next('/usercenter')
         }
         return
     }
 
+    var checkCourse = /courseDetail/i;
+    if (checkCourse.test(to.path)) {
+        const courseId = parseInt(to.params.courseId);
+        if (isNaN(courseId)) {
+            next('/404')
+            return
+        }
+    }
     next()
     return
 })

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import UploadAvatar from '@/components/common/UploadAvatar.vue';
 import { courseRules } from './rule';
 import { CourseType } from '@/type';
@@ -16,15 +16,47 @@ const props = defineProps<{
 const formLabelWidth = '80px';
 
 const form = reactive({
-    courseName: props.data?.courseName || '',
-    courseDes: props.data?.courseDes || '',
-    secretKey: props.data?.secretKey || '',
-    picUrl: props.data?.secretKey || '',
-    language: props.data?.language || 0
+    courseId: -1,
+    courseName: '',
+    courseDes: '',
+    secretKey: '',
+    picUrl: '',
+    language: 0
 })
 
+const setForm = () => {
+    form.courseId = props.data?.courseId || -1;
+    form.courseName = props.data?.courseName || '';
+    form.courseDes = props.data?.courseDes || '';
+    form.secretKey = props.data?.secretKey || '';
+    form.picUrl = props.data?.picUrl || '';
+    form.language = props.data?.language || 0
+}
+
+props.data && watch(props.data, setForm);
+setForm();
+
 const formRules = reactive(courseRules);
-const getUrl = (url: string) => { form.picUrl = url; console.log(form) }
+const getUrl = (url: string) => { form.picUrl = url; }
+
+// edit / create 参数判断
+const getParams = () => {
+    let obj = {
+        courseName: form.courseName,
+        courseDes: form.courseDes,
+        secretKey: form.secretKey,
+        picUrl: form.picUrl,
+        language: form.language,
+    }
+    if (form.courseId > 0) {
+        return Object.assign(
+            { courseId: form.courseId },
+            obj
+        )
+    } else {
+        return obj;
+    }
+}
 
 const commitForm = () => {
     refEl.value.validate((isPass: boolean, obj: any) => {
@@ -36,14 +68,8 @@ const commitForm = () => {
                 onSuccTipClose: () => {
                     props.closeDialog?.();
                 },
-                fetchApi: createCourse,
-                params: {
-                    courseName: form.courseName,
-                    courseDes: form.courseDes,
-                    secretKey: form.secretKey,
-                    picUrl: form.picUrl,
-                    language: form.language,
-                }
+                fetchApi: props.fetchApi,
+                params: getParams()
             });
         }
     });
@@ -79,15 +105,15 @@ defineExpose({
         <el-form-item label="加入密码" :label-width="formLabelWidth" prop="secretKey">
             <el-input v-model="form.secretKey" autocomplete="off" placeholder="请输入课程加入密码（6位）"></el-input>
         </el-form-item>
-        <el-form-item label="课程封面" :label-width="formLabelWidth">
-            <UploadAvatar :after-upload="getUrl" />
-        </el-form-item>
-        <el-form-item label="课程语言" :label-width="formLabelWidth">
+        <el-form-item label="课程语言" :label-width="formLabelWidth" prop="language">
             <el-radio-group v-model="form.language">
-                <el-radio :label="0">python</el-radio>
-                <el-radio :label="1">c++</el-radio>
-                <el-radio :label="2">java</el-radio>
+                <el-radio :label="0">Python</el-radio>
+                <el-radio :label="1">C++</el-radio>
+                <el-radio :label="2">Java</el-radio>
             </el-radio-group>
+        </el-form-item>
+        <el-form-item label="课程封面" :label-width="formLabelWidth">
+            <UploadAvatar :after-upload="getUrl" :avatarUrl="form.picUrl" />
         </el-form-item>
     </el-form>
 </template>

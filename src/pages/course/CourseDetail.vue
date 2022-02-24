@@ -27,25 +27,21 @@ const data = reactive<{
 const courseId = parseInt(route.params?.courseId?.[0]);
 const { course, info } = toRefs(data);
 
-if (isNaN(courseId)) {
-    router.replace('/404');
-} else {
-    getCourseById({ courseId })
-        .then(res => {
-            if (res.code === 0 && res.data) {
-                Object.assign(data.course, res.data.course);
-                getUserInfoById({ userId: data.course.teacherId ?? -1 })
-                    .then(infoRes => {
-                        if (infoRes.code === 0) {
-                            Object.assign(data.info, infoRes.data);
-                        }
-                    })
+getCourseById({ courseId })
+    .then(res => {
+        if (res.code === 0 && res.data) {
+            Object.assign(data.course, res.data.course);
+            getUserInfoById({ userId: data.course.teacherId ?? -1 })
+                .then(infoRes => {
+                    if (infoRes.code === 0) {
+                        Object.assign(data.info, infoRes.data);
+                    }
+                })
+        } else {
+            router.replace('/404');
+        }
+    })
 
-            } else {
-                router.replace('/404');
-            }
-        })
-}
 
 
 // fetch teacher message

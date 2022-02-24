@@ -42,12 +42,25 @@ export const createCourse: (params: createCourseReq) => ResType<any> = (params) 
             return { code: 0 }
         })
         .catch(err => {
-            console.log(err.response);
-            return { code: -1 }
+            return {
+                code: err.response?.data?.code ?? -1,
+                error: {
+                    message: err.response?.data?.message,
+                }
+            }
         })
 }
 
-export const editCourse: (params: createCourseReq) => ResType<any> = (params) => {
+interface editCourseReq {
+    courseId: number,
+    courseDes: string,
+    secretkey: string,
+    courseName: string,
+    picUrl: string,
+    language: number,
+}
+
+export const editCourse: (params: editCourseReq) => ResType<any> = (params) => {
     return _axios({
         method: "PUT",
         url: "/web/course",
@@ -58,7 +71,14 @@ export const editCourse: (params: createCourseReq) => ResType<any> = (params) =>
                 code: 0
             }
         })
-        .catch(err => { return { code: -1 } })
+        .catch(err => {
+            return {
+                code: err.response?.data?.code ?? -1,
+                error: {
+                    message: err.response?.data?.message,
+                }
+            }
+        })
 }
 
 export const getCoursesAll: (params: {
@@ -167,10 +187,36 @@ export const attendCourse: (params: {
         url: "/web/course/attend",
         data: params
     })
+        .then(_ => {
+            return { code: 0 }
+        })
+        .catch(err => {
+            return {
+                code: err.response?.data?.code ?? -1,
+                error: {
+                    message: err.response?.data?.message ?? '',
+                }
+            }
+        })
+}
+
+export const deleteCourse: (params: {
+    courseId: number
+}) => ResType<{ courseId: number }> = (params) => {
+    return _axios({
+        method: "DELETE",
+        url: "/web/course",
+        data: params
+    })
         .then(value => {
             return { code: 0 }
         })
         .catch(err => {
-            return { code: -1 }
+            return {
+                code: err.response?.data?.code ?? -1,
+                error: {
+                    message: err.response?.data?.message ?? '',
+                }
+            }
         })
 }

@@ -36,17 +36,23 @@ const handleAvatarSuccess = (res: { code: number, data: { url: string } }, file:
     })
 }
 const beforeAvatarUpload = (file: ElFile) => {
-    const isJPG = file.type === 'image/jpeg'
+    console.log(file.type)
+    const isAllow = file.type === 'image/jpeg' || 'image/png' || 'image/jpg' || 'image/gif'
     const isLt2M = file.size / 1024 / 1024 < 2
 
-    if (!isJPG) {
-        ElMessage.error('请上传JPEG/JPG格式图片')
+    if (!isAllow) {
+        ElMessage.error('请上传JPEG/JPG/PNG/GIF格式图片')
     }
     if (!isLt2M) {
         ElMessage.error('头像大小不能超过 2MB!')
     }
-    return isJPG && isLt2M
+    return isAllow && isLt2M
 }
+
+const isHover = ref(false);
+const hover = () => { console.log('hover'), isHover.value = true; }
+const leave = () => { isHover.value = false; }
+const hover1 = () => { console.log('??') }
 </script>
 
 <template>
@@ -59,10 +65,18 @@ const beforeAvatarUpload = (file: ElFile) => {
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
         :before-upload="beforeAvatarUpload"
+        accept="image/jpg, image/jpeg, image/png, image/gif"
     >
         <img v-if="avatarUrl" :src="avatarUrl" class="avatar" />
         <div v-else class="noImg">
             <Plus style="height: 2em; width: 2em;" />
+        </div>
+        <div
+            :class="['maskCt',isHover ? 'mask' : 'opacity0']"
+            @mouseenter.stop="hover"
+            @mouseleave.stop="leave"
+        >
+            <div v-show="isHover">点击上传</div>
         </div>
     </el-upload>
 </template>
@@ -70,6 +84,24 @@ const beforeAvatarUpload = (file: ElFile) => {
 <style lang="less" scoped>
 .avatarUploader {
     cursor: pointer;
+    position: relative;
+}
+
+.maskCt {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    line-height: 100px;
+    font-weight: bold;
+    color: #fff;
+}
+.opacity0 {
+    opacity: 0;
+}
+.mask {
+    background-color: rgba(0, 0, 0, 0.164);
 }
 
 .avatar {
@@ -77,17 +109,6 @@ const beforeAvatarUpload = (file: ElFile) => {
     height: 100px;
     display: block;
     object-fit: cover;
-    position: relative;
-
-    &:hover::after {
-        content: "上传aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        height: 100px;
-        width: 100px;
-        // position: absolute;
-        top: 0;
-        left: 0;
-        background-color: #000;
-    }
 }
 .noImg {
     background-color: #fefefe;
