@@ -5,12 +5,12 @@ import { useRoute } from 'vue-router';
 import UploadFile from '@/components/common/UploadFile.vue';
 import { labRules } from './rule';
 import { labType } from '@/type';
-import { createLab } from '@/utils/services';
+import { editLab, getLabById } from '@/utils/services';
 
-// 创建实验表格
+// 修改实验表格
 const refFormEl = ref();
 const props = defineProps<{
-    closeDialog?: () => void,
+    labId: number
 }>();
 
 const formLabelWidth = '80px';
@@ -44,8 +44,8 @@ const commitForm = () => {
                 }
             )
                 .then(() => {
-                    createLab({
-                        courseId,
+                    editLab({
+                        labId: props.labId,
                         title: form.title,
                         content: form.content,
                         attachmentUrl: form.attachmentUrl,
@@ -81,6 +81,9 @@ defineExpose({
 
 <template>
     <el-form :model="form" :rules="formRules" ref="refFormEl">
+        <el-form-item label="实验ID" :label-width="formLabelWidth" prop="title">
+            <el-input disabled v-model="form.id" autocomplete="off" ></el-input>
+        </el-form-item>
         <el-form-item label="实验名称" :label-width="formLabelWidth" prop="title">
             <el-input v-model="form.title" autocomplete="off" placeholder="请输入实验名称"></el-input>
         </el-form-item>

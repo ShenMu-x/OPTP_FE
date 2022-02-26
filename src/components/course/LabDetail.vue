@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { labInfoType } from '@/type';
+import { labType } from '@/type';
 import { UploadFilled } from '@element-plus/icons-vue'
 
 const props = defineProps<{
-    labInfo: labInfoType
+    labInfo: labType
 }>();
 
 const toEditIDE = () => {
@@ -19,7 +19,7 @@ const toEditIDE = () => {
             <div class="title">实验情况</div>
             <div class="card">
                 <div class="info">创建日期: {{ labInfo.createAt }}</div>
-                <div class="info">截止日期: {{ labInfo.endAt }}</div>
+                <div class="info">截止日期: {{ labInfo.deadLine }}</div>
                 <div class="info">
                     状态:
                     <div v-if="labInfo.isFinished" class="tag done">已完成</div>
@@ -29,7 +29,7 @@ const toEditIDE = () => {
         </div>
         <div>
             <div class="title">实验描述</div>
-            <div class="card">{{ labInfo.describe }}</div>
+            <div class="card">{{ labInfo.content }}</div>
         </div>
         <div>
             <div class="title">开始实验</div>

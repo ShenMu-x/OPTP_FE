@@ -28,7 +28,7 @@ getCourseById({ courseId })
     }
   })
 
-const focusTab = ref('info');
+const focusTab = ref('manage');
 
 </script>
 

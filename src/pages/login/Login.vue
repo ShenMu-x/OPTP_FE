@@ -45,7 +45,9 @@ const loginHandler = () => {
       login({ username: user.userName, password: user.password })
         .then(res => {
           if (res.code === 0) {
-            isTeacher()? router.replace('/teach/usercenter') : router.replace('/usercenter')
+            isTeacher() ?
+              router.replace('/teach/user_center') :
+              router.replace('/user_center')
           } else {
             showFailWrap({ text: res.error?.message })
           }
@@ -59,7 +61,7 @@ const toRegister = () => {
 };
 
 const toAuthentication = () => {
-  router.push('./authentication');
+  router.push('./auth');
 };
 
 </script>

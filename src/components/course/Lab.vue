@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, toRef } from 'vue';
 import LabDetail from './LabDetail.vue';
-import { labInfoType } from '@/type';
+import { labType } from '@/type';
 import { InfoFilled } from '@element-plus/icons-vue';
 
 const props = defineProps<{
-    labInfo: labInfoType
+    labInfo: labType
 }>();
 
-const labInfo = reactive(props.labInfo);
+const labInfo = toRef(props, 'labInfo');
 
-const finishStatus = ref(labInfo.isFinished);
+const finishStatus = ref(labInfo.value?.isFinished);
 
 const isDrawerOpen = ref(false);
 const clickLabDrawer = () => {
@@ -20,24 +20,26 @@ const clickLabDrawer = () => {
 
 <template>
     <div class="labCt">
-        <div class="labTitle">{{ labInfo.title }}</div>
-        <div class="labDiscribe">{{ labInfo.describe }}</div>
+        <div class="title">{{ labInfo.title }}</div>
+        <div class="content">{{ labInfo.content }}</div>
         <div class="labInfo">
             <div class="leftCt">
-                <template class="labCommonInfo">
+                <!-- 宽屏 -->
+                <template class="timeCourse">
                     <div class="info">创建日期: {{ labInfo.createAt }}</div>
-                    <div class="info">截止日期: {{ labInfo.endAt }}</div>
+                    <div class="info">截止日期: {{ labInfo.deadLine }}</div>
                     <div
                         class="info course"
                         title="labInfo.isBelongTo"
-                    >所属课程: {{ labInfo.isBelongTo }}</div>
+                    >所属课程: {{ labInfo.courseId }}</div>
                 </template>
+                <!-- 小屏兼容 -->
                 <template class="labInfoIcon">
                     <el-tooltip placement="top">
                         <template #content>
                             创建日期: {{ labInfo.createAt }}
-                            <br />截止日期: {{ labInfo.endAt }}
-                            <br />所属课程: {{ labInfo.isBelongTo }}
+                            <br />截止日期: {{ labInfo.deadLine }}
+                            <br />所属课程: {{ labInfo.courseId }}
                         </template>
                         <span class="tipCt"><InfoFilled style="height: 1.2em;width:1.2em;color: #606266" /></span>
                     </el-tooltip>
@@ -70,13 +72,13 @@ const clickLabDrawer = () => {
     padding: 20px 40px 0;
     border-bottom: 1px solid #aaa;
 }
-.labTitle {
+.title {
     text-align: left;
     font-size: 25px;
     font-weight: 600;
     height: 40px;
 }
-.labDiscribe {
+.content {
     margin: 10px 0;
     font-size: 14px;
     text-align: left;
@@ -133,7 +135,7 @@ const clickLabDrawer = () => {
 .drawer {
     width: 600px;
 }
-.labCommonInfo {
+.timeCourse {
     display: none;
 }
 
@@ -148,7 +150,7 @@ const clickLabDrawer = () => {
 }
 
 @media screen and (min-width: 1060px) {
-    .labCommonInfo {
+    .timeCourse {
         display: flex;
     }
 

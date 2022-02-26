@@ -1,7 +1,7 @@
 import { validateCourseName } from '@/utils/helper/validate';
 
 export const labRules = {
-    labName: [
+    title: [
         {
             required: true,
             message: '请输入实验名称',
@@ -12,14 +12,14 @@ export const labRules = {
             trigger: 'blur'
         }
     ],
-    description: [
+    content: [
         {
             required: true,
             message: '请输入实验介绍',
             trigger: 'blur',
         },
     ],
-    endAt: [
+    deadLine: [
         {
             required: true,
             message: '请输入截止时间',

@@ -1,28 +1,48 @@
 <script setup lang="ts">
-import { computed, ref } from "vue-demi";
+import { watch, toRef } from "vue";
+import { usePageList } from "@/utils/helper";
 
 const props = defineProps<{
-    data?: Array<any>
-    pageSize?: number
+    pageSize?: number,
+    fetchData?: any,
+    common?: any
 }>()
 
-const current = ref(1);
 const pageSize = props.pageSize ?? 7;
-const dataSize = props.data?.length ?? 0;
+const common = toRef(props, 'common');
 
-const showData = computed(() => props.data?.slice((current.value - 1) * pageSize, current.value * pageSize))
+const {
+    current,
+    total,
+    list,
+    fetch,
+    setCommon
+} = usePageList({
+    size: pageSize,
+    fetchData: props.fetchData,
+    failText: '获取列表失败,请稍后再试',
+    common: props.common ?? {}
+});
 
+watch(common, (newV, _) => {
+    setCommon(newV);
+    fetch(1);
+})
+
+if (props.common !== {}) {
+    fetch(1);
+}
 </script>
 
 <template>
-    <div v-if="props.data && props.data.length > 0">
-        <el-table :data="showData" stripe highlight-current-row style="width: 100%">
+    <div v-if="list.length">
+        <el-table :data="list" stripe highlight-current-row style="width: 100%">
             <slot name="tableColumns"></slot>
         </el-table>
         <el-pagination
             v-model:currentPage="current"
             layout="prev, pager, next"
-            :total="dataSize"
+            :total="total"
             :page-size="pageSize"
             hide-on-single-page
         ></el-pagination>

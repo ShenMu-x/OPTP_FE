@@ -1,19 +1,28 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import PageHeader from '@/components/common/PageHeader.vue';
 import LabEdit from './comp/labTab/LabEdit.vue';
 import Homework from './comp/labTab/Homework.vue';
+import { getLabById } from '@/utils/services';
 import { mockLab } from './mock';
 
 
 const route = useRoute();
-const labId = route.params.labId;
+const router = useRouter();
+const labId = parseInt(route.params?.labId?.[0]);
+
+console.log('labId', labId);
+getLabById(labId).then(res => {
+    console.log('lanRes' ,res);
+    if(res.code === -19999) {
+        router.replace('/404');
+    }
+})
 
 
-
-// const focusTab = ref('info');
-const focusTab = ref('homework');
+const focusTab = ref('info');
+// const focusTab = ref('homework');
 </script>
 
 <template>
@@ -21,7 +30,7 @@ const focusTab = ref('homework');
     <div class="card tabCt">
         <el-tabs tab-position="top" class="demo-tabs" v-model="focusTab">
             <el-tab-pane label="修改实验信息" name="info">
-                <LabEdit :data="mockLab" />
+                <LabEdit />
             </el-tab-pane>
             <el-tab-pane label="作业完成情况" name="homework">
                 <Homework />

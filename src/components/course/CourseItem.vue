@@ -12,8 +12,8 @@ const course = toRef(props, 'course');
 console.log('course', course.value)
 
 const toCourseDetail = () => {
-    if (isTeacher()) router.push(`/teach/courseDetail/${course.value.courseId}`);
-    else router.push(`/courseDetail/${course.value.courseId}`);
+    if (isTeacher()) router.push(`/teach/course_detail/${course.value.courseId}`);
+    else router.push(`/course_detail/${course.value.courseId}`);
 }
 </script>
 

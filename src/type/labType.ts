@@ -1,17 +1,17 @@
-import { Settings } from "http2";
-
-export type labInfoType = {
-    labId: string,
+export type labType = {
+    id: number,
+    courseId: number,
     title: string,
-    describe: string,
-    isFinished: boolean,
-    createAt: string,
-    endAt: string,
-    isBelongTo: string,
-    reviews?: ''
+    content: string,
+    createAt?: string,
+    deadLine: string,
+    updatedAt?: string,
+    attachmentUrl: string
+    isFinished?: boolean,
+    reviews?: string
 }
 
-export type labsType = Array<labInfoType>;
+export type labsType = Array<labType>;
 
 export type labStatus = {
     uid: string,

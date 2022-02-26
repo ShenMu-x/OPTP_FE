@@ -1,18 +1,81 @@
 <script setup lang="ts">
+import { computed, reactive, ref, toRef } from 'vue';
+import { ElMessage } from 'element-plus';
 import { UploadFilled } from '@element-plus/icons-vue';
-import { UPLOAD_PDF_URL, UPLOAD_ATTACHMENT_URL, wrapHeaderWithToken } from '@/utils/helper';
+import type {
+    UploadFile,
+    ElUploadProgressEvent,
+    ElFile,
+} from 'element-plus/es/components/upload/src/upload.type'
+import { UPLOAD_PDF_URL, UPLOAD_ATTACHMENT_URL, wrapHeaderWithToken, showFailWrap } from '@/utils/helper';
 
 const props = defineProps<{
-    type: 'attachment' | 'report';
+    type: 'attachment' | 'report',
+    afterUpload?: any
 }>();
 
-const uploadUrl = props.type === 'report' ? UPLOAD_PDF_URL : UPLOAD_ATTACHMENT_URL;
-const fileType = props.type === 'report' ? 'pdf' : 'docx/pdf/txt/rar'
+let allowType = ['application/msword', 'application/pdf', 'application/vnd.ms-powerpoint', 'text/plain', 'aplication/zip']
+let fileType = ['doc', 'pdf', 'ppt', 'txt', 'zip'];
+let name = 'attachment';
+let uploadUrl = UPLOAD_ATTACHMENT_URL;
+if (props.type === 'report') {
+    allowType = ['application/pdf']
+    uploadUrl = UPLOAD_PDF_URL;
+    name = "pdf"
+}
+
+const handleFileSuccess = (res: { code: number, data: { url: string } }, file: UploadFile) => {
+    emits('update', res.data.url);
+    props.afterUpload?.(res.data.url);
+}
+const handleFileError = () => {
+    showFailWrap({
+        text: '上传失败，请稍后再试'
+    })
+}
+const handleRemove = () => {
+    emits('update', '');
+    props.afterUpload?.('');
+}
+
+const beforeFileUpload = (file: ElFile) => {
+    const isAllow = allowType.includes(file.type);
+    const isLt2M = file.size / 1024 / 1024 < 2
+
+    if (!isAllow) {
+        ElMessage.error(`请上传${fileType.join('/')}格式文件`)
+    }
+    if (!isLt2M) {
+        ElMessage.error('文件大小不能超过 2MB!')
+    }
+    return isAllow && isLt2M
+}
+
+const handleExceed = () => {
+    showFailWrap({
+        text: '限制上传 1 个文件'
+    })
+}
+
+const emits = defineEmits(['update']);
+
 
 </script>
 
 <template>
-    <el-upload class="upload-demo" drag :action="uploadUrl" multiple :headers="wrapHeaderWithToken()">
+    <el-upload
+        drag
+        :limit="1"
+        :action="uploadUrl"
+        :headers="wrapHeaderWithToken()"
+        :accept="allowType.join(',')"
+        :on-success="handleFileSuccess"
+        :on-error="handleFileError"
+        :on-remove="handleRemove"
+        :on-exceed="handleExceed"
+        :before-upload="beforeFileUpload"
+        :name="name"
+    >
         <el-icon class="el-icon--upload">
             <upload-filled />
         </el-icon>
@@ -21,7 +84,7 @@ const fileType = props.type === 'report' ? 'pdf' : 'docx/pdf/txt/rar'
             <em>点击上传</em>
         </div>
         <template #tip>
-            <div class="el-upload__tip">只能上传{{ fileType }}文件, 文件大小不超过 2M</div>
+            <div class="el-upload__tip">只能上传{{ fileType.join('/') }}类型文件,个数限制1个,大小不超过 2M</div>
         </template>
     </el-upload>
 </template>

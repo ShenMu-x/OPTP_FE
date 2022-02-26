@@ -1,15 +1,14 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { Plus } from '@element-plus/icons-vue';
 import TablePage from '@/components/common/TablePage.vue';
-
 import LabForm from '../form/LabForm.vue';
-
-import { createLab as createLabApi } from '@/utils/services';
-import { labs } from './mock';
+import { createLab, getLabs } from '@/utils/services';
 
 const router = useRouter();
+const route = useRoute();
+const courseId = parseInt(route.params?.courseId?.[0]);
 
 const dialogFormVisible = ref(false);
 const refLabFormEl = ref();
@@ -26,27 +25,24 @@ const commitHandler = () => {
     refLabFormEl.value?.commitForm?.();
 }
 
-
-const createLab = () => {
+const toCreateLab = () => {
     refLabFormEl.value?.resetForm?.()
     openDialog()
 }
 
-const toDetail = (labId: string) => {
-    router.push(`/teach/labdetail/${labId}`)
+const toDetail = (labId: number) => {
+    router.push(`/teach/lab_detail/${labId}`)
 }
-
-
 
 </script>
 
 <template>
     <div class="labCt">
         <div class="btnCt">
-            <el-button :icon="Plus" @click="createLab">创建实验</el-button>
+            <el-button :icon="Plus" @click="toCreateLab">创建实验</el-button>
         </div>
-        <el-dialog v-model="dialogFormVisible" title="创建实验" :fullscreen="true">
-            <LabForm ref="refLabFormEl" :closeDialog="closeDialog" :fetch-api="createLabApi" />
+        <el-dialog v-model="dialogFormVisible" title="创建实验">
+            <LabForm ref="refLabFormEl" :closeDialog="closeDialog" :fetch-api="createLab" />
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="resetHandler">取消</el-button>
@@ -54,16 +50,16 @@ const toDetail = (labId: string) => {
                 </span>
             </template>
         </el-dialog>
-        <TablePage :data="labs">
+        <TablePage :common="{ courseId }" :fetch-data="getLabs">
             <template v-slot:tableColumns>
-                <el-table-column prop="labId" l label="实验ID" width="80" />
-                <el-table-column prop="labName" label="实验名称" width="180" />
-                <el-table-column prop="labDesc" label="实验描述" width="280" />
-                <el-table-column prop="createAt" label="创建时间" sortable width="280" />
-                <el-table-column prop="labStatus" label="实验状态" width="180" />
+                <el-table-column prop="id" label="实验ID" width="100" />
+                <el-table-column prop="title" label="实验名称" width="140" />
+                <el-table-column prop="content" label="实验描述" width="280" />
+                <el-table-column prop="deadLine" label="截止时间" sortable width="140" />
+                <el-table-column prop="labStatus" label="实验状态" width="140" />
                 <el-table-column label="操作">
                     <template #default="scope">
-                        <el-button type="text" size="small" @click="toDetail(scope?.row?.labId)">详情</el-button>
+                        <el-button type="text" size="small" @click="toDetail(scope?.row?.id)">详情</el-button>
                     </template>
                 </el-table-column>
             </template>

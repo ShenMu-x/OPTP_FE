@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { labInfoType } from '@/type';
+import { labType } from '@/type';
 import LabForm from '../form/LabForm.vue';
 
 const props = defineProps<{
-    data: labInfoType
+    data: labType
 }>();
 
 const editHandler = () => {

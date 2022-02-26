@@ -16,7 +16,7 @@ const store = useStore();
 
 const handlerEditInfo = () => {
     // 跳转修改用户信息页
-    router.push('/editinfo');
+    router.push('/edit_info');
 }
 
 const refreshAvatar = (url: string) => {
