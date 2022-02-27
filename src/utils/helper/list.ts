@@ -18,7 +18,7 @@ export const usePageList = ({
     common
 }: params) => {
     const current = ref(1);
-    const total = ref(0);
+    const total = ref(size);
     const data = reactive<{
         list: Array<any>
     }>({
@@ -42,7 +42,6 @@ export const usePageList = ({
         console.log('fetch')
         isLoading.value = true;
         showLoading();
-        // console.log('commonIn' ,commonIn);
         fetchData?.({
             pageSize: size,
             pageCurrent: nowPage,
@@ -53,6 +52,7 @@ export const usePageList = ({
                     data.list = res.data.records;
                     total.value = res.data.pageInfo.total;
                 } else {
+                    console.log(fetchData, res);
                     showFailWrap({ text: failText })
                 }
                 if (isReload.value) {

@@ -5,7 +5,8 @@ import { usePageList } from "@/utils/helper";
 const props = defineProps<{
     pageSize?: number,
     fetchData?: any,
-    common?: any
+    common?: any,
+    emptyDes?: string
 }>()
 
 const pageSize = props.pageSize ?? 7;
@@ -47,6 +48,5 @@ if (props.common !== {}) {
             hide-on-single-page
         ></el-pagination>
     </div>
-
-    <el-empty v-else description="本课程暂无实验" />
+    <el-empty v-else :description="props.emptyDes || '本课程暂无实验'" />
 </template>

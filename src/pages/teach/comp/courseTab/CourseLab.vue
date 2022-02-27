@@ -5,6 +5,7 @@ import { Plus } from '@element-plus/icons-vue';
 import TablePage from '@/components/common/TablePage.vue';
 import Tag from '@/components/common/Tag.vue';
 import LabForm from '../form/LabForm.vue';
+import BtnCt from '../common/BtnCt.vue';
 import { createLab, getLabs } from '@/utils/services';
 import { isBefore } from '@/utils/helper';
 
@@ -40,9 +41,11 @@ const toDetail = (labId: number) => {
 
 <template>
     <div class="labCt">
-        <div class="btnCt">
-            <el-button :icon="Plus" @click="toCreateLab">创建实验</el-button>
-        </div>
+        <BtnCt>
+            <template v-slot:botton>
+                <el-button :icon="Plus" @click="toCreateLab">创建实验</el-button>
+            </template>
+        </BtnCt>
         <el-dialog v-model="dialogFormVisible" title="创建实验">
             <LabForm ref="refLabFormEl" :closeDialog="closeDialog" :fetch-api="createLab" />
             <template #footer>
@@ -65,7 +68,7 @@ const toDetail = (labId: number) => {
                 </el-table-column>
                 <el-table-column label="操作">
                     <template #default="scope">
-                        <el-button type="text" size="small" @click="toDetail(scope?.row?.labId)">详情</el-button>
+                        <el-button type="text" size="default" @click="toDetail(scope?.row?.labId)">详情</el-button>
                     </template>
                 </el-table-column>
             </template>
@@ -77,12 +80,6 @@ const toDetail = (labId: number) => {
 .labCt {
     margin: 20px;
     margin-top: 0;
-}
-
-.btnCt {
-    width: 100%;
-    display: flex;
-    margin-bottom: 10px;
 }
 
 .toDetailBtn {

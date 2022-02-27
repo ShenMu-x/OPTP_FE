@@ -220,3 +220,163 @@ export const deleteCourse: (params: {
             }
         })
 }
+
+export const getCourseStuds: (params: {
+    courseId: number,
+    pageSize: number,
+    pageCurrent: number
+}) => ResType<any> = (params) => {
+    return _axios({
+        method: 'GET',
+        url: `/web/course/student/${params.courseId}`,
+        params: {
+            pageSize: params.pageSize,
+            pageCurrent: params.pageCurrent
+        }
+    }).then(res => {
+        return {
+            code: 0,
+            data: {
+                records: res.data.data.records.map((item: any) => ({
+                    userId: item.user_id,
+                    email: item.email,
+                    num: item.num,
+                    realName: item.real_name,
+                    avatarUrl: item.avatar_url,
+                    gender: item.gender,
+                    major: item.major,
+                    organization: item.organization
+                })),
+                pageInfo: res.data.data?.page_info
+            }
+        }
+    }).catch(err => {
+        console.log(err.response);
+        return {
+            code: -1
+        }
+    })
+}
+
+export const getVerifyStuds: (params: {
+    courseId: number,
+    pageSize: number,
+    pageCurrent: number
+}) => ResType<any> = (params) => {
+    return _axios({
+        method: 'GET',
+        url: `/web/course/student/examine/${params.courseId}`,
+        params: {
+            pageSize: params.pageSize,
+            pageCurrent: params.pageCurrent
+        }
+    }).then(res => {
+        return {
+            code: 0,
+            data: {
+                records: res.data.data.records?.map((item: any) => ({
+                    userId: item.user_id,
+                    email: item.email,
+                    num: item.num,
+                    realName: item.real_name,
+                    avatarUrl: item.avatar_url,
+                    gender: item.gender,
+                    major: item.major,
+                    organization: item.organization
+                })) || [],
+                pageInfo: res.data.data?.page_info
+            }
+        }
+    }).catch(err => {
+        console.log(err);
+        return {
+            code: -1,
+        }
+    })
+}
+
+
+
+const packResource = (item: any) => {
+    return {
+        title: item.title,
+        content: item.content,
+        attachmentUrl: item.attachment_url,
+        resourceCreatedAt: item.created_at,
+    }
+}
+
+export const getCourseResource: (params: {
+    courseId: number,
+    pageSize: number,
+    pageCurrent: number
+}) => ResType<{ courseId: number }> = (params) => {
+    return _axios({
+        method: "GET",
+        url: "/web/course/resource",
+        params,
+    })
+        .then(res => {
+            return {
+                code: 0,
+                records: res.data.data.records?.map((item: any) => packResource(item)) || [],
+                pageInfo: res.data.data?.page_info
+            }
+        })
+        .catch(err => {
+            return {
+                code: err.response?.data?.code ?? -1,
+                error: {
+                    message: err.response?.data?.message ?? '',
+                }
+            }
+        })
+}
+
+export const getResourceById: (resourceId: number) => ResType<any> = (resourceId) => {
+    return _axios({
+        method: "GET",
+        url: `/web/course/resource/${resourceId}`,
+    })
+        .then(res => {
+            return {
+                code: 0,
+                data: packResource(res.data.data)
+            }
+        })
+        .catch(err => {
+            return {
+                code: err.response?.data?.code ?? -1,
+                error: {
+                    message: err.response?.data?.message ?? '',
+                }
+            }
+        })
+}
+
+export const addCourseResource: (params: {
+    courseId: number,
+    pageSize: number,
+    pageCurrent: number
+}) => ResType<{ courseId: number }> = (params) => {
+    return _axios({
+        method: "get",
+        url: "/web/course/resource",
+        params,
+    })
+        .then(res => {
+            return {
+                code: 0,
+                records: res.data.data.records?.map((item: any) => (item)) || [],
+                pageInfo: res.data.data?.page_info
+            }
+        })
+        .catch(err => {
+            return {
+                code: err.response?.data?.code ?? -1,
+                error: {
+                    message: err.response?.data?.message ?? '',
+                }
+            }
+        })
+}
