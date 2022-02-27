@@ -14,14 +14,16 @@ const props = defineProps<{
     afterUpload?: any
 }>();
 
-let allowType = ['application/msword', 'application/pdf', 'application/vnd.ms-powerpoint', 'text/plain', 'aplication/zip']
-let fileType = ['doc', 'pdf', 'ppt', 'txt', 'zip'];
-let name = 'attachment';
+let allowType = ref(['application/msword', 'application/pdf', 'application/vnd.ms-powerpoint', 'text/plain', 'aplication/zip'])
+let fileType = ref(['doc', 'pdf', 'ppt', 'txt', 'zip']);
+let name = ref('attachment');
 let uploadUrl = UPLOAD_ATTACHMENT_URL;
+// 类型区分
 if (props.type === 'report') {
-    allowType = ['application/pdf']
+    allowType.value = ['application/pdf'];
+    fileType.value = ['pdf']
     uploadUrl = UPLOAD_PDF_URL;
-    name = "pdf"
+    name.value = "pdf"
 }
 
 const handleFileSuccess = (res: { code: number, data: { url: string } }, file: UploadFile) => {
@@ -39,11 +41,11 @@ const handleRemove = () => {
 }
 
 const beforeFileUpload = (file: ElFile) => {
-    const isAllow = allowType.includes(file.type);
+    const isAllow = allowType.value.includes(file.type);
     const isLt2M = file.size / 1024 / 1024 < 2
 
     if (!isAllow) {
-        ElMessage.error(`请上传${fileType.join('/')}格式文件`)
+        ElMessage.error(`请上传${fileType.value.join('/')}格式文件`)
     }
     if (!isLt2M) {
         ElMessage.error('文件大小不能超过 2MB!')
@@ -58,7 +60,6 @@ const handleExceed = () => {
 }
 
 const emits = defineEmits(['update']);
-
 
 </script>
 
@@ -84,13 +85,15 @@ const emits = defineEmits(['update']);
             <em>点击上传</em>
         </div>
         <template #tip>
-            <div class="el-upload__tip">只能上传{{ fileType.join('/') }}类型文件,个数限制1个,大小不超过 2M</div>
+            <div class="el-upload__tip">只能上传{{ fileType.join('/') }}类型文件</div>
+            <div class="el-upload__tip">个数限制1个,大小不超过 2M</div>
         </template>
     </el-upload>
 </template>
 
 <style lang="less" scoped>
 .el-upload__tip {
+    line-height: 20px;
     font-size: 14px;
 }
 </style>

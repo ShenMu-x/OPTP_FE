@@ -1,28 +1,32 @@
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
 import UserInfo from './comp/UserInfo.vue';
 import CodingTimeTable from './comp/CodingTimeTable.vue';
 import CourseList from '@/components/course/CourseList.vue';
-import LabList from '@/components/course/LabList.vue';
+import LabList from '@/components/lab/LabList.vue';
 import { labsType } from '@/type';
-import { getUserInfoByTk, getCoursesAll, getCoursesStudy } from '@/utils/services';
-import { mockLab } from './mockdata';
+import {
+    getUserInfoByTk,
+    getCoursesAll,
+    getCoursesStudy,
+    getLabDetail,
+} from '@/utils/services';
 
 const activeName = ref('coursesCreated');
-const labs = reactive<labsType>(mockLab);
-
+getLabDetail()
 const handleTabClick = (obj: any) => {
     console.log(obj?.props?.label);
 };
 
 getUserInfoByTk()
+
 </script>
 
 <template>
     <div class="userCenterCt">
         <div class="pageTitle">我的主页</div>
-        <UserInfo class="infoCard"/>
-        <div class="codeStatistics">
+        <UserInfo class="infoCard" />
+        <div class="stats">
             <div class="statTitle">我的编码时长统计（min）</div>
             <CodingTimeTable />
         </div>
@@ -36,7 +40,7 @@ getUserInfoByTk()
                     <CourseList :fetchData="getCoursesAll" />
                 </el-tab-pane>
                 <el-tab-pane label="我的实验" name="experiments">
-                    <LabList :labList="labs" />
+                    <LabList />
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -57,7 +61,7 @@ getUserInfoByTk()
 }
 
 .infoCard,
-.codeStatistics,
+.stats,
 .coursesInfo {
     background-color: #fff;
     margin-top: 20px;

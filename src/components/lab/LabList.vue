@@ -1,11 +1,8 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import CourseItem from './CourseItem.vue';
+import { ref, onMounted } from 'vue-demi';
+import Lab from './Lab.vue';
 import { usePageList } from '@/utils/helper';
-
-const props = defineProps<{
-    fetchData?: any,
-}>();
+import { getMyLabs } from '@/utils/services';
 
 const pageSize = 6;
 const refEl = ref();
@@ -22,8 +19,8 @@ const {
     fetch,
 } = usePageList({
     size: pageSize,
-    fetchData: props.fetchData,
-    failText: '获取课程列表失败,请稍后再试',
+    fetchData: getMyLabs,
+    failText: '获取实验列表失败,请稍后再试',
     refEl,
     emitReload
 });
@@ -39,11 +36,11 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="coursesCt" ref="refEl">
-        <template v-if="list?.length > 0">
-            <CourseItem v-for="item in list" :key="item.courseId" :course="item" class="courseCt" />
+    <div class="ct" ref="refEl">
+        <template v-if="list?.length">
+            <Lab v-for="lab in list" :key="lab.labId" :info="lab" class="labCt"></Lab>
         </template>
-        <el-empty v-else v-show="!isLoading" description="暂无课程" style="flex: 1" />
+        <el-empty v-else v-show="!isLoading" description="暂无实验" style="flex: 1" />
     </div>
     <el-pagination
         v-show="!isLoading"
@@ -56,15 +53,14 @@ onMounted(() => {
 </template>
 
 <style lang="less" scoped>
-@import url("@/styles/var.less");
-.coursesCt {
+.ct {
     display: flex;
     flex-wrap: wrap;
     min-height: 480px;
     padding-top: 20px;
 }
 
-.courseCt {
+.labCt {
     flex-basis: 100%;
     width: 100%;
     background-color: #fff;
@@ -76,21 +72,4 @@ onMounted(() => {
     }
 }
 
-// 三屏幕宽度适配，已废弃
-// @media screen and (min-width: @min-width) {
-//     .courseCt {
-//         flex-basis: 48%;
-//         width: 48%;
-//         margin-right: 2%;
-//     }
-// }
-
-// // 适配
-// @media screen and (min-width: @middle-width) {
-//     .courseCt {
-//         flex-basis: 30%;
-//         width: 30%;
-//         margin-right: 3%;
-//     }
-// }
 </style>

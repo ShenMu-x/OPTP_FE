@@ -2,7 +2,7 @@
 
 const props = defineProps<{
     type: 'green' | 'red',
-    text?: boolean,
+    isText?: boolean,
     greenText?: string,
     redText?: string
 }>();
@@ -12,8 +12,8 @@ const props = defineProps<{
     <div
         :class="['tag', 'green', {
             'red': props.type === 'red',
-            'rect': !props.text,
-            'redRect': !props.text && props.type === 'red',
+            'rect': !props.isText,
+            'redRect': !props.isText && props.type === 'red',
         }]"
     >
         <span v-if="props.type === 'red'">{{ props.redText ?? '已结束' }}</span>
@@ -28,6 +28,7 @@ const props = defineProps<{
     padding: 0 10px;
     line-height: 26px;
     font-size: 12px;
+    user-select: none;
 }
 .rect {
     border-width: 1px solid #e1f3d8;

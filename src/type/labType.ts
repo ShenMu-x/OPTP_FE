@@ -1,14 +1,17 @@
 export type labType = {
-    id: number,
+    labId: number,
     courseId: number,
+    courseName?: string,
     title: string,
     content: string,
     createAt?: string,
-    deadLine: string,
     updatedAt?: string,
-    attachmentUrl: string
-    isFinished?: boolean,
-    reviews?: string
+    deadLine?: string,
+    score?: number,
+    isFinish?: boolean,
+    commment?: string,
+    attachmentUrl?: string
+    reportUrl?: string,
 }
 
 export type labsType = Array<labType>;
