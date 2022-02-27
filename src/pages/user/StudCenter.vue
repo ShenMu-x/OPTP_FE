@@ -4,16 +4,13 @@ import UserInfo from './comp/UserInfo.vue';
 import CodingTimeTable from './comp/CodingTimeTable.vue';
 import CourseList from '@/components/course/CourseList.vue';
 import LabList from '@/components/lab/LabList.vue';
-import { labsType } from '@/type';
 import {
     getUserInfoByTk,
     getCoursesAll,
     getCoursesStudy,
-    getLabDetail,
 } from '@/utils/services';
 
 const activeName = ref('coursesCreated');
-getLabDetail()
 const handleTabClick = (obj: any) => {
     console.log(obj?.props?.label);
 };

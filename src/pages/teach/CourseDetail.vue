@@ -4,7 +4,8 @@ import { useRoute, useRouter } from 'vue-router';
 import PageHeader from '@/components/common/PageHeader.vue';
 import CourseInfoEdit from './comp/courseTab/CourseInfoEdit.vue';
 import CourseLab from './comp/courseTab/CourseLab.vue';
-import { getCourseById, getUserInfoById } from '@/utils/services';
+import CourseStud from './comp/courseTab/CourseStud.vue';
+import { getCourseById } from '@/utils/services';
 import { CourseType } from '@/type';
 
 const route = useRoute();
@@ -37,9 +38,11 @@ const focusTab = ref('manage');
   <div class="courseCtrCt">
     <el-tabs tab-position="left" class="demo-tabs" v-model="focusTab">
       <el-tab-pane label="课程管理" name="manage">
+        <CourseStud />
+      </el-tab-pane>
+      <el-tab-pane label="课程实验" name="lab">
         <CourseLab />
       </el-tab-pane>
-      <el-tab-pane label="课程实验" name="lab">课程实验</el-tab-pane>
       <el-tab-pane label="课程公告" name="notice">课程公告</el-tab-pane>
       <el-tab-pane label="课程问答" name="qa">课程问答</el-tab-pane>
       <el-tab-pane label="课程信息" name="info">

@@ -10,41 +10,44 @@ const props = defineProps<{
 
 <template>
     <div
-        :class="['tag', 'green', {
-            'red': props.type === 'red',
+        :class="['tag', {
             'rect': !props.isText,
             'redRect': !props.isText && props.type === 'red',
+            'green': props.isText && props.type === 'green',
+            'red': props.isText && props.type === 'red'
         }]"
     >
-        <span v-if="props.type === 'red'">{{ props.redText ?? '已结束' }}</span>
-        <span v-else>{{ props.greenText ?? '进行中' }}</span>
+        <span v-if="props.type === 'red'">{{ props.redText || '已结束' }}</span>
+        <span v-else>{{ props.greenText || '进行中' }}</span>
     </div>
 </template>
 
 <style lang="less" scoped>
 .tag {
     display: inline-block;
-    height: 26px;
-    padding: 0 10px;
-    line-height: 26px;
-    font-size: 12px;
+    font-size: 14px;
     user-select: none;
+    padding: 0 11px;
+    height: 32px;
+    line-height: 32px;
 }
 .rect {
     border-width: 1px solid #e1f3d8;
     border-radius: 4px;
-    background-color: #f0f9eb;
+    background-color: #41da86;
+    color: #fff;
+    font-weight: bold;
 }
 .redRect {
-    background-color: #fef0f0;
+    background-color: #e96262;
     border-color: #fde2e2;
 }
 
 .green {
-    color: #67c23a;
+    color: #41da86;
 }
 
 .red {
-    color: #f56c6c;
+    color: #e96262;
 }
 </style>

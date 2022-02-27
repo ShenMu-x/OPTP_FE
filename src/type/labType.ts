@@ -4,7 +4,7 @@ export type labType = {
     courseName?: string,
     title: string,
     content: string,
-    createAt?: string,
+    createdAt?: string,
     updatedAt?: string,
     deadLine?: string,
     score?: number,

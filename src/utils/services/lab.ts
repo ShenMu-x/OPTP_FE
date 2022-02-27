@@ -1,6 +1,6 @@
 import _axios from "./axios";
 import { ResType, ListRes } from "./type";
-import { fmatDate } from '../helper';
+import { fmatDate, fmatTime } from '../helper';
 import { labType } from '@/type';
 
 interface createLabReq {
@@ -76,6 +76,7 @@ export const deleteLab: (labId: number) => ResType<''> = (labId) => {
 
 interface labRes {
     lab_id: number;
+    id: number;
     course_id: number;
     course_name?: string;
     title: string;
@@ -92,14 +93,14 @@ interface labRes {
 
 const packLab = (lab: labRes) => {
     return {
-        labId: lab.lab_id,
+        labId: lab.lab_id || lab.id,
         courseId: lab.course_id,
         courseName: lab.course_name,
         title: lab.title,
         content: lab.content,
-        createdAt: fmatDate(lab.created_at),
-        updateAt: fmatDate(lab.update_at),
-        deadLine: fmatDate(lab.dead_line),
+        createdAt: fmatTime(lab.created_at),
+        updateAt: fmatTime(lab.update_at),
+        deadLine: fmatTime(lab.dead_line),
         isFinish: lab.is_finish,
         comment: lab.comment,
         score: lab.score,
@@ -161,6 +162,31 @@ export const getLabs: (params: getLabReq) => ResType<ListRes<labType>> = (params
         })
 }
 
+export const getStuCourseLabs: (params: getLabReq) => ResType<ListRes<labType>> = (params) => {
+    return _axios({
+        method: "GET",
+        url: '/web/lab/details',
+        params,
+    })
+        .then(value => {
+            return {
+                code: 0,
+                data: {
+                    records: packRecords(value.data.records),
+                    pageInfo: value.data.page_info
+                }
+            }
+        })
+        .catch(err => {
+            return {
+                code: err.response?.data?.code,
+                error: {
+                    message: err.response?.data?.message,
+                }
+            }
+        })
+}
+
 export const getMyLabs: (params: {
     pageCurrent: number,
     pageSize: number,
@@ -174,50 +200,9 @@ export const getMyLabs: (params: {
             return {
                 code: 0,
                 data: {
-                    records: value.data.data.records.map((lab: any) => {
-                        return {
-                            id: lab.lab_id,
-                            courseId: lab.course_id,
-                            courseName: lab.course_name,
-                            title: lab.title,
-                            content: lab.content,
-                            attachmentUrl: lab.attachment_url,
-                            deadLine: fmatDate(lab.dead_line),
-                            createAt: fmatDate(lab.created_at),
-                            updateAt: fmatDate(lab.updated_at)
-                        }
-                    }),
+                    records: packRecords(value.data.data.records),
                     pageInfo: value.data.data.page_info
                 }
-            }
-        })
-        .catch(err => {
-            console.log('??', err);
-            return {
-                code: err.response?.data?.code,
-                error: {
-                    message: err.response?.data?.message,
-                }
-            }
-        })
-}
-
-export const getLabDetail: (
-
-) => ResType<ListRes<labType>> = () => {
-    return _axios({
-        method: "GET",
-        url: `/web/lab/details`,
-        params: {
-            courseId: 2,
-            pageCurrent: 1,
-            pageSize: 20
-        }
-    })
-        .then(value => {
-            return {
-                code: 0,
-
             }
         })
         .catch(err => {

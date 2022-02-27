@@ -4,7 +4,6 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { useRoute, useRouter } from 'vue-router';
 import UploadFile from '@/components/common/UploadFile.vue';
 import { labRules } from '../form/rule';
-import { labType } from '@/type';
 import { editLab, getLabById, deleteLab } from '@/utils/services';
 import { showFailWrap, showSuccessWrap } from '@/utils/helper';
 

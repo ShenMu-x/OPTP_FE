@@ -3,8 +3,10 @@ import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { Plus } from '@element-plus/icons-vue';
 import TablePage from '@/components/common/TablePage.vue';
+import Tag from '@/components/common/Tag.vue';
 import LabForm from '../form/LabForm.vue';
 import { createLab, getLabs } from '@/utils/services';
+import { isBefore } from '@/utils/helper';
 
 const router = useRouter();
 const route = useRoute();
@@ -52,14 +54,18 @@ const toDetail = (labId: number) => {
         </el-dialog>
         <TablePage :common="{ courseId }" :fetch-data="getLabs">
             <template v-slot:tableColumns>
-                <el-table-column prop="id" label="实验ID" width="100" />
+                <el-table-column prop="labId" label="实验ID" width="80" />
                 <el-table-column prop="title" label="实验名称" width="140" />
                 <el-table-column prop="content" label="实验描述" width="280" />
-                <el-table-column prop="deadLine" label="截止时间" sortable width="140" />
-                <el-table-column prop="labStatus" label="实验状态" width="140" />
+                <el-table-column prop="isFinish" label="实验状态" width="140">
+                    <template #default="scope">
+                        <div v-if="isBefore(scope.row.deadLine)">进行中</div>
+                        <div v-else>已截止</div>
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作">
                     <template #default="scope">
-                        <el-button type="text" size="small" @click="toDetail(scope?.row?.id)">详情</el-button>
+                        <el-button type="text" size="small" @click="toDetail(scope?.row?.labId)">详情</el-button>
                     </template>
                 </el-table-column>
             </template>

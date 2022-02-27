@@ -4,6 +4,7 @@ import { InfoFilled } from '@element-plus/icons-vue';
 import LabDetail from './LabDetail.vue';
 import Tag from '../common/Tag.vue';
 import { labType } from '@/type';
+import { fmatDate } from '@/utils/helper';
 
 const props = defineProps<{
     info: labType
@@ -17,7 +18,7 @@ const clickLabDrawer = () => {
 }
 
 const finishStatus = ref(info.value?.isFinish);
-const updateStatus = (val) => {
+const updateStatus = (val: boolean) => {
     console.log(val)
     finishStatus.value = val;
     // 申请完成实验
@@ -32,15 +33,15 @@ const updateStatus = (val) => {
             <div class="leftCt">
                 <!-- 宽屏 -->
                 <template class="timeCourse">
-                    <div>创建日期: {{ info.createAt }}</div>
-                    <div>截止日期: {{ info.deadLine }}</div>
+                    <div :title="info.createdAt">创建日期: {{ fmatDate(info.createdAt || "") }}</div>
+                    <div :title="info.deadLine">截止日期: {{ fmatDate(info.deadLine || "") }}</div>
                     <div class="course" title="info.isBelongTo">所属课程: {{ info.courseName }}</div>
                 </template>
                 <!-- 小屏兼容 -->
                 <template class="infoIcon">
                     <el-tooltip placement="top">
                         <template #content>
-                            创建日期: {{ info.createAt }}
+                            创建日期: {{ info.createdAt }}
                             <br />
                             截止日期: {{ info.deadLine }}
                             <br />

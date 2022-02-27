@@ -1,7 +1,9 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { labType } from '@/type';
+import Tag from '../common/Tag.vue';
 import UploadFile from '../common/UploadFile.vue';
-import { getLabDetail } from '@/utils/services'
+import { getLabById } from '@/utils/services';
 
 const props = defineProps<{
     info: labType
@@ -10,6 +12,14 @@ const props = defineProps<{
 const toEditIDE = () => {
 
 }
+const lab = ref<labType>(props.info);
+
+getLabById(props.info.labId).then(res=> {
+    if(res.code === 0) {
+        console.log('lab info', lab.value)
+        lab.value = res.data as labType;
+    }
+})
 
 
 </script>
@@ -21,35 +31,35 @@ const toEditIDE = () => {
             <div class="card">
                 <div class="info">
                     创建日期:
-                    <el-tag class="infoTag" type="info">{{ info.createAt }}</el-tag>
+                    <el-tag class="infoTag" type="info">{{ lab.createdAt }}</el-tag>
                 </div>
                 <div class="info">
                     截止日期:
-                    <el-tag class="infoTag" type="info">{{ info.deadLine }}</el-tag>
+                    <el-tag class="infoTag" type="info">{{ lab.deadLine }}</el-tag>
                 </div>
                 <div class="info">
                     状态:
-                    <div v-if="info.isFinish" class="tag done">已完成</div>
-                    <div v-else class="tag undo">未完成</div>
+                    <Tag v-if="lab.isFinish" type="green" greenText="已完成"/>
+                    <!-- <div  class="tag done"></div> -->
+                    <!-- <div v-else class="tag undo">未完成</div> -->
+                    <Tag v-else type="red" redText="未完成"/>
                 </div>
             </div>
         </div>
         <div>
             <div class="title">实验描述</div>
-            <div class="card">{{ info.content }}</div>
+            <div class="card">{{ lab.content || '暂无描述' }}</div>
         </div>
         <div>
             <div class="title">开始实验</div>
             <div class="card">
-                <el-link v-if="info.attachmentUrl" :href="info.attachmentUrl" type="primary">点此进入实验</el-link>
+                <el-link v-if="lab.attachmentUrl" :href="lab.attachmentUrl" type="primary">点此进入实验</el-link>
             </div>
-            <!-- toEditIDE -->
-            <!-- <el-button class="rectBtn btn" @click="toEditIDE">开始实验</el-button> -->
         </div>
         <div>
             <div class="title">实验附件</div>
             <div class="card">
-                <el-link v-if="info.attachmentUrl" :href="info.attachmentUrl" type="primary">点此下载附件</el-link>
+                <el-link v-if="lab.attachmentUrl" :href="lab.attachmentUrl" type="primary">点此下载附件</el-link>
                 <div v-else>暂无附件</div>
             </div>
         </div>
@@ -61,7 +71,7 @@ const toEditIDE = () => {
         </div>
         <div>
             <div class="title">教师评语</div>
-            <div class="card">{{ info.commment || '暂无评语' }}</div>
+            <div class="card">{{ lab.commment || '暂无评语' }}</div>
         </div>
     </div>
 </template>

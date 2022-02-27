@@ -43,7 +43,6 @@ export const usePageList = ({
         isLoading.value = true;
         showLoading();
         // console.log('commonIn' ,commonIn);
-       
         fetchData?.({
             pageSize: size,
             pageCurrent: nowPage,

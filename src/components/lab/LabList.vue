@@ -67,7 +67,6 @@ onMounted(() => {
     border: 1px solid #e4e7ed;
     border-radius: 4px;
     &:hover {
-        cursor: pointer;
         box-shadow: 0 0 5px #5151e51e;
     }
 }
