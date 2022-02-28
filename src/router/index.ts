@@ -49,6 +49,10 @@ const routes = [
                 component: () => import('../pages/teach/LabDetail.vue')
             },
             {
+                path: '/user_attend',
+                component: () => import('../pages/user/UserAttend.vue')
+            },
+            {
                 path: '/404',
                 component: () => import('../pages/404.vue')
             },

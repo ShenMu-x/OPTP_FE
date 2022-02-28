@@ -9,7 +9,6 @@ import { getCourseResource, addResource, getResourceById } from '@/utils/service
 import { getCourseId } from './logic';
 
 const courseId = getCourseId();
-console.log('courseId', courseId);
 
 const isDialogOpen = ref(false);
 const openDialog = () => { isDialogOpen.value = true; }

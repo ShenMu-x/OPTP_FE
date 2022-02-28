@@ -8,6 +8,7 @@ import {
     getUserInfoByTk,
     getCoursesAll,
     getCoursesStudy,
+    getMyAttend
 } from '@/utils/services';
 
 const activeName = ref('coursesCreated');
@@ -16,7 +17,11 @@ const handleTabClick = (obj: any) => {
 };
 
 getUserInfoByTk()
-
+getMyAttend({
+    pageCurrent: 1,
+    pageSize: 20,
+    courseId: 2
+})
 </script>
 
 <template>

@@ -7,6 +7,8 @@ import CourseLab from './comp/courseTab/CourseLab.vue';
 import CourseStud from './comp/courseTab/CourseStud.vue';
 import CourseResource from './comp/courseTab/CourseResource.vue';
 import CourseState from './comp/courseTab/CourseState.vue';
+import CourseAttend from './comp/courseTab/courseAttend.vue';
+import CourseQA from './comp/courseTab/CourseQA.vue';
 import { getCourseById } from '@/utils/services';
 import { CourseType } from '@/type';
 
@@ -30,7 +32,7 @@ getCourseById({ courseId })
     }
   })
 
-const focusTab = ref('score');
+const focusTab = ref('qa');
 
 </script>
 
@@ -41,13 +43,18 @@ const focusTab = ref('score');
       <el-tab-pane label="课程实验" name="lab">
         <CourseLab />
       </el-tab-pane>
+      <el-tab-pane label="签到管理" name="attend">
+        <CourseAttend />
+      </el-tab-pane>
       <el-tab-pane label="成员管理" name="manage">
         <CourseStud />
       </el-tab-pane>
       <el-tab-pane label="课程资源" name="resource">
         <CourseResource />
       </el-tab-pane>
-      <el-tab-pane label="课程问答" name="qa">课程问答</el-tab-pane>
+      <el-tab-pane label="课程问答" name="qa">
+        <CourseQA />
+      </el-tab-pane>
       <el-tab-pane label="课程信息" name="info">
         <CourseInfoEdit :course="course" />
       </el-tab-pane>

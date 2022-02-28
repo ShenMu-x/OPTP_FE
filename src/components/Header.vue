@@ -2,15 +2,17 @@
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import SCNULogo from '../assets/scnulogo.png';
-import { HomeFilled, ArrowLeftBold, Avatar } from '@element-plus/icons-vue';
+import { HomeFilled, ArrowLeftBold, Avatar, AlarmClock } from '@element-plus/icons-vue';
 
 const router = useRouter();
 
-const toHome = (command: string | number | object) => {
-    if(command === 'toHome') {
-        // router.replace('/user');
-    } else if(command === 'logout') {
+const commandHandler = (command: string) => {
+    if (command === 'toHome') {
+        router.push('/');
+    } else if (command === 'logout') {
         // console.log('logout')
+    } else if (command === 'attend') {
+        router.push('/user_attend')
     }
 }
 
@@ -19,34 +21,35 @@ const toHome = (command: string | number | object) => {
 <template>
     <div class="container">
         <div class="logo">
-            <img :src="SCNULogo">
+            <img :src="SCNULogo" />
         </div>
         <div class="title">在线编程教学平台</div>
-        <el-dropdown @command="toHome">
-            <span  class="el-dropdown-link">
-                <Avatar class="avatar"/>
+        <el-dropdown @command="commandHandler">
+            <span class="el-dropdown-link">
+                <Avatar class="avatar" />
             </span>
             <template #dropdown>
                 <el-dropdown-menu>
                     <el-dropdown-item :icon="HomeFilled" command="toHome">我的主页</el-dropdown-item>
                     <el-dropdown-item :icon="ArrowLeftBold" command="logout">退出登录</el-dropdown-item>
+                    <el-dropdown-item :icon="AlarmClock" command="attend">我的签到</el-dropdown-item>
                 </el-dropdown-menu>
             </template>
         </el-dropdown>
-  </div>
+    </div>
 </template>
 
 <style scoped lang="less">
 .container {
     height: 60px;
-    width: 100%;
+    width:  100%;
     padding: 0 20px;
     display: flex;
     align-items: center;
     background-color: #002d54;
 }
 
-.logo{
+.logo {
     margin-right: 40px;
     img {
         height: 50px;
@@ -57,7 +60,7 @@ const toHome = (command: string | number | object) => {
 .title {
     flex: 1;
     margin-right: 10px;
-    color: #FFF;
+    color: #fff;
     text-align: left;
     font-size: 20px;
     letter-spacing: 5px;
@@ -66,6 +69,6 @@ const toHome = (command: string | number | object) => {
 .avatar {
     height: 32px;
     width: 32px;
-    color: #FFF;
+    color: #fff;
 }
 </style>
