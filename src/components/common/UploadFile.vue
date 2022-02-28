@@ -14,8 +14,8 @@ const props = defineProps<{
     afterUpload?: any
 }>();
 
-let allowType = ref(['application/msword', 'application/pdf', 'application/vnd.ms-powerpoint', 'text/plain', 'aplication/zip'])
-let fileType = ref(['doc', 'pdf', 'ppt', 'txt', 'zip']);
+let allowType = ref(['application/msword', 'application/pdf', 'text/plain'])
+let fileType = ref(['doc', 'pdf', 'txt']);
 let name = ref('attachment');
 let uploadUrl = UPLOAD_ATTACHMENT_URL;
 // 类型区分
@@ -41,6 +41,7 @@ const handleRemove = () => {
 }
 
 const beforeFileUpload = (file: ElFile) => {
+    console.log(file)
     const isAllow = allowType.value.includes(file.type);
     const isLt2M = file.size / 1024 / 1024 < 2
 

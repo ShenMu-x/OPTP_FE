@@ -14,3 +14,13 @@ export type CourseType = {
 }
 
 export type CourseListType = Array<CourseType>
+
+export type ResourceType = {
+    resourceId: number,
+    courseId: number,
+    title: string,
+    content: string,
+    attachmentUrl: string,
+    createAt: string,
+    updateAt: string
+}

@@ -1,7 +1,7 @@
 import _axios from './axios';
 import { ResType, ListRes } from './type';
 import { CourseType } from '@/type';
-import { fmatDate } from '../helper';
+import { fmatDate, fmatTime } from '../helper';
 
 const packCourse = (course: any): CourseType => {
     return {
@@ -293,90 +293,4 @@ export const getVerifyStuds: (params: {
             code: -1,
         }
     })
-}
-
-
-
-const packResource = (item: any) => {
-    return {
-        title: item.title,
-        content: item.content,
-        attachmentUrl: item.attachment_url,
-        resourceCreatedAt: item.created_at,
-    }
-}
-
-export const getCourseResource: (params: {
-    courseId: number,
-    pageSize: number,
-    pageCurrent: number
-}) => ResType<{ courseId: number }> = (params) => {
-    return _axios({
-        method: "GET",
-        url: "/web/course/resource",
-        params,
-    })
-        .then(res => {
-            return {
-                code: 0,
-                records: res.data.data.records?.map((item: any) => packResource(item)) || [],
-                pageInfo: res.data.data?.page_info
-            }
-        })
-        .catch(err => {
-            return {
-                code: err.response?.data?.code ?? -1,
-                error: {
-                    message: err.response?.data?.message ?? '',
-                }
-            }
-        })
-}
-
-export const getResourceById: (resourceId: number) => ResType<any> = (resourceId) => {
-    return _axios({
-        method: "GET",
-        url: `/web/course/resource/${resourceId}`,
-    })
-        .then(res => {
-            return {
-                code: 0,
-                data: packResource(res.data.data)
-            }
-        })
-        .catch(err => {
-            return {
-                code: err.response?.data?.code ?? -1,
-                error: {
-                    message: err.response?.data?.message ?? '',
-                }
-            }
-        })
-}
-
-export const addCourseResource: (params: {
-    courseId: number,
-    pageSize: number,
-    pageCurrent: number
-}) => ResType<{ courseId: number }> = (params) => {
-    return _axios({
-        method: "get",
-        url: "/web/course/resource",
-        params,
-    })
-        .then(res => {
-            return {
-                code: 0,
-                records: res.data.data.records?.map((item: any) => (item)) || [],
-                pageInfo: res.data.data?.page_info
-            }
-        })
-        .catch(err => {
-            return {
-                code: err.response?.data?.code ?? -1,
-                error: {
-                    message: err.response?.data?.message ?? '',
-                }
-            }
-        })
 }

@@ -52,7 +52,7 @@ export const usePageList = ({
                     data.list = res.data.records;
                     total.value = res.data.pageInfo.total;
                 } else {
-                    console.log(fetchData, res);
+                    console.log('fetchData', res);
                     showFailWrap({ text: failText })
                 }
                 if (isReload.value) {

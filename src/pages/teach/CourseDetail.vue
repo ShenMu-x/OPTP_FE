@@ -6,6 +6,7 @@ import CourseInfoEdit from './comp/courseTab/CourseInfoEdit.vue';
 import CourseLab from './comp/courseTab/CourseLab.vue';
 import CourseStud from './comp/courseTab/CourseStud.vue';
 import CourseResource from './comp/courseTab/CourseResource.vue';
+import CourseState from './comp/courseTab/CourseState.vue';
 import { getCourseById } from '@/utils/services';
 import { CourseType } from '@/type';
 
@@ -24,13 +25,12 @@ getCourseById({ courseId })
   .then(res => {
     if (res.code === 0 && res.data) {
       Object.assign(data.course, res.data.course);
-      console.log(data.course)
     } else {
       router.replace('/404');
     }
   })
 
-const focusTab = ref('resource');
+const focusTab = ref('score');
 
 </script>
 
@@ -51,7 +51,9 @@ const focusTab = ref('resource');
       <el-tab-pane label="课程信息" name="info">
         <CourseInfoEdit :course="course" />
       </el-tab-pane>
-      <el-tab-pane label="学生成绩" name="score">学生成绩</el-tab-pane>
+      <el-tab-pane label="学生成绩" name="score">
+        <CourseState />
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
