@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { Search } from '@element-plus/icons-vue';
 import UserInfo from './comp/UserInfo.vue';
 import CodingTimeTable from './comp/CodingTimeTable.vue';
 import CourseList from '@/components/course/CourseList.vue';
@@ -22,6 +23,8 @@ getMyAttend({
     pageSize: 20,
     courseId: 2
 })
+
+const searchId = ref('');
 </script>
 
 <template>
@@ -38,7 +41,16 @@ getMyAttend({
                     <CourseList :fetchData="getCoursesStudy" />
                 </el-tab-pane>
                 <el-tab-pane label="搜索课程" name="coursesJoin">
-                    <div>放一个搜索框</div>
+                    <div class="btnCt">
+                        <el-button>查询</el-button>
+                        <el-input
+                            v-model="searchId"
+                            size="large"
+                            placeholder="输入课程ID查询"
+                            :prefix-icon="Search"
+                        ></el-input>
+                    </div>
+
                     <CourseList :fetchData="getCoursesAll" />
                 </el-tab-pane>
                 <el-tab-pane label="我的实验" name="experiments">
@@ -73,5 +85,9 @@ getMyAttend({
     font-size: 20px;
     text-align: left;
     margin-bottom: 20px;
+}
+
+.btnCt {
+    display: flex;
 }
 </style>

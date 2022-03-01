@@ -1,15 +1,14 @@
 import _axios from '../axios';
 import { ResType, ListRes } from '../type';
 import { CourseType } from '@/type';
-import { fmatDate, fmatTime } from '../../helper';
-import { packRecords } from './pack';
+import { packCourse, packRecords } from './pack';
 
-// 获取学习课程
-export const getCoursesStudy: (params: {
+// 获取课程列表
+export const getCoursesAll: (params: {
     pageCurrent: number,
     pageSize: number
 }) => ResType<ListRes<CourseType>> = (params) => {
-    return _axios.get(`/web/course/study?pageCurrent=${params.pageCurrent}&pageSize=${params.pageSize}`)
+    return _axios.get(`/web/course?pageCurrent=${params.pageCurrent}&pageSize=${params.pageSize}`)
         .then(value => {
             return {
                 code: 0,
@@ -29,24 +28,24 @@ export const getCoursesStudy: (params: {
         })
 }
 
-// 课程签到
-export const attendCourse: (params: {
-    courseId: number,
-    secretKey: string,
-}) => ResType<any> = (params) => {
-    return _axios({
-        method: "POST",
-        url: "/web/course/attend",
-        data: params
-    })
-        .then(_ => {
-            return { code: 0 }
+// 根据课程id获得课程信息
+export const getCourseById: (params: {
+    courseId: number
+}) => ResType<{ course: CourseType }> = (params) => {
+    return _axios.get(`/web/course/${params.courseId}`)
+        .then(value => {
+            return {
+                code: 0,
+                data: {
+                    course: packCourse(value.data.data)
+                }
+            }
         })
         .catch(err => {
             return {
-                code: err.response?.data?.code ?? -1,
+                code: err.response.data.code,
                 error: {
-                    message: err.response?.data?.message ?? '',
+                    message: err.response.data.message,
                 }
             }
         })

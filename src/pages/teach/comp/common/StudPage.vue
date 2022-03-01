@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { useRouter, useRoute } from 'vue-router';
 import TablePage from '@/components/common/TablePage.vue';
-import { getCourseStuds, getVerifyStuds } from '@/utils/services';
+import { getStudents, getVerifyStuds } from '@/utils/services';
 
 const props = defineProps<{
     type: 'default' | 'verify'
 }>();
-const fetch = props.type === 'verify' ? getVerifyStuds : getCourseStuds;
+const fetch = props.type === 'verify' ? getVerifyStuds : getStudents;
 const des = props.type === 'verify' ? '本课程暂无待审核成员' : '本课程暂无成员';
 const route = useRoute();
 const courseId = parseInt(route.params?.courseId?.[0]);

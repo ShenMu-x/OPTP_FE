@@ -6,7 +6,7 @@ import BtnCt from '../common/BtnCt.vue';
 import StudPage from '../common/StudPage.vue';
 import StudTC from './StudTC.vue';
 import TableCommon from '../common/TableCommon.vue';
-import { getCourseStuds, getVerifyStuds } from '@/utils/services';
+import { getStudents, getVerifyStuds } from '@/utils/services';
 const router = useRouter();
 const route = useRoute();
 const courseId = parseInt(route.params?.courseId?.[0]);

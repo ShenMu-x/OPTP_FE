@@ -9,3 +9,4 @@ export * from './format';
 export * from './loading';
 export * from './list';
 export * from './expandFold';
+export * from './use';

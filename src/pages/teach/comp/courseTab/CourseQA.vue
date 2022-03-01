@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-
+import CommentList from '@/components/comment/CommentList.vue';
 </script>
 
 <template>
     <div class="ct">
-        课程问答
+        <CommentList :courseId="2" />
     </div>
 </template>
 
