@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import path from "path";
 import vue from '@vitejs/plugin-vue';
+import monacoEditorPlugin from "vite-plugin-monaco-editor"
 
 // https://vitejs.dev/config/
 // https://www.jianshu.com/p/fabbcc385ee6
@@ -8,6 +9,7 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
     plugins: [
         vue(),
+        monacoEditorPlugin()
     ],
     resolve: {
         alias: {

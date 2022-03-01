@@ -4,20 +4,16 @@ import { useRouter, useRoute } from 'vue-router';
 import { Plus } from '@element-plus/icons-vue';
 import BtnCt from '../common/BtnCt.vue';
 import StudPage from '../common/StudPage.vue';
+import { useCourseId, useDialog } from '@/utils/helper';
 import StudTC from './StudTC.vue';
 import TableCommon from '../common/TableCommon.vue';
 import { getStudents, getVerifyStuds } from '@/utils/services';
 const router = useRouter();
 const route = useRoute();
-const courseId = parseInt(route.params?.courseId?.[0]);
 
-const isDialogOpen = ref(false);
-const closeDialog = () => {
-    isDialogOpen.value = false;
-}
-const openDialog = () => {
-    isDialogOpen.value = true;
-}
+const courseId = useCourseId();
+const { isDialogOpen, openDialog, closeDialog } = useDialog()
+
 const importList = () => {
 
 }
