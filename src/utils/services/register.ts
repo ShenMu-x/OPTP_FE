@@ -1,7 +1,7 @@
 import _axios from "./axios";
 import { ResType } from './type';
 import { setToken, setRole } from '@/utils/storage';
-
+import { packError, packEmptyData } from "./pack";
 interface RegisterReq {
     email: string;
     realName: string;
@@ -15,30 +15,27 @@ interface RegisterReq {
 
 export const stuRegister: (params: RegisterReq) => ResType<''> = (params) => {
     return _axios.post('/web/user/signup/stu', params)
-        .then(_ => ({ code: 0 }))
-        .catch(err => ({
-            code: err.response.data.code,
-            error: { message: err.response?.data.message }
-        }));
+        .then(packEmptyData)
+        .catch(packError);
 }
 
 export const teachRegister: (params: RegisterReq) => ResType<''> = (params) => {
     return _axios.post('web/user/signup/teacher', params)
-        .then(_ => ({ code: 0 }))
-        .catch(err => ({
-            code: err.response.data.code,
-            error: { message: err.response?.data.message }
-        }));
+        .then(packEmptyData)
+        .catch(packError);
 }
 
 export const getCode: (params: { email: string }) => ResType<boolean> = (params) => {
     return _axios.post('/web/user/verificationCode', params)
         .then(res => ({ code: res.data.code, data: res.data.data }))
         .catch(err => {
-            const code = err.response.data.code;
-            let message = err.response.data.message;
-            if (code === 10003) message = '查询不到该邮箱，请更换邮箱'
-            return { code, error: { message } }
+            if (err.response.data.code === 10003) {
+                return {
+                    code: 10003,
+                    errorMsg: '查询不到该邮箱，请更换邮箱'
+                }
+            }
+            else return packError(err);
         })
 }
 
@@ -52,10 +49,13 @@ export const checkEmailUnique: (params: { email: string }) => ResType<{ isUnique
         }
     }).then(value => ({ code: 0, data: { isUnique: value.data.data } })
     ).catch(err => {
-        const code = err.response.data.code;
-        let message = err.response.data.message;
-        if (code === 10003) message = '查询不到该邮箱，请更换邮箱'
-        return { code, error: { message } }
+        if (err.response.data.code === 10003) {
+            return {
+                code: 10003,
+                errorMsg: '查询不到该邮箱，请更换邮箱'
+            }
+        }
+        else return packError(err);
     })
 }
 
@@ -99,12 +99,12 @@ export const login: (params: loginReq) => ResType<loginRes> = (params) => {
                     break;
                 }
                 default: {
-                    message = err.response?.data?.message;
+                    message = err.response?.data?.message || '服务异常，请稍后再试';
                 }
             }
             return {
                 code: err.response?.data?.code,
-                error: { message }
+                errorMsg: message
             }
         });
 }

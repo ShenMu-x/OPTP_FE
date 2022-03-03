@@ -25,7 +25,7 @@ const submit = () => {
                 })
             } else {
                 showFailWrap({
-                    text: res.error?.message || '服务器出现问题，请稍后重试'
+                    text: res.errorMsg || '服务器出现问题，请稍后重试'
                 })
             }
         })

@@ -1,5 +1,6 @@
 import _axios from '../axios';
 import { ResType } from '../type';
+import { packError, packEmptyData } from "../pack";
 
 export const premit: (params: {
     courseId: number,
@@ -10,9 +11,7 @@ export const premit: (params: {
         method: "POST",
         url: "/web/course/examine",
         data: params,
-    }).then(res => {
-        return { code: 0 }
-    }).catch(err => {
-        return { code: -1 }
     })
+        .then(packEmptyData)
+        .catch(packError)
 }

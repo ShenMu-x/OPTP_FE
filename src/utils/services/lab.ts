@@ -1,6 +1,7 @@
 import _axios from "./axios";
 import { ResType, ListRes } from "./type";
 import { fmatDate, fmatTime } from '../helper';
+import { packError } from "./pack";
 import { labType } from '@/type';
 
 interface createLabReq {
@@ -19,15 +20,7 @@ export const createLab: (params: createLabReq) => ResType<''> = (params) => {
     }).then((res) => {
         console.log(res);
         return { code: 0 }
-    }).catch(err => {
-        console.log(err)
-        return {
-            code: err.response.data.code,
-            error: {
-                message: err.response.data.message,
-            }
-        }
-    })
+    }).catch(packError)
 }
 
 interface editLabReq {
@@ -45,14 +38,7 @@ export const editLab: (params: editLabReq) => ResType<''> = (params) => {
         data: params,
     }).then((res) => {
         return { code: 0 }
-    }).catch(err => {
-        return {
-            code: err.response.data.code,
-            error: {
-                message: err.response.data.message,
-            }
-        }
-    })
+    }).catch(packError)
 }
 
 export const deleteLab: (labId: number) => ResType<''> = (labId) => {
@@ -64,14 +50,7 @@ export const deleteLab: (labId: number) => ResType<''> = (labId) => {
         }
     }).then(res => {
         return { code: 0 }
-    }).catch(err => {
-        return {
-            code: err.response.data.code,
-            error: {
-                message: err.response.data.message,
-            }
-        }
-    })
+    }).catch(packError)
 }
 
 interface labRes {
@@ -122,14 +101,7 @@ export const getLabById: (labId: number) => ResType<labType> = (labId) => {
             code: 0,
             data: packLab(res.data.data)
         }
-    }).catch(err => {
-        return {
-            code: err.response.data.code,
-            error: {
-                message: err.response.data.message,
-            }
-        }
-    })
+    }).catch(packError)
 }
 
 interface getLabReq {
@@ -152,14 +124,7 @@ export const getLabs: (params: getLabReq) => ResType<ListRes<labType>> = (params
             }
         }
     })
-        .catch(err => {
-            return {
-                code: err.response.code,
-                error: {
-                    message: err.response.message,
-                }
-            }
-        })
+        .catch(packError)
 }
 
 export const getStuCourseLabs: (params: getLabReq) => ResType<ListRes<labType>> = (params) => {
@@ -177,14 +142,7 @@ export const getStuCourseLabs: (params: getLabReq) => ResType<ListRes<labType>> 
                 }
             }
         })
-        .catch(err => {
-            return {
-                code: err.response?.data?.code,
-                error: {
-                    message: err.response?.data?.message,
-                }
-            }
-        })
+        .catch(packError)
 }
 
 export const getMyLabs: (params: {
@@ -205,12 +163,5 @@ export const getMyLabs: (params: {
                 }
             }
         })
-        .catch(err => {
-            return {
-                code: err.response?.data?.code,
-                error: {
-                    message: err.response?.data?.message,
-                }
-            }
-        })
+        .catch(packError)
 }

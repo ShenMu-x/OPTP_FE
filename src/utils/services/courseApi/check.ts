@@ -1,24 +1,8 @@
 import _axios from '../axios';
 import { ResType, ListRes } from '../type';
 import { fmatTime } from '../../helper'
-
-const packAttend = (item: {
-    course_id?: number,
-    total?: number,
-    actual?: number,
-    checkin_record_id: number;
-    created_at: string;
-    is_checkin?: boolean;
-    name: string;
-}) => ({
-    courseId: item.course_id,
-    actual: item.actual,
-    total: item.total,
-    checkinRecordId: item.checkin_record_id,
-    createAt: fmatTime(item.created_at),
-    isCheckIn: item.is_checkin,
-    name: item.name
-})
+import { packError, packEmptyData } from "../pack";
+import { packAttend } from './pack'
 
 export const checkAttend: (params: {
     pageCurrent: number,
@@ -37,9 +21,7 @@ export const checkAttend: (params: {
                 pageInfo: res.data.data?.page_info
             }
         }
-    }).catch(err => {
-        return { code: -1 }
-    })
+    }).catch(packError)
 }
 interface createAttendReq {
     secretKey: string,
@@ -53,11 +35,9 @@ export const createAttend = (params: createAttendReq) => {
         method: "POST",
         url: "/web/checkin/start",
         data: params,
-    }).then(res => {
-        return { code: 0 }
-    }).catch(err => {
-        return { code: -1 }
     })
+        .then(packEmptyData)
+        .catch(packError)
 }
 
 interface MyAttendReq {
@@ -71,16 +51,15 @@ export const getMyAttend = (params: MyAttendReq) => {
         method: "GET",
         url: "/web/checkin/record/user",
         params,
-    }).then(res => {
-        console.log('???', res.data)
-        return {
-            code: 0,
-            data: {
-                records: res.data?.data?.records?.map((item: any) => packAttend(item)),
-                pageInfo: res.data?.data?.page_info
-            }
-        }
-    }).catch(err => {
-        return { code: -1 }
     })
+        .then(res => {
+            return {
+                code: 0,
+                data: {
+                    records: res.data?.data?.records?.map((item: any) => packAttend(item)),
+                    pageInfo: res.data?.data?.page_info
+                }
+            }
+        })
+        .catch(packError)
 }

@@ -27,7 +27,7 @@ const submitHandler = () => {
             props.failAction?.();
             ElMessage({
                 showClose: true,
-                message: props.failText || res.error.message || '提交失败',
+                message: props.failText || res.errorMsg || '提交失败',
                 type: 'error',
                 duration: 2000,
             })

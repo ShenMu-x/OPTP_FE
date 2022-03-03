@@ -59,9 +59,9 @@ const clickGetCode = () => {
   }, 1000);
 
   // 请求验证码
-  getCode({ email: registerModel.email }).then(value => {
-    if (value.code === 0) showSuccessWrap({ text: '验证码已发送' })
-    else showFailWrap({ text: value.error?.message })
+  getCode({ email: registerModel.email }).then(res => {
+    if (res.code === 0) showSuccessWrap({ text: '验证码已发送' })
+    else showFailWrap({ text: res.errorMsg })
   })
 };
 

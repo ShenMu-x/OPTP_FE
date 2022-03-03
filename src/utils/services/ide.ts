@@ -1,26 +1,17 @@
 import _axios from "./axios"
 import { getToken } from '@/utils/storage';
-
-type IdeUrlRes = {
-    labId: string
-}
+import { ResType } from "./type";
+import { packError } from "./pack";
 
 type IdeUrlReq = any;
 
-export const fetchIdeUrl: (params: IdeUrlRes) => Promise<IdeUrlReq> = (params) => {
+export const fetchIdeUrl: (labId: number) => ResType<IdeUrlReq> = (params) => {
     return _axios({
         method: 'POST',
         url: '/web/ide',
         data: params,
-        headers: {
-            'Authorization': `Bearer ${getToken()}`
-        }
-    })
-    return _axios.post('', params).then(value => {
-        console.log(value);
-        return value;
-    }).catch(err => {
-        console.log('Error fetchIdeUrl', err, typeof err);
-        return err;
-    })
+    }).then(res => {
+        console.log(res);
+        return { code: 0 }
+    }).catch(packError)
 }

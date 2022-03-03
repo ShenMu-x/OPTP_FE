@@ -3,6 +3,7 @@ import { ResType, ListRes } from '../type';
 import { CourseType } from '@/type';
 import { fmatDate, fmatTime } from '../../helper';
 import { packCourse, packRecords, packStud } from './pack';
+import { packError, packEmptyData } from "../pack";
 
 // 创建课程
 interface createCourseReq {
@@ -18,18 +19,8 @@ export const createCourse: (params: createCourseReq) => ResType<any> = (params) 
         url: "/web/course",
         data: params,
     })
-        .then(value => {
-            console.log(value.data);
-            return { code: 0 }
-        })
-        .catch(err => {
-            return {
-                code: err.response?.data?.code ?? -1,
-                error: {
-                    message: err.response?.data?.message,
-                }
-            }
-        })
+        .then(packEmptyData)
+        .catch(packError)
 }
 
 // 修改课程信息
@@ -47,19 +38,8 @@ export const editCourse: (params: editCourseReq) => ResType<any> = (params) => {
         url: "/web/course",
         data: params,
     })
-        .then(value => {
-            return {
-                code: 0
-            }
-        })
-        .catch(err => {
-            return {
-                code: err.response?.data?.code ?? -1,
-                error: {
-                    message: err.response?.data?.message,
-                }
-            }
-        })
+        .then(packEmptyData)
+        .catch(packError)
 }
 
 // 删除课程
@@ -71,17 +51,8 @@ export const deleteCourse: (params: {
         url: "/web/course",
         data: params
     })
-        .then(value => {
-            return { code: 0 }
-        })
-        .catch(err => {
-            return {
-                code: err.response?.data?.code ?? -1,
-                error: {
-                    message: err.response?.data?.message ?? '',
-                }
-            }
-        })
+        .then(packEmptyData)
+        .catch(packError)
 }
 
 // 获取创建的课程
@@ -102,14 +73,7 @@ export const getCoursesCreated: (params: {
                 }
             }
         })
-        .catch(err => {
-            return {
-                code: err.response.data.code,
-                error: {
-                    message: err.response.data.message,
-                }
-            }
-        })
+        .catch(packError)
 }
 
 // 获取待认证学生
@@ -133,11 +97,7 @@ export const getVerifyStuds: (params: {
                 pageInfo: res.data.data?.page_info
             }
         }
-    }).catch(err => {
-        return {
-            code: -1,
-        }
-    })
+    }).catch(packError)
 }
 
 // 获取课程学生
@@ -153,18 +113,15 @@ export const getStudents: (params: {
             pageSize: params.pageSize,
             pageCurrent: params.pageCurrent
         }
-    }).then(res => {
-        return {
-            code: 0,
-            data: {
-                records: res.data.data.records.map((item: any) => packStud(item)) || [],
-                pageInfo: res.data.data?.page_info
-            }
-        }
-    }).catch(err => {
-        console.log(err.response);
-        return {
-            code: -1
-        }
     })
+        .then(res => {
+            return {
+                code: 0,
+                data: {
+                    records: res.data.data.records.map((item: any) => packStud(item)) || [],
+                    pageInfo: res.data.data?.page_info
+                }
+            }
+        })
+        .catch(packError)
 }

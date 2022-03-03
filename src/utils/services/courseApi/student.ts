@@ -3,6 +3,7 @@ import { ResType, ListRes } from '../type';
 import { CourseType } from '@/type';
 import { fmatDate, fmatTime } from '../../helper';
 import { packRecords } from './pack';
+import { packError, packEmptyData } from "../pack";
 
 // 获取学习课程
 export const getCoursesStudy: (params: {
@@ -19,14 +20,7 @@ export const getCoursesStudy: (params: {
                 }
             }
         })
-        .catch(err => {
-            return {
-                code: err.response.data.code,
-                error: {
-                    message: err.response.data.message,
-                }
-            }
-        })
+        .catch(packError)
 }
 
 // 课程签到
@@ -39,15 +33,6 @@ export const attendCourse: (params: {
         url: "/web/course/attend",
         data: params
     })
-        .then(_ => {
-            return { code: 0 }
-        })
-        .catch(err => {
-            return {
-                code: err.response?.data?.code ?? -1,
-                error: {
-                    message: err.response?.data?.message ?? '',
-                }
-            }
-        })
+        .then(packEmptyData)
+        .catch(packError)
 }

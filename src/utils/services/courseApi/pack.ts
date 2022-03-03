@@ -47,3 +47,21 @@ export const packStud = (item: any) => ({
     major: item.major,
     organization: item.organization
 })
+
+export const packAttend = (item: {
+    course_id?: number,
+    total?: number,
+    actual?: number,
+    checkin_record_id: number;
+    created_at: string;
+    is_checkin?: boolean;
+    name: string;
+}) => ({
+    courseId: item.course_id,
+    actual: item.actual,
+    total: item.total,
+    checkinRecordId: item.checkin_record_id,
+    createAt: fmatTime(item.created_at),
+    isCheckIn: item.is_checkin,
+    name: item.name
+})

@@ -50,7 +50,6 @@ const searchId = ref('');
                             :prefix-icon="Search"
                         ></el-input>
                     </div>
-
                     <CourseList :fetchData="getCoursesAll" />
                 </el-tab-pane>
                 <el-tab-pane label="我的实验" name="experiments">

@@ -2,6 +2,7 @@ import _axios from "./axios";
 import { ResType } from "./type";
 import { userInfoType } from '@/type';
 import store from '@/store';
+import { packError, packEmptyData } from "./pack";
 
 export const getUserInfoByTk: () => ResType<userInfoType> = () => {
     return _axios({
@@ -25,12 +26,7 @@ export const getUserInfoByTk: () => ResType<userInfoType> = () => {
             code: value.data.code,
             data: res
         }
-    }).catch(err => {
-        return {
-            code: err.response.data.code,
-            error: err.response.data.message
-        }
-    })
+    }).catch(packError)
 }
 
 export const getUserInfoById: (params: { userId: number }) => ResType<userInfoType> = (params) => {
@@ -52,12 +48,7 @@ export const getUserInfoById: (params: { userId: number }) => ResType<userInfoTy
             code: value.data.code,
             data: res,
         }
-    }).catch(err => {
-        return {
-            code: err.response.data.code,
-            error: err.response.data.message
-        }
-    })
+    }).catch(packError)
 }
 
 interface editReq {
@@ -73,11 +64,8 @@ export const editUserInfo: (params: editReq) => ResType<''> = (params) => {
         url: '/web/user',
         data: params
     })
-        .then(_ => ({ code: 0 })
-        ).catch(err => ({
-            code: err.data.code,
-            message: err.data.response?.message
-        }))
+        .then(packEmptyData)
+        .catch(packError)
 }
 
 export const editUserAvatar: (params: { avatar_url: string }) => ResType<''> = (params) => {
@@ -86,11 +74,8 @@ export const editUserAvatar: (params: { avatar_url: string }) => ResType<''> = (
         url: '/web/user/avatar',
         data: params
     })
-        .then(_ => ({ code: 0 }))
-        .catch(err => ({
-            code: err.data.code,
-            message: err.data.response?.message
-        }))
+        .then(packEmptyData)
+        .catch(packError)
 }
 
 interface costTimeRes {
@@ -116,8 +101,5 @@ export const getUserCodingTime: () => ResType<costTimeRes> = () => {
                 }
             }
         })
-        .catch(err => ({
-            code: err.data.code,
-            message: err.data.response?.message
-        }))
+        .catch(packError)
 }

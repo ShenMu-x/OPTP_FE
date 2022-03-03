@@ -2,6 +2,7 @@ import _axios from '../axios';
 import { ResType, ListRes } from '../type';
 import { CourseType } from '@/type';
 import { packCourse, packRecords } from './pack';
+import { packError, packEmptyData } from "../pack";
 
 // 获取课程列表
 export const getCoursesAll: (params: {
@@ -18,14 +19,7 @@ export const getCoursesAll: (params: {
                 }
             }
         })
-        .catch(err => {
-            return {
-                code: err.response.data.code,
-                error: {
-                    message: err.response.data.message,
-                }
-            }
-        })
+        .catch(packError)
 }
 
 // 根据课程id获得课程信息
@@ -41,12 +35,5 @@ export const getCourseById: (params: {
                 }
             }
         })
-        .catch(err => {
-            return {
-                code: err.response.data.code,
-                error: {
-                    message: err.response.data.message,
-                }
-            }
-        })
+        .catch(packError)
 }

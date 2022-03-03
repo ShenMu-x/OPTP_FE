@@ -1,6 +1,7 @@
 import _axios from "./axios";
 import { ResType, ListRes } from './type';
 import { commentType } from '@/type';
+import { packError } from "./pack";
 
 const packComment = (comment: any) => {
     return {
@@ -32,12 +33,5 @@ export const fetchCourseComment: (params: commentReq) => ResType<ListRes<any>> =
                 }
             }
         })
-        .catch(err => {
-            return {
-                code: err.response.data.code,
-                error: {
-                    message: err.response.data.message,
-                }
-            }
-        })
+        .catch(packError)
 }

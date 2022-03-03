@@ -2,9 +2,7 @@
 export type ResType<T> = Promise<{
     code: number,
     data?: T,
-    error?: {
-        message: string
-    }
+    errorMsg?: string
 }> 
 
 // 分页返回
