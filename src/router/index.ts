@@ -53,6 +53,10 @@ const routes = [
                 component: () => import('../pages/ide/Ide.vue'),
             },
             {
+                path: '/online_oj',
+                component: () => import('../pages/oj/OnlineOJ.vue'),
+            },
+            {
                 path: '/404',
                 component: () => import('../pages/404.vue')
             },

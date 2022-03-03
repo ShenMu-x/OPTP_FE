@@ -23,7 +23,9 @@ echarts.use([
   CanvasRenderer
 ]);
 
-const data = reactive({
+const data = reactive<{
+  timeList: any[]
+}>({
   timeList: []
 });
 
