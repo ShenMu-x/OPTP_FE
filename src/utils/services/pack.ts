@@ -6,3 +6,13 @@ export const packError = (err: any) => {
 }
 
 export const packEmptyData = () => ({ code: 0 });
+
+export const packPageRes = (res: { data: { data: { records: any[]; page_info: { total: number }; }; }; }, pack: (arg0: any) => any) => {
+    return {
+        code: 0,
+        data: {
+            records: res.data?.data?.records?.map((item: any) => pack(item)) || [],
+            pageInfo: res.data?.data?.page_info || { total: 0 }
+        }
+    }
+}

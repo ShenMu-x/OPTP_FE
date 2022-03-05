@@ -2,8 +2,20 @@ import _axios from '../axios';
 import { ResType, ListRes } from '../type';
 import { CourseType } from '@/type';
 import { fmatDate, fmatTime } from '../../helper';
-import { packCourse, packRecords, packStud } from './pack';
-import { packError, packEmptyData } from "../pack";
+import { packCourse } from './pack';
+import { packError, packEmptyData, packPageRes } from "../pack";
+
+export const packStud = (item: any) => ({
+    userId: item.user_id,
+    email: item.email,
+    num: item.num,
+    realName: item.real_name,
+    avatarUrl: item.avatar_url,
+    gender: item.gender,
+    major: item.major,
+    organization: item.organization
+})
+
 
 // 创建课程
 interface createCourseReq {
@@ -64,15 +76,7 @@ export const getCoursesCreated: (params: {
         res(1);
     }, 2000))
     return _axios.get(`/web/course/setup?pageCurrent=${params.pageCurrent}&pageSize=${params.pageSize}`)
-        .then(value => {
-            return {
-                code: 0,
-                data: {
-                    records: packRecords(value.data.data.records),
-                    pageInfo: value.data.data?.page_info
-                }
-            }
-        })
+        .then(res => packPageRes(res, packCourse))
         .catch(packError)
 }
 
@@ -89,15 +93,9 @@ export const getVerifyStuds: (params: {
             pageSize: params.pageSize,
             pageCurrent: params.pageCurrent
         }
-    }).then(res => {
-        return {
-            code: 0,
-            data: {
-                records: res.data.data.records?.map((item: any) => packStud(item)) || [],
-                pageInfo: res.data.data?.page_info
-            }
-        }
-    }).catch(packError)
+    })
+        .then(res => packPageRes(res, packStud))
+        .catch(packError)
 }
 
 // 获取课程学生
@@ -114,14 +112,6 @@ export const getStudents: (params: {
             pageCurrent: params.pageCurrent
         }
     })
-        .then(res => {
-            return {
-                code: 0,
-                data: {
-                    records: res.data.data.records.map((item: any) => packStud(item)) || [],
-                    pageInfo: res.data.data?.page_info
-                }
-            }
-        })
+        .then(res => packPageRes(res, packStud))
         .catch(packError)
 }

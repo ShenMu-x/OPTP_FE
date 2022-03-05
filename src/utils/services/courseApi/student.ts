@@ -2,8 +2,8 @@ import _axios from '../axios';
 import { ResType, ListRes } from '../type';
 import { CourseType } from '@/type';
 import { fmatDate, fmatTime } from '../../helper';
-import { packRecords } from './pack';
-import { packError, packEmptyData } from "../pack";
+import { packCourse } from './pack';
+import { packError, packEmptyData, packPageRes } from "../pack";
 
 // 获取学习课程
 export const getCoursesStudy: (params: {
@@ -11,15 +11,7 @@ export const getCoursesStudy: (params: {
     pageSize: number
 }) => ResType<ListRes<CourseType>> = (params) => {
     return _axios.get(`/web/course/study?pageCurrent=${params.pageCurrent}&pageSize=${params.pageSize}`)
-        .then(value => {
-            return {
-                code: 0,
-                data: {
-                    records: packRecords(value.data.data.records),
-                    pageInfo: value.data.data.page_info
-                }
-            }
-        })
+        .then(res => packPageRes(res, packCourse))
         .catch(packError)
 }
 

@@ -1,13 +1,36 @@
 <script lang="ts" setup>
-import { ref, reactive, toRefs } from 'vue';
+import { ref, reactive, toRefs, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import PageHeader from '@/components/common/PageHeader.vue';
 import TablePage from '@/components/common/TablePage.vue';
-import { getMyAttend } from '@/utils/services';
+import Tag from '@/components/common/Tag.vue';
+import { useCountDownSec } from '@/utils/helper';
+import { getMyAttend, reqAttendStart } from '@/utils/services';
 
 const check = (id: number) => {
 
 }
+
+reqAttendStart();
+const mock = ref([
+    {
+        "checkinRecordId": 1,
+        "name": "签到一",
+        "courseName": "JavaScript训练",
+        "secretKey": "",
+        "createAt": "2022-02-28 17:36:23",
+        "deadLine": "2022-01-01 00:00:00"
+    }
+])
+
+const {
+    startDown,
+    current
+} = useCountDownSec(4);
+onMounted(() => {
+    startDown()
+})
+
 </script>
 
 <template>
@@ -15,26 +38,48 @@ const check = (id: number) => {
     <div class="ct">
         <div class="card">
             <div class="title">当前签到显示</div>
-            <TablePage :common="{ courseId: 2 }" text="目前没有签到" :fetch-data="getMyAttend">
+            <el-table
+                :data="mock"
+                stripe
+                highlight-current-row
+                style="width: 100%"
+                empty-text="当前暂无正在进行的签到"
+            >
+                <el-table-column prop="name" label="签到名称" min-width="100" />
+                <el-table-column prop="courseName" label="所属课程" min-width="200" />
+                <el-table-column prop="createAt" label="创建时间" min-width="180" />
+                <el-table-column prop="isCheckIn" label="操作" min-width="140">
+                    <template #default="scope">
+                        <el-button
+                            type="success"
+                            size="default"
+                            @click="check(scope?.row?.checkinRecordId)"
+                        >{{ current }}秒</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <div class="card">
+            <div class="title">以往签到记录</div>
+            <TablePage text="目前没有签到记录" :fetch-data="getMyAttend">
                 <template v-slot:tableColumns>
-                    <el-table-column prop="name" label="签到名称" width="100" />
-                    <el-table-column prop="createAt" label="创建时间" width="140" />
-                    <el-table-column prop="title" label="应签到人数" width="140" />
-                    <el-table-column prop="content" label="实际签到人数" width="140" />
-                    <el-table-column prop="isCheckIn" label="操作" width="140">
+                    <el-table-column prop="name" label="签到名称" min-width="100" />
+                    <el-table-column prop="courseName" label="所属课程" min-width="200" />
+                    <el-table-column prop="createAt" label="创建时间" min-width="180" />
+                    <el-table-column prop="isCheckIn" label="点击签到" min-width="140">
                         <template #default="scope">
-                            <el-button
-                                type="success"
-                                size="default"
-                                @click="check(scope?.row?.checkinRecordId)"
-                            >签到</el-button>
+                            <Tag
+                                v-if="scope?.row?.isCheckIn"
+                                :is-text="true"
+                                :border="true"
+                                type="green"
+                                green-text="已签到"
+                            />
+                            <Tag v-else :is-text="true" :border="true" type="red" red-text="未签到" />
                         </template>
                     </el-table-column>
                 </template>
             </TablePage>
-        </div>
-        <div class="card">
-            <div class="title">以往签到记录</div>
         </div>
     </div>
 </template>
@@ -51,10 +96,10 @@ const check = (id: number) => {
     display: flex;
     text-align: left;
     font-size: 22px;
-    margin: 20px;
+    margin: 0 20px;
 }
 
 .card {
-    margin: 20px;
+    margin: 20px 40px;
 }
 </style>

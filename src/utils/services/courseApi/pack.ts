@@ -1,7 +1,7 @@
-
+// 存放公共pack
 import _axios from '../axios';
 import { CourseType } from '@/type';
-import { fmatDate, fmatTime } from '../../helper';
+import { fmatTime } from '../../helper';
 
 export const packCourse = (course: any): CourseType => {
     return {
@@ -18,50 +18,3 @@ export const packCourse = (course: any): CourseType => {
         updatedAt: fmatTime(course.updated_at)
     }
 }
-
-export const packRecords = (list: Array<any>) => {
-    return list.map?.(course => packCourse(course));
-}
-
-export const packScore = (item: any) => ({
-    userId: item.user_id,
-    email: item.email,
-    num: item.num,
-    realName: item.real_name,
-    avatarUrl: item.avatar_url,
-    gender: item.gender,
-    major: item.major,
-    organization: item.organization,
-    avgScore: item.avg_score,
-    shallCheckIn: item.shall_check_in,
-    ackCheckIn: item.act_check_in,
-})
-
-export const packStud = (item: any) => ({
-    userId: item.user_id,
-    email: item.email,
-    num: item.num,
-    realName: item.real_name,
-    avatarUrl: item.avatar_url,
-    gender: item.gender,
-    major: item.major,
-    organization: item.organization
-})
-
-export const packAttend = (item: {
-    course_id?: number,
-    total?: number,
-    actual?: number,
-    checkin_record_id: number;
-    created_at: string;
-    is_checkin?: boolean;
-    name: string;
-}) => ({
-    courseId: item.course_id,
-    actual: item.actual,
-    total: item.total,
-    checkinRecordId: item.checkin_record_id,
-    createAt: fmatTime(item.created_at),
-    isCheckIn: item.is_checkin,
-    name: item.name
-})

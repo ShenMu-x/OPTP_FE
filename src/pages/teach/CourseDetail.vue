@@ -26,7 +26,7 @@ const { course } = toRefs(data);
 getCourseById({ courseId })
   .then(res => {
     if (res.code === 0 && res.data) {
-      Object.assign(data.course, res.data.course);
+      Object.assign(data.course, res.data);
     } else {
       router.replace('/404');
     }

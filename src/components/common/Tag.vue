@@ -4,7 +4,8 @@ const props = defineProps<{
     type: 'green' | 'red',
     isText?: boolean,
     greenText?: string,
-    redText?: string
+    redText?: string,
+    border?: boolean
 }>();
 </script>
 
@@ -14,7 +15,9 @@ const props = defineProps<{
             'rect': !props.isText,
             'redRect': !props.isText && props.type === 'red',
             'green': props.isText && props.type === 'green',
-            'red': props.isText && props.type === 'red'
+            'red': props.isText && props.type === 'red',
+            'redBorder': props.border && props.type === 'red',
+            'greenBorder': props.border && props.type === 'green',
         }]"
     >
         <span v-if="props.type === 'red'">{{ props.redText || '已结束' }}</span>
@@ -49,5 +52,13 @@ const props = defineProps<{
 
 .red {
     color: #e96262;
+}
+
+.redBorder {
+    border: 1px solid #e96262;
+}
+
+.greenBorder {
+    border: 1px solid #41da86;
 }
 </style>

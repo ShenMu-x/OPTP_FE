@@ -1,9 +1,24 @@
 import _axios from "./axios";
 import { ResType, ListRes } from "./type";
 import { fmatDate, fmatTime } from '../helper';
-import { packError } from "./pack";
+import { packError, packEmptyData, packPageRes } from "./pack";
 import { labType } from '@/type';
 
+const packLab = (lab: labRes) => ({
+    labId: lab.lab_id || lab.id,
+    courseId: lab.course_id,
+    courseName: lab.course_name,
+    title: lab.title,
+    content: lab.content,
+    createdAt: fmatTime(lab.created_at),
+    updateAt: fmatTime(lab.update_at),
+    deadLine: fmatTime(lab.dead_line),
+    isFinish: lab.is_finish,
+    comment: lab.comment,
+    score: lab.score,
+    attachmentUrl: lab.attachment_url,
+    reportUrl: lab.report_url
+})
 interface createLabReq {
     courseId: number,
     title: string,
@@ -17,10 +32,9 @@ export const createLab: (params: createLabReq) => ResType<''> = (params) => {
         method: "POST",
         url: "/web/lab",
         data: params,
-    }).then((res) => {
-        console.log(res);
-        return { code: 0 }
-    }).catch(packError)
+    })
+        .then(packEmptyData)
+        .catch(packError)
 }
 
 interface editLabReq {
@@ -36,9 +50,9 @@ export const editLab: (params: editLabReq) => ResType<''> = (params) => {
         method: "PUT",
         url: "/web/lab",
         data: params,
-    }).then((res) => {
-        return { code: 0 }
-    }).catch(packError)
+    })
+        .then(packEmptyData)
+        .catch(packError)
 }
 
 export const deleteLab: (labId: number) => ResType<''> = (labId) => {
@@ -48,9 +62,9 @@ export const deleteLab: (labId: number) => ResType<''> = (labId) => {
         data: {
             lab: labId
         }
-    }).then(res => {
-        return { code: 0 }
-    }).catch(packError)
+    })
+        .then(packEmptyData)
+        .catch(packError)
 }
 
 interface labRes {
@@ -68,28 +82,6 @@ interface labRes {
     comment?: string;
     attachment_url: string;
     report_url?: string;
-}
-
-const packLab = (lab: labRes) => {
-    return {
-        labId: lab.lab_id || lab.id,
-        courseId: lab.course_id,
-        courseName: lab.course_name,
-        title: lab.title,
-        content: lab.content,
-        createdAt: fmatTime(lab.created_at),
-        updateAt: fmatTime(lab.update_at),
-        deadLine: fmatTime(lab.dead_line),
-        isFinish: lab.is_finish,
-        comment: lab.comment,
-        score: lab.score,
-        attachmentUrl: lab.attachment_url,
-        reportUrl: lab.report_url
-    }
-}
-
-const packRecords = (records: labRes[]) => {
-    return records.map((lab: labRes) => packLab(lab));
 }
 
 export const getLabById: (labId: number) => ResType<labType> = (labId) => {
@@ -115,15 +107,8 @@ export const getLabs: (params: getLabReq) => ResType<ListRes<labType>> = (params
         method: "GET",
         url: "/web/lab",
         params,
-    }).then(value => {
-        return {
-            code: 0,
-            data: {
-                records: packRecords(value.data.records),
-                pageInfo: value.data.page_info
-            }
-        }
     })
+        .then(res => packPageRes(res, packLab)) //WAITFIX 返回结构不同于其他，res.data / res.data.data
         .catch(packError)
 }
 
@@ -133,15 +118,7 @@ export const getStuCourseLabs: (params: getLabReq) => ResType<ListRes<labType>> 
         url: '/web/lab/details',
         params,
     })
-        .then(value => {
-            return {
-                code: 0,
-                data: {
-                    records: packRecords(value.data.records),
-                    pageInfo: value.data.page_info
-                }
-            }
-        })
+        .then(res => packPageRes(res, packLab)) //WAITFIX 返回结构不同于其他，res.data / res.data.data
         .catch(packError)
 }
 
@@ -154,14 +131,6 @@ export const getMyLabs: (params: {
         url: "/web/lab/student",
         params,
     })
-        .then(value => {
-            return {
-                code: 0,
-                data: {
-                    records: packRecords(value.data.data.records),
-                    pageInfo: value.data.data.page_info
-                }
-            }
-        })
+        .then(res => packPageRes(res, packLab))
         .catch(packError)
 }

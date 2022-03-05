@@ -5,8 +5,6 @@ import { langs, CodeLangs } from '@/utils/option/lang';
 
 const refEditorEl = ref();
 
-
-
 const language = ref(CodeLangs.Python);
 const { changeLang } = useCreateEditor({
     refEditorEl,

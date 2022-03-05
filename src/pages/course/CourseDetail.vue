@@ -30,8 +30,8 @@ const { course, info } = toRefs(data);
 getCourseById({ courseId })
     .then(res => {
         if (res.code === 0 && res.data) {
-            Object.assign(data.course, res.data.course);
-            getUserInfoById({ userId: data.course.teacherId ?? -1 })
+            Object.assign(data.course, res.data);
+            getUserInfoById({ userId: res.data.teacherId ?? -1 })
                 .then(infoRes => {
                     if (infoRes.code === 0) {
                         Object.assign(data.info, infoRes.data);

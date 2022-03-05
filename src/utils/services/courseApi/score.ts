@@ -1,7 +1,20 @@
 import _axios from '../axios';
 import { ResType, ListRes } from '../type';
-import { packScore } from './pack';
-import { packError, packEmptyData } from "../pack";
+import { packError, packEmptyData, packPageRes } from "../pack";
+
+export const packScore = (item: any) => ({
+    userId: item.user_id,
+    email: item.email,
+    num: item.num,
+    realName: item.real_name,
+    avatarUrl: item.avatar_url,
+    gender: item.gender,
+    major: item.major,
+    organization: item.organization,
+    avgScore: item.avg_score,
+    shallCheckIn: item.shall_check_in,
+    ackCheckIn: item.act_check_in,
+})
 
 // 导出成绩
 export const getScoreExport: (courseId: number) => ResType<any> = (courseId) => {
@@ -18,20 +31,12 @@ export const getScoreAll: (params: {
     pageCurrent: number,
     pageSize: number,
     courseId: number
-}) => ResType<any> = (params) => {
+}) => ResType<ListRes<any>> = (params) => {
     return _axios({
         method: 'GET',
         url: '/web/course/score',
         params,
     })
-        .then(res => {
-            return {
-                code: 0,
-                data: {
-                    records: res.data?.data?.records?.map((item: any) => packScore(item)) || [],
-                    pageInfo: res.data?.data?.page_info
-                }
-            }
-        })
+        .then(res => packPageRes(res, packScore))
         .catch(packError)
 }

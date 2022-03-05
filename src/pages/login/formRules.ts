@@ -1,5 +1,4 @@
-import { validateEmail } from '../../utils/helper/validate';
-
+import { validateEmail } from '../../utils/helper';
 
 const getRules = (params: {
     pswCheck: any

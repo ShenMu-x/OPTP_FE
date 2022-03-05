@@ -1,8 +1,43 @@
 import _axios from '../axios';
 import { ResType, ListRes } from '../type';
 import { fmatTime } from '../../helper'
-import { packError, packEmptyData } from "../pack";
-import { packAttend } from './pack'
+import { packError, packEmptyData, packPageRes } from "../pack";
+
+export const packAttendInfo = (item: {
+    course_id?: number,
+    total?: number,
+    actual?: number,
+    checkin_record_id: number;
+    created_at: string;
+    is_checkin?: boolean;
+    name: string;
+}) => ({
+    courseId: item.course_id,
+    actual: item.actual,
+    total: item.total,
+    checkinRecordId: item.checkin_record_id,
+    createAt: fmatTime(item.created_at),
+    isCheckIn: item.is_checkin,
+    name: item.name
+})
+
+export const packStudAttend = (item: {
+    course_name: string;
+    secret_key: string;
+    checkin_record_id: number;
+    created_at: string;
+    dead_line: string;
+    is_finish: boolean;
+    name: string;
+}) => ({
+    checkinRecordId: item.checkin_record_id,
+    courseName: item.course_name,
+    name: item.name,
+    secretKey: item.secret_key,
+    createAt: fmatTime(item.created_at),
+    deadLine: fmatTime(item.dead_line),
+    is_finish: item.is_finish,
+})
 
 export const checkAttend: (params: {
     pageCurrent: number,
@@ -13,15 +48,9 @@ export const checkAttend: (params: {
         method: "get",
         url: "/web/checkin/records",
         params,
-    }).then(res => {
-        return {
-            code: 0,
-            data: {
-                records: res.data.data.records?.map((item: any) => packAttend(item)) || [],
-                pageInfo: res.data.data?.page_info
-            }
-        }
-    }).catch(packError)
+    })
+        .then(res => packPageRes(res, packAttendInfo))
+        .catch(packError)
 }
 interface createAttendReq {
     secretKey: string,
@@ -43,23 +72,23 @@ export const createAttend = (params: createAttendReq) => {
 interface MyAttendReq {
     pageCurrent: number,
     pageSize: number,
-    courseId: number
 }
 
 export const getMyAttend = (params: MyAttendReq) => {
     return _axios({
         method: "GET",
-        url: "/web/checkin/record/user",
+        url: "/web/checkin/self",
         params,
     })
-        .then(res => {
-            return {
-                code: 0,
-                data: {
-                    records: res.data?.data?.records?.map((item: any) => packAttend(item)),
-                    pageInfo: res.data?.data?.page_info
-                }
-            }
-        })
+        .then(res => packPageRes(res, packStudAttend))
+        .catch(packError)
+}
+
+export const reqAttendStart = () => {
+    return _axios({
+        method: "GET",
+        url: "/web/checkin/recent",
+    })
+        .then(res => packStudAttend(res.data.data))
         .catch(packError)
 }

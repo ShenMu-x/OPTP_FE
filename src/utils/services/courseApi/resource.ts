@@ -1,7 +1,17 @@
 import _axios from '../axios';
 import { ResType } from '../type';
 import { fmatDate, fmatTime } from '../../helper';
-import { packError, packEmptyData } from "../pack";
+import { packError, packEmptyData, packPageRes } from "../pack";
+
+const packResource = (item: any) => ({
+    resourceId: item.ID,
+    courseId: item.CourseID,
+    title: item.Title,
+    content: item.Content,
+    attachmentUrl: item.AttachMentURL,
+    createAt: fmatTime(item.created_at),
+    updateAt: fmatTime(item.UpdatedAt)
+})
 
 export const getCourseResource: (params: {
     courseId: number,
@@ -13,23 +23,7 @@ export const getCourseResource: (params: {
         url: "/web/course/resource",
         params,
     })
-        .then(res => {
-            return {
-                code: 0,
-                data: {
-                    records: res.data.data.records?.map((item: any) => ({
-                        resourceId: item.ID,
-                        courseId: item.CourseID,
-                        title: item.Title,
-                        content: item.Content,
-                        attachmentUrl: item.AttachMentURL,
-                        createAt: fmatTime(item.created_at),
-                        updateAt: fmatTime(item.UpdatedAt)
-                    })) || [],
-                    pageInfo: res.data.data?.page_info
-                }
-            }
-        })
+        .then(res => packPageRes(res, packResource))
         .catch(packError)
 }
 
@@ -38,7 +32,7 @@ export const getResourceById: (id: number) => ResType<any> = (id) => {
         method: "GET",
         url: `/web/course/resource/${id}`,
         params: {
-            // 暂传
+            // 暂传 -- WAITFIX
             pageSize: 20,
             pageCurrent: 1
         }
