@@ -108,3 +108,33 @@ export const login: (params: loginReq) => ResType<loginRes> = (params) => {
             }
         });
 }
+
+interface pswReq {
+    email: string;
+    password: string;
+    verificationCode: string
+}
+
+export const changePsw: (params: pswReq) => ResType<any> = (params) => {
+    return _axios({
+        method: 'POST',
+        url: '/web/user/password',
+        data: params
+    })
+        .then(packEmptyData)
+        .catch(err => {
+            const code = err.response.data.code;
+            if (code === 10002) {
+                return {
+                    code: 10003,
+                    errorMsg: '验证码已过期，请重新输入'
+                }
+            } else if (code === 10003) {
+                return {
+                    code: 10003,
+                    errorMsg: '该邮箱尚未注册'
+                }
+            }
+            else return packError(err);
+        })
+}

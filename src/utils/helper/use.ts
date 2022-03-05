@@ -17,14 +17,16 @@ export const useDialog = () => {
         closeDialog
     }
 }
-// 秒倒计时，0为结束
-// 可拓展： step / end
+
 export const useCountDownSec = (start: number) => {
     const current = ref(start);
     let ins: any = null;
+    const isCounting = ref(false);
+
     const destoryDown = () => {
         if (ins) clearInterval(ins)
         current.value = 0;
+        isCounting.value = false;
     }
     const startDown = (num?: number) => {
         console.log('startDown', current.value)
@@ -41,6 +43,7 @@ export const useCountDownSec = (start: number) => {
 
     return {
         current,
-        startDown
+        startDown,
+        isCounting
     }
 }

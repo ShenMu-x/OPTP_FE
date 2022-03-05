@@ -46,7 +46,6 @@ onMounted(() => {
         <el-empty v-else v-show="!isLoading" description="暂无课程" style="flex: 1" />
     </div>
     <el-pagination
-        v-show="!isLoading"
         v-model:currentPage="current"
         layout="prev, pager, next"
         :total="total"

@@ -74,7 +74,7 @@ export const getCoursesCreated: (params: {
 }) => ResType<ListRes<CourseType>> = async (params) => {
     await new Promise(res => setTimeout(() => {
         res(1);
-    }, 2000))
+    }, 1000))
     return _axios.get(`/web/course/setup?pageCurrent=${params.pageCurrent}&pageSize=${params.pageSize}`)
         .then(res => packPageRes(res, packCourse))
         .catch(packError)

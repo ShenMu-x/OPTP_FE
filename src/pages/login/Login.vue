@@ -1,41 +1,19 @@
 <script lang="ts" setup>
-import { ElMessage } from 'element-plus';
 import { reactive, ref } from 'vue';
 import Layout from './index.vue';
-import { useRouter } from 'vue-router';
+import { getLoginRule } from './rules';
+import { useRedirect } from './logic';
 import { login } from '@/utils/services';
 import { isTeacher, showFailWrap } from '@/utils/helper';
-import { mockStuInfo } from './mock';
 
-const router = useRouter();
 const refFomeEl = ref();
-
 const user = reactive({
   userName: '',
   password: ''
 });
 
-const rules = reactive({
-  userName: [
-    {
-      required: true,
-      message: '请输入邮箱',
-      trigger: 'blur',
-    },
-    {
-      pattern: '^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$',
-      message: '请输入正确格式的邮箱',
-      trigger: 'blur'
-    },
-  ],
-  password: [
-    {
-      required: true,
-      message: '请输入密码',
-      trigger: 'blur',
-    },
-  ]
-})
+const rules = reactive(getLoginRule())
+const { redirect, directTo } = useRedirect();
 
 const loginHandler = () => {
   refFomeEl.value.validate((isPass: boolean, obj: any) => {
@@ -46,26 +24,17 @@ const loginHandler = () => {
         .then(res => {
           if (res.code === 0) {
             isTeacher() ?
-              router.replace('/teach/user_center') :
-              router.replace('/user_center')
+              redirect('/teach/user_center') :
+              redirect('/user_center')
           } else {
-            showFailWrap({ text: res.error?.message })
+            showFailWrap({ text: res.errorMsg })
           }
         });
     }
   });
 };
 
-const toRegister = () => {
-  router.push('./register');
-};
-
-const toAuthentication = () => {
-  router.push('./auth');
-};
-
 </script>
-
 <template>
   <Layout>
     <div class="formCt loginFormCt">
@@ -75,7 +44,7 @@ const toAuthentication = () => {
           <el-input v-model="user.userName" placeholder="请输入邮箱"></el-input>
         </el-form-item>
         <el-form-item label="密码" size="large" class="psw" prop="password">
-          <span class="textBtnInForm forgetBtn" @click="toAuthentication">忘记密码?</span>
+          <span class="textBtnInForm forgetBtn" @click="directTo('/auth')">忘记密码?</span>
           <el-input
             v-model="user.password"
             show-password
@@ -91,7 +60,7 @@ const toAuthentication = () => {
         >立即登录</el-button>
         <div class="registerBtnCt">
           还没有账号？
-          <span class="textBtnInForm" @click="toRegister">点击注册</span>
+          <span class="textBtnInForm" @click="directTo('/register')">点击注册</span>
         </div>
       </el-form>
     </div>

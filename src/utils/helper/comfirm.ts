@@ -16,14 +16,15 @@ export const showFail = () => {
     })
 }
 
-export const showSuccessWrap = ({ text, closeCb }: {
+export const showSuccessWrap = ({ text, closeCb, duration }: {
     text?: string,
-    closeCb?: any
+    closeCb?: any,
+    duration?: number
 }) => {
     ElMessage({
         type: 'success',
         message: text ?? '操作成功',
-        duration: 1000,
+        duration: duration || 1000,
         onClose: closeCb
     })
 }
@@ -77,20 +78,20 @@ export const comfirm = ({
                 }
             )
                 .then(() => {
-                    fetchApi(params).then((value: any) => {
-                        if (value.code === 0) {
+                    fetchApi(params).then((res: any) => {
+                        if (res.code === 0) {
                             showSuccessWrap?.({
+                                text: '操作成功',
                                 closeCb: onSuccTipClose
                             });
-                            successCb?.(value);
+                            successCb?.(res);
                         } else {
                             showFailWrap({
-                                text: value.message,
+                                text: res.errorMsg,
                                 closeCb: onFailTipClose
                             });
-                            failCb?.(value);
+                            failCb?.(res);
                         }
-
                     })
                 })
                 .catch(() => {
