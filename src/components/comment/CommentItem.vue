@@ -1,71 +1,43 @@
 <script lang="ts" setup>
 import { computed, reactive, ref, toRefs } from 'vue';
-import { CaretRight } from '@element-plus/icons-vue';
 import Avatar from '../common/Avatar.vue';
 import CommentInput from './CommentInput.vue';
-import { commentItemType, commentReplyType } from '@/type';
-// import ReplyList from './ReplyList.vue';
+import ReplyComment from './ReplyComment.vue';
+import { commentItemType } from '@/type';
 import { useFolder } from '@/utils/helper';
+import { getUserId } from './logic';
 
 const props = defineProps<{
     commentItem?: commentItemType,
-    isLast?: boolean
+    isLast?: boolean,
+    publishReply?: any
 }>();
-
 const { commentItem, isLast } = toRefs(props);
 
 // 回复面板
-const {
-    isFold: isReplyPanelShow,
-    click: handleReplyPanel
-} = useFolder();
+const { isFold: isReplyPanelShow, click: handleReplyPanel } = useFolder();
 // 评论列表面板
-const {
-    isFold: isListShow,
-    click: handleListPanel
-} = useFolder();
+const { isFold: isListShow, click: handleListPanel } = useFolder();
 
-const isSelf = ref(true);
-const hasReplys = computed(() => (commentItem?.value?.replyComments?.length ?? 0) > 0)
+const isSelf = computed(() => getUserId() === commentItem?.value?.comment.userId);
+const hasReplys = computed(() => (commentItem?.value?.replyComments?.length || 0) > 0)
+console.log('hasReply', hasReplys.value)
 
-const submitReply = (params: any) => {
-    // 提交回复, posi api
-    console.log('submit', params);
+const replyWrap = (params: any) => {
+    props.publishReply({ ...params, replyId: commentItem?.value?.comment.userId })
 }
 
-// const isReply = ref(Boolean(props.replyItem));
-// const hasReplys = ref(Boolean(props.commentItem?.replyComments));
-// const commentItemRef = reactive(props.commentItem ?? {} as commentItemType);
-// const replyItemRef = reactive(props.replyItem ?? {} as commentReplyType);
-
-// const isReplying = ref(false);
-// const isReplysShow = ref(false);
-// const isSelf = ref(true);
-
-
-// const replyPanelClickHandler = () => {
-//     isReplying.value = !isReplying.value;
-// }
-
-// const showReplys = () => {
-//     isReplysShow.value = !isReplysShow.value;
-// }
-
-// const submitReply = (params: any) => {
-//     // 提交回复, posi api
-//     console.log('submit', params);
-// }
-
+console.log('replys', commentItem?.value?.replyComments)
 </script>
 
 <template>
     <div :class="['ct', { 'noBorder': isLast }]">
         <div class="avatar">
-            <Avatar type="small" />
+            <Avatar type="small" :src="commentItem?.comment.userAvatarUrl" />
         </div>
         <div class="rightCt">
             <div class="info">
-                <span class="name">{{ commentItem?.comment.userName }}</span>
+                <span class="name">{{ commentItem?.comment.username }}</span>
             </div>
             <div class="commentText">{{ commentItem?.comment.commentText }}</div>
             <div class="btnCt">
@@ -73,27 +45,26 @@ const submitReply = (params: any) => {
                     <span v-show="isReplyPanelShow">收起</span>
                     <span v-show="!isReplyPanelShow">回复</span>
                 </div>
-                <div
-                    class="btn blue"
-                    v-if="hasReplys"
-                    @click="handleListPanel"
-                >
-                    <span v-show="isListShow">收起回复列表</span>
-                    <span v-show="!isListShow">展开回复列表</span>
+                <div class="btn blue" v-if="hasReplys">
+                    <span
+                        v-if="!isListShow"
+                        @click="handleListPanel"
+                    >展开{{ commentItem?.replyComments?.length }}条回复</span>
+                    <span v-if="isListShow" @click="handleListPanel">收起列表</span>
                 </div>
                 <div class="btn red" v-if="isSelf">删除</div>
             </div>
-            <div class="replyInputCt" v-show="isReplyPanelShow">
-                <CommentInput
-                    title="输入你的回复"
-                    :submitComment="submitReply"
-                    :params="{
-                        userName: commentItem?.comment.userName
-                    }"
-                />
+            <div class="replyInputCt" v-if="isReplyPanelShow">
+                <CommentInput title="输入你的回复" :submitComment="replyWrap" />
             </div>
-            <div v-show="hasReplys" class="replyListCt">
-                <ReplyList />
+            <div v-if="commentItem?.replyComments?.length && isListShow" class="replyListCt">
+                <ReplyComment
+                    v-for="(reply, index) in commentItem?.replyComments"
+                    :key="reply.courseCommentId"
+                    :reply="reply"
+                    :isLast="index === commentItem?.replyComments.length - 1"
+                    :publishReply="replyWrap"
+                />
             </div>
         </div>
     </div>
@@ -117,6 +88,7 @@ const submitReply = (params: any) => {
 
 .noBorder {
     border-bottom: none;
+    margin-bottom: 0;
 }
 
 .avatar {
@@ -164,10 +136,11 @@ const submitReply = (params: any) => {
 }
 
 .btnCt {
-    & > div {
-        float: right;
-        margin: 10px;
-        margin-bottom: 0;
+    display: flex;
+    justify-content: flex-end;
+    text-align: right;
+    .btn {
+        margin: 10px 0 0 10px;
 
         &:hover {
             cursor: pointer;
@@ -187,9 +160,5 @@ const submitReply = (params: any) => {
     &:hover {
         color: #1f88f1;
     }
-}
-
-.replyInputCt {
-    margin-top: 40px;
 }
 </style>

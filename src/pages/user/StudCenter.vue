@@ -5,24 +5,12 @@ import UserInfo from './comp/UserInfo.vue';
 import CodingTimeTable from './comp/CodingTimeTable.vue';
 import CourseList from '@/components/course/CourseList.vue';
 import LabList from '@/components/lab/LabList.vue';
-import {
-    getUserInfoByTk,
-    getCoursesAll,
-    getCoursesStudy,
-    getMyAttend
-} from '@/utils/services';
+import { getCoursesAll, getCoursesStudy } from '@/utils/services';
 
 const activeName = ref('coursesCreated');
 const handleTabClick = (obj: any) => {
     console.log(obj?.props?.label);
 };
-
-getUserInfoByTk()
-getMyAttend({
-    pageCurrent: 1,
-    pageSize: 20,
-    courseId: 2
-})
 
 const searchId = ref('');
 </script>

@@ -7,7 +7,7 @@ const store = createStore({
     state() {
         return {
             user: {
-                userId: -1,
+                userId: 0,
                 email: '',
                 num: "",
                 realName: "",

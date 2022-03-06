@@ -8,7 +8,7 @@ import CourseStud from './comp/courseTab/CourseStud.vue';
 import CourseResource from './comp/courseTab/CourseResource.vue';
 import CourseState from './comp/courseTab/CourseState.vue';
 import CourseAttend from './comp/courseTab/courseAttend.vue';
-import CourseQA from './comp/courseTab/CourseQA.vue';
+import QACard from '@/components/comment/QACard.vue';
 import { getCourseById } from '@/utils/services';
 import { CourseType } from '@/type';
 
@@ -40,7 +40,7 @@ const focusTab = ref('qa');
   <PageHeader content="课程管理" />
   <div class="courseCtrCt">
     <el-tabs tab-position="left" class="demo-tabs" v-model="focusTab">
-      <el-tab-pane label="课程实验" name="lab">
+      <!-- <el-tab-pane label="课程实验" name="lab">
         <CourseLab />
       </el-tab-pane>
       <el-tab-pane label="签到管理" name="attend">
@@ -51,16 +51,16 @@ const focusTab = ref('qa');
       </el-tab-pane>
       <el-tab-pane label="课程资源" name="resource">
         <CourseResource />
-      </el-tab-pane>
+      </el-tab-pane> -->
       <el-tab-pane label="课程问答" name="qa">
-        <CourseQA />
+        <QACard class="qaCt" type="course" />
       </el-tab-pane>
-      <el-tab-pane label="课程信息" name="info">
+      <!-- <el-tab-pane label="课程信息" name="info">
         <CourseInfoEdit :course="course" />
       </el-tab-pane>
       <el-tab-pane label="学生成绩" name="score">
         <CourseState />
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>
@@ -70,5 +70,9 @@ const focusTab = ref('qa');
   margin: 10px 30px;
   padding: 10px;
   background-color: #fff;
+}
+.qaCt {
+  margin: 20px;
+  margin-top: 0;
 }
 </style>

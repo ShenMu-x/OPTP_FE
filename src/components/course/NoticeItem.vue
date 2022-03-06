@@ -7,9 +7,6 @@ const props = defineProps<{
 const load = () => {
 
 }
-
-
-
 </script>
 
 <template>

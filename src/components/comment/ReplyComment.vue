@@ -1,43 +1,40 @@
 <script lang="ts" setup>
-import { ref, toRefs } from 'vue';
+import { computed, ref, toRefs } from 'vue';
 import { CaretRight } from '@element-plus/icons-vue';
 import Avatar from '../common/Avatar.vue';
 import CommentInput from './CommentInput.vue';
 import { commentReplyType } from '@/type';
-import { useFolder } from '@/utils/helper';
+import { useFolder, fmatDate } from '@/utils/helper';
+import { getUserId } from './logic';
 
 const props = defineProps<{
     reply?: commentReplyType,
-    isLast?: boolean
+    isLast?: boolean,
+    publishReply?: any
 }>();
 
 const { reply, isLast } = toRefs(props);
 
 // 回复面板
-const {
-    isFold: isReplyPanelShow,
-    click: handleReplyPanel
-} = useFolder();
-
-const isSelf = ref(true);
+const { isFold: isReplyPanelShow, click: handleReplyPanel } = useFolder();
+const isSelf = computed(() => getUserId() === reply?.value?.userId);
 
 const submitReply = (params: any) => {
-    // 提交回复, posi api
-    console.log('submit', params);
+    props.publishReply({ ...params, replyId: reply?.value?.userId })
 }
 
 </script>
 
 <template>
-    <div :class="['ct', { 'noBorder': isLast }]">
+    <div :class="['replyCt', { 'noBorder': isLast }]">
         <div class="avatar">
-            <Avatar type="small" />
+            <Avatar type="small" :src="reply?.userAvatarUrl" />
         </div>
         <div class="rightCt">
             <div class="info">
                 <span class="name">{{ reply?.username }}</span>
                 <CaretRight class="caretIcon" />
-                <span class="name">{{ reply?.replyUsername }}</span>
+                <span class="name replyname">{{ reply?.replyUsername }}</span>
                 <span class="timeStamp">{{ reply?.createdAt }}</span>
             </div>
             <div class="commentText">{{ reply?.commentText }}</div>
@@ -51,9 +48,6 @@ const submitReply = (params: any) => {
                     title="输入你的回复"
                     :placeHolder="`回复 @${reply?.username}: `"
                     :submitComment="submitReply"
-                    :params="{
-                        userName: reply?.username
-                    }"
                 />
             </div>
         </div>
@@ -61,16 +55,16 @@ const submitReply = (params: any) => {
 </template>
 
 <style lang="less" scoped>
-.ct {
+.replyCt {
+    margin: 20px 0;
     min-height: 100px;
-    margin: 20px;
-    padding-bottom: 20px;
     border-bottom: 1px solid #aaa;
     overflow: hidden;
 }
 
 .noBorder {
     border-bottom: none;
+    margin-bottom: 0;
 }
 
 .avatar {
@@ -89,6 +83,7 @@ const submitReply = (params: any) => {
     color: #2c3e50;
     text-align: left;
     width: 100%;
+    display: flex;
 
     .caretIcon {
         height: 15px;
@@ -105,10 +100,13 @@ const submitReply = (params: any) => {
         text-overflow: ellipsis;
     }
 
+    .replyname {
+        margin-right: auto;
+    }
+
     .timeStamp {
-        width: 80px;
         text-align: right;
-        float: right;
+        justify-self: flex-end;
         font-size: 14px;
     }
 }
@@ -119,8 +117,8 @@ const submitReply = (params: any) => {
 
 .btn {
     float: right;
-    margin: 10px;
-    margin-bottom: 0;
+    text-align: right;
+    margin: 10px 0 0 10px;
 
     &:hover {
         cursor: pointer;

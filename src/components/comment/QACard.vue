@@ -1,13 +1,30 @@
 <script lang="ts" setup>
 import CommentInput from '@/components/comment/CommentInput.vue';
 import CommentList from '@/components/comment/CommentList.vue';
-import { useCourseId } from '@/utils/helper';
+import { showFailWrap, showSuccess, showSuccessWrap, useCourseId } from '@/utils/helper';
+import { publishCourseComment } from '@/utils/services';
+
+const props = defineProps<{
+    type: 'lab' | 'course'
+}>();
 
 const courseId = useCourseId();
 
-const submitComment = (comment: string) => {
-    console.log('提交', comment);
+const submitComment = ({ commentText, replyId = 0 }: {
+    commentText: string,
+    replyId?: number,
+}) => {
+    console.log('提交', commentText);
     // 提交成功 / 失败
+    publishCourseComment({
+        courseId,
+        commentText,
+        replyId,
+    })
+        .then(res => {
+            if (res.code === 0) showSuccess()
+            else showFailWrap({ text: res.errorMsg });
+        })
 }
 
 </script>

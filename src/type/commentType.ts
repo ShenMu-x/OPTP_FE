@@ -1,16 +1,28 @@
 export type commentType = {
-    courseCommentId: string,
-    userName: string,
+    courseCommentId: number,
+    courseId: number,
     commentText: string,
-    createdAt: string
+    pid: number,
+    userId: number,
+    userAvatarUrl: string,
+    username: string,
+    replyUserId: number,
+    createdAt: string,
+    updatedAt: string
 };
 
 export type commentReplyType = {
-    replyId: string,
-    username: string,
-    replyUsername: string,
+    courseCommentId: number,
+    courseId: number,
     commentText: string,
+    pid: number,
+    userId: number,
+    userAvatarUrl: string,
+    username: string,
+    replyUserId: number,
     createdAt: string,
+    updatedAt: string,
+    replyUsername: string,
 };
 
 export type commentItemType = {

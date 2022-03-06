@@ -73,6 +73,7 @@ const cancle = () => {
                 <el-table-column prop="actual" label="实际签到人数" width="140" />
                 <el-table-column label="查看详情" width="140">
                     <template #default="scope">
+                        <!-- WAITFIX -->
                         <el-button
                             type="text"
                             size="default"

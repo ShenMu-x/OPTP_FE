@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 
-export const useFolder = (status = true) => {
+export const useFolder = (status = false) => {
     const isFold = ref(status);
     const expand = () => isFold.value = true;
     const fold = () => isFold.value = false;

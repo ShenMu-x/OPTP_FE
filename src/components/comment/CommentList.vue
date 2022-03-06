@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import CommentItem from './CommentItem.vue';
-import { commentsType } from '@/type';
 import { usePageList } from '@/utils/helper';
 import { fetchCourseComment } from '@/utils/services';
 import { ref, onMounted, watch, toRefs } from 'vue';
+import { publishCourseComment } from '@/utils/services';
 
 const props = defineProps<{
     courseId?: number,
@@ -27,11 +27,20 @@ const {
 });
 
 watch(props, (newV, _) => {
-    if(props.courseId) {
-        setCommon({courseId: props.courseId});
+    if (props.courseId) {
+        setCommon({ courseId: props.courseId });
         fetch(1);
     }
 })
+
+props.courseId && fetch(1);
+
+const publishWrap = (common: any) => {
+    publishCourseComment({
+        ...common,
+        courseId: props.courseId,
+    })
+}
 
 </script>
 
@@ -42,6 +51,7 @@ watch(props, (newV, _) => {
             :key="commentItem.comment.courseCommentId"
             :commentItem="commentItem"
             :isLast="index + 1 === list?.length"
+            :publish-reply="publishWrap"
         />
     </template>
     <el-empty v-else description="本课程暂无评论" style="flex: 1" />
