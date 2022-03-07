@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, reactive, ref, toRefs } from 'vue';
+import { computed, ref, toRefs } from 'vue';
 import Avatar from '../common/Avatar.vue';
 import CommentInput from './CommentInput.vue';
 import ReplyComment from './ReplyComment.vue';
@@ -10,24 +10,40 @@ import { getUserId } from './logic';
 const props = defineProps<{
     commentItem?: commentItemType,
     isLast?: boolean,
-    publishReply?: any
+    publishReply?: any,
+    deleteReply?: any,
 }>();
 const { commentItem, isLast } = toRefs(props);
+const refInputEl = ref();
 
-// 回复面板
-const { isFold: isReplyPanelShow, click: handleReplyPanel } = useFolder();
-// 评论列表面板
-const { isFold: isListShow, click: handleListPanel } = useFolder();
+const { isFold: isReplyPanelShow, click: handleReplyPanel } = useFolder();// 回复面板
+const { isFold: isListShow, click: handleListPanel } = useFolder();// 评论列表面板
 
 const isSelf = computed(() => getUserId() === commentItem?.value?.comment.userId);
 const hasReplys = computed(() => (commentItem?.value?.replyComments?.length || 0) > 0)
-console.log('hasReply', hasReplys.value)
 
-const replyWrap = (params: any) => {
-    props.publishReply({ ...params, replyId: commentItem?.value?.comment.userId })
+const submitCb = () => {
+    refInputEl?.value?.resetInput();
+    isReplyPanelShow.value && handleReplyPanel();
+    !isListShow.value && handleListPanel();
 }
 
-console.log('replys', commentItem?.value?.replyComments)
+// 两个params，用于replyItem传递参数
+const replyWrap = (params: any) => {
+    props.publishReply?.({ replyId: commentItem?.value?.comment.courseCommentId, cb: submitCb, ...params })
+}
+const deleteHandler = (params: any) => {
+    props.deleteReply?.({ commentId: commentItem?.value?.comment.courseCommentId, ...params })
+}
+
+// 回复输入框重置
+const reset = () => {
+    refInputEl?.value?.resetInput?.();
+}
+
+defineExpose({
+    reset,
+})
 </script>
 
 <template>
@@ -52,10 +68,10 @@ console.log('replys', commentItem?.value?.replyComments)
                     >展开{{ commentItem?.replyComments?.length }}条回复</span>
                     <span v-if="isListShow" @click="handleListPanel">收起列表</span>
                 </div>
-                <div class="btn red" v-if="isSelf">删除</div>
+                <div class="btn red" v-if="isSelf" @click="deleteHandler">删除</div>
             </div>
             <div class="replyInputCt" v-if="isReplyPanelShow">
-                <CommentInput title="输入你的回复" :submitComment="replyWrap" />
+                <CommentInput title="输入你的回复" :submitComment="replyWrap" ref="refInputEl" />
             </div>
             <div v-if="commentItem?.replyComments?.length && isListShow" class="replyListCt">
                 <ReplyComment
@@ -64,6 +80,7 @@ console.log('replys', commentItem?.value?.replyComments)
                     :reply="reply"
                     :isLast="index === commentItem?.replyComments.length - 1"
                     :publishReply="replyWrap"
+                    :deleteReply="deleteHandler"
                 />
             </div>
         </div>

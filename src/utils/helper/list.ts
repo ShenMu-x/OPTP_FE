@@ -8,6 +8,7 @@ interface params {
     refEl?: any,
     emitReload?: any,
     common?: any,
+    noTip?: boolean
 }
 export const usePageList = ({
     size,
@@ -15,7 +16,8 @@ export const usePageList = ({
     failText,
     refEl,
     emitReload,
-    common
+    common,
+    noTip
 }: params) => {
     const current = ref(1);
     const total = ref(size);
@@ -57,7 +59,7 @@ export const usePageList = ({
                 }
                 if (isReload.value) {
                     emitReload?.();
-                    res.code === 0 && showSuccessWrap({ text: '已刷新' })
+                    res.code === 0 && !noTip && showSuccessWrap({ text: '已刷新' })
                     isReload.value = false
                 }
                 closeLoading()

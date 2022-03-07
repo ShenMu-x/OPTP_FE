@@ -10,17 +10,27 @@ import { getUserId } from './logic';
 const props = defineProps<{
     reply?: commentReplyType,
     isLast?: boolean,
-    publishReply?: any
+    publishReply?: any,
+    deleteReply?: any,
 }>();
 
 const { reply, isLast } = toRefs(props);
+const refInputEl = ref();
 
 // 回复面板
 const { isFold: isReplyPanelShow, click: handleReplyPanel } = useFolder();
 const isSelf = computed(() => getUserId() === reply?.value?.userId);
 
+const submitCb = () => {
+    refInputEl?.value?.resetInput();
+    isReplyPanelShow.value && handleReplyPanel();
+}
+
 const submitReply = (params: any) => {
-    props.publishReply({ ...params, replyId: reply?.value?.userId })
+    props.publishReply?.({ replyId: reply?.value?.courseCommentId, cb: submitCb, ...params })
+}
+const deleteHandler = () => {
+    props.deleteReply?.({ commentId: reply?.value?.courseCommentId })
 }
 
 </script>
@@ -42,12 +52,13 @@ const submitReply = (params: any) => {
                 <span v-show="isReplyPanelShow">收起</span>
                 <span v-show="!isReplyPanelShow">回复</span>
             </div>
-            <div class="btn red" v-if="isSelf">删除</div>
+            <div class="btn red" v-if="isSelf" @click="deleteHandler">删除</div>
             <div class="replyInputCt" v-show="isReplyPanelShow">
                 <CommentInput
                     title="输入你的回复"
                     :placeHolder="`回复 @${reply?.username}: `"
                     :submitComment="submitReply"
+                    ref="refInputEl"
                 />
             </div>
         </div>

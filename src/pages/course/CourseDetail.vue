@@ -5,8 +5,7 @@ import ReturnBtn from '@/components/common/ReturnBtn.vue';
 import CourseItem from '@/components/course/CourseItem.vue';
 import ChooseCourse from './comp/ChooseCourse.vue';
 import TeacherNotice from './comp/TeacherNotice.vue';
-import CommentInput from '@/components/comment/CommentInput.vue';
-import CommentList from '@/components/comment/CommentList.vue';
+import QACard from '@/components/comment/QACard.vue';
 import { scrollToPos } from '@/utils/helper/scrollToPos';
 import { getCourseById, getUserInfoById } from '@/utils/services';
 import { CourseType, userInfoType } from '@/type';
@@ -31,6 +30,7 @@ getCourseById({ courseId })
     .then(res => {
         if (res.code === 0 && res.data) {
             Object.assign(data.course, res.data);
+            console.log(course.value)
             getUserInfoById({ userId: res.data.teacherId ?? -1 })
                 .then(infoRes => {
                     if (infoRes.code === 0) {
@@ -41,17 +41,6 @@ getCourseById({ courseId })
             router.replace('/404');
         }
     })
-
-
-
-// fetch teacher message
-// fetch comments
-
-const submitComment = (comment: string) => {
-    console.log('提交', comment);
-    // 提交成功 / 失败
-}
-
 </script>
 
 <template>
@@ -64,14 +53,13 @@ const submitComment = (comment: string) => {
         <div class="bodyCt">
             <div class="leftCt">
                 <CourseItem :course="course" class="courseCard" />
-                <ChooseCourse :courseId="course.courseId ?? -1" :secret="course.secretKey ?? ''" />
+                <ChooseCourse v-if="!course.isEnroll" :courseId="course.courseId ?? -1" :secret="course.secretKey ?? ''" />
                 <div class="leftInnerCt">
                     <TeacherNotice :info="info" />
                 </div>
                 <div class="qaCard">
                     <div class="cardTitle">课程问答(条)</div>
-                    <CommentInput title="提出我的问题" :submitComment="submitComment" class="inputQue" />
-                    <CommentList :courseId="course.courseId" />
+                    <QACard type="course"/>
                 </div>
             </div>
             <div class="rightCt">

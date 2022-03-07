@@ -2,46 +2,53 @@
 import CommentItem from './CommentItem.vue';
 import { usePageList } from '@/utils/helper';
 import { fetchCourseComment } from '@/utils/services';
-import { ref, onMounted, watch, toRefs } from 'vue';
-import { publishCourseComment } from '@/utils/services';
+import { watch } from 'vue';
 
 const props = defineProps<{
     courseId?: number,
+    submitReply?: any,
+    deleteReply?: any,
 }>();
 
-const pageSize = 20;
-
+const pageSize = 10;
 const {
     current,
     total,
     list,
     fetch,
-    setCommon
+    setCommon,
+    reload,
 } = usePageList({
     size: pageSize,
     fetchData: fetchCourseComment,
     failText: '获取评论列表失败,请稍后再试',
+    noTip: true,
     common: {
         courseId: props.courseId
     }
 });
-
 watch(props, (newV, _) => {
     if (props.courseId) {
         setCommon({ courseId: props.courseId });
         fetch(1);
     }
 })
-
 props.courseId && fetch(1);
 
-const publishWrap = (common: any) => {
-    publishCourseComment({
-        ...common,
-        courseId: props.courseId,
-    })
+const deleteCb = () => {
+
 }
 
+const publishReplyWrap = (common: any) => {
+    props.submitReply?.({ ...common });
+}
+const deleteWrap = (common: any) => {
+    props.deleteReply?.({ ...common });
+}
+
+defineExpose({
+    reloadComment: reload,
+})
 </script>
 
 <template>
@@ -51,7 +58,8 @@ const publishWrap = (common: any) => {
             :key="commentItem.comment.courseCommentId"
             :commentItem="commentItem"
             :isLast="index + 1 === list?.length"
-            :publish-reply="publishWrap"
+            :publish-reply="publishReplyWrap"
+            :delete-reply="deleteWrap"
         />
     </template>
     <el-empty v-else description="本课程暂无评论" style="flex: 1" />

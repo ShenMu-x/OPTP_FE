@@ -85,8 +85,8 @@ router.beforeEach((to, from, next) => {
         next('./login');
         return;
     }
-
-    if(store.state.user.userId) getUserInfoByTk();
+    // 获取用户信息
+    if (!store.state.user.userId) getUserInfoByTk();
 
     // 职能区分
     if (to.path === '/') {

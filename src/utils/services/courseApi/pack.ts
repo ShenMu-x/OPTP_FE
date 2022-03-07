@@ -13,6 +13,7 @@ export const packCourse = (course: any): CourseType => {
         picUrl: course.pic_url,
         secretKey: course.secret_key,
         isClose: course.is_close,
+        isEnroll: course.is_enroll,
         language: course.language,
         createdAt: fmatTime(course.created_at),
         updatedAt: fmatTime(course.updated_at)
