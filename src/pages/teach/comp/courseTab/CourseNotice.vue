@@ -5,7 +5,7 @@ import TablePage from '@/components/common/TablePage.vue';
 import UploadFile from '@/components/common/UploadFile.vue';
 import BtnCt from '../common/BtnCt.vue';
 import { comfirm } from '@/utils/helper';
-import { getCourseNotice, addResource } from '@/utils/services';
+import { getCourseNotice, createNotice } from '@/utils/services';
 import { getCourseId } from './logic';
 
 const courseId = getCourseId();
@@ -41,7 +41,7 @@ const sumbit = () => {
                 onSuccTipClose: () => {
                     closeDialog();
                 },
-                fetchApi: addResource,
+                fetchApi: createNotice,
                 params: {
                     courseId,
                     title: form.title,

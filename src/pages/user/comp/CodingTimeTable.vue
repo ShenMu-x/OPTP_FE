@@ -11,7 +11,7 @@ import {
 import { HeatmapChart } from 'echarts/charts';
 import { CanvasRenderer } from 'echarts/renderers';
 import getConfig from './timeTableConfig';
-import { getUserCodingTime } from '@/utils/services';
+import { getMyCodingTime } from '@/utils/services';
 
 echarts.use([
   TitleComponent,
@@ -36,7 +36,7 @@ onMounted(() => {
   //   ['2022-01-03', 33],
   // ];
 
-  getUserCodingTime()
+  getMyCodingTime()
     .then(res => {
       data.timeList = res.data?.codingTime ?? [];
       getConfig && myChart.setOption(getConfig(data.timeList));

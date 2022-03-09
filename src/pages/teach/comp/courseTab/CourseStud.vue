@@ -5,7 +5,7 @@ import BtnCt from '../common/BtnCt.vue';
 import BtnBlue from '../common/BtnBlue.vue';
 import StudPage from '../common/StudPage.vue';
 import { useDialog, useCourseId } from '@/utils/helper';
-import { examine } from '@/utils/services';
+import { checkJoinInApplication } from '@/utils/services';
 
 const { isDialogOpen, openDialog, closeDialog } = useDialog()
 const courseId = useCourseId();
@@ -21,7 +21,7 @@ const changeTab = () => {
 
 const check = (userId: number, isPass: boolean) => {
     console.log('check', userId, isPass);
-    // examine({
+    // checkJoinInApplication({
     //     courseId,
     //     stuIds: [userId],
     //     isPermitted: isPass,

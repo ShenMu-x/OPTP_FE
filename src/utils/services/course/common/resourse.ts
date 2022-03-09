@@ -1,7 +1,17 @@
-import _axios from '../axios';
-import { ResType } from '../type';
-import { fmatDate, fmatTime } from '../../helper';
-import { packError, packEmptyData, packPageRes } from "../pack";
+import _axios from '../../axios';
+import { ResType, ListRes } from '../../type';
+import { fmatTime } from '../../../helper';
+import { packError, packPageRes } from "../../pack";
+
+export type NoticeType = {
+    resourceId: number,
+    courseId?: number,
+    title: string,
+    content: string,
+    attachmentUrl: string,
+    createAt: string,
+    updateAt: string
+}
 
 const packResource = (item: any) => ({
     resourceId: item.ID,
@@ -17,7 +27,7 @@ export const getCourseNotice: (params: {
     courseId: number,
     pageSize: number,
     pageCurrent: number
-}) => ResType<any> = (params) => {
+}) => ResType<ListRes<NoticeType>> = (params) => {
     return _axios({
         method: "GET",
         url: "/web/course/resource",
@@ -27,7 +37,7 @@ export const getCourseNotice: (params: {
         .catch(packError)
 }
 
-export const getNoticeById: (resourceId: number) => ResType<any> = (resourceId) => {
+export const getNoticeById: (resourceId: number) => ResType<NoticeType> = (resourceId) => {
     return _axios({
         method: "GET",
         url: `/web/course/resource/${resourceId}`,
@@ -40,7 +50,7 @@ export const getNoticeById: (resourceId: number) => ResType<any> = (resourceId) 
             return {
                 code: 0,
                 data: {
-                    courseResourceId: res.data.data.course_recourse_id,
+                    resourceId: res.data.data.course_recourse_id,
                     title: res.data.data.title,
                     content: res.data.data.content,
                     attachmentUrl: res.data.data.attachment_url,
@@ -49,21 +59,5 @@ export const getNoticeById: (resourceId: number) => ResType<any> = (resourceId) 
                 }
             }
         })
-        .catch(packError)
-}
-
-export const addResource: (params: {
-    courseId: number,
-    title: string,
-    content: string,
-    attachmentUrl: String
-}) => ResType<''> = (params) => {
-    console.log('params', params);
-    return _axios({
-        method: "POST",
-        url: "/web/course/resource",
-        data: params,
-    })
-        .then(packEmptyData)
         .catch(packError)
 }

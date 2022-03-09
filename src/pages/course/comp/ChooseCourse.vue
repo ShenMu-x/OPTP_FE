@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue-demi';
-import { attendCourse } from '@/utils/services';
+import { askJoinInCourse } from '@/utils/services';
 import { showFailWrap, showSuccessWrap } from '@/utils/helper';
 
 const props = defineProps<{
@@ -15,7 +15,7 @@ const submit = () => {
             text: '选课密码不正确'
         })
     } else {
-        attendCourse({
+        askJoinInCourse({
             courseId: props.courseId,
             secretKey: props.secret
         }).then(res => {

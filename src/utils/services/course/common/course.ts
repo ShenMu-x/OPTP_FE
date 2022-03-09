@@ -1,11 +1,11 @@
-import _axios from '../axios';
-import { ResType, ListRes } from '../type';
+import _axios from '../../axios';
+import { ResType, ListRes } from '../../type';
 import { CourseType } from '@/type';
-import { packCourse } from './pack';
-import { packError, packPageRes } from "../pack";
+import { packCourse } from '../pack';
+import { packError, packPageRes } from "../../pack";
 
-// 获取课程列表
-export const getCoursesAll: (params: {
+// 获取全部课程列表
+export const getAllCourseList: (params: {
     pageCurrent: number,
     pageSize: number
 }) => ResType<ListRes<CourseType>> = (params) => {
@@ -14,7 +14,7 @@ export const getCoursesAll: (params: {
         .catch(packError)
 }
 
-// 根据课程id获得课程信息
+// 根据课程id获取课程信息
 export const getCourseById: (params: {
     courseId: number
 }) => ResType<CourseType> = (params) => {

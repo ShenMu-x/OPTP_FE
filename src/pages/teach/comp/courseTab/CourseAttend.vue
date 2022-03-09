@@ -5,7 +5,7 @@ import TablePage from '@/components/common/TablePage.vue';
 import BtnCt from '../common/BtnCt.vue';
 import BtnBlue from '../common/BtnBlue.vue';
 import { getCourseId, useDialog } from './logic';
-import { createAttend, checkAttend } from "@/utils/services";
+import { createAttend, getCourseAttendRecords } from "@/utils/services";
 
 const courseId = getCourseId();
 
@@ -55,9 +55,6 @@ const cancle = () => {
                 <el-form-item label="签到时长(秒)" label-width="120px">
                     <el-input-number v-model="form.duration" :min="30" />
                 </el-form-item>
-                <el-form-item label="签到密码" label-width="120px">
-                    <el-input v-model="form.secretKey" placeholder="请输入签到密码"></el-input>
-                </el-form-item>
             </el-form>
             <template #footer>
                 <span class="dialog-footer">
@@ -66,7 +63,7 @@ const cancle = () => {
                 </span>
             </template>
         </el-dialog>
-        <TablePage :common="{ courseId }" :fetch-data="checkAttend">
+        <TablePage :common="{ courseId }" :fetch-data="getCourseAttendRecords">
             <template v-slot:tableColumns>
                 <el-table-column prop="name" label="签到名称" min-width="100" />
                 <el-table-column prop="createAt" label="创建时间" min-width="180" />

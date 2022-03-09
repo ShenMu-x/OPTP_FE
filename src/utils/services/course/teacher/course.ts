@@ -1,21 +1,8 @@
-import _axios from '../axios';
-import { ResType, ListRes } from '../type';
+import _axios from '../../axios';
+import { ResType, ListRes } from '../../type';
 import { CourseType } from '@/type';
-import { fmatDate, fmatTime } from '../../helper';
-import { packCourse } from './pack';
-import { packError, packEmptyData, packPageRes } from "../pack";
-
-export const packStud = (item: any) => ({
-    userId: item.user_id,
-    email: item.email,
-    num: item.num,
-    realName: item.real_name,
-    avatarUrl: item.avatar_url,
-    gender: item.gender,
-    major: item.major,
-    organization: item.organization
-})
-
+import { packCourse } from '../pack';
+import { packError, packEmptyData, packPageRes } from "../../pack";
 
 // 创建课程
 interface createCourseReq {
@@ -77,41 +64,5 @@ export const getCoursesCreated: (params: {
     }, 1000))
     return _axios.get(`/web/course/setup?pageCurrent=${params.pageCurrent}&pageSize=${params.pageSize}`)
         .then(res => packPageRes(res, packCourse))
-        .catch(packError)
-}
-
-// 获取待认证学生
-export const getVerifyStuds: (params: {
-    courseId: number,
-    pageSize: number,
-    pageCurrent: number
-}) => ResType<any> = (params) => {
-    return _axios({
-        method: 'GET',
-        url: `/web/course/student/examine/${params.courseId}`,
-        params: {
-            pageSize: params.pageSize,
-            pageCurrent: params.pageCurrent
-        }
-    })
-        .then(res => packPageRes(res, packStud))
-        .catch(packError)
-}
-
-// 获取课程学生
-export const getStudents: (params: {
-    courseId: number,
-    pageSize: number,
-    pageCurrent: number
-}) => ResType<any> = (params) => {
-    return _axios({
-        method: 'GET',
-        url: `/web/course/student/${params.courseId}`,
-        params: {
-            pageSize: params.pageSize,
-            pageCurrent: params.pageCurrent
-        }
-    })
-        .then(res => packPageRes(res, packStud))
         .catch(packError)
 }

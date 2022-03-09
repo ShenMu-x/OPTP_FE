@@ -85,7 +85,7 @@ interface costTimeRes {
     codingTime: Array<any>;
 }
 
-export const getUserCodingTime: () => ResType<costTimeRes> = () => {
+export const getMyCodingTime: () => ResType<costTimeRes> = () => {
     return _axios({
         method: 'GET',
         url: '/web/coding_time'

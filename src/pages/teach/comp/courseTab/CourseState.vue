@@ -4,7 +4,7 @@ import { Download } from '@element-plus/icons-vue';
 import BtnCt from '../common/BtnCt.vue';
 import ScorePage from '../common/ScorePage.vue';
 import BtnBlue from '../common/BtnBlue.vue';
-import { getScoreExport } from '@/utils/services';
+import { exportScoreFile } from '@/utils/services';
 import { getCourseId, useDialog } from './logic';
 
 const courseId = getCourseId();
@@ -21,7 +21,7 @@ const changeTab = () => {
 }
 
 const exportScore = () => {
-    getScoreExport(courseId);
+    exportScoreFile(courseId);
 }
 
 const getCoding = (userId: number) => {
@@ -41,7 +41,7 @@ const getCoding = (userId: number) => {
             <el-tab-pane label="学生成绩" name="score">
                 <ScorePage>
                     <template v-slot:columns>
-                        <el-table-column prop="shallCheckIn" label="应签到数" width="200" />
+                        <el-table-column prop="shouldCheckIn" label="应签到数" width="200" />
                         <el-table-column prop="ackCheckIn" label="已签到数" width="200" />
                         <el-table-column prop="avgScore" label="平均成绩" width="200" />
                     </template>

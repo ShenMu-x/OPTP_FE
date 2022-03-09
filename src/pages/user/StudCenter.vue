@@ -5,7 +5,7 @@ import UserInfo from './comp/UserInfo.vue';
 import CodingTimeTable from './comp/CodingTimeTable.vue';
 import CourseList from '@/components/course/CourseList.vue';
 import LabList from '@/components/lab/LabList.vue';
-import { getCoursesAll, getCoursesStudy } from '@/utils/services';
+import { getAllCourseList, getStudyCourseList } from '@/utils/services';
 
 const activeName = ref('coursesCreated');
 const handleTabClick = (obj: any) => {
@@ -26,7 +26,7 @@ const searchId = ref('');
         <div class="coursesInfo">
             <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
                 <el-tab-pane label="我的课程" name="coursesCreated">
-                    <CourseList :fetchData="getCoursesStudy" />
+                    <CourseList :fetchData="getStudyCourseList" />
                 </el-tab-pane>
                 <el-tab-pane label="搜索课程" name="coursesJoin">
                     <div class="btnCt">
@@ -38,7 +38,7 @@ const searchId = ref('');
                             :prefix-icon="Search"
                         ></el-input>
                     </div>
-                    <CourseList :fetchData="getCoursesAll" />
+                    <CourseList :fetchData="getAllCourseList" />
                 </el-tab-pane>
                 <el-tab-pane label="我的实验" name="experiments">
                     <LabList />

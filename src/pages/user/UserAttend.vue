@@ -5,31 +5,31 @@ import PageHeader from '@/components/common/PageHeader.vue';
 import TablePage from '@/components/common/TablePage.vue';
 import Tag from '@/components/common/Tag.vue';
 import { useCountDownSec } from '@/utils/helper';
-import { getMyAttend, reqAttendStart } from '@/utils/services';
+import { getMyAttendRecords, getMyAttendRecordsInProgress, AttendType } from '@/utils/services';
 
 const check = (id: number) => {
-
+    console.log(id)
 }
 
-reqAttendStart();
-const mock = ref([
-    {
-        "checkinRecordId": 1,
-        "name": "签到一",
-        "courseName": "JavaScript训练",
-        "secretKey": "",
-        "createAt": "2022-02-28 17:36:23",
-        "deadLine": "2022-01-01 00:00:00"
-    }
-])
+const data = ref<Array<AttendType>>([])
 
-const {
-    startDown,
-    current
-} = useCountDownSec(4);
-onMounted(() => {
-    startDown()
-})
+getMyAttendRecordsInProgress()
+    .then(res => {
+        if (res.code === 0) {
+            data.value = res.data ?? [];
+        } else {
+            data.value = []
+        }
+    })
+
+
+// const {
+//     startDown,
+//     current
+// } = useCountDownSec(4);
+// onMounted(() => {
+//     startDown()
+// })
 
 </script>
 
@@ -39,7 +39,7 @@ onMounted(() => {
         <div class="card">
             <div class="title">当前签到显示</div>
             <el-table
-                :data="mock"
+                :data="data"
                 stripe
                 highlight-current-row
                 style="width: 100%"
@@ -48,24 +48,26 @@ onMounted(() => {
                 <el-table-column prop="name" label="签到名称" min-width="100" />
                 <el-table-column prop="courseName" label="所属课程" min-width="200" />
                 <el-table-column prop="createAt" label="创建时间" min-width="180" />
+                <el-table-column prop="deadLine" label="结束时间" min-width="180" />
                 <el-table-column prop="isCheckIn" label="操作" min-width="140">
                     <template #default="scope">
                         <el-button
                             type="success"
                             size="default"
                             @click="check(scope?.row?.checkinRecordId)"
-                        >{{ current }}秒</el-button>
+                        >签到</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
         <div class="card">
             <div class="title">以往签到记录</div>
-            <TablePage text="目前没有签到记录" :fetch-data="getMyAttend">
+            <TablePage text="目前没有签到记录" :fetch-data="getMyAttendRecords">
                 <template v-slot:tableColumns>
                     <el-table-column prop="name" label="签到名称" min-width="100" />
                     <el-table-column prop="courseName" label="所属课程" min-width="200" />
                     <el-table-column prop="createAt" label="创建时间" min-width="180" />
+                    <el-table-column prop="deadLine" label="结束时间" min-width="180" />
                     <el-table-column prop="isCheckIn" label="点击签到" min-width="140">
                         <template #default="scope">
                             <Tag
@@ -87,16 +89,15 @@ onMounted(() => {
 <style lang="less" scoped>
 .ct {
     width: calc(100% - 160px);
-    height: 700px;
     margin: 0 80px 60px;
     background-color: #fff;
     overflow: hidden;
+    text-align: left;
 }
 .title {
     display: flex;
     text-align: left;
     font-size: 22px;
-    margin: 0 20px;
 }
 
 .card {

@@ -1,6 +1,20 @@
-import _axios from '../axios';
-import { ResType, ListRes } from '../type';
-import { packError, packEmptyData, packPageRes } from "../pack";
+import _axios from '../../axios';
+import { ResType, ListRes } from '../../type';
+import { packError, packEmptyData, packPageRes } from "../../pack";
+
+export type ScoreType = {
+    userId: number,
+    email: string,
+    num: string,
+    realName: string,
+    avatarUrl: string,
+    gender: number,
+    major: string,
+    organization: string,
+    avgScore: number,
+    shouldCheckIn: number,
+    ackCheckIn: number,
+}
 
 export const packScore = (item: any) => ({
     userId: item.user_id,
@@ -12,12 +26,12 @@ export const packScore = (item: any) => ({
     major: item.major,
     organization: item.organization,
     avgScore: item.avg_score,
-    shallCheckIn: item.shall_check_in,
+    shouldCheckIn: item.shall_check_in,
     ackCheckIn: item.act_check_in,
 })
 
 // 导出成绩
-export const getScoreExport: (courseId: number) => ResType<any> = (courseId) => {
+export const exportScoreFile: (courseId: number) => ResType<''> = (courseId) => {
     return _axios({
         method: 'GET',
         url: `/web/course/score/export/${courseId}`
@@ -27,11 +41,11 @@ export const getScoreExport: (courseId: number) => ResType<any> = (courseId) => 
 }
 
 // 获取课程学生成绩
-export const getScoreAll: (params: {
+export const getCourseScoreList: (params: {
     pageCurrent: number,
     pageSize: number,
     courseId: number
-}) => ResType<ListRes<any>> = (params) => {
+}) => ResType<ListRes<ScoreType>> = (params) => {
     return _axios({
         method: 'GET',
         url: '/web/course/score',
