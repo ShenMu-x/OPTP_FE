@@ -35,10 +35,6 @@ watch(props, (newV, _) => {
 })
 props.courseId && fetch(1);
 
-const deleteCb = () => {
-
-}
-
 const publishReplyWrap = (common: any) => {
     props.submitReply?.({ ...common });
 }

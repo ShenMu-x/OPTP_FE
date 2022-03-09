@@ -2,9 +2,8 @@
 import { reactive, ref } from 'vue';
 import Layout from './index.vue';
 import { getLoginRule } from './rules';
-import { useRedirect } from './logic';
 import { login } from '@/utils/services';
-import { isTeacher, showFailWrap } from '@/utils/helper';
+import { isTeacher, showFailWrap, useDirect } from '@/utils/helper';
 
 const refFomeEl = ref();
 const user = reactive({
@@ -13,7 +12,7 @@ const user = reactive({
 });
 
 const rules = reactive(getLoginRule())
-const { redirect, directTo } = useRedirect();
+const { redirect, directTo } = useDirect();
 
 const loginHandler = () => {
   refFomeEl.value.validate((isPass: boolean, obj: any) => {

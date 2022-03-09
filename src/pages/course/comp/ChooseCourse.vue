@@ -5,7 +5,7 @@ import { showFailWrap, showSuccessWrap } from '@/utils/helper';
 
 const props = defineProps<{
     courseId: number,
-    secret: string
+    secret: string,
 }>();
 const inp = ref('');
 

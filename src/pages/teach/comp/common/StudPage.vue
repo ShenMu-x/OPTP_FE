@@ -16,11 +16,11 @@ const courseId = parseInt(route.params?.courseId?.[0]);
 <template>
     <TablePage :common="{ courseId }" :fetch-data="fetch" :empty-des="des">
         <template v-slot:tableColumns>
-            <el-table-column prop="num" label="学生学号" width="180" />
-            <el-table-column prop="realName" label="学生姓名" width="140" />
-            <el-table-column prop="major" label="学生专业" width="140" />
-            <el-table-column prop="organization" label="所属组织" width="180" />
-            <el-table-column prop="email" label="邮箱" width="200" />
+            <el-table-column prop="num" label="学生学号" min-width="140" />
+            <el-table-column prop="realName" label="学生姓名" min-width="140" />
+            <el-table-column prop="major" label="学生专业" min-width="180" />
+            <el-table-column prop="organization" label="所属组织" min-width="180" />
+            <el-table-column prop="email" label="邮箱" min-width="180" />
             <slot name="options"></slot>
         </template>
     </TablePage>

@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue';
 import { Plus, Download } from '@element-plus/icons-vue';
 import TablePage from '@/components/common/TablePage.vue';
 import BtnCt from '../common/BtnCt.vue';
+import BtnBlue from '../common/BtnBlue.vue';
 import { getCourseId, useDialog } from './logic';
 import { createAttend, checkAttend } from "@/utils/services";
 
@@ -14,7 +15,7 @@ const form = reactive({
     secretKey: '',
     courseId,
     duration: 60 * 5,
-    name: '签到一'
+    name: ''
 })
 
 const {
@@ -67,27 +68,19 @@ const cancle = () => {
         </el-dialog>
         <TablePage :common="{ courseId }" :fetch-data="checkAttend">
             <template v-slot:tableColumns>
-                <el-table-column prop="name" label="签到名称" width="100" />
-                <el-table-column prop="createAt" label="创建时间" width="140" />
-                <el-table-column prop="total" label="应签到人数" width="140" />
-                <el-table-column prop="actual" label="实际签到人数" width="140" />
-                <el-table-column label="查看详情" width="140">
+                <el-table-column prop="name" label="签到名称" min-width="100" />
+                <el-table-column prop="createAt" label="创建时间" min-width="180" />
+                <el-table-column prop="total" label="应签到人数" min-width="100" />
+                <el-table-column prop="actual" label="实际签到人数" min-width="100" />
+                <el-table-column label="查看详情" min-width="140">
                     <template #default="scope">
                         <!-- WAITFIX -->
-                        <el-button
-                            type="text"
-                            size="default"
-                            
-                        >详情</el-button>
+                        <BtnBlue>详情</BtnBlue>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作">
                     <template #default="scope">
-                        <el-button
-                            type="danger"
-                            size="default"
-                           
-                        >删除</el-button>
+                        <el-button type="danger" size="default">删除</el-button>
                     </template>
                 </el-table-column>
             </template>

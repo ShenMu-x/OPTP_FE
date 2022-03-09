@@ -13,7 +13,7 @@ const packResource = (item: any) => ({
     updateAt: fmatTime(item.UpdatedAt)
 })
 
-export const getCourseResource: (params: {
+export const getCourseNotice: (params: {
     courseId: number,
     pageSize: number,
     pageCurrent: number
@@ -27,12 +27,11 @@ export const getCourseResource: (params: {
         .catch(packError)
 }
 
-export const getResourceById: (id: number) => ResType<any> = (id) => {
+export const getNoticeById: (resourceId: number) => ResType<any> = (resourceId) => {
     return _axios({
         method: "GET",
-        url: `/web/course/resource/${id}`,
+        url: `/web/course/resource/${resourceId}`,
         params: {
-            // 暂传 -- WAITFIX
             pageSize: 20,
             pageCurrent: 1
         }
@@ -41,7 +40,7 @@ export const getResourceById: (id: number) => ResType<any> = (id) => {
             return {
                 code: 0,
                 data: {
-                    resourceId: res.data.data.course_recourse_id,
+                    courseResourceId: res.data.data.course_recourse_id,
                     title: res.data.data.title,
                     content: res.data.data.content,
                     attachmentUrl: res.data.data.attachment_url,

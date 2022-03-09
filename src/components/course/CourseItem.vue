@@ -1,35 +1,35 @@
 <script lang="ts" setup>
 import { ref, toRef } from 'vue';
 import { CourseType } from '@/type';
-import { useRouter } from 'vue-router';
 import Avatar from '../common/Avatar.vue';
 import Tag from '../common/Tag.vue';
-import { isTeacher } from '@/utils/helper/is';
+import { isTeacher, useDirect } from '@/utils/helper';
 
-const router = useRouter();
-const props = defineProps<{ course: CourseType }>();
+const props = defineProps<{
+    course: CourseType,
+    heightAuto?: boolean
+}>();
 const course = toRef(props, 'course');
 
+const { directTo } = useDirect();
 const toCourseDetail = () => {
-    if (isTeacher()) router.push(`/teach/course_detail/${course.value.courseId}`);
-    else router.push(`/course_detail/${course.value.courseId}`);
+    if (isTeacher()) directTo(`/teach/course_detail/${course.value.courseId}`);
+    else directTo(`/course_detail/${course.value.courseId}`);
 }
 </script>
 
 <template>
-    <div class="courseCt" @click="toCourseDetail">
+    <div :class="['courseCt', props.heightAuto ? '' : 'fixCt']" @click="toCourseDetail">
         <div class="courseMain">
             <Avatar type="large" class="cover" :src="course.picUrl" />
             <div class="courseInfo">
-                <div
-                    class="courseTitle"
-                    :title="course.courseName"
-                >{{ course.courseName }}</div>
+                <div class="courseTitle" :title="course.courseName">{{ course.courseName }}</div>
                 <div class="courseStart">{{ course.createdAt }}</div>
                 <Tag :type="course.isClose ? 'red' : 'green'" />
             </div>
         </div>
         <div
+            :class="['courseDes', props.heightAuto ? '' : 'fixDes']"
             class="courseDes"
             :title="course?.courseDes || ''"
         >课程描述: {{ course?.courseDes || '暂无描述' }}</div>
@@ -38,15 +38,19 @@ const toCourseDetail = () => {
 
 <style lang="less" scoped>
 .courseCt {
-    height: 200px;
+    min-height: 200px;
     flex-basis: 100%;
     width: 100%;
     margin-bottom: 20px;
+    text-align: left;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
     padding: 20px;
+}
+.fixCt {
+    height: 200px;
 }
 
 .courseMain {
@@ -91,6 +95,10 @@ const toCourseDetail = () => {
 
 .courseDes {
     margin-top: 20px;
+    min-height: 60px;
+}
+
+.fixDes {
     height: 60px;
     line-height: 30px;
     overflow: hidden;

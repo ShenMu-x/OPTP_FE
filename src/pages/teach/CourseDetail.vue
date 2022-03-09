@@ -2,10 +2,10 @@
 import { ref, reactive, toRefs } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import PageHeader from '@/components/common/PageHeader.vue';
-import CourseInfoEdit from './comp/courseTab/CourseInfoEdit.vue';
+import CourseInfo from './comp/courseTab/CourseInfo.vue';
 import CourseLab from './comp/courseTab/CourseLab.vue';
 import CourseStud from './comp/courseTab/CourseStud.vue';
-import CourseResource from './comp/courseTab/CourseResource.vue';
+import CourseNotice from './comp/courseTab/CourseNotice.vue';
 import CourseState from './comp/courseTab/CourseState.vue';
 import CourseAttend from './comp/courseTab/courseAttend.vue';
 import QACard from '@/components/comment/QACard.vue';
@@ -32,7 +32,7 @@ getCourseById({ courseId })
     }
   })
 
-const focusTab = ref('qa');
+const focusTab = ref('lab');
 
 </script>
 
@@ -40,7 +40,7 @@ const focusTab = ref('qa');
   <PageHeader content="课程管理" />
   <div class="courseCtrCt">
     <el-tabs tab-position="left" class="demo-tabs" v-model="focusTab">
-      <!-- <el-tab-pane label="课程实验" name="lab">
+      <el-tab-pane label="课程实验" name="lab">
         <CourseLab />
       </el-tab-pane>
       <el-tab-pane label="签到管理" name="attend">
@@ -50,17 +50,17 @@ const focusTab = ref('qa');
         <CourseStud />
       </el-tab-pane>
       <el-tab-pane label="课程资源" name="resource">
-        <CourseResource />
-      </el-tab-pane> -->
+        <CourseNotice />
+      </el-tab-pane>
       <el-tab-pane label="课程问答" name="qa">
         <QACard class="qaCt" type="course" />
       </el-tab-pane>
-      <!-- <el-tab-pane label="课程信息" name="info">
-        <CourseInfoEdit :course="course" />
+      <el-tab-pane label="课程信息" name="info">
+        <CourseInfo :course="course" />
       </el-tab-pane>
       <el-tab-pane label="学生成绩" name="score">
         <CourseState />
-      </el-tab-pane> -->
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>

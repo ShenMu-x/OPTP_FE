@@ -1,18 +1,14 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
 import { Plus } from '@element-plus/icons-vue';
 import BtnCt from '../common/BtnCt.vue';
+import BtnBlue from '../common/BtnBlue.vue';
 import StudPage from '../common/StudPage.vue';
-import { useCourseId, useDialog } from '@/utils/helper';
-import StudTC from './StudTC.vue';
-import TableCommon from '../common/TableCommon.vue';
-import { getStudents, getVerifyStuds } from '@/utils/services';
-const router = useRouter();
-const route = useRoute();
+import { useDialog, useCourseId } from '@/utils/helper';
+import { examine } from '@/utils/services';
 
-const courseId = useCourseId();
 const { isDialogOpen, openDialog, closeDialog } = useDialog()
+const courseId = useCourseId();
 
 const importList = () => {
 
@@ -23,11 +19,13 @@ const changeTab = () => {
     console.log(focusTab.value);
 }
 
-const pass = (userId: number) => {
-
-}
-const reject = (userId: number) => {
-
+const check = (userId: number, isPass: boolean) => {
+    console.log('check', userId, isPass);
+    // examine({
+    //     courseId,
+    //     stuIds: [userId],
+    //     isPermitted: isPass,
+    // })
 }
 </script>
 
@@ -50,9 +48,9 @@ const reject = (userId: number) => {
             <el-tab-pane label="课程成员列表" name="member">
                 <StudPage type="default">
                     <template v-slot:options>
-                        <el-table-column label="操作" width="200">
+                        <el-table-column label="操作" min-width="140">
                             <template #default="scope">
-                                <el-button type="text">详情</el-button>
+                                <BtnBlue>详情</BtnBlue>
                             </template>
                         </el-table-column>
                     </template>
@@ -61,17 +59,17 @@ const reject = (userId: number) => {
             <el-tab-pane label="待审核学生列表" name="verify">
                 <StudPage type="verify">
                     <template v-slot:options>
-                        <el-table-column label="操作" width="200">
+                        <el-table-column label="操作" min-width="140">
                             <template #default="scope">
                                 <el-button
                                     type="success"
                                     size="default"
-                                    @click="pass(scope?.row?.userId)"
+                                    @click="check(scope?.row?.userId, true)"
                                 >通过</el-button>
                                 <el-button
                                     type="danger"
                                     size="default"
-                                    @click="reject(scope?.row?.userId)"
+                                    @click="check(scope?.row?.userId, false)"
                                 >拒绝</el-button>
                             </template>
                         </el-table-column>

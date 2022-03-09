@@ -2,10 +2,10 @@
 import { reactive, ref } from 'vue';
 import { DArrowLeft } from '@element-plus/icons-vue';
 import Layout from './index.vue';
-import { showSuccessWrap, comfirm } from '@/utils/helper';
+import { showSuccessWrap, comfirm, useDirect } from '@/utils/helper';
 import { changePsw } from '@/utils/services';
 import { getAuthRule } from './rules';
-import { useRedirect, useGetCode } from './logic';
+import { useGetCode } from './logic';
 
 const refEl = ref();
 const form = reactive({
@@ -18,7 +18,7 @@ const rules = reactive(getAuthRule({
   getPswCheck: () => form.passwordCheck
 }))
 
-const { redirect } = useRedirect();
+const { redirect } = useDirect();
 const { current, isCounting, fetchCode } = useGetCode();
 const getVerificationCode = () => {
   fetchCode(form.email);

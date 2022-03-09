@@ -1,4 +1,5 @@
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import { ref, onBeforeUnmount } from 'vue';
 
 export const useCourseId = () => {
@@ -6,6 +7,10 @@ export const useCourseId = () => {
     return parseInt(route?.params?.courseId?.[0]);
 }
 
+export const useUserId = () => {
+    const store = useStore();
+    return parseInt(store?.state?.user?.userId);
+}
 
 export const useDialog = () => {
     const isDialogOpen = ref(false);
@@ -45,5 +50,19 @@ export const useCountDownSec = (start: number) => {
         current,
         startDown,
         isCounting
+    }
+}
+
+export const useDirect = () => {
+    const router = useRouter();
+    const redirect = (url: string) => {
+        router.replace(url);
+    };
+    const directTo = (url: string) => {
+        router.push(url);
+    };
+    return {
+        redirect,
+        directTo
     }
 }

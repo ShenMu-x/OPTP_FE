@@ -11,7 +11,6 @@
             :title="props.info.organization"
         >所属组织: {{ props.info.organization }}</div>
     </div>
-    <div class="noticeCard">公告卡片</div>
 </template>
 
 <script lang="ts" setup>
@@ -38,10 +37,5 @@ const props = defineProps<{ info: userInfoType }>();
         text-overflow: ellipsis;
         text-align: left;
     }
-}
-
-.noticeCard {
-    height: 800px;
-    background-color: #fff;
 }
 </style>

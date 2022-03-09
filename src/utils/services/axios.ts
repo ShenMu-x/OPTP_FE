@@ -1,7 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { getToken, rmToken } from "../storage";
 import router from "@/router";
-import { ElMessage } from 'element-plus';
 
 const axiosConfig = {
     baseURL: 'http://175.178.37.132:8081',
@@ -44,12 +43,6 @@ _axios.interceptors.response.use(
                     // 401 无权限
                     rmToken();
                     router.push({ path: '/login' });
-                    ElMessage({
-                        showClose: false,
-                        message: '登录态失效, 需重新登录',
-                        type: 'error',
-                        duration: 2000,
-                    })
                     break;
                 }
                 case 500: {

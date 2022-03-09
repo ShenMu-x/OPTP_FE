@@ -2,7 +2,7 @@ import _axios from '../axios';
 import { ResType } from '../type';
 import { packError, packEmptyData } from "../pack";
 
-export const premit: (params: {
+export const examine: (params: {
     courseId: number,
     stuIds: number[],
     isPermitted: boolean,

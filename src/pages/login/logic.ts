@@ -21,17 +21,3 @@ export const useGetCode = () => {
         fetchCode,
     }
 }
-
-export const useRedirect = () => {
-    const router = useRouter();
-    const redirect = (url: string) => {
-        router.replace(url);
-    };
-    const directTo = (url: string) => {
-        router.push(url);
-    };
-    return {
-        redirect,
-        directTo
-    }
-}

@@ -28,3 +28,17 @@ export const attendCourse: (params: {
         .then(packEmptyData)
         .catch(packError)
 }
+
+// 退出课程
+export const quitCourse: (params: {
+    studentId: number,
+    courseId: number,
+}) => ResType<any> = (params) => {
+    return _axios({
+        method: 'DELETE',
+        url: '/web/course/quit',
+        data: params
+    })
+        .then(packEmptyData)
+        .catch(packError)
+}

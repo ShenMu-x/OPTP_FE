@@ -4,7 +4,9 @@ import { useRoute, useRouter } from 'vue-router';
 import ReturnBtn from '@/components/common/ReturnBtn.vue';
 import CourseItem from '@/components/course/CourseItem.vue';
 import ChooseCourse from './comp/ChooseCourse.vue';
-import TeacherNotice from './comp/TeacherNotice.vue';
+import QuitCourse from './comp/QuitCourse.vue'
+import TeacherInfo from './comp/TeacherInfo.vue';
+import NoticeCard from './comp/NoticeCard.vue';
 import QACard from '@/components/comment/QACard.vue';
 import { scrollToPos } from '@/utils/helper/scrollToPos';
 import { getCourseById, getUserInfoById } from '@/utils/services';
@@ -30,7 +32,6 @@ getCourseById({ courseId })
     .then(res => {
         if (res.code === 0 && res.data) {
             Object.assign(data.course, res.data);
-            console.log(course.value)
             getUserInfoById({ userId: res.data.teacherId ?? -1 })
                 .then(infoRes => {
                     if (infoRes.code === 0) {
@@ -50,23 +51,34 @@ getCourseById({ courseId })
             <div class="divider"></div>
             <div class="title">课程详情</div>
         </div>
-        <div class="bodyCt">
+        <div class="enrollCt" v-if="course.isEnroll">
             <div class="leftCt">
-                <CourseItem :course="course" class="courseCard" />
-                <ChooseCourse v-if="!course.isEnroll" :courseId="course.courseId ?? -1" :secret="course.secretKey ?? ''" />
+                <CourseItem :course="course" class="courseCard" :heightAuto="true"/>
                 <div class="leftInnerCt">
-                    <TeacherNotice :info="info" />
+                    <QuitCourse :courseId="course.courseId ?? 0" />
+                    <TeacherInfo :info="info" />
+                    <NoticeCard />
                 </div>
                 <div class="qaCard">
                     <div class="cardTitle">课程问答(条)</div>
-                    <QACard type="course"/>
+                    <QACard type="course" />
                 </div>
             </div>
             <div class="rightCt">
                 <el-affix :offset="0">
-                    <TeacherNotice :info="info" />
+                    <QuitCourse :courseId="course.courseId ?? 0" />
+                    <TeacherInfo :info="info" />
+                    <NoticeCard />
                 </el-affix>
             </div>
+        </div>
+        <div class="unEnroll" v-else>
+            <div class="unEnrollCt">
+                <CourseItem :course="course" class="courseCard" :heightAuto="true"/>
+                <TeacherInfo :info="info" class="teachInfo"/>
+            </div>
+
+            <ChooseCourse :courseId="course.courseId ?? 0" :secret="course.secretKey ?? ''" />
         </div>
     </div>
 </template>
@@ -95,18 +107,26 @@ getCourseById({ courseId })
     }
 }
 
-.bodyCt {
+.enrollCt,
+.unEnroll {
     margin: 20px 80px 80px;
     display: flex;
     flex-direction: column;
+
+    .unEnrollCt {
+        display: flex;
+        .teachInfo {
+            margin-left: 20px;
+        }
+    }
 }
 
+.courseCard {
+    min-height: 200px;
+    background-color: #fff;
+}
 .leftCt {
     width: 100%;
-    .courseCard {
-        height: 200px;
-        background-color: #fff;
-    }
 
     .cardTitle {
         font-size: 25px;
@@ -133,18 +153,18 @@ getCourseById({ courseId })
 }
 
 @media screen and (min-width: @min-width) {
-    .bodyCt {
+    .enrollCt {
         flex-direction: row;
         justify-content: space-between;
     }
     .leftCt {
-        width: 70%;
+        width: 65%;
     }
     .rightCt {
         display: block;
         margin-top: 0;
         margin-left: 40px;
-        width: 28%;
+        width: 33%;
     }
 
     .leftInnerCt {

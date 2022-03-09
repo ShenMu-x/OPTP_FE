@@ -108,7 +108,13 @@ export const getLabs: (params: getLabReq) => ResType<ListRes<labType>> = (params
         url: "/web/lab",
         params,
     })
-        .then(res => packPageRes(res, packLab)) //WAITFIX 返回结构不同于其他，res.data / res.data.data
+        .then(res => ({
+            code: 0,
+            data: {
+                records: res.data?.records?.map((item: any) => packLab(item)) || [],
+                pageInfo: res.data?.page_info || { total: 0 }
+            }
+        }))//返回结构不同于其他，res.data / res.data.data
         .catch(packError)
 }
 
@@ -118,7 +124,13 @@ export const getStuCourseLabs: (params: getLabReq) => ResType<ListRes<labType>> 
         url: '/web/lab/details',
         params,
     })
-        .then(res => packPageRes(res, packLab)) //WAITFIX 返回结构不同于其他，res.data / res.data.data
+        .then(res => ({
+            code: 0,
+            data: {
+                records: res.data?.records?.map((item: any) => packLab(item)) || [],
+                pageInfo: res.data?.page_info || { total: 0 }
+            }
+        }))//返回结构不同于其他，res.data / res.data.data
         .catch(packError)
 }
 

@@ -3,9 +3,9 @@ import { reactive, ref } from 'vue';
 import { DArrowLeft } from '@element-plus/icons-vue';
 import Layout from './index.vue';
 import { getRegisterRule } from './rules';
-import { stuRegister, teachRegister, getCode } from '@/utils/services';
-import { showFailWrap, showSuccessWrap, useCountDownSec } from '@/utils/helper';
-import { useRedirect, useGetCode } from './logic'
+import { stuRegister, teachRegister } from '@/utils/services';
+import { showFailWrap, showSuccessWrap, useCountDownSec, useDirect } from '@/utils/helper';
+import { useGetCode } from './logic'
 
 const refFormEl = ref();
 const model = reactive({
@@ -24,9 +24,11 @@ const rules = reactive(getRegisterRule({
   pswCheck: () => { return model.password }
 }))
 
-const { redirect } = useRedirect();
+const { redirect } = useDirect();
 const { current, isCounting, fetchCode } = useGetCode();
-const getCode = () => fetchCode(model.email);
+const getCode = () => {
+  fetchCode(model.email)
+};
 
 // 用户身份类型切换
 let register = stuRegister;

@@ -5,7 +5,7 @@ import TablePage from '@/components/common/TablePage.vue';
 import UploadFile from '@/components/common/UploadFile.vue';
 import BtnCt from '../common/BtnCt.vue';
 import { comfirm } from '@/utils/helper';
-import { getCourseResource, addResource, getResourceById } from '@/utils/services';
+import { getCourseNotice, addResource } from '@/utils/services';
 import { getCourseId } from './logic';
 
 const courseId = getCourseId();
@@ -109,11 +109,11 @@ const updateResource = (id: number) => {
                 </span>
             </template>
         </el-dialog>
-        <TablePage :common="{ courseId }" :fetch-data="getCourseResource" emptyDes="本课程暂无公告">
+        <TablePage :common="{ courseId }" :fetch-data="getCourseNotice" emptyDes="本课程暂无公告">
             <template v-slot:tableColumns>
-                <el-table-column prop="title" label="公告名称" width="140" />
-                <el-table-column prop="content" label="内容" width="280" />
-                <el-table-column label="操作">
+                <el-table-column prop="title" label="公告名称" min-width="140" />
+                <el-table-column prop="content" label="内容" min-width="280" />
+                <el-table-column label="操作" min-width="300">
                     <template #default="scope">
                         <el-button
                             type="success"
