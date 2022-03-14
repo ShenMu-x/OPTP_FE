@@ -48,7 +48,6 @@ export const getCourseAttendRecords: (params: {
 
 // 创建签到
 interface createAttendReq {
-    secretKey: string,
     courseId: number,
     duration: number,
     name: string,

@@ -12,7 +12,6 @@ const courseId = getCourseId();
 
 
 const form = reactive({
-    secretKey: '',
     courseId,
     duration: 60 * 5,
     name: ''
@@ -21,7 +20,6 @@ const { isDialogOpen, openDialog, closeDialog } = useDialog()
 const loadRecordsFile = () => { }
 const submit = () => {
     createAttend({
-        secretKey: form.secretKey,
         courseId,
         duration: form.duration,
         name: form.name,
