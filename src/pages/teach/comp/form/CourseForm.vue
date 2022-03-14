@@ -61,7 +61,6 @@ const getParams = () => {
 const commitForm = () => {
     refEl.value.validate((isPass: boolean, obj: any) => {
         if (isPass) {
-            // todo
             comfirm({
                 type: 'submit',
                 refEl: refEl,

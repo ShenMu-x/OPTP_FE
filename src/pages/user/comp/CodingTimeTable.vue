@@ -31,10 +31,6 @@ const data = reactive<{
 
 onMounted(() => {
   let myChart = echarts.init(document.getElementById('statEChartCt') as HTMLElement);
-  // const listData = [
-  //   ['2022-01-02', 1333],
-  //   ['2022-01-03', 33],
-  // ];
 
   getMyCodingTime()
     .then(res => {

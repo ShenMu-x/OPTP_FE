@@ -14,7 +14,7 @@ const props = defineProps<{
 const refFormEl = ref();
 
 const editHandler = () => {
-
+    refFormEl?.value?.commitForm();
 }
 
 const deleteHandler = () => {

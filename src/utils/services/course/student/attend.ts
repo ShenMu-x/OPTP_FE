@@ -1,7 +1,7 @@
 import _axios from '../../axios';
 import { ResType, ListRes } from '../../type';
 import { fmatTime } from '../../../helper'
-import { packError, packPageRes } from "../../pack";
+import { packEmptyData, packError, packPageRes } from "../../pack";
 
 export type AttendType = {
     checkinRecordId: number,
@@ -56,5 +56,18 @@ export const getMyAttendRecordsInProgress: () => ResType<Array<AttendType>> = ()
                 data: res.data?.data?.map((item: any) => packStudAttend(item)) || [],
             }
         })
+        .catch(packError)
+}
+
+// 学生签到 WAITFIX 参数有误
+export const checkAttend: (params: { courseID: number }) => ResType<''> = (params) => {
+    return _axios({
+        method: 'POST',
+        url: '/web/checkin/check',
+        data: {
+            courseId: params.courseID,
+        }
+    })
+        .then(packEmptyData)
         .catch(packError)
 }

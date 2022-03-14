@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
+import { ElMessageBox } from 'element-plus';
 import { Plus, Download } from '@element-plus/icons-vue';
 import TablePage from '@/components/common/TablePage.vue';
 import BtnCt from '../common/BtnCt.vue';
-import BtnBlue from '../common/BtnBlue.vue';
 import { getCourseId, useDialog } from './logic';
-import { createAttend, getCourseAttendRecords } from "@/utils/services";
+import { createAttend, getCourseAttendRecords, deleteAttend } from "@/utils/services";
+import { showSuccessWrap } from '@/utils/helper';
 
 const courseId = getCourseId();
 
-const load = () => { }
 
 const form = reactive({
     secretKey: '',
@@ -17,24 +17,49 @@ const form = reactive({
     duration: 60 * 5,
     name: ''
 })
-
-const {
-    isDialogOpen,
-    openDialog,
-    closeDialog
-} = useDialog()
+const { isDialogOpen, openDialog, closeDialog } = useDialog()
+const loadRecordsFile = () => { }
 const submit = () => {
     createAttend({
         secretKey: form.secretKey,
         courseId,
         duration: form.duration,
         name: form.name,
+    }).then(res => {
+        console.log(res);
+        if (res.code === 0) closeDialog()
     })
-    // closeDialog()
 }
 const cancle = () => {
-    // reset
     closeDialog();
+}
+
+const refTableEl = ref();
+
+const deleteHandler = (checkinRecordId: number) => {
+    ElMessageBox.confirm(
+        '删除确认？',
+        '删除签到确认',
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'success',
+            lockScroll: false,
+        }
+    ).then(_ => {
+        deleteAttend(checkinRecordId)
+            .then(res => {
+                if (res.code === 0) {
+                    showSuccessWrap({
+                        text: '删除签到成功',
+                        closeCb: () => {
+                            console.log(refTableEl.value)
+                            refTableEl?.value?.reload()
+                        }
+                    })
+                }
+            })
+    })
 }
 
 </script>
@@ -44,7 +69,7 @@ const cancle = () => {
         <BtnCt>
             <template v-slot:botton>
                 <el-button :icon="Plus" @click="openDialog">新建签到</el-button>
-                <el-button :icon="Download" @click="load">下载签到表</el-button>
+                <el-button :icon="Download" @click="loadRecordsFile">下载签到表</el-button>
             </template>
         </BtnCt>
         <el-dialog v-model="isDialogOpen" title="新建签到">
@@ -63,21 +88,19 @@ const cancle = () => {
                 </span>
             </template>
         </el-dialog>
-        <TablePage :common="{ courseId }" :fetch-data="getCourseAttendRecords">
+        <TablePage :common="{ courseId }" :fetch-data="getCourseAttendRecords" ref="refTableEl">
             <template v-slot:tableColumns>
                 <el-table-column prop="name" label="签到名称" min-width="100" />
                 <el-table-column prop="createAt" label="创建时间" min-width="180" />
                 <el-table-column prop="total" label="应签到人数" min-width="100" />
                 <el-table-column prop="actual" label="实际签到人数" min-width="100" />
-                <el-table-column label="查看详情" min-width="140">
-                    <template #default="scope">
-                        <!-- WAITFIX -->
-                        <BtnBlue>详情</BtnBlue>
-                    </template>
-                </el-table-column>
                 <el-table-column label="操作">
                     <template #default="scope">
-                        <el-button type="danger" size="default">删除</el-button>
+                        <el-button
+                            type="danger"
+                            size="default"
+                            @click="deleteHandler(scope.row.checkinRecordId)"
+                        >删除</el-button>
                     </template>
                 </el-table-column>
             </template>

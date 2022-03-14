@@ -4,10 +4,10 @@ import { fmatTime } from '../../../helper'
 import { packError, packEmptyData, packPageRes } from "../../pack";
 
 export type AttendCourse = {
+    checkinRecordId: number,
     courseId: number,
     actual: number, // 实际签到人数
     total: number, // 预期签到人数
-    checkinRecordId: number,
     createAt: string,
     isCheckIn: boolean,
     name: string
@@ -22,10 +22,10 @@ export const packAttendInfo = (item: {
     is_checkin?: boolean;
     name: string;
 }) => ({
+    checkinRecordId: item.checkin_record_id,
     courseId: item.course_id,
     actual: item.actual,
     total: item.total,
-    checkinRecordId: item.checkin_record_id,
     createAt: fmatTime(item.created_at),
     isCheckIn: item.is_checkin,
     name: item.name
@@ -58,6 +58,16 @@ export const createAttend = (params: createAttendReq) => {
         method: "POST",
         url: "/web/checkin/start",
         data: params,
+    })
+        .then(packEmptyData)
+        .catch(packError)
+}
+// 删除签到 
+export const deleteAttend = (id: number) => {
+    return _axios({
+        method: "DELETE",
+        url: "/web/checkin/record",
+        params: { checkInRecordId: id },
     })
         .then(packEmptyData)
         .catch(packError)

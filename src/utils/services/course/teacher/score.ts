@@ -54,3 +54,17 @@ export const getCourseScoreList: (params: {
         .then(res => packPageRes(res, packScore))
         .catch(packError)
 }
+
+// 获取课程学生编码时间表
+export const getCourseCodingTime: (params: { courseId: number, pageSize: number,pageCurrent: number }) => ResType<any> = (params) => {
+    return _axios({
+        method: 'GET',
+        url: `/web/coding_time/${params.courseId}`,
+        params: {
+            pageCurrent: params.pageCurrent,
+            pageSize: params.pageSize
+        }
+    })
+        .then(res => ({ code: 0 }))
+        .catch(packError)
+}

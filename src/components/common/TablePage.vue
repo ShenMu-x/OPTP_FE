@@ -17,7 +17,8 @@ const {
     total,
     list,
     fetch,
-    setCommon
+    setCommon,
+    reload
 } = usePageList({
     size: pageSize,
     fetchData: props.fetchData,
@@ -33,6 +34,10 @@ watch(common, (newV, _) => {
 if (props.common !== {}) {
     fetch(1);
 }
+
+defineExpose({
+    reload
+})
 </script>
 
 <template>

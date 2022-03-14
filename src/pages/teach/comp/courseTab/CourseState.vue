@@ -4,7 +4,7 @@ import { Download } from '@element-plus/icons-vue';
 import BtnCt from '../common/BtnCt.vue';
 import ScorePage from '../common/ScorePage.vue';
 import BtnBlue from '../common/BtnBlue.vue';
-import { exportScoreFile } from '@/utils/services';
+import { exportScoreFile, getCourseCodingTime } from '@/utils/services';
 import { getCourseId, useDialog } from './logic';
 
 const courseId = getCourseId();
@@ -52,7 +52,7 @@ const getCoding = (userId: number) => {
                     <template v-slot:columns>
                         <el-table-column label="操作">
                             <template #default="scope">
-                                 <BtnBlue @click="getCoding(scope?.row?.userId)">详情</BtnBlue>
+                                <BtnBlue @click="getCoding(scope?.row?.userId)">详情</BtnBlue>
                             </template>
                         </el-table-column>
                     </template>

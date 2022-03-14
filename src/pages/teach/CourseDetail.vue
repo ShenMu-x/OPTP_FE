@@ -32,7 +32,7 @@ getCourseById({ courseId })
     }
   })
 
-const focusTab = ref('lab');
+const focusTab = ref('score');
 
 </script>
 
@@ -49,7 +49,7 @@ const focusTab = ref('lab');
       <el-tab-pane label="成员管理" name="manage">
         <CourseStud />
       </el-tab-pane>
-      <el-tab-pane label="课程资源" name="resource">
+      <el-tab-pane label="课程公告" name="notice">
         <CourseNotice />
       </el-tab-pane>
       <el-tab-pane label="课程问答" name="qa">

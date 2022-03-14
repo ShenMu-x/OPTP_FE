@@ -4,11 +4,12 @@ import { useRoute, useRouter } from 'vue-router';
 import PageHeader from '@/components/common/PageHeader.vue';
 import TablePage from '@/components/common/TablePage.vue';
 import Tag from '@/components/common/Tag.vue';
-import { useCountDownSec } from '@/utils/helper';
-import { getMyAttendRecords, getMyAttendRecordsInProgress, AttendType } from '@/utils/services';
+import { getMyAttendRecords, getMyAttendRecordsInProgress, AttendType, checkAttend } from '@/utils/services';
 
 const check = (id: number) => {
-    console.log(id)
+    checkAttend({
+        courseID: 1
+    });
 }
 
 const data = ref<Array<AttendType>>([])
@@ -21,15 +22,6 @@ getMyAttendRecordsInProgress()
             data.value = []
         }
     })
-
-
-// const {
-//     startDown,
-//     current
-// } = useCountDownSec(4);
-// onMounted(() => {
-//     startDown()
-// })
 
 </script>
 
