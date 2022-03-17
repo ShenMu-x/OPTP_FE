@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { Edit } from '@element-plus/icons-vue';
 import UploadAvatar from '@/components/common/UploadAvatar.vue';
+import BtnBlue from '@/components/common/BtnBlue.vue';
 import { editUserAvatar } from '@/utils/services';
 import { rmToken, rmRole } from '@/utils/storage';
 import { showSuccessWrap } from '@/utils/helper';
@@ -47,11 +48,11 @@ const handlerLogOut = () => {
         <div class="info">
             <div class="name">
                 {{ store.state.user.realName }}
-                <el-button type="text" :icon="Edit" class="editBtn" @click="handlerEditInfo">编辑个人信息</el-button>
+                <el-button  type="text" :icon="Edit" class="editBtn" @click="handlerEditInfo">编辑个人信息</el-button>
             </div>
             <div>{{ props.role === 1 ? '职工号' : '学号' }}: {{ store.state.user.num }}</div>
         </div>
-        <el-button type="primary" @click="handlerLogOut">退出登录</el-button>
+        <BtnBlue size="large" @click="handlerLogOut">退出登录</BtnBlue>
     </div>
 </template>
 

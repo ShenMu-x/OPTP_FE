@@ -33,25 +33,25 @@ getCourseById({ courseId })
   <PageHeader content="课程管理" />
   <div class="courseCtrCt">
     <el-tabs tab-position="left" class="demo-tabs" v-model="focusTab">
-      <el-tab-pane label="课程实验" name="lab">
+      <el-tab-pane label="课程实验" name="lab" lazy>
         <CourseLab />
       </el-tab-pane>
-      <el-tab-pane label="签到管理" name="attend">
+      <el-tab-pane label="签到管理" name="attend" lazy>
         <CourseAttend />
       </el-tab-pane>
-      <el-tab-pane label="成员管理" name="manage">
+      <el-tab-pane label="成员管理" name="manage" lazy>
         <CourseStud />
       </el-tab-pane>
-      <el-tab-pane label="课程公告" name="notice">
+      <el-tab-pane label="课程公告" name="notice" lazy>
         <CourseNotice />
       </el-tab-pane>
-      <el-tab-pane label="课程问答" name="qa">
+      <el-tab-pane label="课程问答" name="qa" lazy>
         <QACard class="qaCt" type="course" />
       </el-tab-pane>
-      <el-tab-pane label="课程信息" name="info">
+      <el-tab-pane label="课程信息" name="info" lazy>
         <CourseInfo :course="course" />
       </el-tab-pane>
-      <el-tab-pane label="学生成绩" name="score">
+      <el-tab-pane label="学生成绩" name="score" lazy>
         <CourseState />
       </el-tab-pane>
     </el-tabs>
