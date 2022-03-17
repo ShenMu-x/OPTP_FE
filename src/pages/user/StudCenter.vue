@@ -2,17 +2,29 @@
 import { ref } from 'vue';
 import { Search } from '@element-plus/icons-vue';
 import UserInfo from './comp/UserInfo.vue';
-import CodingTimeTable from './comp/CodingTimeTable.vue';
+import CodingTimeTable from '@/components/common/CodingTimeTable.vue';
+import BtnBlue from '@/components/common/BtnBlue.vue';
 import CourseList from '@/components/course/CourseList.vue';
 import LabList from '@/components/lab/LabList.vue';
-import { getAllCourseList, getStudyCourseList } from '@/utils/services';
+import { getAllCourseList, getStudyCourseList, getMyCodingTime } from '@/utils/services';
 
 const activeName = ref('coursesCreated');
 const handleTabClick = (obj: any) => {
     console.log(obj?.props?.label);
 };
 
-const searchId = ref('');
+const searchText = ref('');
+const search = () => {
+    console.log(searchText.value);
+}
+
+const list = ref<any>([]);
+getMyCodingTime()
+    .then(res => {
+        if (res.code === 0) {
+            list.value = res.data?.codingTime;
+        }
+    })
 </script>
 
 <template>
@@ -21,7 +33,7 @@ const searchId = ref('');
         <UserInfo class="infoCard" />
         <div class="stats">
             <div class="statTitle">我的编码时长统计（min）</div>
-            <CodingTimeTable />
+            <CodingTimeTable :list="list" />
         </div>
         <div class="coursesInfo">
             <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
@@ -30,9 +42,9 @@ const searchId = ref('');
                 </el-tab-pane>
                 <el-tab-pane label="搜索课程" name="coursesJoin">
                     <div class="btnCt">
-                        <el-button>查询</el-button>
+                        <BtnBlue class="searchBtn" @click="search" size="large">查询</BtnBlue>
                         <el-input
-                            v-model="searchId"
+                            v-model="searchText"
                             size="large"
                             placeholder="输入课程ID查询"
                             :prefix-icon="Search"
@@ -76,5 +88,9 @@ const searchId = ref('');
 
 .btnCt {
     display: flex;
+    width: 300px;
+    .searchBtn {
+        margin-right: 20px;
+    }
 }
 </style>

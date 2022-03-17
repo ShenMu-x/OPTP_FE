@@ -14,8 +14,8 @@ const toEditIDE = () => {
 }
 const lab = ref<labType>(props.info);
 
-getLabById(props.info.labId).then(res=> {
-    if(res.code === 0) {
+getLabById(props.info.labId).then(res => {
+    if (res.code === 0) {
         console.log('lab info', lab.value)
         lab.value = res.data as labType;
     }
@@ -29,20 +29,17 @@ getLabById(props.info.labId).then(res=> {
         <div class="infoCt">
             <div class="title">实验情况</div>
             <div class="card">
-                <div class="info">
-                    创建日期:
-                    <el-tag class="infoTag" type="info">{{ lab.createdAt }}</el-tag>
-                </div>
-                <div class="info">
-                    截止日期:
-                    <el-tag class="infoTag" type="info">{{ lab.deadLine }}</el-tag>
-                </div>
+                <div class="info">创建日期:
+                    <span class="infoText">{{ lab.createdAt }}</span>
+                    
+                    </div>
+                <div class="info">截止日期:
+                    <span class="infoText">{{ lab.deadLine }}</span>
+                    </div>
                 <div class="info">
                     状态:
-                    <Tag v-if="lab.isFinish" type="green" greenText="已完成"/>
-                    <!-- <div  class="tag done"></div> -->
-                    <!-- <div v-else class="tag undo">未完成</div> -->
-                    <Tag v-else type="red" redText="未完成"/>
+                    <Tag v-if="lab.isFinish" type="green" :isText="true" class="infoText" greenText="已完成" />
+                    <Tag v-else type="red" :isText="true" class="infoText" redText="未完成" />
                 </div>
             </div>
         </div>
@@ -89,27 +86,9 @@ getLabById(props.info.labId).then(res=> {
 .info {
     margin-right: 10px;
     display: inline-block;
-    .infoTag {
-        font-size: 14px;
-        line-height: 16px;
-    }
-}
 
-.infoCt {
-    .tag {
-        padding: 0 5px;
-        font-size: 14px;
+    .infoText {
         font-weight: bold;
-        display: inline-block;
-        color: #fff;
-
-        &.done {
-            background-color: #41da86;
-        }
-
-        &.undo {
-            background-color: #e96262;
-        }
     }
 }
 

@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { ref, reactive, toRefs, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 import PageHeader from '@/components/common/PageHeader.vue';
 import TablePage from '@/components/common/TablePage.vue';
 import Tag from '@/components/common/Tag.vue';

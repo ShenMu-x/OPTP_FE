@@ -4,12 +4,10 @@ import { ElMessageBox } from 'element-plus';
 import { Plus, Download } from '@element-plus/icons-vue';
 import TablePage from '@/components/common/TablePage.vue';
 import BtnCt from '../common/BtnCt.vue';
-import { getCourseId, useDialog } from './logic';
 import { createAttend, getCourseAttendRecords, deleteAttend } from "@/utils/services";
-import { showSuccessWrap } from '@/utils/helper';
+import { showSuccessWrap, useCourseId, useDialog } from '@/utils/helper';
 
-const courseId = getCourseId();
-
+const courseId = useCourseId();
 
 const form = reactive({
     courseId,

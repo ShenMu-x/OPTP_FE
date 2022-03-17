@@ -9,22 +9,22 @@ import type {
 } from 'element-plus/es/components/upload/src/upload.type'
 import { UPLOAD_PDF_URL, UPLOAD_ATTACHMENT_URL, wrapHeaderWithToken, showFailWrap } from '@/utils/helper';
 
-const props = defineProps<{
-    type: 'attachment' | 'report',
-    afterUpload?: any
-}>();
-
 let allowType = ref(['application/msword', 'application/pdf', 'text/plain'])
 let fileType = ref(['doc', 'pdf', 'txt']);
 let name = ref('attachment');
 let uploadUrl = UPLOAD_ATTACHMENT_URL;
-// 类型区分
+
+const props = defineProps<{
+    type: 'attachment' | 'report',
+    afterUpload?: any
+}>();
 if (props.type === 'report') {
     allowType.value = ['application/pdf'];
     fileType.value = ['pdf']
     uploadUrl = UPLOAD_PDF_URL;
     name.value = "pdf"
 }
+const refUploadEl = ref();
 
 const handleFileSuccess = (res: { code: number, data: { url: string } }, file: UploadFile) => {
     emits('update', res.data.url);
@@ -41,7 +41,6 @@ const handleRemove = () => {
 }
 
 const beforeFileUpload = (file: ElFile) => {
-    console.log(file)
     const isAllow = allowType.value.includes(file.type);
     const isLt2M = file.size / 1024 / 1024 < 2
 
@@ -61,12 +60,18 @@ const handleExceed = () => {
 }
 
 const emits = defineEmits(['update']);
-
+const resetUpload = () => {
+    refUploadEl?.value?.clearFiles()
+}
+defineExpose({
+    resetUpload,
+})
 </script>
 
 <template>
     <el-upload
         drag
+        ref="refUploadEl"
         :limit="1"
         :action="uploadUrl"
         :headers="wrapHeaderWithToken()"

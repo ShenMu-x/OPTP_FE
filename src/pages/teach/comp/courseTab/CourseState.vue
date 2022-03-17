@@ -1,33 +1,15 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { Download } from '@element-plus/icons-vue';
+import { Download, Pointer } from '@element-plus/icons-vue';
 import BtnCt from '../common/BtnCt.vue';
-import ScorePage from '../common/ScorePage.vue';
-import BtnBlue from '../common/BtnBlue.vue';
-import { exportScoreFile, getCourseCodingTime } from '@/utils/services';
-import { getCourseId, useDialog } from './logic';
+import TablePage from '@/components/common/TablePage.vue';
+import { exportScoreFile, getCourseScoreList } from '@/utils/services';
+import { useCourseId, useDirect } from '@/utils/helper';
 
-const courseId = getCourseId();
-
-const {
-    isDialogOpen,
-    openDialog,
-    closeDialog
-} = useDialog()
-
-const focusTab = ref('score');
-const changeTab = () => {
-    console.log(focusTab.value);
-}
-
+const courseId = useCourseId();
+const { directTo } = useDirect();
 const exportScore = () => {
     exportScoreFile(courseId);
 }
-
-const getCoding = (userId: number) => {
-    openDialog();
-}
-
 </script>
 
 <template>
@@ -35,30 +17,18 @@ const getCoding = (userId: number) => {
         <BtnCt>
             <template v-slot:botton>
                 <el-button :icon="Download" @click="exportScore">导出成绩列表</el-button>
+                <el-button :icon="Pointer" @click="directTo(`/teach/course_coding/${courseId}`)">查看学生编码活跃度</el-button>
             </template>
         </BtnCt>
-        <el-tabs tab-position="top" v-model="focusTab" @tab-click="changeTab">
-            <el-tab-pane label="学生成绩" name="score">
-                <ScorePage>
-                    <template v-slot:columns>
-                        <el-table-column prop="shouldCheckIn" label="应签到数" width="200" />
-                        <el-table-column prop="ackCheckIn" label="已签到数" width="200" />
-                        <el-table-column prop="avgScore" label="平均成绩" width="200" />
-                    </template>
-                </ScorePage>
-            </el-tab-pane>
-            <el-tab-pane label="学生编码活跃度" name="active">
-                <ScorePage>
-                    <template v-slot:columns>
-                        <el-table-column label="操作">
-                            <template #default="scope">
-                                <BtnBlue @click="getCoding(scope?.row?.userId)">详情</BtnBlue>
-                            </template>
-                        </el-table-column>
-                    </template>
-                </ScorePage>
-            </el-tab-pane>
-        </el-tabs>
+        <TablePage :common="{ courseId }" :fetch-data="getCourseScoreList" text="本课程暂无学生">
+            <template v-slot:tableColumns>
+                <el-table-column prop="num" label="学生学号" min-width="180" />
+                <el-table-column prop="realName" label="学生姓名" min-width="140" />
+                <el-table-column prop="shouldCheckIn" label="应签到数" min-width="140" />
+                <el-table-column prop="ackCheckIn" label="已签到数" min-width="140" />
+                <el-table-column prop="avgScore" label="平均成绩" min-width="140" />
+            </template>
+        </TablePage>
     </div>
 </template>
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import SCNULogo from '../assets/scnulogo.png';
 import { HomeFilled, ArrowLeftBold, Avatar, AlarmClock } from '@element-plus/icons-vue';
 
@@ -31,8 +31,8 @@ const commandHandler = (command: string) => {
             <template #dropdown>
                 <el-dropdown-menu>
                     <el-dropdown-item :icon="HomeFilled" command="toHome">我的主页</el-dropdown-item>
-                    <el-dropdown-item :icon="ArrowLeftBold" command="logout">退出登录</el-dropdown-item>
                     <el-dropdown-item :icon="AlarmClock" command="attend">我的签到</el-dropdown-item>
+                    <el-dropdown-item :icon="ArrowLeftBold" command="logout">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
             </template>
         </el-dropdown>

@@ -18,16 +18,18 @@ const clickLabDrawer = () => {
 }
 
 const finishStatus = ref(info.value?.isFinish);
-const updateStatus = (val: boolean) => {
-    console.log(val)
-    finishStatus.value = val;
-    // 申请完成实验
+const updateStatus = () => {
+    // 申请实验状态改变
 }
 </script>
 
 <template>
     <div class="labCt">
-        <div class="title">{{ info.title }}</div>
+        <div class="titleCt">
+            <div class="title">{{ info.title }}</div>
+            <Tag :type="info.isFinish ? 'red' : 'green'" />
+        </div>
+
         <div class="content">{{ info.content }}</div>
         <div class="info">
             <div class="leftCt">
@@ -37,7 +39,7 @@ const updateStatus = (val: boolean) => {
                     <div :title="info.deadLine">截止日期: {{ fmatDate(info.deadLine || "") }}</div>
                     <div class="course" title="info.isBelongTo">所属课程: {{ info.courseName }}</div>
                 </template>
-                <!-- 小屏兼容 -->
+                <!-- 小屏兼容(底部信息收起) -->
                 <template class="infoIcon">
                     <el-tooltip placement="top">
                         <template #content>
@@ -99,12 +101,18 @@ const updateStatus = (val: boolean) => {
     align-items: flex-start;
     padding: 20px;
 }
-.title {
-    text-align: left;
-    font-size: 22px;
-    font-weight: 600;
-    height: 40px;
+
+.titleCt {
+    display: flex;
+    .title {
+        text-align: left;
+        font-size: 22px;
+        font-weight: 600;
+        height: 40px;
+        margin-right: 20px;
+    }
 }
+
 .content {
     margin: 10px 0;
     font-size: 14px;

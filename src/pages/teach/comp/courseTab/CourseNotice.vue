@@ -4,15 +4,11 @@ import { Plus } from '@element-plus/icons-vue';
 import TablePage from '@/components/common/TablePage.vue';
 import UploadFile from '@/components/common/UploadFile.vue';
 import BtnCt from '../common/BtnCt.vue';
-import { comfirm } from '@/utils/helper';
+import { comfirm, useCourseId, useDialog } from '@/utils/helper';
 import { getCourseNotice, createNotice } from '@/utils/services';
-import { getCourseId } from './logic';
 
-const courseId = getCourseId();
-
-const isDialogOpen = ref(false);
-const openDialog = () => { isDialogOpen.value = true; }
-const closeDialog = () => { isDialogOpen.value = false; }
+const courseId = useCourseId();
+const { isDialogOpen, openDialog, closeDialog } = useDialog()
 
 const refEl = ref();
 const form = reactive({

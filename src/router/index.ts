@@ -43,6 +43,10 @@ const routes = [
                 component: () => import('../pages/teach/CourseDetail.vue')
             },
             {
+                path: '/teach/course_coding/:courseId',
+                component: () => import('../pages/teach/CourseCodingTime.vue')
+            },
+            {
                 path: '/teach/lab_detail/:labId',
                 component: () => import('../pages/teach/LabDetail.vue')
             },
@@ -60,6 +64,7 @@ const routes = [
             },
             {
                 path: '/404',
+                name: 'not_found',
                 component: () => import('../pages/404.vue')
             },
         ]

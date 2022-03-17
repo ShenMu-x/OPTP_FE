@@ -2,8 +2,8 @@
 import { ref } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 import BtnCt from '../common/BtnCt.vue';
-import BtnBlue from '../common/BtnBlue.vue';
 import StudPage from '../common/StudPage.vue';
+import BtnBlue from '@/components/common/BtnBlue.vue';
 import { useDialog, useCourseId } from '@/utils/helper';
 import { checkJoinInApplication } from '@/utils/services';
 

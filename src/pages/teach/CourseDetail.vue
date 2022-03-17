@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { ref, reactive, toRefs } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 import PageHeader from '@/components/common/PageHeader.vue';
 import CourseInfo from './comp/courseTab/CourseInfo.vue';
 import CourseLab from './comp/courseTab/CourseLab.vue';
@@ -9,31 +8,25 @@ import CourseNotice from './comp/courseTab/CourseNotice.vue';
 import CourseState from './comp/courseTab/CourseState.vue';
 import CourseAttend from './comp/courseTab/courseAttend.vue';
 import QACard from '@/components/comment/QACard.vue';
+import { useCourseId, useDirect } from '@/utils/helper';
 import { getCourseById } from '@/utils/services';
 import { CourseType } from '@/type';
 
-const route = useRoute();
-const router = useRouter();
-
-const courseId = parseInt(route.params?.courseId?.[0]);
+const { redirect } = useDirect();
+const courseId = useCourseId();
 const data = reactive<{
   course: CourseType
 }>({
   course: {},
 })
 const { course } = toRefs(data);
+const focusTab = ref('lab');
 
 getCourseById({ courseId })
   .then(res => {
-    if (res.code === 0 && res.data) {
-      Object.assign(data.course, res.data);
-    } else {
-      router.replace('/404');
-    }
+    if (res.code === 0 && res.data) Object.assign(data.course, res.data);
+    else redirect('/404');
   })
-
-const focusTab = ref('score');
-
 </script>
 
 <template>

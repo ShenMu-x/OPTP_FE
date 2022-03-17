@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { Plus } from '@element-plus/icons-vue';
 import TablePage from '@/components/common/TablePage.vue';
-import BtnBlue from '../common/BtnBlue.vue';
+import BtnBlue from '@/components/common/BtnBlue.vue';
 import LabForm from '../form/LabForm.vue';
 import BtnCt from '../common/BtnCt.vue';
 import { createLab, getLabs } from '@/utils/services';

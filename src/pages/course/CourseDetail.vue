@@ -77,7 +77,6 @@ getCourseById({ courseId })
                 <CourseItem :course="course" class="courseCard" :heightAuto="true"/>
                 <TeacherInfo :info="info" class="teachInfo"/>
             </div>
-
             <ChooseCourse :courseId="course.courseId ?? 0" :secret="course.secretKey ?? ''" />
         </div>
     </div>

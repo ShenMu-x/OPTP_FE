@@ -11,7 +11,6 @@ import {
 import { HeatmapChart } from 'echarts/charts';
 import { CanvasRenderer } from 'echarts/renderers';
 import getConfig from './timeTableConfig';
-import { getMyCodingTime } from '@/utils/services';
 
 echarts.use([
   TitleComponent,
@@ -23,30 +22,22 @@ echarts.use([
   CanvasRenderer
 ]);
 
-const data = reactive<{
-  timeList: any[]
-}>({
-  timeList: []
-});
-
+const props = defineProps<{ list: any[], id?: string }>();
+const id = `echartEl_${props.id}` ?? 'echartEl';
 onMounted(() => {
-  let myChart = echarts.init(document.getElementById('statEChartCt') as HTMLElement);
-
-  getMyCodingTime()
-    .then(res => {
-      data.timeList = res.data?.codingTime ?? [];
-      getConfig && myChart.setOption(getConfig(data.timeList));
-    });
+  let myChart = echarts.init(document.getElementById(id) as HTMLElement);
+  getConfig && myChart.setOption(getConfig(props.list ?? []));
 })
 
 </script>
 
 <template>
-  <div id="statEChartCt"></div>
+  <div :id="id" class="eChartCt"></div>
 </template>
 
 <style lang="less" scoped>
-#statEChartCt {
+.eChartCt {
+  position: relative;
   height: 180px;
   width: 100%;
 }

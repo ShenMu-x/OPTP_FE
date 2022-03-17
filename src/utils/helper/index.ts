@@ -4,7 +4,7 @@ export * from './scrollToPos';
 export * from './getHeaderToken';
 export * from './getUploadUrl';
 export * from './comfirm';
-export * from './config';
+export * from './default';
 export * from './format';
 export * from './loading';
 export * from './list';

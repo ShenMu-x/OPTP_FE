@@ -1,10 +1,9 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { useRoute } from 'vue-router';
 import UploadFile from '@/components/common/UploadFile.vue';
 import { labRules } from './rule';
-import { labType } from '@/type';
+import { useCourseId } from '@/utils/helper';
 import { createLab } from '@/utils/services';
 
 // 创建实验表格
@@ -14,9 +13,9 @@ const props = defineProps<{
 }>();
 
 const formLabelWidth = '80px';
+const refUploadEl = ref();
 
-const route = useRoute();
-const courseId = parseInt(route.params?.courseId?.[0]);
+const courseId = useCourseId();
 const form = reactive({
     title: '',
     content: '',
@@ -71,6 +70,7 @@ const commitForm = () => {
 
 const resetForm = () => {
     refFormEl.value.resetFields();
+    refUploadEl?.value?.resetUpload();
 }
 
 defineExpose({
@@ -98,7 +98,7 @@ defineExpose({
             <el-date-picker v-model="form.deadLine" type="datetime" placeholder="请选择截止时间"></el-date-picker>
         </el-form-item>
         <el-form-item label="上传附件" :label-width="formLabelWidth">
-            <UploadFile type="attachment" @update="updateFile" />
+            <UploadFile type="attachment" @update="updateFile" ref="refUploadEl" />
         </el-form-item>
     </el-form>
 </template>
