@@ -2,8 +2,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { getToken } from "../utils/storage";
 import { isTeacher } from "@/utils/helper/is";
-import store from '../store';
-import { getUserInfoByTk } from '@/utils/services';
 
 const routes = [
     {
@@ -90,10 +88,6 @@ router.beforeEach((to, from, next) => {
         next('./login');
         return;
     }
-    // 根据token获取用户信息
-    if (!store.state.user.userId && token) {
-        getUserInfoByTk()
-    };
 
     // 职能区分
     if (to.path === '/') {

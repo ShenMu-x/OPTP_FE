@@ -1,7 +1,6 @@
 import _axios from "./axios";
 import { ResType } from "./type";
 import { userInfoType } from '@/type';
-import store from '@/store';
 import { packError, packEmptyData } from "./pack";
 
 export const getUserInfoByTk: () => ResType<userInfoType> = () => {
@@ -9,22 +8,18 @@ export const getUserInfoByTk: () => ResType<userInfoType> = () => {
         method: 'GET',
         url: '/web/user'
     }).then(value => {
-        const res = {
-            email: value.data.data.email,
-            userId: value.data.data.user_id,
-            num: value.data.data.num,
-            realName: value.data.data.real_name,
-            avatarUrl: value.data.data.avatar_url,
-            gender: value.data.data.gender,
-            major: value.data.data.major,
-            organization: value.data.data.organization
-        };
-        store.commit('setUserInfo', {
-            user: res
-        })
         return {
             code: value.data.code,
-            data: res
+            data: {
+                email: value.data.data.email,
+                userId: value.data.data.user_id,
+                num: value.data.data.num,
+                realName: value.data.data.real_name,
+                avatarUrl: value.data.data.avatar_url,
+                gender: value.data.data.gender,
+                major: value.data.data.major,
+                organization: value.data.data.organization
+            }
         }
     }).catch(packError)
 }

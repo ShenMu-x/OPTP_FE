@@ -3,7 +3,6 @@ import { ref } from 'vue';
 import { Search } from '@element-plus/icons-vue';
 import UserInfo from './comp/UserInfo.vue';
 import CodingTimeTable from '@/components/common/CodingTimeTable.vue';
-import BtnBlue from '@/components/common/BtnBlue.vue';
 import CourseList from '@/components/course/CourseList.vue';
 import LabList from '@/components/lab/LabList.vue';
 import { getAllCourseList, getStudyCourseList, getMyCodingTime } from '@/utils/services';

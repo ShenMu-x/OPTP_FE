@@ -1,6 +1,6 @@
 import { useRoute, useRouter } from 'vue-router';
-import { useStore } from 'vuex';
-import { ref, onBeforeUnmount } from 'vue';
+import { ref, onBeforeUnmount, inject } from 'vue';
+import { userInfoType } from '@/type';
 
 export const useCourseId = () => {
     const route = useRoute();
@@ -12,9 +12,22 @@ export const useLabId = () => {
     return parseInt(route?.params?.labId?.[0]);
 }
 
-export const useUserId = () => {
-    const store = useStore();
-    return parseInt(store?.state?.user?.userId);
+export const useUser = () => {
+    const user: userInfoType = inject('user', {});
+    const editUserInfo: (params: {
+        realName?: string,
+        major?: string,
+        organization?: string,
+        gender?: number
+    }) => void
+        = inject('editUserInfo', (params) => { });
+    const editAvatar: (url: string) => void
+        = inject('editAvatar', (url) => { });
+    return {
+        user,
+        editAvatar,
+        editUserInfo
+    };
 }
 
 export const useDialog = () => {

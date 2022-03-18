@@ -6,7 +6,7 @@ import { login } from '@/utils/services';
 import { isTeacher, showFailWrap, useDirect } from '@/utils/helper';
 
 const refFomeEl = ref();
-const user = reactive({
+const form = reactive({
   userName: '',
   password: ''
 });
@@ -19,7 +19,7 @@ const loginHandler = () => {
     // 通过表单检查
     if (isPass) {
       // 请求登录
-      login({ username: user.userName, password: user.password })
+      login({ username: form.userName, password: form.password })
         .then(res => {
           if (res.code === 0) {
             isTeacher() ?
@@ -38,14 +38,14 @@ const loginHandler = () => {
   <Layout>
     <div class="formCt loginFormCt">
       <p class="formTitle">请登录您的账号</p>
-      <el-form label-position="top" class="loginForm" :model="user" :rules="rules" ref="refFomeEl">
+      <el-form label-position="top" class="loginForm" :model="form" :rules="rules" ref="refFomeEl">
         <el-form-item label="邮箱" size="large" prop="userName">
-          <el-input v-model="user.userName" placeholder="请输入邮箱"></el-input>
+          <el-input v-model="form.userName" placeholder="请输入邮箱"></el-input>
         </el-form-item>
         <el-form-item label="密码" size="large" class="psw" prop="password">
           <span class="textBtnInForm forgetBtn" @click="directTo('/auth')">忘记密码?</span>
           <el-input
-            v-model="user.password"
+            v-model="form.password"
             show-password
             placeholder="请输入密码"
             @keyup.enter="loginHandler"

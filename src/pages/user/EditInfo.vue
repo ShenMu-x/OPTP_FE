@@ -1,23 +1,19 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import { DArrowLeft } from '@element-plus/icons-vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
 import { userInfoType } from '@/type';
 import { editRules } from './rules';
-import { comfirm } from '@/utils/helper';
+import { comfirm, useUser, useDirect } from '@/utils/helper';
 import { editUserInfo } from '@/utils/services';
 
-const router = useRouter();
-const store = useStore();
 const refEl = ref();
+const { routerBack } = useDirect();
+const { user, editUserInfo: editUser } = useUser();
+const editModel = reactive<userInfoType>({ ...user });
+const rules = reactive(editRules);
 
-const back = () => {
-    router.back()
-}
-
-const refresh = () => {
-    store.commit('editUserInfo', {
+const updateUserInject = () => {
+    editUser?.({
         realName: editModel.realName,
         major: editModel.major,
         organization: editModel.organization,
@@ -30,8 +26,8 @@ const editHandler = () => {
         type: 'edit',
         refEl: refEl,
         onSuccTipClose: () => {
-            refresh();
-            back();
+            updateUserInject();
+            routerBack();
         },
         fetchApi: editUserInfo,
         params: {
@@ -42,15 +38,11 @@ const editHandler = () => {
         }
     });
 }
-
-
-const editModel = reactive<userInfoType>({ ...store.state.user });
-const rules = reactive(editRules);
 </script>
 
 <template>
     <div class="editCt">
-        <el-button class="returnBtn" :icon="DArrowLeft" type="text" @click="back">返回</el-button>
+        <el-button class="returnBtn" :icon="DArrowLeft" type="text" @click="routerBack">返回</el-button>
         <p class="formTitle">修改信息</p>
         <el-form
             label-position="top"

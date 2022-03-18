@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-import { computed, ref, toRefs } from 'vue';
+import { computed, ref, toRefs, inject } from 'vue';
 import Avatar from '../common/Avatar.vue';
 import CommentInput from './CommentInput.vue';
 import ReplyComment from './ReplyComment.vue';
-import { commentItemType } from '@/type';
-import { useFolder } from '@/utils/helper';
-import { getUserId } from './logic';
+import { commentItemType, userInfoType } from '@/type';
+import { useFolder, useUser } from '@/utils/helper';
 
 const props = defineProps<{
     commentItem?: commentItemType,
@@ -14,12 +13,13 @@ const props = defineProps<{
     deleteReply?: any,
 }>();
 const { commentItem, isLast } = toRefs(props);
+const { user } = useUser();
 const refInputEl = ref();
 
 const { isFold: isReplyPanelShow, click: handleReplyPanel } = useFolder();// 回复面板
 const { isFold: isListShow, click: handleListPanel } = useFolder();// 评论列表面板
 
-const isSelf = computed(() => getUserId() === commentItem?.value?.comment.userId);
+const isSelf = computed(() => user.userId === commentItem?.value?.comment.userId);
 const hasReplys = computed(() => (commentItem?.value?.replyComments?.length || 0) > 0)
 
 const submitCb = () => {

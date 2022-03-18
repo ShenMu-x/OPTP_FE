@@ -4,8 +4,7 @@ import { CaretRight } from '@element-plus/icons-vue';
 import Avatar from '../common/Avatar.vue';
 import CommentInput from './CommentInput.vue';
 import { commentReplyType } from '@/type';
-import { useFolder, fmatDate } from '@/utils/helper';
-import { getUserId } from './logic';
+import { useFolder, useUser } from '@/utils/helper';
 
 const props = defineProps<{
     reply?: commentReplyType,
@@ -15,11 +14,12 @@ const props = defineProps<{
 }>();
 
 const { reply, isLast } = toRefs(props);
+const { user } = useUser();
 const refInputEl = ref();
 
 // 回复面板
 const { isFold: isReplyPanelShow, click: handleReplyPanel } = useFolder();
-const isSelf = computed(() => getUserId() === reply?.value?.userId);
+const isSelf = computed(() => user.userId === reply?.value?.userId);
 
 const submitCb = () => {
     refInputEl?.value?.resetInput();

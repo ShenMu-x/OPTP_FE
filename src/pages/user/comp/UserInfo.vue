@@ -1,56 +1,44 @@
 <script lang="ts" setup>
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
 import { Edit } from '@element-plus/icons-vue';
 import UploadAvatar from '@/components/common/UploadAvatar.vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
 import { editUserAvatar } from '@/utils/services';
 import { rmToken, rmRole } from '@/utils/storage';
-import { showSuccessWrap } from '@/utils/helper';
+import { showSuccessWrap, useDirect, useUser } from '@/utils/helper';
 
 const props = defineProps<{
     role?: 0 | 1;
 }>();
+const { directTo } = useDirect();
+const { user, editAvatar } = useUser();
 
-const router = useRouter();
-const store = useStore();
-
-const handlerEditInfo = () => {
-    // 跳转修改用户信息页
-    router.push('/edit_info');
-}
-
-const refreshAvatar = (url: string) => {
-    store.commit('setUserAvatar', { url })
-}
-
+const handlerEditInfo = () => directTo('/edit_info');
+const updateUserInject = (url: string) => editAvatar(url)
 const handlerLogOut = () => {
     rmToken();
     rmRole();
-
     showSuccessWrap({
         text: '已退出登录,跳转登录页...',
         closeCb: () => {
-            router.push('/login')
+            directTo('/login')
         }
     })
 };
-
 </script>
 
 <template>
     <div class="userInfoCt">
         <UploadAvatar
-            :avatarUrl="store.state.user.avatarUrl"
+            :avatarUrl="user.avatarUrl"
             :submit-api="editUserAvatar"
-            :afterSubmit="refreshAvatar"
+            :afterSubmit="updateUserInject"
         />
         <div class="info">
             <div class="name">
-                {{ store.state.user.realName }}
-                <el-button  type="text" :icon="Edit" class="editBtn" @click="handlerEditInfo">编辑个人信息</el-button>
+                {{ user.realName }}
+                <el-button type="text" :icon="Edit" class="editBtn" @click="handlerEditInfo">编辑个人信息</el-button>
             </div>
-            <div>{{ props.role === 1 ? '职工号' : '学号' }}: {{ store.state.user.num }}</div>
+            <div>{{ props.role === 1 ? '职工号' : '学号' }}: {{ user.num }}</div>
         </div>
         <BtnBlue size="large" @click="handlerLogOut">退出登录</BtnBlue>
     </div>
