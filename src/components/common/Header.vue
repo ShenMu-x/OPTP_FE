@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import SCNULogo from '../assets/scnulogo.png';
+import SCNULogo from '../../assets/scnulogo.png';
 import { HomeFilled, ArrowLeftBold, Avatar, AlarmClock } from '@element-plus/icons-vue';
 import { isTeacher, useDirect } from '@/utils/helper';
 

@@ -41,7 +41,6 @@ export const usePageList = ({
     }
 
     const fetch = (nowPage: number) => {
-        console.log('fetch')
         isLoading.value = true;
         showLoading();
         fetchData?.({
@@ -54,7 +53,6 @@ export const usePageList = ({
                     data.list = res.data.records;
                     total.value = res.data.pageInfo.total;
                 } else {
-                    console.log('fetchData', res);
                     showFailWrap({ text: failText })
                 }
                 if (isReload.value) {

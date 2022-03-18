@@ -16,7 +16,6 @@ const lab = ref<labType>(props.info);
 
 getLabById(props.info.labId).then(res => {
     if (res.code === 0) {
-        console.log('lab info', lab.value)
         lab.value = res.data as labType;
     }
 })

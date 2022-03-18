@@ -51,9 +51,8 @@ const beforeAvatarUpload = (file: ElFile) => {
 }
 
 const isHover = ref(false);
-const hover = () => { console.log('hover'), isHover.value = true; }
+const hover = () => { isHover.value = true; }
 const leave = () => { isHover.value = false; }
-const hover1 = () => { console.log('??') }
 </script>
 
 <template>

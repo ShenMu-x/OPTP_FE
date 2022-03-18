@@ -22,7 +22,6 @@ const submit = () => {
         duration: form.duration,
         name: form.name,
     }).then(res => {
-        console.log(res);
         if (res.code === 0) closeDialog()
     })
 }
@@ -49,7 +48,6 @@ const deleteHandler = (checkinRecordId: number) => {
                     showSuccessWrap({
                         text: '删除签到成功',
                         closeCb: () => {
-                            console.log(refTableEl.value)
                             refTableEl?.value?.reload()
                         }
                     })

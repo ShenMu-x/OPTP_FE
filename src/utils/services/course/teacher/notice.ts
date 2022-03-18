@@ -8,7 +8,6 @@ export const createNotice: (params: {
     content: string,
     attachmentUrl: String
 }) => ResType<''> = (params) => {
-    console.log('params', params);
     return _axios({
         method: "POST",
         url: "/web/course/resource",

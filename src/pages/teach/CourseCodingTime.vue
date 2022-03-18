@@ -34,16 +34,11 @@ onMounted(() => {
 defineExpose({
     reload
 })
-
-const click = () => {
-    console.log(total, list.value)
-}
-
 </script>
 
 <template>
     <PageHeader content="学生编码活跃度" />
-    <div class="listCt" ref="refEl" @click="click">
+    <div class="listCt" ref="refEl">
         <template v-if="list?.length > 0">
             <CodingTableItem v-for="item in list" :key="item.userId" :info="item" />
         </template>

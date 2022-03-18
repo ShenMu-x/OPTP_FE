@@ -1,19 +1,15 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { useRoute, useRouter } from 'vue-router';
 import UploadFile from '@/components/common/UploadFile.vue';
 import { labRules } from '../form/rule';
+import { showFailWrap, showSuccessWrap, useLabId, useDirect } from '@/utils/helper';
 import { editLab, getLabById, deleteLab } from '@/utils/services';
-import { showFailWrap, showSuccessWrap } from '@/utils/helper';
 
-// 修改实验表格
 const refFormEl = ref();
 const formLabelWidth = '80px';
-
-const route = useRoute();
-const router = useRouter();
-const labId = parseInt(route.params?.labId?.[0]);
+const labId = useLabId();
+const { redirect, routerBack } = useDirect();
 
 const form = reactive({
     title: '',
@@ -29,7 +25,7 @@ getLabById(labId).then(res => {
         form.attachmentUrl = res.data?.attachmentUrl || "";
         form.deadLine = res.data?.deadLine || "";
     } else if (res.code === -19999) {
-        router.replace('/404');
+        redirect('/404');
     }
 })
 
@@ -92,7 +88,7 @@ const deleteHandler = () => {
                     if (value.code === 0) {
                         showSuccessWrap({
                             text: '实验已删除',
-                            closeCb: () => { router.back() }
+                            closeCb: () => { routerBack() }
                         })
                     } else {
                         showFailWrap({
@@ -107,9 +103,6 @@ const deleteHandler = () => {
         })
 }
 
-const resetForm = () => {
-    refFormEl.value.resetFields();
-}
 </script>
 
 <template>

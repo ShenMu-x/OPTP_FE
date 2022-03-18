@@ -1,6 +1,6 @@
 import { useStore } from 'vuex';
 
-export const getUserId = (userId?: number) => {
+export const getUserId = () => {
     const store = useStore();
     return store.state?.user?.userId;
 }

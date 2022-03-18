@@ -40,8 +40,6 @@ export const publishCourseComment: (params: {
     commentText: string,
     replyId: number,
 }) => ResType<ListRes<any>> = (params) => {
-    console.log('comment', params);
-    // return Promise.resolve({ code: 0 })
     return _axios({
         method: "POST",
         url: `/web/comment/course`,

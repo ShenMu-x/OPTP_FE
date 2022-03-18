@@ -7,6 +7,11 @@ export const useCourseId = () => {
     return parseInt(route?.params?.courseId?.[0]);
 }
 
+export const useLabId = () => {
+    const route = useRoute();
+    return parseInt(route?.params?.labId?.[0]);
+}
+
 export const useUserId = () => {
     const store = useStore();
     return parseInt(store?.state?.user?.userId);
@@ -34,11 +39,9 @@ export const useCountDownSec = (start: number) => {
         isCounting.value = false;
     }
     const startDown = (num?: number) => {
-        console.log('startDown', current.value)
         destoryDown();
         current.value = num || start;
         ins = setInterval(() => {
-            console.log('downIt', current.value)
             current.value > 0 ? (current.value -= 1) : destoryDown()
         }, 1000);
     }

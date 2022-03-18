@@ -1,42 +1,25 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
 import { Plus } from '@element-plus/icons-vue';
 import TablePage from '@/components/common/TablePage.vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
 import LabForm from '../form/LabForm.vue';
 import BtnCt from '../common/BtnCt.vue';
+import { isBefore, useCourseId, useDirect, useDialog } from '@/utils/helper';
 import { createLab, getLabs } from '@/utils/services';
-import { isBefore } from '@/utils/helper';
 
-const router = useRouter();
-const route = useRoute();
-const courseId = parseInt(route.params?.courseId?.[0]);
-
-const dialogFormVisible = ref(false);
 const refLabFormEl = ref();
-const closeDialog = () => {
-    dialogFormVisible.value = false;
-}
-const openDialog = () => {
-    dialogFormVisible.value = true;
-}
-const resetHandler = () => {
-    closeDialog();
-}
-const commitHandler = () => {
-    refLabFormEl.value?.commitForm?.();
-}
+const courseId = useCourseId();
+const { directTo } = useDirect();
+const { isDialogOpen, openDialog, closeDialog } = useDialog();
 
 const toCreateLab = () => {
     refLabFormEl.value?.resetForm?.()
     openDialog()
 }
-
-const toDetail = (labId: number) => {
-    router.push(`/teach/lab_detail/${labId}`)
+const commitHandler = () => {
+    refLabFormEl.value?.commitForm?.();
 }
-
 </script>
 
 <template>
@@ -46,11 +29,11 @@ const toDetail = (labId: number) => {
                 <el-button :icon="Plus" @click="toCreateLab">创建实验</el-button>
             </template>
         </BtnCt>
-        <el-dialog v-model="dialogFormVisible" title="创建实验">
+        <el-dialog v-model="isDialogOpen" title="创建实验">
             <LabForm ref="refLabFormEl" :closeDialog="closeDialog" :fetch-api="createLab" />
             <template #footer>
                 <span class="dialog-footer">
-                    <el-button @click="resetHandler">取消</el-button>
+                    <el-button @click="closeDialog">取消</el-button>
                     <el-button type="primary" @click="commitHandler">提交</el-button>
                 </span>
             </template>
@@ -68,7 +51,7 @@ const toDetail = (labId: number) => {
                 </el-table-column>
                 <el-table-column label="操作">
                     <template #default="scope">
-                        <BtnBlue @click="toDetail(scope?.row?.labId)">详情</BtnBlue>
+                        <BtnBlue @click="directTo(`/teach/lab_detail/${scope?.row?.labId}`)">详情</BtnBlue>
                     </template>
                 </el-table-column>
             </template>

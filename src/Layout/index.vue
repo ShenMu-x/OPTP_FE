@@ -1,14 +1,13 @@
 <script lang="ts" setup>
-import Footer from '../components/Footer.vue';
-import Header from '../components/Header.vue';
+import FooterVue from '@/components/common/Footer.vue';
+import HeaderVue from '@/components/common/Header.vue';
 </script>
-
 
 <template>
     <div class="layout">
-        <Header />
+        <HeaderVue />
         <main class="layoutMain"><router-view /></main>
-        <Footer />
+        <FooterVue />
     </div>
 </template>
 
@@ -18,11 +17,8 @@ import Header from '../components/Header.vue';
     flex-direction: column;
     background-color: #e9eef3;
     min-height: 100%;
-
     .layoutMain {
         position: relative;
     }
 }
-
-
 </style>

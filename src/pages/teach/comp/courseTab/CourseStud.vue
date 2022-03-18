@@ -15,17 +15,12 @@ const importList = () => {
 }
 
 const focusTab = ref('member');
-const changeTab = () => {
-    console.log(focusTab.value);
-}
-
 const check = (userId: number, isPass: boolean) => {
-    console.log('check', userId, isPass);
-    // checkJoinInApplication({
-    //     courseId,
-    //     stuIds: [userId],
-    //     isPermitted: isPass,
-    // })
+    checkJoinInApplication({
+        courseId,
+        stuIds: [userId],
+        isPermitted: isPass,
+    })
 }
 </script>
 
@@ -44,7 +39,7 @@ const check = (userId: number, isPass: boolean) => {
                 </span>
             </template>
         </el-dialog>
-        <el-tabs tab-position="top" v-model="focusTab" @tab-click="changeTab">
+        <el-tabs tab-position="top" v-model="focusTab">
             <el-tab-pane label="课程成员列表" name="member">
                 <StudPage type="default"></StudPage>
             </el-tab-pane>

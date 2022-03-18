@@ -9,10 +9,6 @@ import LabList from '@/components/lab/LabList.vue';
 import { getAllCourseList, getStudyCourseList, getMyCodingTime } from '@/utils/services';
 
 const activeName = ref('coursesCreated');
-const handleTabClick = (obj: any) => {
-    console.log(obj?.props?.label);
-};
-
 const searchText = ref('');
 const search = () => {
     console.log(searchText.value);
@@ -36,13 +32,13 @@ getMyCodingTime()
             <CodingTimeTable :list="list" />
         </div>
         <div class="coursesInfo">
-            <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
+            <el-tabs v-model="activeName" type="card">
                 <el-tab-pane label="我的课程" name="coursesCreated">
                     <CourseList :fetchData="getStudyCourseList" />
                 </el-tab-pane>
-                <el-tab-pane label="搜索课程" name="coursesJoin">
+                <el-tab-pane label="搜索课程" name="coursesJoin" lazy>
                     <div class="btnCt">
-                        <BtnBlue class="searchBtn" @click="search" size="large">查询</BtnBlue>
+                        <el-button class="searchBtn" @click="search" size="large">查询</el-button>
                         <el-input
                             v-model="searchText"
                             size="large"
@@ -52,7 +48,7 @@ getMyCodingTime()
                     </div>
                     <CourseList :fetchData="getAllCourseList" />
                 </el-tab-pane>
-                <el-tab-pane label="我的实验" name="experiments">
+                <el-tab-pane label="我的实验" name="experiments" lazy>
                     <LabList />
                 </el-tab-pane>
             </el-tabs>
