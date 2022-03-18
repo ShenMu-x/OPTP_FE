@@ -1,20 +1,14 @@
 <script lang="ts" setup>
-import { useRouter } from 'vue-router';
+import { useDirect } from '@/utils/helper';
 
-const router = useRouter();
-
-const goBack = () => {
-  router.go(-1)
-}
-
+const { routerBack } = useDirect();
 const props = defineProps<{
   content: string
 }>()
-
 </script>
 
 <template>
-  <el-page-header :content="props.content" title="返回" @back="goBack" class="header" />
+  <el-page-header :content="props.content" title="返回" @back="routerBack" class="header" />
 </template>
 
 <style lang="less" scoped>
