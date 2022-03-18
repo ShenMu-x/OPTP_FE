@@ -17,7 +17,6 @@
         "node": "^14.16.1",
         "vue": "^3.2.25",
         "vue-router": "^4.0.12",
-        "vuex": "4",
         "yarn": "^1.22.17"
     },
     "devDependencies": {
