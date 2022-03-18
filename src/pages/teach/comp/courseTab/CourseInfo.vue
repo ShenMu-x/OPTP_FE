@@ -1,13 +1,12 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import CourseForm from '../form/CourseForm.vue';
 import { CourseType } from '@/type';
 import { ElMessageBox } from 'element-plus';
-import { showSuccessWrap } from '@/utils/helper';
+import { showSuccessWrap, useDirect } from '@/utils/helper';
 import { deleteCourse, editCourse } from '@/utils/services';
 
-const router = useRouter();
+const { routerBack } = useDirect();
 const props = defineProps<{
     course: CourseType
 }>();
@@ -35,7 +34,7 @@ const deleteHandler = () => {
                 if (value.code === 0) {
                     showSuccessWrap({
                         text: '课程已删除',
-                        closeCb: () => { router.back() }
+                        closeCb: () => { routerBack() }
                     })
                 }
             })
@@ -44,7 +43,6 @@ const deleteHandler = () => {
         .catch(() => {
             // 取消删除
         })
-
 }
 
 </script>

@@ -5,7 +5,7 @@ import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
 import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
-import { langs, CodeLangs, mapTemplate } from '@/utils/option/lang';
+import { langs, CodeLangs, mapTemplate } from '@/utils/option';
 // https://github.com/vitejs/vite/discussions/1791
 // https://juejin.cn/post/6933463466111926286
 

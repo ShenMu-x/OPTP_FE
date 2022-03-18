@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import SCNULogo from '../assets/scnulogo.png';
 import { HomeFilled, ArrowLeftBold, Avatar, AlarmClock } from '@element-plus/icons-vue';
+import { isTeacher, useDirect } from '@/utils/helper';
 
-const router = useRouter();
-
+const { directTo } = useDirect();
 const commandHandler = (command: string) => {
     if (command === 'toHome') {
-        router.push('/');
+        directTo('/');
     } else if (command === 'logout') {
         // console.log('logout')
     } else if (command === 'attend') {
-        router.push('/user_attend')
+        directTo('/user_attend')
     }
 }
 
@@ -31,7 +30,7 @@ const commandHandler = (command: string) => {
             <template #dropdown>
                 <el-dropdown-menu>
                     <el-dropdown-item :icon="HomeFilled" command="toHome">我的主页</el-dropdown-item>
-                    <el-dropdown-item :icon="AlarmClock" command="attend">我的签到</el-dropdown-item>
+                    <el-dropdown-item :icon="AlarmClock" command="attend" v-if="!isTeacher()">我的签到</el-dropdown-item>
                     <el-dropdown-item :icon="ArrowLeftBold" command="logout">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
             </template>
@@ -48,7 +47,6 @@ const commandHandler = (command: string) => {
     align-items: center;
     background-color: #002d54;
 }
-
 .logo {
     margin-right: 40px;
     img {
@@ -56,7 +54,6 @@ const commandHandler = (command: string) => {
         margin-top: 5px;
     }
 }
-
 .title {
     flex: 1;
     margin-right: 10px;
@@ -65,7 +62,6 @@ const commandHandler = (command: string) => {
     font-size: 20px;
     letter-spacing: 5px;
 }
-
 .avatar {
     height: 32px;
     width: 32px;

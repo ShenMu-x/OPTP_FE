@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useCreateEditor } from './manaco';
-import { langs, CodeLangs } from '@/utils/option/lang';
+import { langs, CodeLangs } from '@/utils/option';
 
 const refEditorEl = ref();
 

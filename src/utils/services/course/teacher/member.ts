@@ -29,7 +29,7 @@ export const packStud = (item: any) => ({
 })
 
 // 获取申请加入的学生列表
-export const getReqJoinInStudents: (params: {
+export const getAskForAdmissionStudents: (params: {
     courseId: number,
     pageSize: number,
     pageCurrent: number

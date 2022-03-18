@@ -7,7 +7,8 @@ import type {
     ElUploadProgressEvent,
     ElFile,
 } from 'element-plus/es/components/upload/src/upload.type'
-import { UPLOAD_PDF_URL, UPLOAD_ATTACHMENT_URL, wrapHeaderWithToken, showFailWrap } from '@/utils/helper';
+import { wrapHeaderWithToken, showFailWrap } from '@/utils/helper';
+import { UPLOAD_PDF_URL, UPLOAD_ATTACHMENT_URL } from '@/utils/option';
 
 let allowType = ref(['application/msword', 'application/pdf', 'text/plain'])
 let fileType = ref(['doc', 'pdf', 'txt']);

@@ -61,8 +61,12 @@ export const useDirect = () => {
     const directTo = (url: string) => {
         router.push(url);
     };
+    const routerBack = () => {
+        router.back();
+    }
     return {
         redirect,
-        directTo
+        directTo,
+        routerBack
     }
 }

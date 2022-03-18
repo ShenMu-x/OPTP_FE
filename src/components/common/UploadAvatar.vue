@@ -7,7 +7,8 @@ import type {
     ElUploadProgressEvent,
     ElFile,
 } from 'element-plus/es/components/upload/src/upload.type'
-import { wrapHeaderWithToken, UPLOAD_PIC_URL, showSuccess, showFail } from '@/utils/helper';
+import { wrapHeaderWithToken, showSuccess, showFail } from '@/utils/helper';
+import { UPLOAD_PIC_URL } from '@/utils/option';
 
 const props = defineProps<{
     avatarUrl?: string,
@@ -72,7 +73,7 @@ const hover1 = () => { console.log('??') }
             <Plus style="height: 2em; width: 2em;" />
         </div>
         <div
-            :class="['maskCt',isHover ? 'mask' : 'opacity0']"
+            :class="['maskCt', isHover ? 'mask' : 'opacity0']"
             @mouseenter.stop="hover"
             @mouseleave.stop="leave"
         >

@@ -1,7 +1,7 @@
 
 import { createStore } from 'vuex';
 import { userInfoType } from '@/type';
-import { DEFAULT_AVATAR } from '@/utils/helper';
+import { DEFAULT_AVATAR } from "@/utils/option";
 
 const store = createStore({
     state() {

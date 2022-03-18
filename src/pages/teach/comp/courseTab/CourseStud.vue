@@ -46,18 +46,10 @@ const check = (userId: number, isPass: boolean) => {
         </el-dialog>
         <el-tabs tab-position="top" v-model="focusTab" @tab-click="changeTab">
             <el-tab-pane label="课程成员列表" name="member">
-                <StudPage type="default">
-                    <template v-slot:options>
-                        <el-table-column label="操作" min-width="140">
-                            <template #default="scope">
-                                <BtnBlue>详情</BtnBlue>
-                            </template>
-                        </el-table-column>
-                    </template>
-                </StudPage>
+                <StudPage type="default"></StudPage>
             </el-tab-pane>
             <el-tab-pane label="待审核学生列表" name="verify">
-                <StudPage type="verify">
+                <StudPage type="default">
                     <template v-slot:options>
                         <el-table-column label="操作" min-width="140">
                             <template #default="scope">

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { reactive, toRefs } from "vue";
-import { DEFAULT_AVATAR } from "@/utils/helper";
+import { toRefs } from "vue";
+import { DEFAULT_AVATAR } from "@/utils/option";
 
 const props = defineProps<{
     type?: 'small' | 'middle' | 'large',
