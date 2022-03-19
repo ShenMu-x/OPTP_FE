@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue-demi';
+import { ref } from 'vue';
 import { askJoinInCourse } from '@/utils/services';
 import { showFailWrap, showSuccessWrap } from '@/utils/helper';
 

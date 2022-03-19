@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { toRefs } from 'vue-demi';
+import { toRefs } from 'vue';
 import CourseItem from '@/components/course/CourseItem.vue';
 import ChooseCourse from './ChooseCourse.vue';
 import TeacherInfo from './TeacherInfo.vue';

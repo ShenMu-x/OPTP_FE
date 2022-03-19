@@ -7,5 +7,5 @@ import { fetchIdeUrl } from '@/utils/services';
 
 <template>
     <div>EDIT IDE</div>
-    <button @click="fetchIdeUrl({ labId: '1' })">click</button>
+    <button @click="fetchIdeUrl(1)">click</button>
 </template>

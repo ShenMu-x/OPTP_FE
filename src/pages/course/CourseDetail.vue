@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, toRefs } from 'vue-demi';
+import { reactive, toRefs } from 'vue';
 import PageHeader from '@/components/common/PageHeader.vue';
 import CourseItem from '@/components/course/CourseItem.vue';
 import QACard from '@/components/comment/QACard.vue';

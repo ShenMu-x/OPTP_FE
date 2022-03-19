@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue-demi';
+import { ref, onMounted } from 'vue';
 import Lab from './Lab.vue';
 import { usePageList } from '@/utils/helper';
 import { getMyLabs } from '@/utils/services';

@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import { ref } from 'vue-demi';
+import { ref } from 'vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
-import { showFailWrap, showSuccessWrap, useUserId, useDirect } from '@/utils/helper';
+import { showFailWrap, showSuccessWrap, useUser, useDirect } from '@/utils/helper';
 import { quitCourse } from '@/utils/services';
 
 const props = defineProps<{
     courseId: number,
 }>();
-
+const { user } = useUser();
 const submit = () => {
     quitCourse({
         courseId: props.courseId,
-        studentId: useUserId()
+        studentId: user.userId ?? 0
     }).then(res => {
         if (res.code === 0) {
             showSuccessWrap({
