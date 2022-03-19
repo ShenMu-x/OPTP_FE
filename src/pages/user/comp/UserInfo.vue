@@ -3,27 +3,15 @@ import { Edit } from '@element-plus/icons-vue';
 import UploadAvatar from '@/components/common/UploadAvatar.vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
 import { editUserAvatar } from '@/utils/services';
-import { rmToken, rmRole } from '@/utils/storage';
-import { showSuccessWrap, useDirect, useUser } from '@/utils/helper';
+import { useLogout, useDirect, useUser } from '@/utils/helper';
 
 const props = defineProps<{
     role?: 0 | 1;
 }>();
 const { directTo } = useDirect();
 const { user, editAvatar } = useUser();
-
 const handlerEditInfo = () => directTo('/edit_info');
 const updateUserInject = (url: string) => editAvatar(url)
-const handlerLogOut = () => {
-    rmToken();
-    rmRole();
-    showSuccessWrap({
-        text: '已退出登录,跳转登录页...',
-        closeCb: () => {
-            directTo('/login')
-        }
-    })
-};
 </script>
 
 <template>
@@ -40,7 +28,7 @@ const handlerLogOut = () => {
             </div>
             <div>{{ props.role === 1 ? '职工号' : '学号' }}: {{ user.num }}</div>
         </div>
-        <BtnBlue size="large" @click="handlerLogOut">退出登录</BtnBlue>
+        <BtnBlue size="large" @click="useLogout">退出登录</BtnBlue>
     </div>
 </template>
 

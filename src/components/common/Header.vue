@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import SCNULogo from '../../assets/scnulogo.png';
 import { HomeFilled, ArrowLeftBold, Avatar, AlarmClock } from '@element-plus/icons-vue';
-import { isTeacher, useDirect } from '@/utils/helper';
+import { isTeacher, useDirect, useLogout } from '@/utils/helper';
 
 const { directTo } = useDirect();
 const commandHandler = (command: string) => {
     if (command === 'toHome') {
         directTo('/');
     } else if (command === 'logout') {
-        // console.log('logout')
+        useLogout()
     } else if (command === 'attend') {
         directTo('/user_attend')
     }
