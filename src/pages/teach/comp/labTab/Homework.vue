@@ -1,44 +1,52 @@
 <script lang="ts" setup>
 import TablePage from '@/components/common/TablePage.vue';
-import { stuLab } from './mock';
+import { useLabId } from '@/utils/helper';
+import { getHomeworkStatus } from '@/utils/services';
+import BtnBlue from '@/components/common/BtnBlue.vue';
+import Tag from '@/components/common/Tag.vue';
 
-const showReview = (row: any) => {
-
+const labId = useLabId();
+const changeScore = (row: any) => {
+    console.log('修改成绩');
 }
 
 </script>
 
 <template>
-    <TablePage :data="stuLab" emptyDes="本课程还没有学生" >
+    <TablePage :fetchData="getHomeworkStatus" :common="{ labId }" emptyDes="本课程还没有学生">
         <template v-slot:tableColumns>
-            <el-table-column prop="uid" label="学生编号" width="140" />
-            <el-table-column prop="name" label="学生姓名" width="140" />
-            <el-table-column prop="isFinish" label="完成情况" width="140" />
-            <el-table-column prop="codeTime" label="编码时长(分钟)" width="140" />
-            <el-table-column label="查看代码">
+            <el-table-column prop="number" label="学生学号" min-width="120" />
+            <el-table-column prop="name" label="学生姓名" min-width="100" />
+            <el-table-column label="状态" min-width="100">
                 <template #default="scope">
-                    <span class="textBtn">查看</span>
+                    <Tag
+                        class="tag"
+                        type="green"
+                        :isText="true"
+                        greenText="点击下载"
+                        v-if="scope.row.isFinish"
+                    />
+                    <Tag class="tag" type="red" :isText="true" redText="尚未提交" v-else />
                 </template>
             </el-table-column>
-            <el-table-column label="实验报告">
+            <el-table-column prop="codingTime" label="编码时长(分钟)" min-width="140" />
+            <el-table-column prop="score" label="评分" min-width="60" />
+            <el-table-column label="实验报告" min-width="100">
                 <template #default="scope">
-                    <span class="textBtn">查看</span>
+                    <a :href="scope.row.reportUrl" v-if="scope.row.reportUrl">点击下载</a>
+                    <span v-else>尚未提交</span>
                 </template>
             </el-table-column>
-            <el-table-column label="实验评语">
+            <el-table-column label="实验评语" min-width="100">
                 <template #default="scope">
-                    <span class="textBtn">评语</span>
+                    <span v-if="!scope.row.comment">暂无评语</span>
+                    <BtnBlue v-else>查看评语</BtnBlue>
                 </template>
             </el-table-column>
-            <el-table-column label="实验评分">
+            <el-table-column label="操作" min-width="240">
                 <template #default="scope">
-                    <div v-if="scope.row.score >= 0">
-                        <span>{{ scope.row.score }}</span>
-                        <span class="textBtn">修改</span>
-                    </div>
-                    <div v-else>
-                        <span class="textBtn">添加成绩</span>
-                    </div>
+                    <el-button size="default" @click="changeScore(scope.row)">修改评分</el-button>
+                    <BtnBlue>查看代码</BtnBlue>
                 </template>
             </el-table-column>
         </template>
@@ -51,5 +59,9 @@ const showReview = (row: any) => {
     &:hover {
         cursor: pointer;
     }
+}
+
+.tag {
+    padding-left: 0;
 }
 </style>
