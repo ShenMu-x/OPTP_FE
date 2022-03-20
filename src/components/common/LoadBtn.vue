@@ -13,6 +13,14 @@ const clickHandler = () => {
 </script>
 
 <template>
-    <el-button v-show="props.isLoding" loading>刷新</el-button>
-    <el-button v-show="!props.isLoding" :icon="Refresh" @click="clickHandler">刷新</el-button>
+    <div>
+        <el-button v-show="props.isLoding" loading class="btn">刷新</el-button>
+        <el-button v-show="!props.isLoding" :icon="Refresh" @click="clickHandler" class="btn">刷新</el-button>
+    </div>
 </template>
+
+<style lang="less" scoped>
+.btn {
+    margin-left: 0;
+}
+</style>

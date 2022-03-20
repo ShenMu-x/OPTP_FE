@@ -5,7 +5,7 @@ import UserInfo from './comp/UserInfo.vue';
 import CourseForm from '../teach/comp/form/CourseForm.vue';
 import CourseList from '@/components/course/CourseList.vue';
 import LoadBtn from '@/components/common/LoadBtn.vue';
-import { createCourse, getUserInfoByTk, getCoursesCreated } from '@/utils/services';
+import { createCourse, getCoursesCreated } from '@/utils/services';
 import { useReloader } from '@/utils/helper';
 
 const activeTabName = ref('coursesCreated');
@@ -34,9 +34,6 @@ const {
     reloadHandler,
     finishReload,
 } = useReloader(refListEl);
-
-getUserInfoByTk()
-
 </script>
 
 <template>
@@ -50,7 +47,7 @@ getUserInfoByTk()
                 <el-tab-pane label="我的课程" name="coursesCreated">
                     <div class="btnCt">
                         <el-button :icon="Plus" @click="openDialog">创建课程</el-button>
-                        <LoadBtn @reload="reloadHandler" :is-loding="isReloading" />
+                        <LoadBtn @reload="reloadHandler" :is-loding="isReloading" class="loadButton" />
                     </div>
                     <CourseList
                         :fetchData="getCoursesCreated"
@@ -94,5 +91,9 @@ getUserInfoByTk()
 
 .btnCt {
     display: flex;
+
+    .loadButton {
+        margin-left: 12px;
+    }
 }
 </style>

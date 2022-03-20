@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch, toRef, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import CourseItem from '@/components/course/CourseItem.vue';
 import { usePageList } from '@/utils/helper';
 import { searchCourseByName } from '@/utils/services';

@@ -9,7 +9,7 @@ const props = defineProps<{
     emptyDes?: string
 }>()
 
-const pageSize = props.pageSize ?? 7;
+const pageSize = props.pageSize || 7;
 const common = toRef(props, 'common');
 
 const {

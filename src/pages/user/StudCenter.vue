@@ -2,19 +2,33 @@
 import { ref } from 'vue';
 import UserInfo from './comp/UserInfo.vue';
 import SearchPanel from './comp/SearchPanel.vue';
+import LoadBtn from '@/components/common/LoadBtn.vue';
 import CodingTimeTable from '@/components/common/CodingTimeTable.vue';
 import CourseList from '@/components/course/CourseList.vue';
 import LabList from '@/components/lab/LabList.vue';
-import { getAllCourseList, getStudyCourseList, searchCourseByName, getMyCodingTime } from '@/utils/services';
+import { useReloader } from '@/utils/helper';
+import { getStudyCourseList, getMyCodingTime } from '@/utils/services';
 
 const activeName = ref('all');
 const list = ref<any>([]);
 
+const refCreateList = ref();
+const {
+    isReloading,
+    reloadHandler,
+    finishReload,
+} = useReloader(refCreateList);
+
+const refAllList = ref();
+const {
+    isReloading: isReloadingAll,
+    reloadHandler: reloadHandlerAll,
+    finishReload: finishReloadAll,
+} = useReloader(refAllList);
+
 getMyCodingTime()
     .then(res => {
-        if (res.code === 0) {
-            list.value = res.data?.codingTime;
-        }
+        if (res.code === 0) list.value = res.data?.codingTime;
     })
 </script>
 
@@ -29,13 +43,23 @@ getMyCodingTime()
         <div class="coursesInfo">
             <el-tabs v-model="activeName" type="card">
                 <el-tab-pane label="我的课程" name="join">
-                    <CourseList :fetchData="getStudyCourseList" />
+                    <div class="btnCt">
+                        <LoadBtn @reload="reloadHandler" :is-loding="isReloading" />
+                    </div>
+                    <CourseList
+                        :fetchData="getStudyCourseList"
+                        ref="refCreateList"
+                        @reloadend="finishReload"
+                    />
                 </el-tab-pane>
                 <el-tab-pane label="搜索课程" name="all" lazy>
                     <SearchPanel />
                 </el-tab-pane>
                 <el-tab-pane label="我的实验" name="labs" lazy>
-                    <LabList />
+                    <div class="btnCt">
+                        <LoadBtn @reload="reloadHandlerAll" :is-loding="isReloadingAll" />
+                    </div>
+                    <LabList ref="refAllList" @reloadend="finishReloadAll" />
                 </el-tab-pane>
             </el-tabs>
         </div>

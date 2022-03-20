@@ -13,6 +13,7 @@ export type AttendType = {
 }
 
 export const packStudAttend = (item: {
+    courseId: number,
     course_name: string;
     secret_key: string;
     checkin_record_id: number;
@@ -22,11 +23,12 @@ export const packStudAttend = (item: {
     name: string;
 }) => ({
     checkinRecordId: item.checkin_record_id,
+    courseId: item.courseId,
     courseName: item.course_name,
     name: item.name,
     createAt: fmatTime(item.created_at),
     deadLine: fmatTime(item.dead_line),
-    isFinish: item.is_finish,
+    isFinish: item.is_finish || false,
 })
 
 interface MyAttendReq {
@@ -57,13 +59,13 @@ export const getMyAttendRecordsInProgress: () => ResType<Array<AttendType>> = ()
         .catch(packError)
 }
 
-// 学生签到 WAITFIX 参数有误
-export const checkAttend: (params: { courseID: number }) => ResType<''> = (params) => {
+// 学生签到
+export const checkAttend: (courseID: number) => ResType<''> = (courseID) => {
     return _axios({
         method: 'POST',
         url: '/web/checkin/check',
         data: {
-            courseId: params.courseID,
+            courseID,
         }
     })
         .then(packEmptyData)

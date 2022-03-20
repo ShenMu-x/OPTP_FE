@@ -9,7 +9,7 @@ const showReview = (row: any) => {
 </script>
 
 <template>
-    <TablePage :data="stuLab">
+    <TablePage :data="stuLab" emptyDes="本课程还没有学生" >
         <template v-slot:tableColumns>
             <el-table-column prop="uid" label="学生编号" width="140" />
             <el-table-column prop="name" label="学生姓名" width="140" />

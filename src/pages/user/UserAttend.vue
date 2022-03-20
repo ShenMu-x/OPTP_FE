@@ -1,25 +1,15 @@
 <script lang="ts" setup>
-import { ref, reactive, toRefs, onMounted } from 'vue';
+import { ref } from 'vue';
 import PageHeader from '@/components/common/PageHeader.vue';
 import TablePage from '@/components/common/TablePage.vue';
 import Tag from '@/components/common/Tag.vue';
 import { getMyAttendRecords, getMyAttendRecordsInProgress, AttendType, checkAttend } from '@/utils/services';
 
-const check = (id: number) => {
-    checkAttend({
-        courseID: 1
-    });
-}
-
 const data = ref<Array<AttendType>>([])
-
 getMyAttendRecordsInProgress()
     .then(res => {
-        if (res.code === 0) {
-            data.value = res.data ?? [];
-        } else {
-            data.value = []
-        }
+        if (res.code === 0) data.value = res.data || [];
+        else data.value = []
     })
 
 </script>
@@ -45,7 +35,7 @@ getMyAttendRecordsInProgress()
                         <el-button
                             type="success"
                             size="default"
-                            @click="check(scope?.row?.checkinRecordId)"
+                            @click="checkAttend(scope?.row?.courseId)"
                         >签到</el-button>
                     </template>
                 </el-table-column>

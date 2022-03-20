@@ -3,7 +3,8 @@ import { ref } from 'vue';
 import PageHeader from '@/components/common/PageHeader.vue';
 import LabEdit from './comp/labTab/LabEdit.vue';
 import Homework from './comp/labTab/Homework.vue';
-
+import Plagiarism from './comp/labTab/Plagiarism.vue';
+import ErrorLog from './comp/labTab/ErrorLog.vue';
 const focusTab = ref('info');
 </script>
 
@@ -17,8 +18,12 @@ const focusTab = ref('info');
             <el-tab-pane label="作业完成情况" name="homework">
                 <Homework />
             </el-tab-pane>
-            <el-tab-pane label="代码查重" name="plagiarism">代码查重</el-tab-pane>
-            <el-tab-pane label="编译日志失败收集" name="errorLog">编译日志失败收集</el-tab-pane>
+            <el-tab-pane label="代码查重" name="plagiarism">
+                <Plagiarism />
+            </el-tab-pane>
+            <el-tab-pane label="编译日志失败收集" name="errorLog">
+                <ErrorLog />
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
