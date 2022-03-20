@@ -3,17 +3,38 @@ import { ref } from 'vue';
 import TablePage from '@/components/common/TablePage.vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
 import Tag from '@/components/common/Tag.vue';
-import { useLabId, useDialog } from '@/utils/helper';
-import { getHomeworkStatus, setLabScore } from '@/utils/services';
+import { useLabId, useDialog, showFailWrap, showSuccessWrap } from '@/utils/helper';
+import { getHomeworkStatus, setLabScore, homeworkType } from '@/utils/services';
 
 const labId = useLabId();
 const { isDialogOpen: isScoreDialogOpen, openDialog: openScoreDialog } = useDialog();
 const common = { labId }
 const score = ref();
-const changeScore = (row: any) => {
-    console.log('修改成绩');
-    score.value = row
+const scoreInp = ref(0);
+const openScorePanel = (row: any) => {
+    score.value = row;
+    scoreInp.value = row.score;
     openScoreDialog();
+}
+const onScorePanelClose = () => {
+    score.value = {};
+    scoreInp.value = 0;
+}
+const changeScore = () => {
+    if (scoreInp.value < 0 || scoreInp.value > 100) {
+        showFailWrap({ text: '请输入合法成绩(0-100)' })
+    } else {
+        setLabScore({
+            userId: score.value?.userId,
+            score: scoreInp.value,
+            labId
+        }).then(res => {
+            if (res.code === 0) showSuccessWrap({ text: '成绩已修改' })
+            else showFailWrap({ text: '成绩修改失败，请稍后再试' })
+        })
+        console.log(scoreInp.value)
+    }
+
 }
 </script>
 
@@ -50,20 +71,61 @@ const changeScore = (row: any) => {
             </el-table-column>
             <el-table-column label="操作" min-width="240">
                 <template #default="scope">
-                    <el-button size="default" @click="changeScore(scope.row)">修改评分</el-button>
+                    <el-button size="default" @click="openScorePanel(scope.row)">修改评分</el-button>
                     <BtnBlue>查看代码</BtnBlue>
                 </template>
             </el-table-column>
         </template>
     </TablePage>
-    <el-dialog v-model="isScoreDialogOpen" title="修改学生成绩">
-        <div>修改成绩</div>
-        <div>{{ score }}</div>
+    <el-dialog v-model="isScoreDialogOpen" title="修改学生成绩" @closed="onScorePanelClose">
+        <div class="scoreDialogCt">
+            <div class="titleCt">
+                <span class="title">姓名:</span>
+                {{ score?.name }}
+            </div>
+            <div class="titleCt">
+                <span class="title">学号:</span>
+                {{ score?.number }}
+            </div>
+            <div class="titleCt">
+                <span class="title">成绩:</span>
+                <el-input
+                    type="number"
+                    :min="0"
+                    :max="100"
+                    size="default"
+                    v-model.number="scoreInp"
+                ></el-input>
+            </div>
+        </div>
+        <BtnBlue class="btn" @click="changeScore">修改成绩</BtnBlue>
     </el-dialog>
 </template>
 
 <style lang="less" scoped>
 .tag {
     padding-left: 0;
+}
+.scoreDialogCt {
+    margin: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.titleCt {
+    text-align: left;
+    display: flex;
+    align-items: center;
+    min-width: 130px;
+    flex: 1 0 130px;
+    margin-bottom: 10px;
+}
+.title {
+    width: 40px;
+    flex: 0 0 40px;
+    line-height: 20px;
+}
+
+.btn {
+    width: 100px;
 }
 </style>

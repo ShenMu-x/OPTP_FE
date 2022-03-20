@@ -1,60 +1,55 @@
 <script lang="ts" setup>
-import TablePage from '@/components/common/TablePage.vue';
+import { ref, watch } from 'vue';
 import { useLabId } from '@/utils/helper';
 import { getLabPlagiarism } from '@/utils/services';
 import BtnBlue from '@/components/common/BtnBlue.vue';
-import Tag from '@/components/common/Tag.vue';
 
 const labId = useLabId();
-const common = { labId }
-const changeScore = (row: any) => {
-    console.log('修改成绩');
+let data: any[] = [];
+const current = ref(1);
+const total = ref(0);
+const pageSize = ref(7);
+let list = ref<any[]>([]);
+const setList = () => {
+    list.value = data?.slice?.((current.value - 1) * pageSize.value, current.value * pageSize.value)
+}
+
+getLabPlagiarism(labId)
+    .then(res => {
+        if (res.code === 0) {
+            data = res.data ?? [];
+            total.value = data.length;
+            setList()
+        }
+    })
+watch(current, setList)
+
+const direct = (url: string) => {
+    location.assign(location.origin + url)
 }
 </script>
 
 <template>
-    <TablePage :fetchData="getLabPlagiarism" :common="common" emptyDes="本课程还没有学生">
-        <template v-slot:tableColumns>
-            <el-table-column prop="number" label="学生学号" min-width="120" />
-            <el-table-column prop="name" label="学生姓名" min-width="100" />
-            <el-table-column label="状态" min-width="100">
-                <template #default="scope">
-                    <Tag
-                        class="tag"
-                        type="green"
-                        :isText="true"
-                        greenText="点击下载"
-                        v-if="scope.row.isFinish"
-                    />
-                    <Tag class="tag" type="red" :isText="true" redText="尚未提交" v-else />
-                </template>
-            </el-table-column>
-            <el-table-column prop="codingTime" label="编码时长(分钟)" min-width="140" />
-            <el-table-column prop="score" label="评分" min-width="60" />
+    <div v-if="list.length">
+        <el-table :data="list" stripe highlight-current-row style="width: 100%">
+            <el-table-column prop="num1" label="学生一学号" min-width="120" />
+            <el-table-column prop="num2" label="学生二学号" min-width="120" />
+            <el-table-column prop="realName1" label="学生一姓名" min-width="120" />
+            <el-table-column prop="realName2" label="学生二姓名" min-width="120" />
+            <el-table-column prop="similarity" label="相似度" min-width="120" />
             <el-table-column label="实验报告" min-width="100">
                 <template #default="scope">
-                    <a :href="scope.row.reportUrl" v-if="scope.row.reportUrl">点击下载</a>
-                    <span v-else>尚未提交</span>
+                    <BtnBlue @click="direct(scope.row.url)">查看</BtnBlue>
                 </template>
             </el-table-column>
-            <el-table-column label="实验评语" min-width="100">
-                <template #default="scope">
-                    <span v-if="!scope.row.comment">暂无评语</span>
-                    <BtnBlue v-else>查看评语</BtnBlue>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作" min-width="240">
-                <template #default="scope">
-                    <el-button size="default" @click="changeScore(scope.row)">修改评分</el-button>
-                    <BtnBlue>查看代码</BtnBlue>
-                </template>
-            </el-table-column>
-        </template>
-    </TablePage>
+        </el-table>
+        <el-pagination
+            v-model:currentPage="current"
+            layout="prev, pager, next"
+            :total="total"
+            :page-size="pageSize"
+            hide-on-single-page
+        ></el-pagination>
+    </div>
+    <el-empty v-else description="暂无查重记录" />
 </template>
-
-<style lang="less" scoped>
-.tag {
-    padding-left: 0;
-}
-</style>

@@ -5,7 +5,7 @@ import LabEdit from './comp/labTab/LabEdit.vue';
 import Homework from './comp/labTab/Homework.vue';
 import Plagiarism from './comp/labTab/Plagiarism.vue';
 import ErrorLog from './comp/labTab/ErrorLog.vue';
-const focusTab = ref('homework');
+const focusTab = ref('info');
 </script>
 
 <template>

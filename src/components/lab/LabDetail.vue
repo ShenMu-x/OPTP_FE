@@ -5,22 +5,15 @@ import Tag from '../common/Tag.vue';
 import UploadFile from '../common/UploadFile.vue';
 import { getLabById } from '@/utils/services';
 
-const props = defineProps<{
-    info: labType
-}>();
-
-const toEditIDE = () => {
-
-}
+const props = defineProps<{ info: labType }>();
 const lab = ref<labType>(props.info);
+const ideUrl = location.origin + '/online_oj';
 
 getLabById(props.info.labId).then(res => {
     if (res.code === 0) {
         lab.value = res.data as labType;
     }
 })
-
-
 </script>
 
 <template>
@@ -28,16 +21,23 @@ getLabById(props.info.labId).then(res => {
         <div class="infoCt">
             <div class="title">实验情况</div>
             <div class="card">
-                <div class="info">创建日期:
+                <div class="info">
+                    创建日期:
                     <span class="infoText">{{ lab.createdAt }}</span>
-                    
-                    </div>
-                <div class="info">截止日期:
+                </div>
+                <div class="info">
+                    截止日期:
                     <span class="infoText">{{ lab.deadLine }}</span>
-                    </div>
+                </div>
                 <div class="info">
                     状态:
-                    <Tag v-if="lab.isFinish" type="green" :isText="true" class="infoText" greenText="已完成" />
+                    <Tag
+                        v-if="lab.isFinish"
+                        type="green"
+                        :isText="true"
+                        class="infoText"
+                        greenText="已完成"
+                    />
                     <Tag v-else type="red" :isText="true" class="infoText" redText="未完成" />
                 </div>
             </div>
@@ -49,7 +49,7 @@ getLabById(props.info.labId).then(res => {
         <div>
             <div class="title">开始实验</div>
             <div class="card">
-                <el-link v-if="lab.attachmentUrl" :href="lab.attachmentUrl" type="primary">点此进入实验</el-link>
+                <el-link v-if="ideUrl" :href="ideUrl" type="primary">点此进入实验</el-link>
             </div>
         </div>
         <div>
@@ -77,7 +77,6 @@ getLabById(props.info.labId).then(res => {
     display: flex;
     flex-direction: column;
 }
-
 .card {
     margin: 15px 10px 15px 0;
     text-align: left;
@@ -85,23 +84,13 @@ getLabById(props.info.labId).then(res => {
 .info {
     margin-right: 10px;
     display: inline-block;
-
     .infoText {
         font-weight: bold;
     }
 }
-
 .title {
     text-align: left;
     font-size: 20px;
     font-weight: bold;
-}
-
-.btn {
-    margin: 20px;
-}
-
-.uploadCard {
-    margin: 20px 0;
 }
 </style>

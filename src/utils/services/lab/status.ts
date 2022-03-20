@@ -4,7 +4,7 @@ import { fmatTime } from '../../helper';
 import { packError, packPageRes } from "../pack";
 import { labType } from '@/type';
 
-type homeworkType = {
+export type homeworkType = {
     id: number,
     labId: number,
     userId: number,
@@ -65,17 +65,36 @@ export const getHomeworkStatus: (params: req) => ResType<ListRes<homeworkType>> 
         .catch(packError)
 }
 
+const packPlagiarism = (item: { user_id_1: number; user_id_2: number; real_name_1: string; real_name_2: string; num_1: string; num_2: string; url: string; similarity: number; }) => ({
+    userId1: item.user_id_1,
+    userId2: item.user_id_2,
+    realName1: item.real_name_1,
+    realName2: item.real_name_2,
+    num1: item.num_1,
+    num2: item.num_2,
+    url: item.url,
+    similarity: item.similarity
+})
 // 获取实验编译失败记录
-export const getLabPlagiarism: (params: req) => ResType<ListRes<labType>> = (params) => {
+type plagiarismType = {
+    userId1: number,
+    userId2: number,
+    realName1: string,
+    realName2: string,
+    num1: string,
+    num2: string,
+    url: string,
+    similarity: number
+}
+export const getLabPlagiarism: (labId: number) => ResType<plagiarismType[]> = (labId) => {
     return _axios({
         method: "GET",
-        url: `/web/lab/summit/plagiarism/${params.labId}`,
-        params: {
-            pageCurrent: params.pageCurrent,
-            pageSize: params.pageSize
-        }
+        url: `/web/lab/summit/plagiarism/${labId}`,
     })
-        .then(res => packPageRes(res, packHomework))
+        .then(res => ({
+            code: 0,
+            data: res.data.data.map(packPlagiarism)
+        }))
         .catch(packError)
 }
 
