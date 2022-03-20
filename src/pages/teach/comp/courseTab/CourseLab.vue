@@ -6,7 +6,7 @@ import BtnBlue from '@/components/common/BtnBlue.vue';
 import LabForm from '../form/LabForm.vue';
 import BtnCt from '../common/BtnCt.vue';
 import { isBefore, useCourseId, useDirect, useDialog } from '@/utils/helper';
-import { createLab, getLabs } from '@/utils/services';
+import { createLab, getCourseLabList } from '@/utils/services';
 
 const refLabFormEl = ref();
 const courseId = useCourseId();
@@ -38,7 +38,7 @@ const commitHandler = () => {
                 </span>
             </template>
         </el-dialog>
-        <TablePage :common="{ courseId }" :fetch-data="getLabs">
+        <TablePage :common="{ courseId }" :fetch-data="getCourseLabList">
             <template v-slot:tableColumns>
                 <el-table-column prop="labId" label="实验ID" min-width="80" />
                 <el-table-column prop="title" label="实验名称" min-width="140" />
