@@ -18,7 +18,7 @@ export const langs = [
 export const mapTemplate = new Map([
     [
         'Python',
-        'class MyClass:\n\tdef func(self, n):\n\t\t"code used python"'
+        'class MyClass:\n\tdef func(self, n):\n\t\t'
     ],
     [
         "C++",

@@ -2,9 +2,10 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useCreateEditor } from './manaco';
 import { langs, CodeLangs } from '@/utils/option';
+import { useDirect } from '@/utils/helper'
 
 const refEditorEl = ref();
-
+const { routerBack } = useDirect();
 const language = ref(CodeLangs.Python);
 const { changeLang } = useCreateEditor({
     refEditorEl,
@@ -34,6 +35,7 @@ const textarea = ref('采用websocket实现通信');
             </el-select>
             <el-button class="btn">查看实验内容</el-button>
             <el-button class="btn">运行</el-button>
+            <el-button class="btn" @click="routerBack">返回上一页</el-button>
         </div>
         <div class="editorCt">
             <div id="editor" class="editor" ref="refEditorEl"></div>
