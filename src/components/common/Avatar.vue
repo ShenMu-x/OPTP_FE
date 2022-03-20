@@ -14,8 +14,8 @@ const { type, size, src, alt, style } = toRefs(props);
 </script>
 
 <template>
-    <div :class="`avatar avatar-${type ?? 'middle'}`" :style="style ?? ''">
-        <img :src="src ?? DEFAULT_AVATAR" :alt="alt ?? '头像'" class="avatar-image" />
+    <div :class="`avatar avatar-${type || 'middle'}`" :style="style || ''">
+        <img :src="src || DEFAULT_AVATAR" :alt="alt ?? '头像'" class="avatar-image" />
     </div>
 </template>
 
@@ -31,12 +31,10 @@ const { type, size, src, alt, style } = toRefs(props);
     height: 60px;
     width: 60px;
 }
-
 .avatar-large {
     height: 80px;
     width: 80px;
 }
-
 .avatar-image {
     width: 100%;
     height: 100%;

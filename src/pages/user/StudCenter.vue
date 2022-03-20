@@ -1,19 +1,15 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { Search } from '@element-plus/icons-vue';
 import UserInfo from './comp/UserInfo.vue';
+import SearchPanel from './comp/SearchPanel.vue';
 import CodingTimeTable from '@/components/common/CodingTimeTable.vue';
 import CourseList from '@/components/course/CourseList.vue';
 import LabList from '@/components/lab/LabList.vue';
-import { getAllCourseList, getStudyCourseList, getMyCodingTime } from '@/utils/services';
+import { getAllCourseList, getStudyCourseList, searchCourseByName, getMyCodingTime } from '@/utils/services';
 
-const activeName = ref('coursesCreated');
-const searchText = ref('');
-const search = () => {
-    console.log(searchText.value);
-}
-
+const activeName = ref('all');
 const list = ref<any>([]);
+
 getMyCodingTime()
     .then(res => {
         if (res.code === 0) {
@@ -32,22 +28,13 @@ getMyCodingTime()
         </div>
         <div class="coursesInfo">
             <el-tabs v-model="activeName" type="card">
-                <el-tab-pane label="我的课程" name="coursesCreated">
+                <el-tab-pane label="我的课程" name="join">
                     <CourseList :fetchData="getStudyCourseList" />
                 </el-tab-pane>
-                <el-tab-pane label="搜索课程" name="coursesJoin" lazy>
-                    <div class="btnCt">
-                        <el-button class="searchBtn" @click="search" size="large">查询</el-button>
-                        <el-input
-                            v-model="searchText"
-                            size="large"
-                            placeholder="输入课程ID查询"
-                            :prefix-icon="Search"
-                        ></el-input>
-                    </div>
-                    <CourseList :fetchData="getAllCourseList" />
+                <el-tab-pane label="搜索课程" name="all" lazy>
+                    <SearchPanel />
                 </el-tab-pane>
-                <el-tab-pane label="我的实验" name="experiments" lazy>
+                <el-tab-pane label="我的实验" name="labs" lazy>
                     <LabList />
                 </el-tab-pane>
             </el-tabs>
@@ -84,8 +71,5 @@ getMyCodingTime()
 .btnCt {
     display: flex;
     width: 300px;
-    .searchBtn {
-        margin-right: 20px;
-    }
 }
 </style>

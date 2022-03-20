@@ -90,13 +90,12 @@ export const useDirect = () => {
 }
 
 export const useLogout = () => {
-    const { directTo } = useDirect();
     rmToken();
     rmRole();
     showSuccessWrap({
         text: '已退出登录,跳转登录页...',
         closeCb: () => {
-            directTo('/login')
+            location.href = `${location.origin}/login`
         }
     })
 }

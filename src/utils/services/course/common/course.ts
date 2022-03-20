@@ -27,3 +27,18 @@ export const getCourseById: (params: {
         })
         .catch(packError)
 }
+
+// 根据课程名称模糊查询课程信息
+export const searchCourseByName: (params: {
+    courseName: string,
+    pageSize: number,
+    pageCurrent: number
+}) => ResType<any> = (params) => {
+    return _axios({
+        method: 'GET',
+        url: 'web/course/search',
+        params
+    })
+        .then(res => packPageRes(res, packCourse))
+        .catch(packError)
+}

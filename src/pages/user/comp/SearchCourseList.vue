@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import CourseItem from './CourseItem.vue';
+import { ref, watch, toRef, onMounted } from 'vue';
+import CourseItem from '@/components/course/CourseItem.vue';
 import { usePageList } from '@/utils/helper';
+import { searchCourseByName } from '@/utils/services';
 
 const props = defineProps<{
-    fetchData?: any,
+    keyword?: string,
 }>();
 
 const pageSize = 6;
@@ -20,26 +21,37 @@ const {
     list,
     reload,
     fetch,
+    setCommon,
 } = usePageList({
     size: pageSize,
-    fetchData: props.fetchData,
-    failText: '获取课程列表失败,请稍后再试',
+    fetchData: searchCourseByName,
+    failText: '搜索课程失败,请稍后再试',
     refEl,
-    emitReload
+    emitReload,
+    noTip: true,
+    common: { courseName: props.keyword }
 });
 
 defineExpose({
     reload
 })
 
-onMounted(() => {
-    fetch(1);
-});
+watch(props, (newV) => {
+    if (newV.keyword !== "") {
+        setCommon({ courseName: newV.keyword });
+        fetch(1)
+    }
+})
 
+onMounted(() => {
+    props.keyword && fetch(1)
+})
+
+const click = () => { console.log(props.keyword) }
 </script>
 
 <template>
-    <div class="coursesCt" ref="refEl">
+    <div class="coursesCt" ref="refEl" @click="click">
         <template v-if="list?.length > 0">
             <CourseItem v-for="item in list" :key="item.courseId" :course="item" class="courseCt" />
         </template>
