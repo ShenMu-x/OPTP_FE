@@ -9,10 +9,11 @@ const props = defineProps<{
 const fetch = props.type === 'verify' ? getAskForAdmissionStudents : getCourseStudents;
 const des = props.type === 'verify' ? '本课程暂无待审核成员' : '本课程暂无成员';
 const courseId = useCourseId();
+const common = { courseId }
 </script>
 
 <template>
-    <TablePage :common="{ courseId }" :fetch-data="fetch" :empty-des="des">
+    <TablePage :common="common" :fetch-data="fetch" :empty-des="des">
         <template v-slot:tableColumns>
             <el-table-column prop="num" label="学生学号" min-width="140" />
             <el-table-column prop="realName" label="学生姓名" min-width="140" />

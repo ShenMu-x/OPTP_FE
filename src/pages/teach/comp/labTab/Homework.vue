@@ -1,19 +1,24 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
 import TablePage from '@/components/common/TablePage.vue';
-import { useLabId } from '@/utils/helper';
-import { getHomeworkStatus } from '@/utils/services';
 import BtnBlue from '@/components/common/BtnBlue.vue';
 import Tag from '@/components/common/Tag.vue';
+import { useLabId, useDialog } from '@/utils/helper';
+import { getHomeworkStatus, setLabScore } from '@/utils/services';
 
 const labId = useLabId();
+const { isDialogOpen: isScoreDialogOpen, openDialog: openScoreDialog } = useDialog();
+const common = { labId }
+const score = ref();
 const changeScore = (row: any) => {
     console.log('修改成绩');
+    score.value = row
+    openScoreDialog();
 }
-
 </script>
 
 <template>
-    <TablePage :fetchData="getHomeworkStatus" :common="{ labId }" emptyDes="本课程还没有学生">
+    <TablePage :fetchData="getHomeworkStatus" :common="common" emptyDes="本课程还没有学生">
         <template v-slot:tableColumns>
             <el-table-column prop="number" label="学生学号" min-width="120" />
             <el-table-column prop="name" label="学生姓名" min-width="100" />
@@ -51,16 +56,13 @@ const changeScore = (row: any) => {
             </el-table-column>
         </template>
     </TablePage>
+    <el-dialog v-model="isScoreDialogOpen" title="修改学生成绩">
+        <div>修改成绩</div>
+        <div>{{ score }}</div>
+    </el-dialog>
 </template>
 
 <style lang="less" scoped>
-.textBtn {
-    color: #409eff;
-    &:hover {
-        cursor: pointer;
-    }
-}
-
 .tag {
     padding-left: 0;
 }

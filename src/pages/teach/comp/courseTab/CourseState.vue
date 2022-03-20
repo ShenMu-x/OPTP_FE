@@ -6,6 +6,7 @@ import { exportScoreFile, getCourseScoreList } from '@/utils/services';
 import { useCourseId, useDirect } from '@/utils/helper';
 
 const courseId = useCourseId();
+const common = { courseId }
 const { directTo } = useDirect();
 const exportScore = () => {
     exportScoreFile(courseId);
@@ -20,7 +21,7 @@ const exportScore = () => {
                 <el-button :icon="Pointer" @click="directTo(`/teach/course_coding/${courseId}`)">查看学生编码活跃度</el-button>
             </template>
         </BtnCt>
-        <TablePage :common="{ courseId }" :fetch-data="getCourseScoreList" text="本课程暂无学生">
+        <TablePage :common="common" :fetch-data="getCourseScoreList" text="本课程暂无学生">
             <template v-slot:tableColumns>
                 <el-table-column prop="num" label="学生学号" min-width="180" />
                 <el-table-column prop="realName" label="学生姓名" min-width="140" />

@@ -21,7 +21,7 @@ const focusTab = ref('homework');
             <el-tab-pane label="代码查重" name="plagiarism" lazy>
                 <Plagiarism />
             </el-tab-pane>
-            <el-tab-pane label="编译日志失败收集" name="errorLog" lazy>
+            <el-tab-pane label="编译日志失败收集" name="log" lazy>
                 <ErrorLog />
             </el-tab-pane>
         </el-tabs>

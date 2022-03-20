@@ -10,6 +10,7 @@ import { createLab, getCourseLabList } from '@/utils/services';
 
 const refLabFormEl = ref();
 const courseId = useCourseId();
+const common = { courseId };
 const { directTo } = useDirect();
 const { isDialogOpen, openDialog, closeDialog } = useDialog();
 
@@ -38,7 +39,7 @@ const commitHandler = () => {
                 </span>
             </template>
         </el-dialog>
-        <TablePage :common="{ courseId }" :fetch-data="getCourseLabList">
+        <TablePage :common="common" :fetch-data="getCourseLabList">
             <template v-slot:tableColumns>
                 <el-table-column prop="labId" label="实验ID" min-width="80" />
                 <el-table-column prop="title" label="实验名称" min-width="140" />

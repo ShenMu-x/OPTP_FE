@@ -102,7 +102,6 @@ const deleteHandler = () => {
             // 取消删除
         })
 }
-
 </script>
 
 <template>
@@ -127,7 +126,7 @@ const deleteHandler = () => {
             <el-date-picker v-model="form.deadLine" type="datetime" placeholder="请选择截止时间"></el-date-picker>
         </el-form-item>
         <el-form-item label="实验附件" :label-width="formLabelWidth">
-            <el-link v-if="form.attachmentUrl" :href="form.attachmentUrl" type="primary">点击下载已有附件</el-link>
+            <el-link v-if="form.attachmentUrl" :href="form.attachmentUrl" type="primary">点击下载附件</el-link>
             <div v-else>暂无附件</div>
         </el-form-item>
         <el-form-item label="更新附件" :label-width="formLabelWidth">

@@ -8,7 +8,7 @@ import { createAttend, getCourseAttendRecords, deleteAttend } from "@/utils/serv
 import { showSuccessWrap, useCourseId, useDialog } from '@/utils/helper';
 
 const courseId = useCourseId();
-
+const common = { courseId }
 const form = reactive({
     courseId,
     duration: 60 * 5,
@@ -82,7 +82,7 @@ const deleteHandler = (checkinRecordId: number) => {
                 </span>
             </template>
         </el-dialog>
-        <TablePage :common="{ courseId }" :fetch-data="getCourseAttendRecords" ref="refTableEl">
+        <TablePage :common="common" :fetch-data="getCourseAttendRecords" ref="refTableEl">
             <template v-slot:tableColumns>
                 <el-table-column prop="name" label="签到名称" min-width="100" />
                 <el-table-column prop="createAt" label="创建时间" min-width="180" />

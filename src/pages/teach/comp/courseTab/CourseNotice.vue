@@ -8,6 +8,7 @@ import { comfirm, useCourseId, useDialog } from '@/utils/helper';
 import { getCourseNotice, createNotice } from '@/utils/services';
 
 const courseId = useCourseId();
+const common = { courseId };
 const { isDialogOpen, openDialog, closeDialog } = useDialog()
 
 const refEl = ref();
@@ -105,7 +106,7 @@ const updateResource = (id: number) => {
                 </span>
             </template>
         </el-dialog>
-        <TablePage :common="{ courseId }" :fetch-data="getCourseNotice" emptyDes="本课程暂无公告">
+        <TablePage :common="common" :fetch-data="getCourseNotice" emptyDes="本课程暂无公告">
             <template v-slot:tableColumns>
                 <el-table-column prop="title" label="公告名称" min-width="140" />
                 <el-table-column prop="content" label="内容" min-width="280" />

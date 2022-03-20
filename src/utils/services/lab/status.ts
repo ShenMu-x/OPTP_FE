@@ -1,7 +1,7 @@
 import _axios from "../axios";
 import { ResType, ListRes } from "../type";
-import { fmatDate, fmatTime } from '../../helper';
-import { packError, packEmptyData, packPageRes } from "../pack";
+import { fmatTime } from '../../helper';
+import { packError, packPageRes } from "../pack";
 import { labType } from '@/type';
 
 type homeworkType = {
@@ -47,12 +47,12 @@ const packHomework = (item: {
 })
 
 // 获取学生完成情况
-interface homeworkReq {
+interface req {
     labId: number,
     pageSize: number,
     pageCurrent: number
 }
-export const getHomeworkStatus: (params: homeworkReq) => ResType<ListRes<labType>> = (params) => {
+export const getHomeworkStatus: (params: req) => ResType<ListRes<homeworkType>> = (params) => {
     return _axios({
         method: "GET",
         url: `/web/lab/summit/${params.labId}`,
@@ -62,5 +62,32 @@ export const getHomeworkStatus: (params: homeworkReq) => ResType<ListRes<labType
         }
     })
         .then(res => packPageRes(res, packHomework))
+        .catch(packError)
+}
+
+// 获取实验编译失败记录
+export const getLabPlagiarism: (params: req) => ResType<ListRes<labType>> = (params) => {
+    return _axios({
+        method: "GET",
+        url: `/web/lab/summit/plagiarism/${params.labId}`,
+        params: {
+            pageCurrent: params.pageCurrent,
+            pageSize: params.pageSize
+        }
+    })
+        .then(res => packPageRes(res, packHomework))
+        .catch(packError)
+}
+
+// 获取实验编译失败记录
+export const getLabErrorLog: (labId: number) => ResType<{ compilerErrorLog: string }> = (labId) => {
+    return _axios({
+        method: "GET",
+        url: `/web/lab/summit/compile_error_log/${labId}`,
+    })
+        .then(res => ({
+            code: 0,
+            compilerErrorLog: res.data.data.compiler_error_log
+        }))
         .catch(packError)
 }
