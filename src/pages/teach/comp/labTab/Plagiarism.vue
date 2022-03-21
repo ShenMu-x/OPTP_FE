@@ -25,7 +25,7 @@ getLabPlagiarism(labId)
 watch(current, setList)
 
 const direct = (url: string) => {
-    location.assign(location.origin + url)
+    location.assign(url)
 }
 </script>
 

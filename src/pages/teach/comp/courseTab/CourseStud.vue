@@ -3,8 +3,7 @@ import { ref } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 import BtnCt from '../common/BtnCt.vue';
 import StudPage from '../common/StudPage.vue';
-import BtnBlue from '@/components/common/BtnBlue.vue';
-import { useDialog, useCourseId } from '@/utils/helper';
+import { useDialog, useCourseId, showFailWrap } from '@/utils/helper';
 import { checkJoinInApplication } from '@/utils/services';
 
 const { isDialogOpen, openDialog, closeDialog } = useDialog()
@@ -13,6 +12,8 @@ const courseId = useCourseId();
 const importList = () => {
 
 }
+const refMemberList = ref()
+const refVerityList = ref()
 
 const focusTab = ref('member');
 const check = (userId: number, isPass: boolean) => {
@@ -20,6 +21,13 @@ const check = (userId: number, isPass: boolean) => {
         courseId,
         stuIds: [userId],
         isPermitted: isPass,
+    }).then(res => {
+        if (res.code === 0) {
+            refMemberList?.value?.reload?.();
+            refVerityList?.value?.reload?.();
+        } else {
+            showFailWrap({text: '服务出错，请稍后再试'})
+        }
     })
 }
 </script>
@@ -41,23 +49,25 @@ const check = (userId: number, isPass: boolean) => {
         </el-dialog>
         <el-tabs tab-position="top" v-model="focusTab">
             <el-tab-pane label="课程成员列表" name="member">
-                <StudPage type="default"></StudPage>
+                <StudPage type="default" ref="refMemberList"></StudPage>
             </el-tab-pane>
             <el-tab-pane label="待审核学生列表" name="verify">
-                <StudPage type="default">
+                <StudPage type="verify" ref="refVerityList">
                     <template v-slot:options>
                         <el-table-column label="操作" min-width="140">
                             <template #default="scope">
-                                <el-button
-                                    type="success"
-                                    size="default"
-                                    @click="check(scope?.row?.userId, true)"
-                                >通过</el-button>
-                                <el-button
-                                    type="danger"
-                                    size="default"
-                                    @click="check(scope?.row?.userId, false)"
-                                >拒绝</el-button>
+                                <div class="btnCt">
+                                    <el-button
+                                        type="success"
+                                        size="default"
+                                        @click="check(scope?.row?.userId, true)"
+                                    >通过</el-button>
+                                    <el-button
+                                        type="danger"
+                                        size="default"
+                                        @click="check(scope?.row?.userId, false)"
+                                    >拒绝</el-button>
+                                </div>
                             </template>
                         </el-table-column>
                     </template>
@@ -71,5 +81,9 @@ const check = (userId: number, isPass: boolean) => {
 .ct {
     margin: 20px;
     margin-top: 0;
+}
+
+.btnCt {
+    display: flex;
 }
 </style>

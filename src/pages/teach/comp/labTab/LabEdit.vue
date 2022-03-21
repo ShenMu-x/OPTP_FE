@@ -3,7 +3,7 @@ import { reactive, ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import UploadFile from '@/components/common/UploadFile.vue';
 import { labRules } from '../form/rule';
-import { showFailWrap, showSuccessWrap, useLabId, useDirect } from '@/utils/helper';
+import { showFailWrap, showSuccessWrap, useLabId, useDirect, fmatTimeFitServer } from '@/utils/helper';
 import { editLab, getLabById, deleteLab } from '@/utils/services';
 
 const refFormEl = ref();
@@ -23,7 +23,7 @@ getLabById(labId).then(res => {
         form.title = res.data?.title || "";
         form.content = res.data?.content || "";
         form.attachmentUrl = res.data?.attachmentUrl || "";
-        form.deadLine = res.data?.deadLine || "";
+        form.deadLine = fmatTimeFitServer(res.data?.deadLine || "");
     } else if (res.code === -19999) {
         redirect('/404');
     }
