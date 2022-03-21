@@ -10,7 +10,7 @@ import vue from '@vitejs/plugin-vue';
 // const prefix = `monaco-editor/esm/vs`;
 
 export default defineConfig({
-    base: './',
+    base: '/',
     plugins: [
         vue(),
     ],
