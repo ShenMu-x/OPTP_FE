@@ -1,11 +1,14 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
-import { DArrowLeft } from '@element-plus/icons-vue';
 import Layout from './index.vue';
-import { getRegisterRule } from './rules';
+import FormCt from './comp/FormCt.vue';
+import TextBtn from './comp/TextBtn.vue';
+import BtnBlue from '@/components/common/BtnBlue.vue';
+import TextReturnBtn from '@/components/common/TextReturnBtn.vue';
 import { stuRegister, teachRegister } from '@/utils/services';
-import { showFailWrap, showSuccessWrap, useCountDownSec, useDirect } from '@/utils/helper';
-import { useGetCode } from './logic'
+import { showSuccessWrap, useDirect } from '@/utils/helper';
+import { getRegisterRule } from './rules';
+import { useCountDownWrap } from './logic'
 
 const refFormEl = ref();
 const model = reactive({
@@ -25,7 +28,7 @@ const rules = reactive(getRegisterRule({
 }))
 
 const { redirect } = useDirect();
-const { current, isCounting, fetchCode } = useGetCode();
+const { current, isCounting, fetchCode } = useCountDownWrap();
 const getCode = () => {
   fetchCode(model.email)
 };
@@ -62,13 +65,8 @@ const registerHandler = () => {
 
 <template>
   <Layout>
-    <div class="formCt formCt">
-      <el-button
-        class="textBtnInForm returnBtn"
-        :icon="DArrowLeft"
-        @click="redirect('/login')"
-        type="text"
-      >返回</el-button>
+    <FormCt class="RegisterFormCt">
+      <TextReturnBtn />
       <p class="formTitle">用户注册</p>
       <el-form
         label-position="top"
@@ -89,13 +87,7 @@ const registerHandler = () => {
         <el-form-item label="验证码" prop="verificationCode">
           <div class="codeInpCt">
             <el-input class="codeInput" placeholder="请输入6位验证码" v-model="model.verificationCode" />
-            <el-button
-              class="rectBtnHover"
-              color="#002D54"
-              type="primary"
-              @click="getCode"
-              v-show="!isCounting"
-            >获取验证码</el-button>
+            <BtnBlue size="large" @click="getCode" v-show="!isCounting">获取验证码</BtnBlue>
             <el-button type="primary" disabled v-show="isCounting">{{ current }}s后重新获取</el-button>
           </div>
         </el-form-item>
@@ -123,66 +115,43 @@ const registerHandler = () => {
             <el-radio :label="1">女</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-button
-          type="primary"
-          color="#002D54"
-          class="rectBtnHover registerBtn"
-          @click="registerHandler"
-        >点击注册</el-button>
+        <BtnBlue size="large" @click="registerHandler" class="registerBtn">点击注册</BtnBlue>
         <div class="registerBtnCt">
           已有账号？
-          <span class="textBtnInForm" @click="redirect('/login')">点击登录</span>
+          <TextBtn @click="redirect('/login')">点击登录</TextBtn>
         </div>
       </el-form>
-    </div>
+    </FormCt>
   </Layout>
 </template>
 <style lang="less" scoped>
-.formCt {
+.RegisterFormCt {
   width: 60%;
   padding: 0 30px;
   margin: 25px 0;
-
   .formTitle {
+    font-size: 32px;
     margin-bottom: 20px;
   }
-
   .registerForm {
     margin-bottom: 30px;
   }
 }
-
-.returnBtn {
-  margin-top: 20px;
-  font-size: 20px;
-  justify-self: flex-start;
-  width: fit-content;
-}
-
 .codeInpCt {
   display: flex;
   width: 100%;
-
   .codeInput {
     flex: 1;
     margin-right: 40px;
   }
-}
-.forgetBtn {
-  position: absolute;
-  line-height: 22px;
-  top: -34px;
-  right: 0;
 }
 .registerBtnCt {
   font-size: 14px;
   margin-top: 10px;
   float: right;
 }
-
 .registerBtn {
   width: 100%;
-  margin-top: 40px;
-  height: 50px;
+  margin-top: 30px;
 }
 </style>

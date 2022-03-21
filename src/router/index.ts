@@ -85,7 +85,7 @@ router.beforeEach((to, from, next) => {
     let token = getToken();
     const canNoLoginPath = ['/login', '/auth', '/register'];
     if (!token && !canNoLoginPath.includes(to.path)) {
-        next('./login');
+        // next('/login');
         return;
     }
 

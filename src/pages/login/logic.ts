@@ -1,8 +1,7 @@
-import { useRouter } from 'vue-router';
 import { showFailWrap, showSuccessWrap, useCountDownSec } from '@/utils/helper';
 import { getCode } from '@/utils/services';
 
-export const useGetCode = () => {
+export const useCountDownWrap = () => {
     const { current, startDown, isCounting } = useCountDownSec(60);
 
     const fetchCode = (email: string) => {

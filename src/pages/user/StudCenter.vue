@@ -9,7 +9,7 @@ import LabList from '@/components/lab/LabList.vue';
 import { useReloader } from '@/utils/helper';
 import { getStudyCourseList, getMyCodingTime } from '@/utils/services';
 
-const activeName = ref('all');
+const activeName = ref('join');
 const list = ref<any>([]);
 
 const refCreateList = ref();

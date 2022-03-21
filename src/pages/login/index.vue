@@ -18,7 +18,6 @@
   justify-content: center;
   align-items: center;
 }
-
 .title {
   color: #ffffff;
   margin-top: 40px;
@@ -28,31 +27,5 @@
   .webName {
     font-size: 30px;
   }
-}
-</style>
-
-<style lang="less">
-.textBtnInForm {
-  font-size: 14px;
-  color: #3f9eff;
-  &:hover {
-    cursor: pointer;
-    color: #1f88f1;
-  }
-}
-
-.rectBtnHover {
-  border: 0;
-}
-
-.formTitle {
-  font-size: 32px;
-}
-
-.formCt {
-  background: #ffffff;
-  box-shadow: 0px 0px 15px 0px #504d5f;
-  display: flex;
-  flex-direction: column;
 }
 </style>

@@ -3,6 +3,7 @@ import { ref, toRef } from 'vue';
 import { InfoFilled } from '@element-plus/icons-vue';
 import LabDetail from './LabDetail.vue';
 import Tag from '../common/Tag.vue';
+import BtnBlue from '../common/BtnBlue.vue';
 import { labType } from '@/type';
 import { fmatDate } from '@/utils/helper';
 
@@ -11,12 +12,10 @@ const props = defineProps<{
 }>();
 
 const info = toRef(props, 'info');
-
 const isDrawerOpen = ref(false);
 const clickLabDrawer = () => {
     isDrawerOpen.value = !isDrawerOpen.value;
 }
-
 const finishStatus = ref(info.value?.isFinish);
 const updateStatus = () => {
     // 申请实验状态改变
@@ -80,7 +79,7 @@ const updateStatus = () => {
                 </div>
             </div>
             <div class="rightCt">
-                <el-button type="primary" class="rectBtn" @click="clickLabDrawer">进入实验</el-button>
+                <BtnBlue size="large" @click="clickLabDrawer">进入实验</BtnBlue>
             </div>
         </div>
         <el-drawer v-model="isDrawerOpen" :title="info.title" size="40%">

@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
-import { DArrowLeft } from '@element-plus/icons-vue';
-import { userInfoType } from '@/type';
-import { editRules } from './rules';
+import BtnBlue from '@/components/common/BtnBlue.vue';
+import TextReturnBtn from '@/components/common/TextReturnBtn.vue';
 import { comfirm, useUser, useDirect } from '@/utils/helper';
 import { editUserInfo } from '@/utils/services';
+import { userInfoType } from '@/type';
+import { editRules } from './rules';
 
 const refEl = ref();
 const { routerBack } = useDirect();
@@ -42,7 +43,7 @@ const editHandler = () => {
 
 <template>
     <div class="editCt">
-        <el-button class="returnBtn" :icon="DArrowLeft" type="text" @click="routerBack">返回</el-button>
+        <TextReturnBtn />
         <p class="formTitle">修改信息</p>
         <el-form
             label-position="top"
@@ -66,7 +67,7 @@ const editHandler = () => {
                     <el-radio :label="1">女</el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-button type="primary" class="editBtn" @click="editHandler">点击修改</el-button>
+            <BtnBlue size="large" class="editBtn" @click="editHandler">点击修改</BtnBlue>
         </el-form>
     </div>
 </template>
@@ -80,29 +81,13 @@ const editHandler = () => {
     background-color: #fff;
     min-height: calc(100vh - 60px - 70px - 30px);
 }
-
-.returnBtn {
-    margin-top: 20px;
-    font-size: 20px;
-    justify-self: flex-start;
-    width: fit-content;
-    font-size: 14px;
-    color: #002d54;
-    &:hover {
-        cursor: pointer;
-        color: #03437a;
-    }
-}
-
 .formTitle {
     font-size: 32px;
     margin-bottom: 20px;
 }
-
 .editInfoForm {
     padding: 10px 30px;
 }
-
 .editBtn {
     width: 100%;
     margin-top: 40px;

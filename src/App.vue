@@ -18,17 +18,4 @@
   width: 100%;
   height: 100%;
 }
-
-.rectBtn {
-  border: 0;
-  background: #002d54;
-  color: #fff;
-  &:hover,
-  &:active,
-  &:focus {
-    border: 0;
-    background: #335776;
-    color: #fff;
-  }
-}
 </style>
