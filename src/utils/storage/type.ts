@@ -1,7 +1,9 @@
-// 存储全局变量
-const LocalVal = {
+// 全局变量类型
+export const LocalVal = {
     Token: '__TOKEN',
     Role: '__Role',
 };
 
-export default LocalVal;
+export enum ConfigVal {
+    IdeUrl = '__IDEURL'
+}

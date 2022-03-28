@@ -1,17 +1,17 @@
 import _axios from "./axios"
-import { getToken } from '@/utils/storage';
 import { ResType } from "./type";
 import { packError, packEmptyData } from "./pack";
+import { dataTool } from "echarts";
 
-type IdeUrlReq = any;
-// WAITFIX
-export const fetchIdeUrl: (labId: number) => ResType<IdeUrlReq> = (params) => {
+type ideUrlReq = any;
+export const fetchIdeUrl: (labId: number) => ResType<ideUrlReq> = (labId) => {
     return _axios({
         method: 'POST',
         url: '/web/ide',
-        data: params,
-    }).then(res => {
-        console.log(res);
-        return { code: 0 }
-    }).catch(packError)
+        data: { labId },
+    }).then(res => ({
+        code: 0,
+        data: res.data.data
+    })
+    ).catch(packError)
 }

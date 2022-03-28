@@ -79,7 +79,7 @@ const updateStatus = () => {
                 </div>
             </div>
             <div class="rightCt">
-                <BtnBlue size="large" @click="clickLabDrawer">进入实验</BtnBlue>
+                <BtnBlue size="large" @click="clickLabDrawer">实验详情</BtnBlue>
             </div>
         </div>
         <el-drawer v-model="isDrawerOpen" :title="info.title" size="40%">

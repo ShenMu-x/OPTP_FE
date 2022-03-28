@@ -1,19 +1,34 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { labType } from '@/type';
+import BtnBlue from '../common/BtnBlue.vue';
 import Tag from '../common/Tag.vue';
 import UploadFile from '../common/UploadFile.vue';
-import { getLabById } from '@/utils/services';
+import { showFailWrap, useDirect } from '@/utils/helper';
+import { getLabById, fetchIdeUrl } from '@/utils/services';
+import { setConfig, ConfigVal } from '@/utils/storage';
+import { labType } from '@/type';
 
 const props = defineProps<{ info: labType }>();
 const lab = ref<labType>(props.info);
-const ideUrl = location.origin + '/online_oj';
+const url = ref('');
+const { directTo } = useDirect();
 
-getLabById(props.info.labId).then(res => {
-    if (res.code === 0) {
-        lab.value = res.data as labType;
+getLabById(props.info.labId)
+    .then(res => {
+        if (res.code === 0) lab.value = res.data as labType;
+    })
+const goToIDE = async () => {
+    const res = await fetchIdeUrl(lab.value.labId);
+    if (res?.code === 0) url.value = res?.data.url;
+    if (url.value) {
+        setConfig(ConfigVal.IdeUrl, url.value);
+        directTo('/ide');
+    } else {
+        showFailWrap({
+            text: '系统异常，请稍后再试'
+        })
     }
-})
+}
 </script>
 
 <template>
@@ -49,7 +64,7 @@ getLabById(props.info.labId).then(res => {
         <div>
             <div class="title">开始实验</div>
             <div class="card">
-                <el-link v-if="ideUrl" :href="ideUrl" type="primary">点此进入实验</el-link>
+                <BtnBlue size="large" @click="goToIDE">点此进入实验</BtnBlue>
             </div>
         </div>
         <div>
