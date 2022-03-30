@@ -17,6 +17,10 @@ const routes = [
         component: () => import('../pages/login/Authentication.vue'),
     },
     {
+        path: '/ide',
+        component: () => import('../pages/ide/Ide.vue'),
+    },
+    {
         path: '/',
         component: () => import("../layout/index.vue"),
         children: [
@@ -51,10 +55,6 @@ const routes = [
             {
                 path: '/user_attend',
                 component: () => import('../pages/user/UserAttend.vue')
-            },
-            {
-                path: '/ide',
-                component: () => import('../pages/ide/Ide.vue'),
             },
             {
                 path: '/online_oj',

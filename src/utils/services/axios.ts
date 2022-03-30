@@ -1,9 +1,10 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { getToken, rmToken } from "../storage";
+import { baseURL } from "../option";
 import router from "@/router";
 
 const axiosConfig = {
-    baseURL: 'http://175.178.37.132:8081',
+    baseURL,
     timeout: 3000,
     headers: {},
 }
