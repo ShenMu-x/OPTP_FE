@@ -6,10 +6,10 @@ const props = defineProps<{info: any}>();
 <template>
     <div class="itemCt">
         <div class="infoCt">
-            <div class="text"><b>姓名：</b>学生</div>
-            <div class="text"><b>学号: </b>1234</div>
+            <div class="text"><b>姓名：</b>{{info.name}}</div>
+            <div class="text"><b>学号: </b>{{info.number}}</div>
         </div>
-        <CodingTimeTable :list="[]" :id="`${info.userId}`"/>
+        <CodingTimeTable :list="info.codingTime" :id="`${info.userId}`"/>
     </div>
 </template>
 
