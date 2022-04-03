@@ -20,7 +20,7 @@ const updateStatus = () => {
 const { directToWithParams } = useDirect();
 const toIDE = async () => {
     const url = await getIDEUrl(info.value.labId ?? 0);
-    if (url) directToWithParams('ide', { ide: url })
+    if (url) directToWithParams('ide', { ide: url, end: isAfterCurrentTime(info?.value?.deadLine?? '') ? '' : 'true' })
 }
 </script>
 

@@ -32,9 +32,7 @@ const changeScore = () => {
             if (res.code === 0) showSuccessWrap({ text: '成绩已修改' })
             else showFailWrap({ text: '成绩修改失败，请稍后再试' })
         })
-        console.log(scoreInp.value)
     }
-
 }
 </script>
 

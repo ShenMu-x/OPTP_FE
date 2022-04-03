@@ -7,24 +7,21 @@ import { useWs } from './init';
 
 const route = useRoute();
 const url = ref(route?.params?.ide as string ?? "");
+const isFinish = ref(route?.params?.end as string ? true: false)
 const { routerBack } = useDirect();
-
-const closeIDE = () => {
-    alert('to close ide')
-}
 </script>
 
 <template>
     <div class="ct">
         <div class="ctr">
             <div class="ctrTitle">选项</div>
-            <el-button class="closeBtn" @click="closeIDE">实验结束，关闭IDE</el-button>
-            <el-button @click="routerBack">返回上一页</el-button>
+            <el-button @click="routerBack" class="closeBtn">返回</el-button>
+            <div class="finishTip" v-if="isFinish">实验已结束，无法再进行修改</div>
         </div>
         <iframe :src="url" frameborder="0" v-if="url" class="iFrameCt"></iframe>
         <div class="errorCt" v-else>
             系统出错，请稍后再试
-            <BtnBlue>点击返回上一级</BtnBlue>
+            <BtnBlue @click="routerBack">点击返回上一级</BtnBlue>
         </div>
     </div>
 </template>
@@ -52,6 +49,9 @@ const closeIDE = () => {
 }
 .closeBtn {
     margin-right: 20px;
+}
+.finishTip {
+    font-weight: bold;
 }
 .iFrameCt {
     height: calc(100vh - @ctr-height);
