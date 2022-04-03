@@ -6,7 +6,7 @@ import router from "@/router";
 
 const axiosConfig = {
     baseURL,
-    timeout: 3000,
+    timeout: 5000,
     headers: {},
 }
 const _axios = axios.create(axiosConfig);

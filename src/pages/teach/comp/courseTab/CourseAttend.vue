@@ -9,9 +9,10 @@ import { createAttend, getCourseAttendRecords, deleteAttend, exportAttend } from
 
 const courseId = useCourseId();
 const common = { courseId }
+const MINUTE = 60;
 const form = reactive({
     courseId,
-    duration: 60 * 5,
+    duration: 5,
     name: ''
 })
 const { isDialogOpen, openDialog, closeDialog } = useDialog()
@@ -24,10 +25,13 @@ const loadRecordsFile = async () => {
 const submit = () => {
     createAttend({
         courseId,
-        duration: form.duration,
+        duration: form.duration * MINUTE,
         name: form.name,
     }).then(res => {
-        if (res.code === 0) closeDialog()
+        if (res.code === 0) {
+            closeDialog();
+            refTableEl?.value?.reload();
+        }
     })
 }
 const cancle = () => { closeDialog(); }
@@ -73,8 +77,9 @@ const deleteHandler = (checkinRecordId: number) => {
                 <el-form-item label="签到名称" label-width="120px">
                     <el-input v-model="form.name" placeholder="请输入签到名称"></el-input>
                 </el-form-item>
-                <el-form-item label="签到时长(秒)" label-width="120px">
-                    <el-input-number v-model="form.duration" :min="30" />
+                <el-form-item label="签到时长(分钟)" label-width="120px">
+                    <el-input-number v-model="form.duration" :min="5" style="margin-right: 10px"/>
+                    <span class="note">签到时长至少5分钟</span>
                 </el-form-item>
             </el-form>
             <template #footer>
@@ -108,5 +113,8 @@ const deleteHandler = (checkinRecordId: number) => {
 .ct {
     margin: 20px;
     margin-top: 0;
+}
+.note {
+    color: #cececf;
 }
 </style>

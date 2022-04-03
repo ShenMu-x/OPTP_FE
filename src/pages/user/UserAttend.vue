@@ -4,14 +4,31 @@ import PageHeader from '@/components/common/PageHeader.vue';
 import TablePage from '@/components/common/TablePage.vue';
 import Tag from '@/components/common/Tag.vue';
 import { getMyAttendRecords, getMyAttendRecordsInProgress, AttendType, checkAttend } from '@/utils/services';
+import { showSuccessWrap, showFailWrap } from '@/utils/helper';
 
+const refEl = ref();
 const data = ref<Array<AttendType>>([])
-getMyAttendRecordsInProgress()
+const refreshAttend = () => {
+    getMyAttendRecordsInProgress()
     .then(res => {
         if (res.code === 0) data.value = res.data || [];
         else data.value = []
     })
+}
 
+const checkAttendHandler = (courseId: number) => {
+    checkAttend(courseId)
+        .then(res => {
+            if (res.code === 0) {
+                showSuccessWrap({text: '已签到'});
+                refreshAttend();
+                refEl?.value?.reload?.();
+            } else {
+                showFailWrap({text: '签到失败，请稍后再试'})
+            }
+        })
+}
+refreshAttend();
 </script>
 
 <template>
@@ -35,7 +52,7 @@ getMyAttendRecordsInProgress()
                         <el-button
                             type="success"
                             size="default"
-                            @click="checkAttend(scope?.row?.courseId)"
+                            @click="checkAttendHandler(scope?.row?.courseId)"
                         >签到</el-button>
                     </template>
                 </el-table-column>
@@ -43,7 +60,7 @@ getMyAttendRecordsInProgress()
         </div>
         <div class="card">
             <div class="title">以往签到记录</div>
-            <TablePage text="目前没有签到记录" :fetch-data="getMyAttendRecords">
+            <TablePage text="目前没有签到记录" :fetch-data="getMyAttendRecords" ref="refEl">
                 <template v-slot:tableColumns>
                     <el-table-column prop="name" label="签到名称" min-width="100" />
                     <el-table-column prop="courseName" label="所属课程" min-width="200" />
