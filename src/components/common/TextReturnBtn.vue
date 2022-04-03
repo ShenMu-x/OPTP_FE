@@ -19,7 +19,7 @@ const { routerBack } = useDirect();
     color: #002D54;
     &:hover {
         cursor: pointer;
-        color: #1f88f1;
+        color: rgb(51, 87, 118);;
     }
 }
 </style>

@@ -73,12 +73,10 @@ getMyCodingTime()
     padding: 35px 80px;
     margin-bottom: 30px;
 }
-
 .pageTitle {
     font-size: 25px;
     align-self: flex-start;
 }
-
 .infoCard,
 .stats,
 .coursesInfo {
@@ -91,7 +89,6 @@ getMyCodingTime()
     text-align: left;
     margin-bottom: 20px;
 }
-
 .btnCt {
     display: flex;
     width: 300px;

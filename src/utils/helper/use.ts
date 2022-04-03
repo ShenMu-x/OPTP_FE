@@ -1,8 +1,9 @@
 import { useRoute, useRouter } from 'vue-router';
 import { ref, onBeforeUnmount, inject } from 'vue';
-import { rmToken, rmRole } from '../storage';
+import { clearTokenAndRole } from '../storage';
 import { showSuccessWrap } from './comfirm';
 import { userInfoType } from '@/type';
+import { stringify } from 'querystring';
 
 export const useCourseId = () => {
     const route = useRoute();
@@ -79,19 +80,25 @@ export const useDirect = () => {
     const directTo = (url: string) => {
         router.push(url);
     };
+    const directToWithParams = (name: string, params: any) => {
+        router.push({
+            name,
+            params
+        })
+    }
     const routerBack = () => {
         router.back();
     }
     return {
         redirect,
         directTo,
-        routerBack
+        directToWithParams,
+        routerBack,
     }
 }
 
 export const useLogout = () => {
-    rmToken();
-    rmRole();
+    clearTokenAndRole();
     showSuccessWrap({
         text: '已退出登录,跳转登录页...',
         closeCb: () => {

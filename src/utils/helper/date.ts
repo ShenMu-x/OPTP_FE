@@ -14,3 +14,7 @@ export const fmatTimeFitServer = (time: string) => {
     // YYYY-MM-DD HH:mm:ss => YYYY-MM-DDTHH:mm:ss.000Z
     return `${time?.split(" ")?.join('T')}.000Z`
 }
+
+export const isAfterCurrentTime = (time: string) => {
+    return dayjs(time).isAfter(dayjs())
+}

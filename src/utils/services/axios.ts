@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { getToken, rmToken } from "../storage";
+import { getLocalStorage, clearTokenAndRole, LocalVal } from "../storage";
+import { HttpCode, Code } from './code';
 import { baseURL } from "../option";
 import router from "@/router";
 
@@ -13,48 +14,25 @@ const _axios = axios.create(axiosConfig);
 // 请求拦截器
 _axios.interceptors.request.use(
     function (config: AxiosRequestConfig) {
-
-        if (config?.headers) {
-            config.headers['Authorization'] = `Bearer ${getToken()}`;
-        }
-
+        if (config?.headers) config.headers['Authorization'] = `Bearer ${getLocalStorage(LocalVal.AccessToken)}`;
         return config;
-    },
-    function (error) {
-        // req出错时报错
-        error.response.data = {
-            code: 500,
-            data: {
-                message: '服务器异常, 请稍后重试'
-            }
-        };
-        return Promise.reject(error);
-    }
-);
+    });
 
 // 响应拦截器
 _axios.interceptors.response.use(
-    response => {
-        return response;
-    },
+    response => (response),
     error => {
         if (error.response) {
-            switch (error.response.status) {
-                case 401: {
-                    // 401 无权限
-                    rmToken();
-                    router.push({ path: '/login' });
-                    break;
-                }
-                case 500: {
-                    // 500 服务器异常
-                    error.response.data = {
-                        code: 500,
-                        data: {
-                            message: '服务器异常, 请稍后重试'
-                        }
+            const statusCode = error.response.status;
+            if (statusCode === HttpCode.NoAuth) {
+                clearTokenAndRole();
+                router.push({ path: '/login' });
+            } else if (statusCode === HttpCode.ServerError) {
+                error.response.data = {
+                    code: HttpCode.ServerError,
+                    data: {
+                        message: '服务器异常, 请稍后重试'
                     }
-                    break;
                 }
             }
             return Promise.reject(error);

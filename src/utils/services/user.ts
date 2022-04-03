@@ -9,7 +9,7 @@ export const getUserInfoByTk: () => ResType<userInfoType> = () => {
         url: '/web/user'
     }).then(value => {
         return {
-            code: value.data.code,
+            code: 0,
             data: {
                 email: value.data.data.email,
                 userId: value.data.data.user_id,
@@ -40,7 +40,7 @@ export const getUserInfoById: (params: { userId: number }) => ResType<userInfoTy
             organization: value.data.data.organization
         };
         return {
-            code: value.data.code,
+            code: 0,
             data: res,
         }
     }).catch(packError)

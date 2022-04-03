@@ -1,8 +1,8 @@
-import { getToken } from '@/utils/storage';
+import { getLocalStorage, LocalVal } from '../storage';
 
 export const wrapHeaderWithToken = (params?: any) => {
     return {
         ...params,
-        'Authorization': `Bearer ${getToken()}`
+        'Authorization': `Bearer ${getLocalStorage(LocalVal.AccessToken)}`
     }
 }

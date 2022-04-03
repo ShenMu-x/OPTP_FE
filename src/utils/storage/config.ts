@@ -1,7 +1,6 @@
 export enum ConfigVal {
     IdeUrl = '__IDEURL'
 }
-
 type ConfigType = {
     [propName in ConfigVal]?: any;
 }

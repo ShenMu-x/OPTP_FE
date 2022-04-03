@@ -1,34 +1,35 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, toRef, watch } from 'vue';
 import BtnBlue from '../common/BtnBlue.vue';
 import Tag from '../common/Tag.vue';
 import UploadFile from '../common/UploadFile.vue';
-import { showFailWrap, useDirect } from '@/utils/helper';
-import { getLabById, fetchIdeUrl } from '@/utils/services';
-import { setConfig, ConfigVal } from '@/utils/storage';
+import { useDirect, isAfterCurrentTime } from '@/utils/helper';
+import { getLabById } from '@/utils/services';
 import { labType } from '@/type';
+import { getIDEUrl } from './logic';
 
 const props = defineProps<{ info: labType }>();
+const info = toRef(props, 'info');
 const lab = ref<labType>(props.info);
-const url = ref('');
-const { directTo } = useDirect();
+const id = ref(0);
 
-getLabById(props.info.labId)
-    .then(res => {
-        if (res.code === 0) lab.value = res.data as labType;
-    })
-const goToIDE = async () => {
-    const res = await fetchIdeUrl(lab.value.labId);
-    if (res?.code === 0) url.value = res?.data.url;
-    if (url.value) {
-        setConfig(ConfigVal.IdeUrl, url.value);
-        directTo('/ide');
-    } else {
-        showFailWrap({
-            text: '系统异常，请稍后再试'
-        })
-    }
+const { directToWithParams } = useDirect();
+const toIDE = async () => {
+    const url = await getIDEUrl(lab.value.labId ?? 0);
+    if (url) directToWithParams('ide', { ide: url })
 }
+const getLabInfo = () => {
+    getLabById(id.value)
+        .then(res => {
+            if (res.code === 0) lab.value = res.data as labType;
+        })
+}
+watch(info, (newV, _) => {
+    if (id.value !== newV.labId) {
+        id.value = newV.labId ?? 0;
+        getLabInfo();
+    }
+})
 </script>
 
 <template>
@@ -36,24 +37,39 @@ const goToIDE = async () => {
         <div class="infoCt">
             <div class="title">实验情况</div>
             <div class="card">
-                <div class="info">
-                    创建日期:
-                    <span class="infoText">{{ lab.createdAt }}</span>
+                <div class="infoInnerCt">
+                    <div class="info">
+                        创建日期:
+                        <span class="infoText">{{ lab.createdAt }}</span>
+                    </div>
+                    <div class="info">
+                        截止日期:
+                        <span class="infoText">{{ lab.deadLine }}</span>
+                    </div>
                 </div>
-                <div class="info">
-                    截止日期:
-                    <span class="infoText">{{ lab.deadLine }}</span>
-                </div>
-                <div class="info">
-                    状态:
-                    <Tag
-                        v-if="lab.isFinish"
-                        type="green"
-                        :isText="true"
-                        class="infoText"
-                        greenText="已完成"
-                    />
-                    <Tag v-else type="red" :isText="true" class="infoText" redText="未完成" />
+                <div class="infoInnerCt">
+                    <div class="info">
+                        实验状态:
+                        <Tag
+                            v-if="isAfterCurrentTime(lab.deadLine ?? '')"
+                            type="green"
+                            :isText="true"
+                            class="infoText"
+                            greenText="进行中"
+                        />
+                        <Tag v-else type="red" :isText="true" class="infoText" redText="已结束" />
+                    </div>
+                    <div class="info">
+                        完成情况:
+                        <Tag
+                            v-if="lab.isFinish"
+                            type="green"
+                            :isText="true"
+                            class="infoText"
+                            greenText="已完成"
+                        />
+                        <Tag v-else type="red" :isText="true" class="infoText" redText="未完成" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -64,7 +80,7 @@ const goToIDE = async () => {
         <div>
             <div class="title">开始实验</div>
             <div class="card">
-                <BtnBlue size="large" @click="goToIDE">点此进入实验</BtnBlue>
+                <BtnBlue size="large" @click="toIDE">点此进入实验</BtnBlue>
             </div>
         </div>
         <div>
@@ -95,6 +111,11 @@ const goToIDE = async () => {
 .card {
     margin: 15px 10px 15px 0;
     text-align: left;
+    flex-direction: column;
+    .infoInnerCt {
+        display: flex;
+        flex-wrap: wrap;
+    }
 }
 .info {
     margin-right: 10px;

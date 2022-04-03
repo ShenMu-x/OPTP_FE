@@ -1,5 +1,5 @@
-import { getRole } from "../storage"
+import { getLocalStorage, LocalVal } from "../storage"
 
 export const isTeacher = () => {
-    return getRole() === 1;
+    return getLocalStorage(LocalVal.Role) === '1';
 }

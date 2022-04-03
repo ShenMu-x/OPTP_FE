@@ -1,34 +1,35 @@
 <script lang="ts" setup>
 import { ref, toRef } from 'vue';
 import { InfoFilled } from '@element-plus/icons-vue';
-import LabDetail from './LabDetail.vue';
 import Tag from '../common/Tag.vue';
 import BtnBlue from '../common/BtnBlue.vue';
 import { labType } from '@/type';
-import { fmatDate } from '@/utils/helper';
+import { fmatDate, useDirect,isAfterCurrentTime } from '@/utils/helper';
+import { getIDEUrl } from './logic';
 
-const props = defineProps<{
-    info: labType
-}>();
-
+const props = defineProps<{ info: labType }>();
+const emits = defineEmits(['openDrawer'])
 const info = toRef(props, 'info');
-const isDrawerOpen = ref(false);
-const clickLabDrawer = () => {
-    isDrawerOpen.value = !isDrawerOpen.value;
+const openLabDrawer = () => {
+    emits('openDrawer', info.value);
 }
 const finishStatus = ref(info.value?.isFinish);
 const updateStatus = () => {
     // 申请实验状态改变
 }
+const { directToWithParams } = useDirect();
+const toIDE = async () => {
+    const url = await getIDEUrl(info.value.labId ?? 0);
+    if (url) directToWithParams('ide', { ide: url })
+}
 </script>
 
 <template>
-    <div class="labCt">
+    <div class="labCt" @click="openLabDrawer">
         <div class="titleCt">
             <div class="title">{{ info.title }}</div>
-            <Tag :type="info.isFinish ? 'red' : 'green'" />
+            <Tag :type="isAfterCurrentTime(info.deadLine?? '') ? 'green' : 'red'" />
         </div>
-
         <div class="content">{{ info.content }}</div>
         <div class="info">
             <div class="leftCt">
@@ -53,13 +54,13 @@ const updateStatus = () => {
                         </span>
                     </el-tooltip>
                 </template>
-                <div class="status">
+                <div class="status" @click.stop="">
                     完成情况:
                     <el-switch
                         v-model="finishStatus"
                         class="switch"
-                        active-color="#13ce66"
-                        inactive-color="#ff4949"
+                        active-color="#41da86"
+                        inactive-color="#e96262"
                         @change="updateStatus"
                     />
                     <Tag
@@ -79,12 +80,9 @@ const updateStatus = () => {
                 </div>
             </div>
             <div class="rightCt">
-                <BtnBlue size="large" @click="clickLabDrawer">实验详情</BtnBlue>
+                <BtnBlue size="large" @click.stop="toIDE">开始实验</BtnBlue>
             </div>
         </div>
-        <el-drawer v-model="isDrawerOpen" :title="info.title" size="40%">
-            <LabDetail :info="info" style="cursor: default;" />
-        </el-drawer>
     </div>
 </template>
 
@@ -99,6 +97,10 @@ const updateStatus = () => {
     justify-content: flex-start;
     align-items: flex-start;
     padding: 20px;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 .titleCt {

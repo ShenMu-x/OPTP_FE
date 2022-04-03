@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { createRouter, createWebHistory } from "vue-router";
-import { getToken } from "../utils/storage";
+import { getLocalStorage, LocalVal } from "../utils/storage";
 import { isTeacher } from "@/utils/helper/is";
 
 const routes = [
@@ -18,6 +18,7 @@ const routes = [
     },
     {
         path: '/ide',
+        name: 'ide',
         component: () => import('../pages/ide/Ide.vue'),
     },
     {
@@ -82,9 +83,9 @@ const router = new createRouter({
 
 router.beforeEach((to, from, next) => {
     // 权限校验
-    let token = getToken();
-    const canNoLoginPath = ['/login', '/auth', '/register'];
-    if (!token && !canNoLoginPath.includes(to.path)) {
+    let token = getLocalStorage(LocalVal.AccessToken) ?? '';
+    const pathsAllowNoLogin = ['/login', '/auth', '/register'];
+    if (!token && !pathsAllowNoLogin.includes(to.path)) {
         next('/login');
         return;
     }

@@ -3,7 +3,7 @@ export * from './scrollToPos';
 export * from './scrollToPos';
 export * from './getHeaderToken';
 export * from './comfirm';
-export * from './format';
+export * from './date';
 export * from './loading';
 export * from './list';
 export * from './expandFold';

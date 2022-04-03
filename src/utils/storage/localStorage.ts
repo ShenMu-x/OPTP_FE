@@ -1,27 +1,20 @@
-import { LocalVal } from "./type";
-export const getToken = () => {
-    return localStorage.getItem(LocalVal.Token) ?? '';
-}
+export enum LocalVal {
+    AccessToken= '__ACCESS',
+    RefreshToken='__REFRESH',
+    Role = '__ROLE',
+};
 
-export const setToken = (token: string) => {
-    localStorage.setItem(LocalVal.Token, token ?? '');
-    return token;
+export const getLocalStorage = (key: LocalVal) => {
+    return localStorage.getItem(key);
 }
-
-export const rmToken = () => {
-    localStorage.removeItem(LocalVal.Token);
+export const setLocalStorage = (key: LocalVal, value: string) => {
+    return localStorage.setItem(key, value);
 }
-
-export const getRole = () => {
-    // 解密过程
-    return parseInt(localStorage.getItem(LocalVal.Role) ?? '0');
+export const removeLocalStorage = (key: LocalVal) => {
+    return localStorage.removeItem(key);
 }
-
-export const setRole = (role: string) => {
-    localStorage.setItem(LocalVal.Role, role ?? '0');
-    return role;
-}
-
-export const rmRole = () => {
-    localStorage.removeItem(LocalVal.Role);
+export const clearTokenAndRole = () => {
+    removeLocalStorage(LocalVal.AccessToken);
+    removeLocalStorage(LocalVal.RefreshToken);
+    removeLocalStorage(LocalVal.Role);
 }

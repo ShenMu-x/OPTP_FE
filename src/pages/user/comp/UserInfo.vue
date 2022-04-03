@@ -12,8 +12,9 @@ const { directTo } = useDirect();
 const { user, editAvatar } = useUser();
 const handlerEditInfo = () => directTo('/edit_info');
 const updateUserInject = (url: string) => editAvatar(url)
+console.log('prop', user)
 </script>
-
+ 
 <template>
     <div class="userInfoCt">
         <UploadAvatar

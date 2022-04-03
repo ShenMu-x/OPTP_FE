@@ -3,6 +3,7 @@
 </template>
 
 <style lang="less">
+@import url('@/styles/var.less');
 * {
   margin: 0;
   padding: 0;
@@ -13,7 +14,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: @main-color;
   position: absolute;
   width: 100%;
   height: 100%;

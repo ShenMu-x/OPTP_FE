@@ -1,23 +1,17 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import BtnBlue from '@/components/common/BtnBlue.vue';
 import { useDirect } from '@/utils/helper';
-import { getConfig, ConfigVal } from '@/utils/storage';
 import { useWs } from './init';
 
+const route = useRoute();
+const url = ref(route?.params?.ide as string ?? "");
 const { routerBack } = useDirect();
-
-// 获取url
-const url = ref(getConfig(ConfigVal.IdeUrl) || "");
-// url.value = 'http://175.178.37.132:31732';
 
 const closeIDE = () => {
     alert('to close ide')
 }
-
-
-onMounted(() => {
-    useWs()
-})
 </script>
 
 <template>

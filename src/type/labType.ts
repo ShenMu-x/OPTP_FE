@@ -1,9 +1,9 @@
 export type labType = {
-    labId: number,
-    courseId: number,
+    labId?: number,
+    courseId?: number,
     courseName?: string,
-    title: string,
-    content: string,
+    title?: string,
+    content?: string,
     createdAt?: string,
     updatedAt?: string,
     deadLine?: string,

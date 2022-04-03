@@ -44,6 +44,7 @@ export const provideUser = () => {
                 user.gender = res.data?.gender;
                 user.major = res.data?.major;
                 user.organization = res.data?.organization;
+                console.log(res);
             }
         })
 }

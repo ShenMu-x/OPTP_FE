@@ -1,7 +1,6 @@
 import _axios from "./axios"
 import { ResType } from "./type";
 import { packError, packEmptyData } from "./pack";
-import { dataTool } from "echarts";
 
 type ideUrlReq = any;
 export const fetchIdeUrl: (labId: number) => ResType<ideUrlReq> = (labId) => {

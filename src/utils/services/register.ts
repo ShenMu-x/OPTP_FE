@@ -1,6 +1,6 @@
 import _axios from "./axios";
 import { ResType } from './type';
-import { setToken, setRole } from '@/utils/storage';
+import { setLocalStorage, LocalVal } from '@/utils/storage';
 import { packError, packEmptyData } from "./pack";
 interface RegisterReq {
     email: string;
@@ -72,16 +72,13 @@ interface loginRes {
 export const login: (params: loginReq) => ResType<loginRes> = (params) => {
     return _axios.post('/web/login', params)
         .then(value => {
-            const res = {
-                code: 0,
-                data: {
-                    role: value.data.data.role,
-                    token: value.data.data.token
-                }
-            }
-            setToken(res.data.token);
-            setRole(res.data.role);
-            return res;
+            const Teacher = 1;
+            const role = value.data.data.role === Teacher ? '1' : '0';
+            const accessToken = value.data.data.token;
+            const refreshToken = '';
+            setLocalStorage(LocalVal.AccessToken, accessToken);
+            setLocalStorage(LocalVal.Role, role);
+            return packEmptyData();
         })
         .catch(err => {
             let message = err.response?.data?.message;
