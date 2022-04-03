@@ -31,13 +31,22 @@ export const packScore = (item: any) => ({
 })
 
 // 导出成绩
-export const exportScoreFile: (courseId: number) => ResType<''> = (courseId) => {
+export const exportScore: (courseId: number) => ResType<{csvData: any}> = (courseId) => {
     return _axios({
+        responseType: "blob",
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
         method: 'GET',
         url: `/web/course/score/export/${courseId}`
-    })
-        .then(packEmptyData)
-        .catch(packError)
+    }).then(res => {
+        return {
+            code: 0,
+            data: {
+                csvData: res.data
+            }
+        }
+    }).catch(packError)
 }
 
 // 获取课程学生成绩

@@ -1,21 +1,24 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
+import BtnBlue from '@/components/common/BtnBlue.vue';
 import BtnCt from '../common/BtnCt.vue';
 import StudPage from '../common/StudPage.vue';
-import { useDialog, useCourseId, showFailWrap } from '@/utils/helper';
-import { checkJoinInApplication } from '@/utils/services';
+import UploadStudentCsv from '../common/UploadStudentCsv.vue';
+import { useDialog, useCourseId, showFailWrap, loadCsv } from '@/utils/helper';
+import { checkJoinInApplication, fetchImportMemberTemplate } from '@/utils/services';
 
 const { isDialogOpen, openDialog, closeDialog } = useDialog()
 const courseId = useCourseId();
 
-const importList = () => {
-
+const refEl = ref();
+const getMemberTemplate = () => {
+    loadCsv(refEl?.value,'导入学生模板', fetchImportMemberTemplate, {});
 }
-const refMemberList = ref()
-const refVerityList = ref()
 
 const focusTab = ref('member');
+const refMemberList = ref()
+const refVerityList = ref()
 const check = (userId: number, isPass: boolean) => {
     checkJoinInApplication({
         courseId,
@@ -26,7 +29,7 @@ const check = (userId: number, isPass: boolean) => {
             refMemberList?.value?.reload?.();
             refVerityList?.value?.reload?.();
         } else {
-            showFailWrap({text: '服务出错，请稍后再试'})
+            showFailWrap({ text: '服务出错，请稍后再试' })
         }
     })
 }
@@ -40,10 +43,12 @@ const check = (userId: number, isPass: boolean) => {
             </template>
         </BtnCt>
         <el-dialog v-model="isDialogOpen" title="导入学生列表">
-            upload组件
+            <UploadStudentCsv @upload="closeDialog" :course-id="courseId" />
             <template #footer>
                 <span class="dialog-footer">
+                    <BtnBlue size="large" @click="getMemberTemplate">下载模板文件</BtnBlue>
                     <el-button @click="closeDialog">取消</el-button>
+                    <div ref="refEl"></div>
                 </span>
             </template>
         </el-dialog>

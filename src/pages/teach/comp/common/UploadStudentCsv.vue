@@ -7,29 +7,23 @@ import type {
     ElUploadProgressEvent,
     ElFile,
 } from 'element-plus/es/components/upload/src/upload.type'
-import { wrapHeaderWithToken, showFailWrap } from '@/utils/helper';
-import { UPLOAD_PDF_URL, UPLOAD_ATTACHMENT_URL } from '@/utils/option';
+import { wrapHeaderWithToken, showFailWrap, showSuccessWrap } from '@/utils/helper';
+import { UPLOAD_CSV_STUDENT_TEMPLATE_URL } from '@/utils/option';
 
-let allowType = ref(['application/msword', 'application/pdf', 'text/plain'])
-let fileType = ref(['doc', 'pdf', 'txt']);
-let name = ref('attachment');
-let uploadUrl = UPLOAD_ATTACHMENT_URL;
-
-const props = defineProps<{
-    type: 'attachment' | 'report',
-    afterUpload?: any
-}>();
-if (props.type === 'report') {
-    allowType.value = ['application/pdf'];
-    fileType.value = ['pdf']
-    uploadUrl = UPLOAD_PDF_URL;
-    name.value = "pdf"
-}
 const refUploadEl = ref();
+let allowType = ref(['text/csv'])
+let fileType = ref(['csv']);
+let name = ref('csv');
+let uploadUrl = UPLOAD_CSV_STUDENT_TEMPLATE_URL;
+
+const props = defineProps<{ courseId: number }>();
+const emits = defineEmits(['upload']);
 
 const handleFileSuccess = (res: { code: number, data: { url: string } }, file: UploadFile) => {
-    emits('update', res.data.url);
-    props.afterUpload?.(res.data.url);
+    emits('upload', res.data.url);
+    showSuccessWrap({
+        text: '学生列表导入成功'
+    })
 }
 const handleFileError = () => {
     showFailWrap({
@@ -37,10 +31,8 @@ const handleFileError = () => {
     })
 }
 const handleRemove = () => {
-    emits('update', '');
-    props.afterUpload?.('');
+    emits('upload', '');
 }
-
 const beforeFileUpload = (file: ElFile) => {
     const isAllow = allowType.value.includes(file.type);
     const isLt2M = file.size / 1024 / 1024 < 2
@@ -53,14 +45,12 @@ const beforeFileUpload = (file: ElFile) => {
     }
     return isAllow && isLt2M
 }
-
 const handleExceed = () => {
     showFailWrap({
         text: '限制上传 1 个文件'
     })
 }
 
-const emits = defineEmits(['update']);
 const resetUpload = () => {
     refUploadEl?.value?.clearFiles()
 }
@@ -83,6 +73,7 @@ defineExpose({
         :on-exceed="handleExceed"
         :before-upload="beforeFileUpload"
         :name="name"
+        :data="{ courseId: props.courseId }"
     >
         <el-icon class="el-icon--upload">
             <upload-filled />

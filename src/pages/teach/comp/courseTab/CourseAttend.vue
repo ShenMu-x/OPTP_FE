@@ -4,7 +4,7 @@ import { ElMessageBox } from 'element-plus';
 import { Plus, Download } from '@element-plus/icons-vue';
 import TablePage from '@/components/common/TablePage.vue';
 import BtnCt from '../common/BtnCt.vue';
-import { showFailWrap, showSuccessWrap, useCourseId, useDialog } from '@/utils/helper';
+import { showSuccessWrap, useCourseId, useDialog, loadCsv } from '@/utils/helper';
 import { createAttend, getCourseAttendRecords, deleteAttend, exportAttend } from "@/utils/services";
 
 const courseId = useCourseId();
@@ -18,23 +18,7 @@ const { isDialogOpen, openDialog, closeDialog } = useDialog()
 
 const refCtEl = ref();
 const loadRecordsFile = async () => {
-    const res = await exportAttend(courseId);
-    if (res.code === 0) {
-        const blob = res.data?.csvData;
-        const reader = new FileReader();
-        reader.readAsDataURL(blob); // 转换为base64，可直接放入a标签href属性
-        reader.onload = e => {
-            let a = document.createElement("a");
-            a.style.display = "none";
-            a.download = "学生签到记录.csv";
-            a.href = e.target?.result as string;
-            refCtEl.value?.appendChild?.(a);
-            a.click();
-            refCtEl.value?.removeChild(a);
-        };
-    } else {
-        showFailWrap({ text: '服务出现问题，请稍后再试' });
-    }
+    loadCsv(refCtEl?.value, '学生签到记录', exportAttend, courseId)
 }
 
 const submit = () => {

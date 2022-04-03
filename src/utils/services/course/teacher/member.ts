@@ -63,3 +63,22 @@ export const getCourseStudents: (params: {
         .then(res => packPageRes(res, packStud))
         .catch(packError)
 }
+
+//获取学生模板
+export const fetchImportMemberTemplate: () => ResType<{csvData: any}> = () => {
+    return _axios({
+        responseType: "blob",
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        method: 'GET',
+        url: `/web/course/student/export/template`
+    }).then(res => {
+        return {
+            code: 0,
+            data: {
+                csvData: res.data
+            }
+        }
+    }).catch(packError)
+}
