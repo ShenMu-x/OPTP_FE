@@ -4,8 +4,8 @@ import { ElMessageBox } from 'element-plus';
 import { Plus, Download } from '@element-plus/icons-vue';
 import TablePage from '@/components/common/TablePage.vue';
 import BtnCt from '../common/BtnCt.vue';
-import { createAttend, getCourseAttendRecords, deleteAttend } from "@/utils/services";
-import { showSuccessWrap, useCourseId, useDialog } from '@/utils/helper';
+import { showFailWrap, showSuccessWrap, useCourseId, useDialog } from '@/utils/helper';
+import { createAttend, getCourseAttendRecords, deleteAttend, exportAttend } from "@/utils/services";
 
 const courseId = useCourseId();
 const common = { courseId }
@@ -15,7 +15,28 @@ const form = reactive({
     name: ''
 })
 const { isDialogOpen, openDialog, closeDialog } = useDialog()
-const loadRecordsFile = () => { }
+
+const refCtEl = ref();
+const loadRecordsFile = async () => {
+    const res = await exportAttend(courseId);
+    if (res.code === 0) {
+        const blob = res.data?.csvData;
+        const reader = new FileReader();
+        reader.readAsDataURL(blob); // 转换为base64，可直接放入a标签href属性
+        reader.onload = e => {
+            let a = document.createElement("a");
+            a.style.display = "none";
+            a.download = "学生签到记录.csv";
+            a.href = e.target?.result as string;
+            refCtEl.value?.appendChild?.(a);
+            a.click();
+            refCtEl.value?.removeChild(a);
+        };
+    } else {
+        showFailWrap({ text: '服务出现问题，请稍后再试' });
+    }
+}
+
 const submit = () => {
     createAttend({
         courseId,
@@ -25,12 +46,9 @@ const submit = () => {
         if (res.code === 0) closeDialog()
     })
 }
-const cancle = () => {
-    closeDialog();
-}
+const cancle = () => { closeDialog(); }
 
 const refTableEl = ref();
-
 const deleteHandler = (checkinRecordId: number) => {
     ElMessageBox.confirm(
         '删除确认？',
@@ -59,11 +77,11 @@ const deleteHandler = (checkinRecordId: number) => {
 </script>
 
 <template>
-    <div class="ct">
+    <div class="ct" ref="refCtEl">
         <BtnCt>
             <template v-slot:botton>
                 <el-button :icon="Plus" @click="openDialog">新建签到</el-button>
-                <el-button :icon="Download" @click="loadRecordsFile">下载签到表</el-button>
+                <el-button :icon="Download" @click="loadRecordsFile">下载学生签到记录</el-button>
             </template>
         </BtnCt>
         <el-dialog v-model="isDialogOpen" title="新建签到">

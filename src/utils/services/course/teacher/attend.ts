@@ -71,3 +71,21 @@ export const deleteAttend = (id: number) => {
         .then(packEmptyData)
         .catch(packError)
 }
+// 导出签到表
+export const exportAttend: (courseId: number) => ResType<{ csvData: any }> = (courseId) => {
+    return _axios({
+        responseType: "blob", //blob流
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        method: 'GET',
+        url: `/web/checkin/export/${courseId}`
+    }).then(res => {
+        return {
+            code: 0,
+            data: {
+                csvData: res.data
+            }
+        }
+    }).catch(packError)
+}
