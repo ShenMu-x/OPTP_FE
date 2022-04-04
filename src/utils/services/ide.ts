@@ -1,16 +1,17 @@
 import _axios from "./axios"
 import { ResType } from "./type";
-import { packError, packEmptyData } from "./pack";
+import { packError } from "./pack";
 
-type ideUrlReq = any;
-export const fetchIdeUrl: (labId: number) => ResType<ideUrlReq> = (labId) => {
+export const fetchIdeUrl: (labId: number) => ResType<{url: string}> = (labId) => {
     return _axios({
         method: 'POST',
         url: '/web/ide',
         data: { labId },
     }).then(res => ({
         code: 0,
-        data: res.data.data
+        data: {
+            url: res.data?.data?.url
+        } 
     })
     ).catch(packError)
 }

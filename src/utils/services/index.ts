@@ -4,3 +4,4 @@ export * from './lab';
 export * from './ide';
 export * from './user';
 export * from './course';
+export * from './OnlineOJ';

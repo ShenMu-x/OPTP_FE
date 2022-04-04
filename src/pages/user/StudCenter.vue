@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import UserInfo from './comp/UserInfo.vue';
 import SearchPanel from './comp/SearchPanel.vue';
+import OtherFeatures from './comp/OtherFeatures.vue';
 import LoadBtn from '@/components/common/LoadBtn.vue';
 import CodingTimeTable from '@/components/common/CodingTimeTable.vue';
 import CourseList from '@/components/course/CourseList.vue';
@@ -60,6 +61,9 @@ getMyCodingTime()
                         <LoadBtn @reload="reloadHandlerAll" :is-loding="isReloadingAll" />
                     </div>
                     <LabList ref="refAllList" @reloadend="finishReloadAll" />
+                </el-tab-pane>
+                <el-tab-pane label="其他功能" name="other" lazy>
+                    <OtherFeatures></OtherFeatures>
                 </el-tab-pane>
             </el-tabs>
         </div>

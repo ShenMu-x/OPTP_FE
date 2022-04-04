@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
 import { Refresh } from '@element-plus/icons-vue'
 const props = defineProps<{
-    isLoding?: boolean
+    isLoding: boolean,
+    title?: string
 }>();
 
 const emits = defineEmits(['reload']);
@@ -14,8 +14,13 @@ const clickHandler = () => {
 
 <template>
     <div>
-        <el-button v-show="props.isLoding" loading class="btn">刷新</el-button>
-        <el-button v-show="!props.isLoding" :icon="Refresh" @click="clickHandler" class="btn">刷新</el-button>
+        <el-button v-show="props.isLoding" loading class="btn">{{ props.title ?? '刷新' }}</el-button>
+        <el-button
+            v-show="!props.isLoding"
+            :icon="Refresh"
+            @click="clickHandler"
+            class="btn"
+        >{{ props.title ?? '刷新' }}</el-button>
     </div>
 </template>
 

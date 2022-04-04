@@ -1,31 +1,38 @@
-export enum CodeLangs { 'Python' = 0, 'C++' = 1, 'Java' = 2 }
-
-export const langs = [
-    {
-        label: 'Python',
-        value: 0,
-    },
-    {
-        label: 'C++',
-        value: 1,
-    },
-    {
-        label: 'Java',
-        value: 2,
-    },
-];
+export enum CodeLangs { 'python' = 0, 'c++' = 1, 'java' = 2 }
+export const langs: Array<{ label: string, value: number }> = [];
+const init = () => {
+    for (let key in CodeLangs) {
+        if (typeof CodeLangs[key] === 'number')
+            langs.push({ label: key, value: CodeLangs[key] as unknown as number })
+    }
+}
+init();
 
 export const mapTemplate = new Map([
     [
-        'Python',
-        'class MyClass:\n\tdef func(self, n):\n\t\t'
+        'python',
+        'print(\"hello world\")'
     ],
     [
-        "C++",
-        '#include<iostream>\nusing namespace std;\n'
+        "c++",
+        `
+#include <iostream>
+using namespace std;
+    
+int main ()
+{ 
+    cout << "Hello world." << endl;
+    return 0;
+}
+        `
     ],
     [
-        "Java",
-        'class Solution {\n\tpublic int main() {\n\n\n\t\n}}'
+        "java",
+        `// Solution
+public class Solution {
+public static void main(String args[]) {
+}
+}
+        `
     ],
 ]);

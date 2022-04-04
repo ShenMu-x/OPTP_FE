@@ -1,13 +1,18 @@
 <script lang="ts" setup>
-import { onMounted, onUnmounted, ref } from 'vue';
+import { ref } from 'vue';
 import { useCreateEditor } from './manaco';
+import LoadBtn from '@/components/common/LoadBtn.vue';
 import { langs, CodeLangs } from '@/utils/option';
-import { useDirect } from '@/utils/helper'
+import { useDirect, useLoader } from '@/utils/helper';
+import { fetchCodeResult } from '@/utils/services';
 
 const refEditorEl = ref();
 const { routerBack } = useDirect();
-const language = ref(CodeLangs.Python);
-const { changeLang } = useCreateEditor({
+const isLoading = ref(false);
+const showLoading = () => isLoading.value = true;
+const cancelLoading = () => isLoading.value = false;
+const language = ref(CodeLangs.python);
+const { changeLang, getValue } = useCreateEditor({
     refEditorEl,
 })
 const change = () => {
@@ -15,9 +20,21 @@ const change = () => {
     changeLang(language.value)
 }
 
-const textarea = ref('采用websocket实现通信');
-// 后台建立wss链接
-// 前端控制代码格式化，静态语法检查，语义化提示
+const textarea = ref('');
+const run = () => {
+    showLoading();
+    fetchCodeResult({
+        language: language.value as number,
+        code: getValue()
+    }).then(res => {
+        if (res.code === 0) {
+            textarea.value = res.data?.status === 0 ? `运行成功\n${res.data?.description}` : `运行出错\n${res.data?.description}`;
+        } else {
+            textarea.value =  `运行失败\n${res.errorMsg}`;
+        }
+        cancelLoading();
+    })
+}
 
 </script>
 
@@ -33,8 +50,7 @@ const textarea = ref('采用websocket实现通信');
                     :value="item.value"
                 ></el-option>
             </el-select>
-            <el-button class="btn">查看实验内容</el-button>
-            <el-button class="btn">运行</el-button>
+            <LoadBtn title="运行" :is-loding="isLoading" class="btn" @reload="run"/>
             <el-button class="btn" @click="routerBack">返回上一页</el-button>
         </div>
         <div class="editorCt">
@@ -48,7 +64,7 @@ const textarea = ref('采用websocket实现通信');
                     readonly
                     resize="none"
                     :input-style="{
-                        height: '100%',
+                        height: '500px',
                         color: '#5e5e5e'
                     }"
                 />
@@ -90,7 +106,7 @@ const textarea = ref('采用websocket实现通信');
     text-align: left; // 全局center
 }
 .editor {
-    height: 100%;
+    height: calc(100vh - 60px - 60px - 30px);
     width: 800px;
     border-right: 2px solid #2e2e2e;
 }
@@ -103,6 +119,11 @@ const textarea = ref('采用websocket实现通信');
 
     .viewerTitle {
         margin-bottom: 20px;
+    }
+
+    .textArea {
+        height: 600px;
+        color: "#5e5e5e";
     }
 }
 </style>

@@ -1,4 +1,4 @@
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import * as monaco from 'monaco-editor'
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
@@ -35,7 +35,7 @@ export const useCreateEditor = ({
     refEditorEl: any,
     langType?: number
 }) => {
-    const refLang = ref(langType ?? CodeLangs.Python);
+    const refLang = ref(langType ?? CodeLangs.python);
     let instance: any = null;
     let model: any = null;
 
@@ -59,13 +59,13 @@ export const useCreateEditor = ({
             });
 
             instance.onDidChangeModelContent(() => {
-                console.log('INPUT:: ', instance.getValue());
+                // console.log('INPUT:: ', instance.getValue());
             })
         }
     }
 
     const changeLang = (type: number) => {
-        refLang.value = type ?? CodeLangs.Python;
+        refLang.value = type ?? CodeLangs.python;
         createEditor()
     }
 
@@ -73,9 +73,13 @@ export const useCreateEditor = ({
         createEditor()
     })
 
+    onUnmounted(() => {
+        disposeEditor?.()
+    })
+
     return {
         changeLang,
-        disposeEditor
+        getValue: () => instance?.getValue?.()
     }
 }
 
