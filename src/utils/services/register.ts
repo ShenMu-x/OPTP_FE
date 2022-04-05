@@ -2,6 +2,7 @@ import _axios from "./axios";
 import { ResType } from './type';
 import { setLocalStorage, LocalVal } from '@/utils/storage';
 import { packError, packEmptyData } from "./pack";
+import { TeacherRole, RoleList } from '../option';
 interface RegisterReq {
     email: string;
     realName: string;
@@ -72,8 +73,7 @@ interface loginRes {
 export const login: (params: loginReq) => ResType<loginRes> = (params) => {
     return _axios.post('/web/login', params)
         .then(value => {
-            const Teacher = 1;
-            const role = value.data.data.role === Teacher ? '1' : '0';
+            const role = value.data.data.role;
             const accessToken = value.data.data.token;
             const refreshToken = value.data.data.refresh_token;
             setLocalStorage(LocalVal.AccessToken, accessToken);

@@ -5,7 +5,7 @@ import Layout from './index.vue';
 import FormCt from './comp/FormCt.vue';
 import TextBtn from './comp/TextBtn.vue';
 import { login } from '@/utils/services';
-import { isTeacher, showFailWrap, useDirect } from '@/utils/helper';
+import { isTeacher, isStudent, isManager, showFailWrap, useDirect } from '@/utils/helper';
 import { getLoginRule } from './rules';
 
 const refFomeEl = ref();
@@ -25,9 +25,9 @@ const loginHandler = () => {
       login({ username: form.userName, password: form.password })
         .then(res => {
           if (res.code === 0) {
-            isTeacher() ?
-              redirect('/teach/user_center') :
-              redirect('/user_center')
+            isStudent() && redirect('/user_center');
+            isTeacher() && redirect('/teach/user_center');
+            isManager() && redirect('/manage_platform');
           } else {
             showFailWrap({ text: res.errorMsg })
           }
