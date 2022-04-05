@@ -75,8 +75,9 @@ export const login: (params: loginReq) => ResType<loginRes> = (params) => {
             const Teacher = 1;
             const role = value.data.data.role === Teacher ? '1' : '0';
             const accessToken = value.data.data.token;
-            const refreshToken = '';
+            const refreshToken = value.data.data.refresh_token;
             setLocalStorage(LocalVal.AccessToken, accessToken);
+            setLocalStorage(LocalVal.RefreshToken, refreshToken);
             setLocalStorage(LocalVal.Role, role);
             return packEmptyData();
         })

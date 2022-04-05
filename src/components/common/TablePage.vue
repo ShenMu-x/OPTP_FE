@@ -18,12 +18,13 @@ const {
     list,
     fetch,
     setCommon,
-    reload
+    reload,
 } = usePageList({
     size: pageSize,
     fetchData: props.fetchData,
     failText: '获取列表失败,请稍后再试',
-    common: props.common ?? {}
+    common: props.common ?? {},
+    noTip: true
 });
 
 watch(common, (newV, _) => {

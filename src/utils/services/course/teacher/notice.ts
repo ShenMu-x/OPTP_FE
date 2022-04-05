@@ -16,3 +16,27 @@ export const createNotice: (params: {
         .then(packEmptyData)
         .catch(packError)
 }
+
+export const deleteNotice: (courseResourceId: number, courseId: number) => ResType<''> = (courseResourceId, courseId) => {
+    return _axios({
+        method: "DELETE",
+        url: `/web/course/resource/${courseId}`,
+        data: { courseResourceId }
+    })
+        .then(packEmptyData)
+        .catch(packError)
+}
+export const editNotice: (params: {
+    resourceId: number,
+    title: string,
+    content: string,
+    attachmentUrl: String
+}) => ResType<''> = (params) => {
+    return _axios({
+        method: "PUT",
+        url: "/web/course/resource",
+        data: params,
+    })
+        .then(packEmptyData)
+        .catch(packError)
+}

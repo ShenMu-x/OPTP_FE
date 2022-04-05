@@ -66,10 +66,10 @@ refreshAttend();
                     <el-table-column prop="courseName" label="所属课程" min-width="200" />
                     <el-table-column prop="createAt" label="创建时间" min-width="180" />
                     <el-table-column prop="deadLine" label="结束时间" min-width="180" />
-                    <el-table-column prop="isCheckIn" label="点击签到" min-width="140">
+                    <el-table-column prop="isFinish" label="签到状态" min-width="140">
                         <template #default="scope">
                             <Tag
-                                v-if="scope?.row?.isCheckIn"
+                                v-if="scope?.row?.isFinish"
                                 :is-text="true"
                                 :border="true"
                                 type="green"

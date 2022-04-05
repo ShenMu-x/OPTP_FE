@@ -10,3 +10,4 @@ export * from './expandFold';
 export * from './use';
 export * from './validate';
 export * from './loadCsv';
+export * from './loadAttachment';

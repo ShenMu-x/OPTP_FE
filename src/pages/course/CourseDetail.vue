@@ -7,11 +7,10 @@ import QuitCourse from './comp/QuitCourse.vue';
 import TeacherInfo from './comp/TeacherInfo.vue';
 import NoticeCard from './comp/NoticeCard.vue';
 import UnEnrollCourseDetail from './comp/UnEnrollCourseDetail.vue';
-import { scrollToPos, useCourseId, useDirect } from '@/utils/helper';
+import { scrollToPos, useCourseId } from '@/utils/helper';
 import { getCourseById, getUserInfoById } from '@/utils/services';
 import { CourseType, userInfoType } from '@/type';
 
-const { redirect } = useDirect();
 const courseId = useCourseId();
 const data = reactive<{ course: CourseType, info: userInfoType }>({ course: {}, info: {} });
 const { course, info } = toRefs(data);
@@ -27,8 +26,6 @@ getCourseById({ courseId })
                         Object.assign(data.info, infoRes.data);
                     }
                 })
-        } else {
-            redirect('/404');
         }
     })
 </script>

@@ -24,8 +24,6 @@ getLabById(labId).then(res => {
         form.content = res.data?.content || "";
         form.attachmentUrl = res.data?.attachmentUrl || "";
         form.deadLine = fmatTimeFitServer(res.data?.deadLine || "");
-    } else if (res.code === -19999) {
-        redirect('/404');
     }
 })
 

@@ -1,112 +1,122 @@
 <script lang="ts" setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, toRefs } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
+import { ElMessageBox } from 'element-plus';
 import TablePage from '@/components/common/TablePage.vue';
 import UploadFile from '@/components/common/UploadFile.vue';
 import BtnCt from '../common/BtnCt.vue';
-import { comfirm, useCourseId, useDialog } from '@/utils/helper';
-import { getCourseNotice, createNotice } from '@/utils/services';
+import NoticeForm from '../form/NoticeForm.vue';
+import { comfirm, useCourseId, useDialog, loadAttachment, showSuccessWrap, showFailWrap } from '@/utils/helper';
+import { getCourseNotice, createNotice, deleteNotice } from '@/utils/services';
+import { identifier } from '@babel/types';
 
 const courseId = useCourseId();
 const common = { courseId };
 const { isDialogOpen, openDialog, closeDialog } = useDialog()
+const { isDialogOpen: isEditPanelOpen, openDialog: openEditPanelOpen, closeDialog: closeEditPanelOpen } = useDialog()
 
-const refEl = ref();
-const form = reactive({
-    title: '',
-    content: '',
-    attachmentUrl: '',
-})
-const rules = reactive({
-    title: [
-        {
-            required: true,
-            message: '请输入公告标题',
-            trigger: 'blur',
-        },
-    ],
-})
-const update = (url: string) => {
-    form.attachmentUrl = url
-}
+const refCreateFormEl = ref();
+const refEditFormEl = ref();
+const refCtEl = ref();
+const refTableEl = ref();
+
 const sumbit = () => {
-    refEl.value.validate((isPass: boolean, obj: any) => {
-        if (isPass) {
-            comfirm({
-                type: 'submit',
-                refEl: refEl,
-                onSuccTipClose: () => {
-                    closeDialog();
-                },
-                fetchApi: createNotice,
-                params: {
-                    courseId,
-                    title: form.title,
-                    content: form.content,
-                    attachmentUrl: form.attachmentUrl
-                }
-            });
-        }
-    });
+    refCreateFormEl?.value?.submit?.();
 }
-const cancle = () => {
-    refEl?.value?.resetFields();
+const submitCb = () => {
+    closeDialog();
+    closeEditPanelOpen();
+    refTableEl?.value?.reload?.();
+}
+const cancleCreatePanel = () => {
+    refCreateFormEl?.value?.resetFields?.();
     closeDialog();
 }
-
-const load = (url: string) => {
-    window.location.href = url;
+const sumbitEdit = () => {
+    refEditFormEl?.value?.submit?.();
 }
-
+const cancleEditPanel = () => {
+    refEditFormEl?.value?.resetFields?.();
+    closeEditPanelOpen();
+}
+const load = (url: string, title: string) => {
+    loadAttachment(refCtEl, url);
+}
+const info = ref({
+    resourceId: 0,
+    title: '',
+    content: '',
+    attachmentUrl: ''
+})
+const updateResource = (row: any) => {
+    info.value = {
+        resourceId: row.resourceId,
+        title: row.title,
+        content : row.content,
+        attachmentUrl : row.attachmentUrl
+    }
+    openEditPanelOpen();
+}
 const remove = (id: number) => {
-
+    ElMessageBox.confirm(
+        '确认删除?',
+        '删除确认',
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            lockScroll: false,
+        }
+    )
+        .then(() => {
+            deleteNotice(id, courseId).then(res => {
+                if (res.code === 0) {
+                    showSuccessWrap({ text: '删除成功' })
+                    refTableEl?.value?.reload?.();
+                } else {
+                    showFailWrap({ text: '服务出现问题，请稍后再试' })
+                }
+            })
+        })
+        .catch(() => { })
 }
-
-const updateResource = (id: number) => {
-
-}
-
 </script>
-
 <template>
-    <div class="ct">
+    <div class="ct" ref="refCtEl">
         <BtnCt>
             <template v-slot:botton>
                 <el-button :icon="Plus" @click="openDialog">新增课程公告</el-button>
             </template>
         </BtnCt>
         <el-dialog v-model="isDialogOpen" title="新增课程公告">
-            <el-form :model="form" :rules="rules" ref="refEl">
-                <el-form-item label="标题" label-width="80px" prop="title">
-                    <el-input
-                        v-model="form.title"
-                        autocomplete="off"
-                        placeholder="请输入资源标题"
-                        maxlength="20"
-                        show-word-limit
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="描述" label-width="80px" prop="content">
-                    <el-input
-                        v-model="form.content"
-                        autocomplete="off"
-                        placeholder="请输入资源描述"
-                        maxlength="20"
-                        show-word-limit
-                    ></el-input>
-                </el-form-item>
-                <el-form-item label="资源上传" label-width="80px" prop="content">
-                    <UploadFile type="attachment" @update="update" />
-                </el-form-item>
-            </el-form>
+            <NoticeForm :success-cb="submitCb" ref="refCreateFormEl" />
             <template #footer>
                 <span class="dialog-footer">
                     <el-button type="primary" @click="sumbit">提交</el-button>
-                    <el-button @click="cancle">取消</el-button>
+                    <el-button @click="cancleCreatePanel">取消</el-button>
                 </span>
             </template>
         </el-dialog>
-        <TablePage :common="common" :fetch-data="getCourseNotice" emptyDes="本课程暂无公告">
+        <el-dialog v-model="isEditPanelOpen" title="修改课程公告">
+            <NoticeForm
+                :success-cb="submitCb"
+                ref="refEditFormEl"
+                type="edit"
+                :info="info"
+            />
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button type="primary" @click="sumbitEdit">提交</el-button>
+                    <el-button @click="cancleEditPanel">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <TablePage
+            :common="common"
+            :fetch-data="getCourseNotice"
+            emptyDes="本课程暂无公告"
+            ref="refTableEl"
+        >
             <template v-slot:tableColumns>
                 <el-table-column prop="title" label="公告名称" min-width="140" />
                 <el-table-column prop="content" label="内容" min-width="280" />
@@ -115,12 +125,14 @@ const updateResource = (id: number) => {
                         <el-button
                             type="success"
                             size="default"
-                            @click="load(scope?.row?.attachmentUrl)"
-                        >下载</el-button>
+                            v-if="scope?.row?.attachmentUrl"
+                            @click="load(scope?.row?.attachmentUrl, scope?.row?.title)"
+                        >下载资料</el-button>
+                        <el-button type="success" size="default" disabled v-else>暂无资料</el-button>
                         <el-button
                             type="primary"
                             size="default"
-                            @click="updateResource(scope?.row?.resourceId)"
+                            @click="updateResource(scope?.row)"
                         >修改</el-button>
                         <el-button
                             type="danger"
@@ -133,7 +145,6 @@ const updateResource = (id: number) => {
         </TablePage>
     </div>
 </template>
-
 <style lang="less" scoped>
 .ct {
     margin: 20px;

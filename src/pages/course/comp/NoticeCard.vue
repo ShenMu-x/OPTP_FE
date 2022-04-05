@@ -53,5 +53,6 @@ courseId && fetch(1);
 }
 .empty {
     display: flex;
+    justify-content: center;
 }
 </style>

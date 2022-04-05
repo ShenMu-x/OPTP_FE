@@ -3,7 +3,6 @@ import { ref, onBeforeUnmount, inject } from 'vue';
 import { clearTokenAndRole } from '../storage';
 import { showSuccessWrap } from './comfirm';
 import { userInfoType } from '@/type';
-import { stringify } from 'querystring';
 
 export const useCourseId = () => {
     const route = useRoute();

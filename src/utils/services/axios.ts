@@ -1,8 +1,15 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { getLocalStorage, clearTokenAndRole, LocalVal } from "../storage";
+import { getLocalStorage, LocalVal } from "../storage";
 import { HttpCode, Code } from './code';
 import { baseURL } from "../option";
-import router from "@/router";
+import {
+    clearAuthAndRedirect,
+    REQUEST_REFRESH_TOKEN_URL,
+    refreshAccessToken,
+    getIsTokenRefreshing,
+    pushRetryRequset,
+    clearRetryQueue
+} from './refreshToken';
 
 const axiosConfig = {
     baseURL,
@@ -25,8 +32,17 @@ _axios.interceptors.response.use(
         if (error.response) {
             const statusCode = error.response.status;
             if (statusCode === HttpCode.NoAuth) {
-                clearTokenAndRole();
-                router.push({ path: '/login' });
+                return new Promise((resolve, reject) => {
+                    let { config } = error.response;
+                    if (config.url === REQUEST_REFRESH_TOKEN_URL) {
+                        clearRetryQueue();
+                        clearAuthAndRedirect();
+                        reject(error);
+                    } else {
+                        if (!getIsTokenRefreshing()) refreshAccessToken();
+                        pushRetryRequset(() =>  resolve(_axios(config)));
+                    }
+                })
             } else if (statusCode === HttpCode.ServerError) {
                 error.response.data = {
                     code: HttpCode.ServerError,

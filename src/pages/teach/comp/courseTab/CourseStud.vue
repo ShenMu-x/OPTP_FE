@@ -5,7 +5,7 @@ import BtnBlue from '@/components/common/BtnBlue.vue';
 import BtnCt from '../common/BtnCt.vue';
 import StudPage from '../common/StudPage.vue';
 import UploadStudentCsv from '../common/UploadStudentCsv.vue';
-import { useDialog, useCourseId, showFailWrap, loadCsv } from '@/utils/helper';
+import { useDialog, useCourseId, showFailWrap, loadCsv, showSuccessWrap } from '@/utils/helper';
 import { checkJoinInApplication, fetchImportMemberTemplate } from '@/utils/services';
 
 const { isDialogOpen, openDialog, closeDialog } = useDialog()
@@ -13,7 +13,7 @@ const courseId = useCourseId();
 
 const refEl = ref();
 const getMemberTemplate = () => {
-    loadCsv(refEl?.value,'导入学生模板', fetchImportMemberTemplate, {});
+    loadCsv(refEl?.value, '导入学生模板', fetchImportMemberTemplate, {});
 }
 
 const focusTab = ref('member');
@@ -26,6 +26,7 @@ const check = (userId: number, isPass: boolean) => {
         isPermitted: isPass,
     }).then(res => {
         if (res.code === 0) {
+            showSuccessWrap({ text: '通过学生申请' })
             refMemberList?.value?.reload?.();
             refVerityList?.value?.reload?.();
         } else {

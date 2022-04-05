@@ -13,7 +13,7 @@ const courseId = useCourseId();
 const common = { courseId }
 const refTableEl = ref();
 defineExpose({
-    reload: refTableEl?.value?.reload?.()
+    reload: refTableEl?.value?.reload
 })
 </script>
 

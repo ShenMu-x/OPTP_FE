@@ -25,7 +25,6 @@ const focusTab = ref('lab');
 getCourseById({ courseId })
   .then(res => {
     if (res.code === 0 && res.data) Object.assign(data.course, res.data);
-    else redirect('/404');
   })
 </script>
 

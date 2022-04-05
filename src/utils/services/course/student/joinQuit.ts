@@ -18,7 +18,6 @@ export const askJoinInCourse: (params: {
 
 // 退出课程
 export const quitCourse: (params: {
-    studentId: number,
     courseId: number,
 }) => ResType<any> = (params) => {
     return _axios({
