@@ -1,14 +1,12 @@
 <script lang="ts" setup>
-import { ref, reactive, toRefs } from 'vue';
+import { ref } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 import { ElMessageBox } from 'element-plus';
 import TablePage from '@/components/common/TablePage.vue';
-import UploadFile from '@/components/common/UploadFile.vue';
-import BtnCt from '../common/BtnCt.vue';
+import BtnCt from '@/components/common/BtnCt.vue';
 import NoticeForm from '../form/NoticeForm.vue';
-import { comfirm, useCourseId, useDialog, loadAttachment, showSuccessWrap, showFailWrap } from '@/utils/helper';
-import { getCourseNotice, createNotice, deleteNotice } from '@/utils/services';
-import { identifier } from '@babel/types';
+import { useCourseId, useDialog, loadAttachment, showSuccessWrap, showFailWrap } from '@/utils/helper';
+import { getCourseNotice, deleteNotice } from '@/utils/services';
 
 const courseId = useCourseId();
 const common = { courseId };

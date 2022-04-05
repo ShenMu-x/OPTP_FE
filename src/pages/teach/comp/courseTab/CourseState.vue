@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { Download, Pointer } from '@element-plus/icons-vue';
-import BtnCt from '../common/BtnCt.vue';
+import BtnCt from '@/components/common/BtnCt.vue';
 import TablePage from '@/components/common/TablePage.vue';
 import { exportScore, getCourseScoreList } from '@/utils/services';
 import { useCourseId, useDirect, loadCsv } from '@/utils/helper';

@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
-import BtnCt from '../common/BtnCt.vue';
+import BtnCt from '@/components/common/BtnCt.vue';
 import StudPage from '../common/StudPage.vue';
 import UploadStudentCsv from '../common/UploadStudentCsv.vue';
 import { useDialog, useCourseId, showFailWrap, loadCsv, showSuccessWrap } from '@/utils/helper';

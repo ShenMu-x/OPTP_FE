@@ -3,7 +3,7 @@ import { reactive, ref } from 'vue';
 import { ElMessageBox } from 'element-plus';
 import { Plus, Download } from '@element-plus/icons-vue';
 import TablePage from '@/components/common/TablePage.vue';
-import BtnCt from '../common/BtnCt.vue';
+import BtnCt from '@/components/common/BtnCt.vue';
 import { showSuccessWrap, useCourseId, useDialog, loadCsv } from '@/utils/helper';
 import { createAttend, getCourseAttendRecords, deleteAttend, exportAttend } from "@/utils/services";
 

@@ -22,6 +22,10 @@ const routes = [
         component: () => import('../pages/ide/Ide.vue'),
     },
     {
+        path: '/manage_platform',
+        component: () => import('../pages/manage/ManageHome.vue'),
+    },
+    {
         path: '/',
         component: () => import("../layout/index.vue"),
         children: [

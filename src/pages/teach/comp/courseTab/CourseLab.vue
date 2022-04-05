@@ -3,8 +3,8 @@ import { ref } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 import TablePage from '@/components/common/TablePage.vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
+import BtnCt from '@/components/common/BtnCt.vue';
 import LabForm from '../form/LabForm.vue';
-import BtnCt from '../common/BtnCt.vue';
 import { isBefore, useCourseId, useDirect, useDialog } from '@/utils/helper';
 import { createLab, getCourseLabList } from '@/utils/services';
 
