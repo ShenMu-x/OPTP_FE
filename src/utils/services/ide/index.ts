@@ -1,6 +1,6 @@
-import _axios from "./axios"
-import { ResType } from "./type";
-import { packError } from "./pack";
+import _axios from "../axios"
+import { ResType } from "../type";
+import { packError } from "../pack";
 
 export const fetchIdeUrl: (labId: number) => ResType<{url: string}> = (labId) => {
     return _axios({

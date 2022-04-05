@@ -23,7 +23,7 @@ const focusTab = ref('user')
 </template>
 <style lang="less" scoped>
 .courseCtrCt {
-  margin: 10px 30px;
+  margin: 30px;
   padding: 10px;
   background-color: #fff;
 }

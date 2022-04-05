@@ -61,7 +61,6 @@ const deleteHandler = (checkinRecordId: number) => {
             })
     })
 }
-
 </script>
 
 <template>

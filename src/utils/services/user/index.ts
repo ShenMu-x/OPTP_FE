@@ -1,7 +1,7 @@
-import _axios from "./axios";
-import { ResType } from "./type";
+import _axios from "../axios";
+import { ResType } from "../type";
 import { userInfoType } from '@/type';
-import { packError, packEmptyData } from "./pack";
+import { packError, packEmptyData } from "../pack";
 
 export const getUserInfoByTk: () => ResType<userInfoType> = () => {
     return _axios({

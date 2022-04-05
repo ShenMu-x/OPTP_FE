@@ -1,6 +1,7 @@
 import _axios from '../../axios';
 import { ResType, ListRes } from '../../type';
-import { packError, packEmptyData, packPageRes } from "../../pack";
+import { packError, packPageRes } from "../../pack";
+import { exportCsv } from '../../exportCsv';
 
 export type ScoreType = {
     userId: number,
@@ -31,22 +32,8 @@ export const packScore = (item: any) => ({
 })
 
 // 导出成绩
-export const exportScore: (courseId: number) => ResType<{csvData: any}> = (courseId) => {
-    return _axios({
-        responseType: "blob",
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
-        method: 'GET',
-        url: `/web/course/score/export/${courseId}`
-    }).then(res => {
-        return {
-            code: 0,
-            data: {
-                csvData: res.data
-            }
-        }
-    }).catch(packError)
+export const exportScore: (courseId: number) => ResType<{ csvData: any }> = (courseId) => {
+    return exportCsv(`/web/course/score/export/${courseId}`);
 }
 
 // 获取课程学生成绩

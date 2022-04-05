@@ -1,5 +1,5 @@
-import _axios from "./axios"
-import { ResType } from "./type";
+import _axios from "../axios"
+import { ResType } from "../type";
 
 export const fetchCodeResult: (params: { language: number, code: string }) => ResType<{
     status: number,

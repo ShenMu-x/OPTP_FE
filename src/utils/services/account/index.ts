@@ -1,8 +1,8 @@
-import _axios from "./axios";
-import { ResType } from './type';
-import { setLocalStorage, LocalVal } from '@/utils/storage';
-import { packError, packEmptyData } from "./pack";
-import { TeacherRole, RoleList } from '../option';
+import _axios from "../axios";
+import { ResType } from '../type';
+import { setLocalStorage, LocalVal } from '../../storage';
+import { packError, packEmptyData } from "../pack";
+
 interface RegisterReq {
     email: string;
     realName: string;

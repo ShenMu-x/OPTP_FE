@@ -1,6 +1,7 @@
 import _axios from '../../axios';
 import { ResType } from '../../type';
 import { packError, packEmptyData, packPageRes } from "../../pack";
+import { exportCsv } from '../../exportCsv';
 
 // 审核学生加入申请
 export const checkJoinInApplication: (params: {
@@ -66,19 +67,5 @@ export const getCourseStudents: (params: {
 
 //获取学生模板
 export const fetchImportMemberTemplate: () => ResType<{csvData: any}> = () => {
-    return _axios({
-        responseType: "blob",
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
-        method: 'GET',
-        url: `/web/course/student/export/template`
-    }).then(res => {
-        return {
-            code: 0,
-            data: {
-                csvData: res.data
-            }
-        }
-    }).catch(packError)
+    return exportCsv(`/web/course/student/export/template`);
 }
