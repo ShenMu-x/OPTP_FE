@@ -5,6 +5,7 @@ import Tag from '../common/Tag.vue';
 import BtnBlue from '../common/BtnBlue.vue';
 import { labType } from '@/type';
 import { fmatDate, useDirect,isAfterCurrentTime } from '@/utils/helper';
+import { setLabStatus } from '@/utils/services';
 import { getIDEUrl } from './logic';
 
 const props = defineProps<{ info: labType }>();
@@ -13,9 +14,12 @@ const info = toRef(props, 'info');
 const openLabDrawer = () => {
     emits('openDrawer', info.value);
 }
-const finishStatus = ref(info.value?.isFinish);
-const updateStatus = () => {
-    // 申请实验状态改变
+const finishStatus = ref(info.value.isFinish ?? false);
+const updateLabStatus = () => {
+    setLabStatus({
+        isFinish: finishStatus.value,
+        labId: info.value?.labId ?? 0
+    })
 }
 const { directToWithParams } = useDirect();
 const toIDE = async () => {
@@ -61,7 +65,7 @@ const toIDE = async () => {
                         class="switch"
                         active-color="#41da86"
                         inactive-color="#e96262"
-                        @change="updateStatus"
+                        @change="updateLabStatus"
                     />
                     <Tag
                         class="tag"
