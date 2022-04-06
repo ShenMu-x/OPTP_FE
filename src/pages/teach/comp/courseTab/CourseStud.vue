@@ -4,9 +4,10 @@ import { Plus } from '@element-plus/icons-vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
 import BtnCt from '@/components/common/BtnCt.vue';
 import StudPage from '../common/StudPage.vue';
-import UploadStudentCsv from '../common/UploadStudentCsv.vue';
+import UploadCsv from '@/components/common/UploadCsv.vue';
 import { useDialog, useCourseId, showFailWrap, loadCsv, showSuccessWrap } from '@/utils/helper';
 import { checkJoinInApplication, fetchImportMemberTemplate } from '@/utils/services';
+import { UPLOAD_CSV_STUDENT_TEMPLATE_URL } from '@/utils/option';
 
 const { isDialogOpen, openDialog, closeDialog } = useDialog()
 const courseId = useCourseId();
@@ -44,7 +45,7 @@ const check = (userId: number, isPass: boolean) => {
             </template>
         </BtnCt>
         <el-dialog v-model="isDialogOpen" title="导入学生列表">
-            <UploadStudentCsv @upload="closeDialog" :course-id="courseId" />
+            <UploadCsv @upload="closeDialog" :data="{courseId}" :upload-url="UPLOAD_CSV_STUDENT_TEMPLATE_URL"/>
             <template #footer>
                 <span class="dialog-footer">
                     <BtnBlue size="large" @click="getMemberTemplate">下载模板文件</BtnBlue>

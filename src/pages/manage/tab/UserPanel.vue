@@ -1,54 +1,75 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
+import { Plus, Upload } from '@element-plus/icons-vue';
 import TablePage from '@/components/common/TablePage.vue';
 import BtnCt from '@/components/common/BtnCt.vue';
-import { Plus, Download } from '@element-plus/icons-vue';
+import Avatar from '@/components/common/Avatar.vue';
+import CreateAccountPanel from './comp/CreateAccountPanel.vue';
+import UploadStudentPanel from './comp/UploadStudentPanel.vue';
+import EditAccountPanel from './comp/EditAccountPanel.vue';
+import { getGender } from '@/utils/helper';
+import { getAllAccoutInfo } from '@/utils/services';
+
+const refCreateAccountEl = ref();
+const openAccountPanel = () => {
+    refCreateAccountEl?.value?.openPanel?.();
+}
+const refUploadStudentEl = ref();
+const openUploadPanel = () => {
+    refUploadStudentEl?.value?.openPanel?.();
+}
+const refEditInfoEl = ref();
+const info = ref<any>({});
+const editInfoHandler = (params: any) => {
+    info.value = params;
+    refEditInfoEl?.value?.openPanel?.();
+}
 </script>
 
 <template>
     <div class="layout">
-        <!-- <BtnCt>
+        <BtnCt>
             <template v-slot:botton>
-                <el-button :icon="Plus" @click="openDialog">新建签到</el-button>
-                <el-button :icon="Download" @click="loadRecordsFile">下载学生签到记录</el-button>
+                <el-button :icon="Plus" @click="openAccountPanel">新增系统用户</el-button>
+                <el-button :icon="Upload" @click="openUploadPanel">导入学生信息</el-button>
             </template>
         </BtnCt>
-        <el-dialog v-model="isDialogOpen" title="新建签到">
-            <el-form :model="form" ref="refEl">
-                <el-form-item label="签到名称" label-width="120px">
-                    <el-input v-model="form.name" placeholder="请输入签到名称"></el-input>
-                </el-form-item>
-                <el-form-item label="签到时长(分钟)" label-width="120px">
-                    <el-input-number v-model="form.duration" :min="5" style="margin-right: 10px"/>
-                    <span class="note">签到时长至少5分钟</span>
-                </el-form-item>
-            </el-form>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button type="primary" @click="submit">提交</el-button>
-                    <el-button @click="cancle">取消</el-button>
-                </span>
-            </template>
-        </el-dialog>
-        <TablePage :common="common" :fetch-data="getCourseAttendRecords" ref="refTableEl">
+        <CreateAccountPanel ref="refCreateAccountEl" />
+        <UploadStudentPanel ref="refUploadStudentEl" />
+        <EditAccountPanel ref="refEditInfoEl" />
+        <TablePage
+            :page-size="6"
+            :fetch-data="getAllAccoutInfo"
+            ref="refTableEl"
+            emptyDes="系统中暂无账户"
+        >
             <template v-slot:tableColumns>
-                <el-table-column prop="name" label="签到名称" min-width="100" />
-                <el-table-column prop="createAt" label="创建时间" min-width="180" />
-                <el-table-column prop="total" label="应签到人数" min-width="100" />
-                <el-table-column prop="actual" label="实际签到人数" min-width="100" />
+                <el-table-column label="头像" min-width="40">
+                    <template #default="scope">
+                        <Avatar type="small" :src="scope.row.avatarUrl" />
+                    </template>
+                </el-table-column>
+                <el-table-column prop="realName" label="姓名" min-width="100" />
+                <el-table-column prop="num" label="学号" min-width="100" />
+                <el-table-column prop="email" label="邮箱" min-width="140" />
+                <el-table-column prop="gender" label="性别" min-width="40">
+                    <template #default="scope">{{ getGender(scope.row.gender) }}</template>
+                </el-table-column>
+                <el-table-column prop="major" label="专业" min-width="100" />
+                <el-table-column prop="organization" label="单位" min-width="100" />
                 <el-table-column label="操作">
                     <template #default="scope">
                         <el-button
                             type="danger"
                             size="default"
-                            @click="deleteHandler(scope.row.checkinRecordId)"
-                        >删除</el-button>
+                            @click="editInfoHandler(scope.row)"
+                        >修改信息</el-button>
                     </template>
                 </el-table-column>
             </template>
-        </TablePage> -->
+        </TablePage>
     </div>
 </template>
 
 <style lang="less" scoped>
-
 </style>

@@ -51,7 +51,8 @@ interface comfirmParams {
     successCb?: any,
     onSuccTipClose?: any,
     onFailTipClose?: any,
-    failCb?: any
+    failCb?: any,
+    finallyCb?: any
 }
 
 export const comfirm = ({
@@ -60,6 +61,7 @@ export const comfirm = ({
     cilckCancle,
     failCb,
     successCb,
+    finallyCb,
     onSuccTipClose,
     onFailTipClose,
     fetchApi,
@@ -92,6 +94,7 @@ export const comfirm = ({
                             });
                             failCb?.(res);
                         }
+                        finallyCb?.();
                     })
                 })
                 .catch(() => {

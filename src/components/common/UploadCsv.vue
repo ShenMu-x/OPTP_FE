@@ -8,21 +8,19 @@ import type {
     ElFile,
 } from 'element-plus/es/components/upload/src/upload.type'
 import { wrapHeaderWithToken, showFailWrap, showSuccessWrap } from '@/utils/helper';
-import { UPLOAD_CSV_STUDENT_TEMPLATE_URL } from '@/utils/option';
 
+const props = defineProps<{ uploadUrl: string, data?: any }>();
 const refUploadEl = ref();
 let allowType = ref(['text/csv'])
 let fileType = ref(['csv']);
-let name = ref('csv');
-let uploadUrl = UPLOAD_CSV_STUDENT_TEMPLATE_URL;
+let uploadUrl = props.uploadUrl;
 
-const props = defineProps<{ courseId: number }>();
 const emits = defineEmits(['upload']);
 
 const handleFileSuccess = (res: { code: number, data: { url: string } }, file: UploadFile) => {
     emits('upload', res.data.url);
     showSuccessWrap({
-        text: '学生列表导入成功'
+        text: '导入成功'
     })
 }
 const handleFileError = () => {
@@ -72,8 +70,8 @@ defineExpose({
         :on-remove="handleRemove"
         :on-exceed="handleExceed"
         :before-upload="beforeFileUpload"
-        :name="name"
-        :data="{ courseId: props.courseId }"
+        name="csv"
+        :data="props.data ?? {}"
     >
         <el-icon class="el-icon--upload">
             <upload-filled />
