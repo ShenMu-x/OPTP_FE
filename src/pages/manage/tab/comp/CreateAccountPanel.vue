@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { comfirm, useDialog } from '@/utils/helper';
 import { addAccount } from '@/utils/services';
-import { reactive } from 'vue-demi';
 
 const { isDialogOpen, openDialog, closeDialog } = useDialog();
 const refEl = ref();
@@ -38,7 +37,7 @@ defineExpose({
 </script>
 
 <template>
-    <el-dialog v-model="isDialogOpen"  title="新建账户">
+    <el-dialog v-model="isDialogOpen" title="新建账户">
         <el-form :model="form" ref="refEl">
             <el-form-item label="账户身份" :label-width="labelWidth">
                 <el-radio-group v-model="form.role" size="large">

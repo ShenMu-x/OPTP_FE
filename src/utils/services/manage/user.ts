@@ -2,7 +2,7 @@ import _axios from "../axios";
 import { ResType, ListRes } from "../type";
 import { packError, packEmptyData, packPageRes } from "../pack";
 import { exportCsv } from "../exportCsv";
-interface account {
+export interface accountType {
     userId: number,
     email: string,
     num: string,
@@ -27,7 +27,7 @@ const packAccount = (info: { user_id: any; email: any; num: any; real_name: any;
 export const getAllAccoutInfo: (params: {
     pageCurrent: number,
     pageSize: number
-}) => ResType<ListRes<account>> = (params) => {
+}) => ResType<ListRes<accountType>> = (params) => {
     return _axios({
         method: "GET",
         url: "/admin/user",
@@ -66,7 +66,7 @@ interface editAccountReq {
 export const editAccountInfo: (data: editAccountReq) => ResType<any> = (data) => {
     return _axios({
         method: "POST",
-        url: "/admin/amend",
+        url: "/admin/user/amend",
         data,
     })
         .then(packEmptyData)

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { createRouter, createWebHistory } from "vue-router";
 import { getLocalStorage, LocalVal } from "../utils/storage";
-import { isTeacher } from "@/utils/helper/is";
+import { isTeacher, isStudent, isManager } from "@/utils/helper/is";
 
 const routes = [
     {
@@ -96,9 +96,9 @@ router.beforeEach((to, from, next) => {
 
     // 职能区分
     if (to.path === '/') {
-        isTeacher() ?
-            next('/teach/user_center') :
-            next('/user_center')
+        isTeacher() && (next('/teach/user_center'))
+        isStudent() && (next('/user_center'))
+        isManager() && (next('/manage_platform'))
         return
     }
     // 部分路由参数校验

@@ -8,8 +8,10 @@ import CreateAccountPanel from './comp/CreateAccountPanel.vue';
 import UploadStudentPanel from './comp/UploadStudentPanel.vue';
 import EditAccountPanel from './comp/EditAccountPanel.vue';
 import { getGender } from '@/utils/helper';
-import { getAllAccoutInfo } from '@/utils/services';
+import { getAllAccoutInfo, accountType } from '@/utils/services';
+import { emptyAccount } from './default';
 
+const refTableEl  =ref();
 const refCreateAccountEl = ref();
 const openAccountPanel = () => {
     refCreateAccountEl?.value?.openPanel?.();
@@ -19,10 +21,13 @@ const openUploadPanel = () => {
     refUploadStudentEl?.value?.openPanel?.();
 }
 const refEditInfoEl = ref();
-const info = ref<any>({});
+const account = ref<accountType>(emptyAccount);
 const editInfoHandler = (params: any) => {
-    info.value = params;
+    account.value = params;
     refEditInfoEl?.value?.openPanel?.();
+}
+const submitHandler = () => {
+    refTableEl?.value?.reload?.()
 }
 </script>
 
@@ -36,7 +41,7 @@ const editInfoHandler = (params: any) => {
         </BtnCt>
         <CreateAccountPanel ref="refCreateAccountEl" />
         <UploadStudentPanel ref="refUploadStudentEl" />
-        <EditAccountPanel ref="refEditInfoEl" />
+        <EditAccountPanel ref="refEditInfoEl" :account="account" @submit="submitHandler" />
         <TablePage
             :page-size="6"
             :fetch-data="getAllAccoutInfo"

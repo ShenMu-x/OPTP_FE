@@ -83,6 +83,8 @@ const leave = () => { isHover.value = false; }
 
 <style lang="less" scoped>
 .avatarUploader {
+    height: 100px;
+    width: 100px;
     cursor: pointer;
     position: relative;
 }

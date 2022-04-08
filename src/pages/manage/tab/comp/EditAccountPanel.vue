@@ -1,12 +1,54 @@
 <script lang="ts" setup>
-import TablePage from '@/components/common/TablePage.vue';
-import BtnCt from '@/components/common/BtnCt.vue';
-import { Plus, Download, Upload } from '@element-plus/icons-vue';
-import { useDialog } from '@/utils/helper';
-import { editAccountInfo } from '@/utils/services';
+import { ref, reactive, toRef, watch } from 'vue';
+import UploadAvatar from '@/components/common/UploadAvatar.vue';
+import { comfirm, useDialog } from '@/utils/helper';
+import { editAccountInfo, accountType } from '@/utils/services';
+import { emptyAccount } from '../default';
 
 const { isDialogOpen, openDialog, closeDialog } = useDialog();
-
+const refEl = ref();
+const labelWidth = '80px';
+const props = defineProps<{ account: accountType }>();
+const account = toRef(props, 'account');
+const form = reactive(emptyAccount)
+const refreshInfo = () => {
+    form.userId = account.value.userId;
+    form.email = account.value.email;
+    form.realName = account.value.realName;
+    form.num = account.value.num;
+    form.avatarUrl = account.value?.avatarUrl;
+    form.major = account.value?.major;
+    form.organization = account.value?.organization;
+    form.gender = account.value?.gender;
+}
+watch(account, (newV, oldV) => {
+    if (newV.userId !== oldV.userId) refreshInfo()
+})
+const emits = defineEmits(['submit'])
+const getUrl = (url: string) => { form.avatarUrl = url; }
+const submit = () => {
+    comfirm({
+        type: 'edit',
+        refEl,
+        successCb: () => { emits('submit') },
+        finallyCb: closeDialog,
+        fetchApi: editAccountInfo,
+        params: {
+            user_id: form.userId,
+            email: form.email,
+            number: form.num,
+            name: form.realName,
+            major: form.major,
+            organization: form.organization,
+            avatar: form.avatarUrl,
+            gender: form.gender,
+        }
+    })
+}
+const cancle = () => {
+    refEl?.value?.resetFields?.();
+    closeDialog()
+}
 defineExpose({
     openPanel: openDialog
 })
@@ -14,13 +56,30 @@ defineExpose({
 
 <template>
     <el-dialog v-model="isDialogOpen" title="新建账户">
-        <!-- <el-form :model="form" ref="refEl">
-            <el-form-item label="签到名称" label-width="120px">
-                <el-input v-model="form.name" placeholder="请输入签到名称"></el-input>
+        <el-form :model="form" ref="refEl">
+            <el-form-item label="邮箱信息" :label-width="labelWidth" required>
+                <el-input v-model="form.email" placeholder="请输入账户邮箱"></el-input>
             </el-form-item>
-            <el-form-item label="签到时长(分钟)" label-width="120px">
-                <el-input-number v-model="form.duration" :min="5" style="margin-right: 10px" />
-                <span class="note">签到时长至少5分钟</span>
+            <el-form-item label="姓名" :label-width="labelWidth" required>
+                <el-input v-model="form.realName" placeholder="请输入用户姓名"></el-input>
+            </el-form-item>
+            <el-form-item label="学工号" :label-width="labelWidth" required>
+                <el-input v-model="form.num" placeholder="请输入签到名称"></el-input>
+            </el-form-item>
+            <el-form-item label="专业" prop="major" :label-width="labelWidth">
+                <el-input v-model="form.major"></el-input>
+            </el-form-item>
+            <el-form-item label="单位" prop="organization" :label-width="labelWidth">
+                <el-input v-model="form.organization" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="性别" :label-width="labelWidth">
+                <el-radio-group v-model="form.gender">
+                    <el-radio :label="0">男</el-radio>
+                    <el-radio :label="1">女</el-radio>
+                </el-radio-group>
+            </el-form-item>
+            <el-form-item label="头像" :label-width="labelWidth">
+                <UploadAvatar :after-upload="getUrl" :avatarUrl="form.avatarUrl" />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -28,7 +87,7 @@ defineExpose({
                 <el-button type="primary" @click="submit">提交</el-button>
                 <el-button @click="cancle">取消</el-button>
             </span>
-        </template> -->
+        </template>
     </el-dialog>
 </template>
 
