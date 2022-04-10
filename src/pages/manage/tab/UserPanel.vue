@@ -49,7 +49,7 @@ const submitHandler = () => {
             emptyDes="系统中暂无账户"
         >
             <template v-slot:tableColumns>
-                <el-table-column label="头像" min-width="40">
+                <el-table-column label="头像" min-width="60">
                     <template #default="scope">
                         <Avatar type="small" :src="scope.row.avatarUrl" />
                     </template>
@@ -57,12 +57,12 @@ const submitHandler = () => {
                 <el-table-column prop="realName" label="姓名" min-width="100" />
                 <el-table-column prop="num" label="学号" min-width="100" />
                 <el-table-column prop="email" label="邮箱" min-width="140" />
-                <el-table-column prop="gender" label="性别" min-width="40">
+                <el-table-column prop="gender" label="性别" min-width="60">
                     <template #default="scope">{{ getGender(scope.row.gender) }}</template>
                 </el-table-column>
                 <el-table-column prop="major" label="专业" min-width="100" />
                 <el-table-column prop="organization" label="单位" min-width="100" />
-                <el-table-column label="操作">
+                <el-table-column label="操作" min-width="120">
                     <template #default="scope">
                         <el-button
                             type="danger"

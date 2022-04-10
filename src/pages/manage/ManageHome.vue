@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import Layout from './Layout.vue';
 import UserPanel from './tab/UserPanel.vue';
+import CoursePanel from './tab/CoursePanel.vue';
 const focusTab = ref('user')
 </script>
 <template>
@@ -12,7 +13,7 @@ const focusTab = ref('user')
                     <UserPanel />
                 </el-tab-pane>
                 <el-tab-pane label="课程管理" name="course" lazy>
-                    2
+                    <CoursePanel />
                 </el-tab-pane>
                 <el-tab-pane label="实验管理" name="lab" lazy>
                     3
