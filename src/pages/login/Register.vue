@@ -29,9 +29,7 @@ const rules = reactive(getRegisterRule({
 
 const { redirect } = useDirect();
 const { current, isCounting, fetchCode } = useCountDownWrap();
-const getCode = () => {
-  fetchCode(model.email)
-};
+const getCode = () => fetchCode(model.email)
 
 // 用户身份类型切换
 let register = stuRegister;
@@ -68,13 +66,7 @@ const registerHandler = () => {
     <FormCt class="RegisterFormCt">
       <TextReturnBtn />
       <p class="formTitle">用户注册</p>
-      <el-form
-        label-position="top"
-        class="registerForm"
-        :model="model"
-        ref="refFormEl"
-        :rules="rules"
-      >
+      <el-form label-position="top" class="registerForm" :model="model" ref="refFormEl" :rules="rules">
         <el-form-item label="身份">
           <el-radio-group v-model="model.role" size="large" @change="changeRole">
             <el-radio :label="0" border>我是学生</el-radio>
@@ -122,34 +114,40 @@ const registerHandler = () => {
         </div>
       </el-form>
     </FormCt>
-  </Layout>
+    </Layout>
 </template>
 <style lang="less" scoped>
 .RegisterFormCt {
   width: 60%;
   padding: 0 30px;
   margin: 25px 0;
+
   .formTitle {
     font-size: 32px;
     margin-bottom: 20px;
   }
+
   .registerForm {
     margin-bottom: 30px;
   }
 }
+
 .codeInpCt {
   display: flex;
   width: 100%;
+
   .codeInput {
     flex: 1;
     margin-right: 40px;
   }
 }
+
 .registerBtnCt {
   font-size: 14px;
   margin-top: 10px;
   float: right;
 }
+
 .registerBtn {
   width: 100%;
   margin-top: 30px;

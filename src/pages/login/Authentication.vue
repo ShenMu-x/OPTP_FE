@@ -23,9 +23,7 @@ const rules = reactive(getAuthRule({
 
 const { redirect } = useDirect();
 const { current, isCounting, fetchCode } = useCountDownWrap();
-const getVerificationCode = () => {
-  fetchCode(form.email);
-};
+const getVerificationCode = () => fetchCode(form.email);
 
 const registerHandler = () => {
   comfirm({
@@ -70,34 +68,40 @@ const registerHandler = () => {
         </div>
       </el-form>
     </FormCt>
-  </Layout>
+    </Layout>
 </template>
 <style lang="less" scoped>
 .authCt {
   width: 60%;
   padding: 0 30px;
   margin: 25px 0;
+
   .formTitle {
     font-size: 32px;
     margin-bottom: 20px;
   }
+
   .auth {
     margin-bottom: 30px;
   }
 }
+
 .codeInpCt {
   display: flex;
   width: 100%;
+
   .codeInput {
     flex: 1;
     margin-right: 40px;
   }
 }
+
 .registerBtnCt {
   font-size: 14px;
   margin-top: 10px;
   float: right;
 }
+
 .submitBtn {
   width: 100%;
   margin-top: 30px;

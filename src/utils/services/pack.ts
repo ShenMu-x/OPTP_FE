@@ -4,7 +4,12 @@ export const packError = (err: any) => {
         errorMsg: err.response?.data?.message || '服务异常，请稍后再试',
     }
 }
-
+export const packErrorWrap = (err: any, errorMap: Map<number, string>) => {
+    return {
+        code: err.response?.data?.code || -1,
+        errorMsg: errorMap.get(err.response?.data?.code) || '服务异常，请稍后再试',
+    }
+}
 export const packEmptyData = () => ({ code: 0 });
 
 export const packPageRes = (res: { data: { data: { records: any[]; page_info: { total: number }; }; }; }, pack: (arg0: any) => any) => {

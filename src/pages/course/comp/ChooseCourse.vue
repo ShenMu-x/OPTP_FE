@@ -5,19 +5,19 @@ import { showFailWrap, showSuccessWrap } from '@/utils/helper';
 
 const props = defineProps<{
     courseId: number,
-    secret: string,
+    isClose: boolean,
 }>();
-const inp = ref('');
+const key = ref('');
 
 const submit = () => {
-    if (inp.value !== props.secret) {
+    if (key.value === '') {
         showFailWrap({
-            text: '选课密码不正确'
+            text: '选课密码不为空'
         })
     } else {
         askJoinInCourse({
             courseId: props.courseId,
-            secretKey: props.secret
+            secretKey: key.value
         }).then(res => {
             if (res.code === 0) {
                 showSuccessWrap({
@@ -37,12 +37,13 @@ const submit = () => {
 <template>
     <div class="courseChooseCard">
         <div class="cardTitle">自主选课</div>
-        <div class="coursePsw">
-            请输入6位选课密码:
-            <input type="text" maxlength="6" minlength="6" class="pswInput" v-model="inp" />
+        <div v-if="props.isClose">本课程已结束，无法选课</div>
+        <div class="courseKey" v-else>
+            <div class="desc">请输入6位选课密码:</div>
+            <el-input type="text" maxlength="6" minlength="6" class="pswInput" v-model="key"></el-input>
+            <el-button class="submitBtn" type="primary" @click="submit">选课</el-button>
         </div>
-        <el-button class="submitBtn" type="primary" @click="submit">选课</el-button>
-    </div>
+</div>
 </template>
 
 <style lang="less" scoped>
@@ -54,15 +55,25 @@ const submit = () => {
     text-align: left;
 }
 
+.courseKey {
+    width: 60%;
+    display: flex;
+}
+
+.desc {
+    flex: 0 0 145px;
+    width: 145px;
+    line-height: 40px;
+}
+
 .pswInput {
-    margin-left: 10px;
+    margin-left: 5px;
     line-height: 1em;
     padding: 0 5px;
 }
 
 .submitBtn {
-    float: right;
-    margin-right: 20px;
+    margin-left: 40px;
 }
 
 .cardTitle {

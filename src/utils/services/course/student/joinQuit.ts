@@ -1,6 +1,6 @@
 import _axios from '../../axios';
 import { ResType } from '../../type';
-import { packError, packEmptyData } from "../../pack";
+import { packError, packErrorWrap, packEmptyData } from "../../pack";
 
 // 申请加入课程
 export const askJoinInCourse: (params: {
@@ -13,7 +13,7 @@ export const askJoinInCourse: (params: {
         data: params
     })
         .then(packEmptyData)
-        .catch(packError)
+        .catch(err => packErrorWrap(err, new Map<number, string>([[10002, '选课密码错误']])))
 }
 
 // 退出课程

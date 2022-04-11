@@ -1,8 +1,7 @@
 import _axios from "../axios";
 import { ResType } from '../type';
 import { setLocalStorage, LocalVal } from '../../storage';
-import { packError, packEmptyData } from "../pack";
-
+import { packError, packErrorWrap, packEmptyData } from "../pack";
 interface RegisterReq {
     email: string;
     realName: string;
@@ -13,7 +12,6 @@ interface RegisterReq {
     organization: string;
     verificationCode: string;
 }
-
 export const stuRegister: (params: RegisterReq) => ResType<''> = (params) => {
     return _axios.post('/web/user/signup/stu', params)
         .then(packEmptyData)
@@ -26,20 +24,13 @@ export const teachRegister: (params: RegisterReq) => ResType<''> = (params) => {
         .catch(packError);
 }
 
-export const getCode: (params: { email: string }) => ResType<boolean> = (params) => {
+export const getVerificationCode: (params: { email: string }) => ResType<boolean> = (params) => {
     return _axios.post('/web/user/verificationCode', params)
         .then(res => ({ code: res.data.code, data: res.data.data }))
-        .catch(err => {
-            if (err.response.data.code === 10003) {
-                return {
-                    code: 10003,
-                    errorMsg: '查询不到该邮箱，请更换邮箱'
-                }
-            }
-            else return packError(err);
-        })
+        .catch(err => packErrorWrap(err, new Map<number, string>([
+            [10003, '查询不到该邮箱，请检查信息']
+        ])))
 }
-
 
 export const checkEmailUnique: (params: { email: string }) => ResType<{ isUnique: boolean }> = (params) => {
     return _axios({
@@ -48,16 +39,11 @@ export const checkEmailUnique: (params: { email: string }) => ResType<{ isUnique
         params: {
             email: encodeURIComponent(params.email)
         }
-    }).then(value => ({ code: 0, data: { isUnique: value.data.data } })
-    ).catch(err => {
-        if (err.response.data.code === 10003) {
-            return {
-                code: 10003,
-                errorMsg: '查询不到该邮箱，请更换邮箱'
-            }
-        }
-        else return packError(err);
     })
+        .then(value => ({ code: 0, data: { isUnique: value.data.data } }))
+        .catch(err => packErrorWrap(err, new Map<number, string>([
+            [10003, '查询不到该邮箱，请检查信息']
+        ])))
 }
 
 interface loginReq {
@@ -69,7 +55,6 @@ interface loginRes {
     token?: string,
     message?: string,
 }
-
 export const login: (params: loginReq) => ResType<loginRes> = (params) => {
     return _axios.post('/web/login', params)
         .then(value => {
@@ -81,58 +66,27 @@ export const login: (params: loginReq) => ResType<loginRes> = (params) => {
             setLocalStorage(LocalVal.Role, role);
             return packEmptyData();
         })
-        .catch(err => {
-            let message = err.response?.data?.message;
-            switch (err.response?.data?.code) {
-                case -19998: {
-                    message = '账号或密码过长，请重新输入';
-                    break;
-                }
-                case -19999: {
-                    message = '账号或密码不为空，请重新输入';
-                    break;
-                }
-                case 10002: {
-                    message = '验证失败，账号或密码输入错误';
-                    break;
-                }
-                default: {
-                    message = err.response?.data?.message || '服务异常，请稍后再试';
-                }
-            }
-            return {
-                code: err.response?.data?.code,
-                errorMsg: message
-            }
-        });
+        .catch(err => packErrorWrap(err, new Map<number, string>([
+            [-19998, '账号或密码过长，请重新输入'],
+            [-19999, '账号或密码不为空，请重新输入'],
+            [10002, '账号或密码错误，请重新输入'],
+        ])))
 }
 
-interface pswReq {
+interface changePswReq {
     email: string;
     password: string;
     verificationCode: string
 }
-
-export const changePsw: (params: pswReq) => ResType<any> = (params) => {
+export const changePsw: (params: changePswReq) => ResType<any> = (params) => {
     return _axios({
         method: 'POST',
         url: '/web/user/password',
         data: params
     })
         .then(packEmptyData)
-        .catch(err => {
-            const code = err.response.data.code;
-            if (code === 10002) {
-                return {
-                    code: 10003,
-                    errorMsg: '验证码已过期，请重新输入'
-                }
-            } else if (code === 10003) {
-                return {
-                    code: 10003,
-                    errorMsg: '该邮箱尚未注册'
-                }
-            }
-            else return packError(err);
-        })
+        .catch(err => packErrorWrap(err, new Map<number, string>([
+            [10002, '验证码过期，请重新获取'],
+            [10003, '该邮箱尚未注册，请检查信息']
+        ])))
 }
