@@ -2,11 +2,12 @@
 import { ref, onUnmounted } from 'vue';
 import { HomeFilled, ArrowLeftBold, Avatar, AlarmClock } from '@element-plus/icons-vue';
 import SCNULogo from '../../assets/scnulogo.png';
-import { isTeacher, useDirect, useLogout } from '@/utils/helper';
+import { isTeacher, isStudent, useDirect, useLogout } from '@/utils/helper';
 import { getMyAttendRecordsInProgress } from '@/utils/services';
 
 const { directTo } = useDirect();
-const isStudent = !isTeacher();
+const isUserStudent = isStudent();
+const isUserTeacher = isTeacher();
 const hasAttendInProgress = ref(false);
 const cancleAttendTip = () => { hasAttendInProgress.value = false }
 const showAttendTip = () => { hasAttendInProgress.value = true }
@@ -27,7 +28,7 @@ const requestAttend = () => {
             else cancleAttendTip()
         })
 }
-if (isStudent) {
+if (isUserStudent) {
     requestAttend();
     intreval = setInterval(requestAttend, 4 * 1000)// 轮询请求签到信息
 }
@@ -50,18 +51,18 @@ onUnmounted(() => {
             </span>
             <template #dropdown>
                 <el-dropdown-menu>
-                    <el-dropdown-item :icon="HomeFilled" command="toHome">我的主页</el-dropdown-item>
-                    <el-dropdown-item :icon="AlarmClock" command="attend" v-if="isStudent">
-                        <span
-                            :class="['attendCt', { 'point': hasAttendInProgress }]"
-                            @click="cancleAttendTip"
-                        >我的签到</span>
+                    <el-dropdown-item :icon="HomeFilled" command="toHome" v-if="isUserTeacher || isUserStudent">
+                        我的主页
+                    </el-dropdown-item>
+                    <el-dropdown-item :icon="AlarmClock" command="attend" v-if="isUserStudent">
+                        <span :class="['attendCt', { 'point': hasAttendInProgress }]" @click="cancleAttendTip">
+                            我的签到
+                        </span>
                     </el-dropdown-item>
                     <el-dropdown-item :icon="ArrowLeftBold" command="logout">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
             </template>
-        </el-dropdown>
-    </div>
+        </el-dropdown>  </div>
 </template>
 
 <style scoped lang="less">
@@ -73,13 +74,16 @@ onUnmounted(() => {
     align-items: center;
     background-color: #002d54;
 }
+
 .logo {
     margin-right: 40px;
+
     img {
         height: 50px;
         margin-top: 5px;
     }
 }
+
 .title {
     flex: 1;
     margin-right: 10px;
@@ -88,15 +92,18 @@ onUnmounted(() => {
     font-size: 20px;
     letter-spacing: 5px;
 }
+
 .attendCt {
     position: relative;
 }
+
 .avatarCt {
     display: inline-block;
     height: 36px;
     width: 36px;
     position: relative;
 }
+
 .avatarPoint {
     position: absolute;
     top: 0;
@@ -106,11 +113,13 @@ onUnmounted(() => {
     border-radius: 50%;
     background-color: orange;
 }
+
 .avatar {
     height: 32px;
     width: 32px;
     color: #fff;
 }
+
 .point {
     &::after {
         content: "";

@@ -22,10 +22,6 @@ const routes = [
         component: () => import('../pages/ide/Ide.vue'),
     },
     {
-        path: '/manage_platform',
-        component: () => import('../pages/manage/ManageHome.vue'),
-    },
-    {
         path: '/',
         component: () => import("../layout/index.vue"),
         children: [
@@ -64,6 +60,10 @@ const routes = [
             {
                 path: '/online_oj',
                 component: () => import('../pages/oj/OnlineOJ.vue'),
+            },
+            {
+                path: '/manage_platform',
+                component: () => import('../pages/manage/ManageHome.vue'),
             },
             {
                 path: '/404',
