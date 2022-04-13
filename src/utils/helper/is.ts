@@ -10,3 +10,6 @@ export const isTeacher = () => {
 export const isManager = () => {
     return getLocalStorage(LocalVal.Role) === `${ManagerRole}`;
 }
+export const isAllowedRole = (allowList: number[]) => {
+    return allowList.map(item => `${item}`).includes(getLocalStorage(LocalVal.Role) || '');
+}

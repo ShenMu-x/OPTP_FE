@@ -27,7 +27,7 @@ const loginHandler = () => {
           if (res.code === 0) {
             isStudent() && redirect('/user_center');
             isTeacher() && redirect('/teach/user_center');
-            isManager() && redirect('/manage_platform');
+            isManager() && redirect('/manage/platform');
           } else {
             showFailWrap({ text: res.errorMsg })
           }

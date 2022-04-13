@@ -1,7 +1,8 @@
 // @ts-nocheck
 import { createRouter, createWebHistory } from "vue-router";
 import { getLocalStorage, LocalVal } from "../utils/storage";
-import { isTeacher, isStudent, isManager } from "@/utils/helper/is";
+import { isTeacher, isStudent, isManager, isAllowedRole } from "@/utils/helper/is";
+import { TeacherRole, ManagerRole, StudentRole } from "@/utils/option";
 
 const routes = [
     {
@@ -27,42 +28,72 @@ const routes = [
         children: [
             {
                 path: '/user_center',
+                meta: {
+                    allowRole: [StudentRole]
+                },
                 component: () => import('../pages/user/StudCenter.vue')
             },
             {
                 path: '/edit_info',
+                meta: {
+                    allowRole: [StudentRole, TeacherRole]
+                },
                 component: () => import('../pages/user/EditInfo.vue')
             },
             {
                 path: '/course_detail/:courseId',
+                meta: {
+                    allowRole: [StudentRole]
+                },
                 component: () => import('../pages/course/CourseDetail.vue')
             },
             {
-                path: '/teach/user_center',
-                component: () => import('../pages/user/TeacherCenter.vue')
-            },
-            {
-                path: '/teach/course_detail/:courseId',
-                component: () => import('../pages/teach/CourseDetail.vue')
-            },
-            {
-                path: '/teach/course_coding/:courseId',
-                component: () => import('../pages/teach/CourseCodingTime.vue')
-            },
-            {
-                path: '/teach/lab_detail/:labId',
-                component: () => import('../pages/teach/LabDetail.vue')
-            },
-            {
                 path: '/user_attend',
+                meta: {
+                    allowRole: [StudentRole]
+                },
                 component: () => import('../pages/user/UserAttend.vue')
             },
             {
                 path: '/online_oj',
+                meta: {
+                    allowRole: [StudentRole]
+                },
                 component: () => import('../pages/oj/OnlineOJ.vue'),
             },
             {
-                path: '/manage_platform',
+                path: '/teach/user_center',
+                meta: {
+                    allowRole: [TeacherRole]
+                },
+                component: () => import('../pages/user/TeacherCenter.vue')
+            },
+            {
+                path: '/teach/course_detail/:courseId',
+                meta: {
+                    allowRole: [TeacherRole]
+                },
+                component: () => import('../pages/teach/CourseDetail.vue')
+            },
+            {
+                path: '/teach/course_coding/:courseId',
+                meta: {
+                    allowRole: [TeacherRole]
+                },
+                component: () => import('../pages/teach/CourseCodingTime.vue')
+            },
+            {
+                path: '/teach/lab_detail/:labId',
+                meta: {
+                    allowRole: [TeacherRole]
+                },
+                component: () => import('../pages/teach/LabDetail.vue')
+            },
+            {
+                path: '/manage/platform',
+                meta: {
+                    allowRole: [ManagerRole]
+                },
                 component: () => import('../pages/manage/ManageHome.vue'),
             },
             {
@@ -77,7 +108,6 @@ const routes = [
         name: 'NotFound',
         redirect: '/404'
     },
-
 ];
 
 const router = new createRouter({
@@ -98,29 +128,16 @@ router.beforeEach((to, from, next) => {
     if (to.path === '/') {
         isTeacher() && (next('/teach/user_center'))
         isStudent() && (next('/user_center'))
-        isManager() && (next('/manage_platform'))
+        isManager() && (next('/manage/platform'))
         return
     }
-    // 部分路由参数校验
-    let checkCourse = /course_detail/i;
-    if (checkCourse.test(to.path)) {
-        const courseId = parseInt(to.params.courseId);
-        if (isNaN(courseId)) {
-            next('/404')
-            return
-        }
-    }
 
-    let checkLab = /lab_detail/i;
-    if (checkLab.test(to.path)) {
-        const labId = parseInt(to.params.labId);
-        if (isNaN(labId)) {
-            next('/404')
-            return
-        }
+    // 路由权限控制
+    if (to.meta?.allowRole && !isAllowedRole(to.meta.allowRole)) {
+            next('/404');
+            return;
     }
     next()
-    return
 })
 
 export default router;
