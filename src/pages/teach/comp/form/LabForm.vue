@@ -53,13 +53,11 @@ const commitForm = () => {
                         if (value.code === 0) {
                             ElMessage({
                                 type: 'success',
-                                message: '修改成功',
+                                message: '创建成功',
                             })
-
                             props.closeDialog?.();
                         }
                     })
-
                 })
                 .catch(() => {
                     // 取消提交

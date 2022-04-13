@@ -7,13 +7,14 @@ import QuitCourse from './comp/QuitCourse.vue';
 import TeacherInfo from './comp/TeacherInfo.vue';
 import NoticeCard from './comp/NoticeCard.vue';
 import UnEnrollCourseDetail from './comp/UnEnrollCourseDetail.vue';
-import { scrollToPos, useCourseId } from '@/utils/helper';
+import { scrollToPos, useCourseId, showFailWrap, useDirect } from '@/utils/helper';
 import { getCourseById, getUserInfoById } from '@/utils/services';
 import { CourseType, userInfoType } from '@/type';
 
 const courseId = useCourseId();
 const data = reactive<{ course: CourseType, info: userInfoType }>({ course: {}, info: {} });
 const { course, info } = toRefs(data);
+const { routerBack } = useDirect();
 
 scrollToPos(0);
 getCourseById({ courseId })
@@ -26,6 +27,8 @@ getCourseById({ courseId })
                         Object.assign(data.info, infoRes.data);
                     }
                 })
+        } else {
+            showFailWrap({ text: res.errorMsg, closeCb: routerBack })
         }
     })
 </script>
@@ -60,34 +63,42 @@ getCourseById({ courseId })
 
 <style lang="less" scoped>
 @import url("@/styles/var.less");
+
 .ct {
     margin: 40px 90px 100px;
     display: flex;
     flex-direction: column;
 }
+
 .enrollCt {
     display: flex;
     flex-direction: column;
 }
+
 .courseCard {
     min-height: 200px;
     background-color: #fff;
 }
+
 .leftCt {
     width: 100%;
+
     .cardTitle {
         font-size: 25px;
         margin-bottom: 10px;
     }
+
     .qaCard {
         margin-top: 20px;
         padding: 20px;
         background-color: #fff;
     }
 }
+
 .rightCt {
     display: none;
 }
+
 .leftInnerCt {
     display: block;
 }
@@ -97,15 +108,18 @@ getCourseById({ courseId })
         flex-direction: row;
         justify-content: space-between;
     }
+
     .leftCt {
         width: 65%;
     }
+
     .rightCt {
         display: block;
         margin-top: 0;
         margin-left: 40px;
         width: 33%;
     }
+
     .leftInnerCt {
         display: none;
     }

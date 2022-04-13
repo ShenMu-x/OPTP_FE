@@ -6,12 +6,14 @@ import { userInfoType } from '@/type';
 
 export const useCourseId = () => {
     const route = useRoute();
-    return parseInt(route?.params?.courseId?.[0]);
+    const courseId = route?.params?.courseId instanceof Array ? route?.params?.courseId[0] : route?.params?.courseId;
+    return parseInt(courseId);
 }
 
 export const useLabId = () => {
     const route = useRoute();
-    return parseInt(route?.params?.labId?.[0]);
+    const labId = route?.params?.labId instanceof Array ? route?.params?.labId[0] : route?.params?.labId;
+    return parseInt(labId);
 }
 
 export const useUser = () => {

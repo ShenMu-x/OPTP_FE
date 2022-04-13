@@ -2,7 +2,7 @@ import _axios from '../../axios';
 import { ResType, ListRes } from '../../type';
 import { CourseType } from '@/type';
 import { packCourse } from '../pack';
-import { packError, packPageRes } from "../../pack";
+import { packError, packErrorWrap, packPageRes } from "../../pack";
 
 // 获取全部课程列表
 export const getAllCourseList: (params: {
@@ -11,7 +11,9 @@ export const getAllCourseList: (params: {
 }) => ResType<ListRes<CourseType>> = (params) => {
     return _axios.get(`/web/course?pageCurrent=${params.pageCurrent}&pageSize=${params.pageSize}`)
         .then(res => packPageRes(res, packCourse))
-        .catch(packError)
+        .catch(err => packErrorWrap(err, new Map<number, string>([
+            [-19999, '该课程不存在']
+        ])))
 }
 
 // 根据课程id获取课程信息

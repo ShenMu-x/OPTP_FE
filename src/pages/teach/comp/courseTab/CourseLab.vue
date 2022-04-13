@@ -1,14 +1,16 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
+import { ElMessageBox } from 'element-plus';
 import TablePage from '@/components/common/TablePage.vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
 import BtnCt from '@/components/common/BtnCt.vue';
 import LabForm from '../form/LabForm.vue';
-import { isBefore, useCourseId, useDirect, useDialog } from '@/utils/helper';
-import { createLab, getCourseLabList } from '@/utils/services';
+import { showFailWrap, showSuccessWrap, isBefore, useCourseId, useDirect, useDialog } from '@/utils/helper';
+import { createLab, getCourseLabList, deleteLab } from '@/utils/services';
 
 const refLabFormEl = ref();
+const refTableEl = ref();
 const courseId = useCourseId();
 const common = { courseId };
 const { directTo } = useDirect();
@@ -18,8 +20,38 @@ const toCreateLab = () => {
     refLabFormEl.value?.resetForm?.()
     openDialog()
 }
+const closeCreatePanel = () => {
+    closeDialog();
+    refTableEl.value.reload?.()
+}
 const commitHandler = () => {
     refLabFormEl.value?.commitForm?.();
+}
+const deleteHandler = (labId: number) => {
+    ElMessageBox.confirm(
+        '确定删除？',
+        '实验删除确认',
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'success',
+            lockScroll: false,
+        }
+    )
+        .then(() => {
+            deleteLab(labId)
+                .then((value: any) => {
+                    if (value.code === 0) {
+                        showSuccessWrap({ text: '实验已删除' });
+                        refTableEl.value.reload?.()
+                    } else {
+                        showFailWrap({ text: '删除失败，请稍后再试' })
+                    }
+                })
+        })
+        .catch(() => {
+            // 取消删除
+        })
 }
 </script>
 
@@ -31,7 +63,7 @@ const commitHandler = () => {
             </template>
         </BtnCt>
         <el-dialog v-model="isDialogOpen" title="创建实验">
-            <LabForm ref="refLabFormEl" :closeDialog="closeDialog" :fetch-api="createLab" />
+            <LabForm ref="refLabFormEl" :closeDialog="closeCreatePanel" :fetch-api="createLab" />
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="closeDialog">取消</el-button>
@@ -39,7 +71,7 @@ const commitHandler = () => {
                 </span>
             </template>
         </el-dialog>
-        <TablePage :common="common" :fetch-data="getCourseLabList">
+        <TablePage :common="common" :fetch-data="getCourseLabList" ref="refTableEl">
             <template v-slot:tableColumns>
                 <el-table-column prop="labId" label="实验ID" min-width="80" />
                 <el-table-column prop="title" label="实验名称" min-width="140" />
@@ -50,9 +82,10 @@ const commitHandler = () => {
                         <div v-else>已截止</div>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column label="操作" min-width="180">
                     <template #default="scope">
                         <BtnBlue @click="directTo(`/teach/lab_detail/${scope?.row?.labId}`)">详情</BtnBlue>
+                        <el-button type="danger" size="default" @click="deleteHandler(scope?.row?.labId)">删除</el-button>
                     </template>
                 </el-table-column>
             </template>

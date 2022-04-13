@@ -3,13 +3,13 @@ import { reactive, ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import UploadFile from '@/components/common/UploadFile.vue';
 import { labRules } from '../form/rule';
-import { showFailWrap, showSuccessWrap, useLabId, useDirect, fmatTimeFitServer } from '@/utils/helper';
-import { editLab, getLabById, deleteLab } from '@/utils/services';
+import { useLabId, fmatTimeFitServer, showFailWrap, useDirect } from '@/utils/helper';
+import { editLab, getLabById } from '@/utils/services';
 
 const refFormEl = ref();
 const formLabelWidth = '80px';
 const labId = useLabId();
-const { redirect, routerBack } = useDirect();
+const { routerBack } = useDirect();
 
 const form = reactive({
     title: '',
@@ -24,6 +24,8 @@ getLabById(labId).then(res => {
         form.content = res.data?.content || "";
         form.attachmentUrl = res.data?.attachmentUrl || "";
         form.deadLine = fmatTimeFitServer(res.data?.deadLine || "");
+    } else {
+        showFailWrap({ text: res.errorMsg, closeCb: routerBack })
     }
 })
 
@@ -60,45 +62,12 @@ const submitHandler = () => {
                             })
                         }
                     })
-
                 })
                 .catch(() => {
                     // 取消提交
                 })
         }
     });
-}
-
-const deleteHandler = () => {
-    ElMessageBox.confirm(
-        '确定删除？',
-        '实验删除确认',
-        {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'success',
-            lockScroll: false,
-        }
-    )
-        .then(() => {
-            deleteLab(labId)
-                .then((value: any) => {
-                    if (value.code === 0) {
-                        showSuccessWrap({
-                            text: '实验已删除',
-                            closeCb: () => { routerBack() }
-                        })
-                    } else {
-                        showFailWrap({
-                            text: '删除失败，请稍后再试',
-                        })
-                    }
-                })
-
-        })
-        .catch(() => {
-            // 取消删除
-        })
 }
 </script>
 
@@ -111,14 +80,8 @@ const deleteHandler = () => {
             <el-input v-model="form.title" autocomplete="off" placeholder="请输入实验名称"></el-input>
         </el-form-item>
         <el-form-item label="实验描述" :label-width="formLabelWidth" prop="content">
-            <el-input
-                v-model="form.content"
-                type="textarea"
-                :autosize="{ minRows: 2, maxRows: 6 }"
-                placeholder="请输入实验描述"
-                maxlength="100"
-                show-word-limit
-            ></el-input>
+            <el-input v-model="form.content" type="textarea" :autosize="{ minRows: 2, maxRows: 6 }"
+                placeholder="请输入实验描述" maxlength="100" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="截止日期" :label-width="formLabelWidth" prop="deadLine">
             <el-date-picker v-model="form.deadLine" type="datetime" placeholder="请选择截止时间"></el-date-picker>
@@ -133,7 +96,6 @@ const deleteHandler = () => {
     </el-form>
     <div class="btnCt">
         <el-button color="#002D54" type="primary" @click="submitHandler">确认修改</el-button>
-        <el-button type="danger" @click="deleteHandler">删除实验</el-button>
     </div>
 </template>
 

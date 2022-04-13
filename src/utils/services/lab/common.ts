@@ -1,6 +1,6 @@
 import _axios from "../axios";
 import { ResType, ListRes } from "../type";
-import { packError } from "../pack";
+import { packError, packErrorWrap } from "../pack";
 import { packLab } from "./pack";
 import { labType } from '@/type';
 
@@ -14,7 +14,9 @@ export const getLabById: (labId: number) => ResType<labType> = (labId) => {
             code: 0,
             data: packLab(res.data.data)
         }
-    }).catch(packError)
+    }).catch(err => packErrorWrap(err, new Map<number, string>([
+        [-19999, '该实验不存在']
+    ])))
 }
 
 // 获取课程实验列表

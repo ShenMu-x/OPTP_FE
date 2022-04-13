@@ -9,7 +9,9 @@ import { showFailWrap, showSuccessWrap, useReloader } from '@/utils/helper';
 const refTableEl = ref();
 const isClosing = ref(false);
 const closingIdeId = ref(0);
-const closeHandler = (row: { containerId: number; labIsEnd: boolean; }) => {
+const closeHandler = async (row: { containerId: number; labIsEnd: boolean; }) => {
+    isClosing.value = true;
+    closingIdeId.value = row.containerId
     closeIDE(row.containerId)
         .then(res => {
             if (res.code === 0) {
@@ -18,6 +20,7 @@ const closeHandler = (row: { containerId: number; labIsEnd: boolean; }) => {
             } else {
                 showFailWrap({ text: '服务出现问题，请稍后再试' })
             }
+            isClosing.value = false;
         })
 }
 const {
@@ -57,7 +60,8 @@ const {
                 <el-table-column prop="createdAt" label="创建时间" min-width="100" />
                 <el-table-column label="操作" min-width="120">
                     <template #default="scope">
-                        <el-button type="danger" size="default" @click="closeHandler(scope.row)">
+                        <el-button :loading="scope.row.containerId === closingIdeId && isClosing" type="danger"
+                            size="default" @click="closeHandler(scope.row)">
                             关闭IDE
                         </el-button>
                     </template>
