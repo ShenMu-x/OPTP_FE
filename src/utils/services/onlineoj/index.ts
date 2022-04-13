@@ -20,6 +20,6 @@ export const fetchCodeResult: (params: { language: number, code: string }) => Re
     })
     ).catch(_ => ({
         code: 2,
-        errorMsg: '程序超时，请检查代码',
+        errorMsg: '运行出错，请检查代码',
     }))
 }

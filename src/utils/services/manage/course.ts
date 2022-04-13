@@ -1,9 +1,7 @@
 import _axios from "../axios";
 import { ResType, ListRes } from "../type";
 import { packError, packEmptyData, packPageRes } from "../pack";
-import { exportCsv } from "../exportCsv";
 import { fmatTime } from "@/utils/helper";
-
 export interface courseType {
     courseId: number,
     name: string,
@@ -40,22 +38,6 @@ export const getAllCourse: (params: {
         .then(res => packPageRes(res, packCourse))
         .catch(packError)
 }
-// // 新增系统用户
-// interface addAccountReq {
-//     email: string,
-//     name: string,
-//     number: string,
-//     role: 0 | 1,
-// }
-// export const addAccount: (data: addAccountReq) => ResType<any> = (data) => {
-//     return _axios({
-//         method: "POST",
-//         url: "/admin/distribute",
-//         data,
-//     })
-//         .then(packEmptyData)
-//         .catch(packError)
-// }
 // 修改课程信息
 interface editCourseReq {
     course_id: number,

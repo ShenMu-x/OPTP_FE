@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import Layout from './Layout.vue';
 import UserPanel from './tab/UserPanel.vue';
 import CoursePanel from './tab/CoursePanel.vue';
+import IDEPanel from './tab/IDEPanel.vue';
 const focusTab = ref('user')
 </script>
 <template>
@@ -15,7 +15,7 @@ const focusTab = ref('user')
                 <CoursePanel />
             </el-tab-pane>
             <el-tab-pane label="实验管理" name="lab" lazy>
-                3
+                <IDEPanel />
             </el-tab-pane>
         </el-tabs>  </div>
 </template>

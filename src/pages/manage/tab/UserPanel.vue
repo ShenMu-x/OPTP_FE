@@ -4,14 +4,15 @@ import { Plus, Upload } from '@element-plus/icons-vue';
 import TablePage from '@/components/common/TablePage.vue';
 import BtnCt from '@/components/common/BtnCt.vue';
 import Avatar from '@/components/common/Avatar.vue';
+import LoadBtn from '@/components/common/LoadBtn.vue';
 import CreateAccountPanel from './userComp/CreateAccountPanel.vue';
 import UploadStudentPanel from './userComp/UploadStudentPanel.vue';
 import EditAccountPanel from './userComp/EditAccountPanel.vue';
-import { getGender } from '@/utils/helper';
+import { getGender, useReloader } from '@/utils/helper';
 import { getAllAccoutInfo, accountType } from '@/utils/services';
 import { emptyAccount } from './default';
 
-const refTableEl  =ref();
+const refTableEl = ref();
 const refCreateAccountEl = ref();
 const openAccountPanel = () => {
     refCreateAccountEl?.value?.openPanel?.();
@@ -29,6 +30,11 @@ const editInfoHandler = (params: any) => {
 const submitHandler = () => {
     refTableEl?.value?.reload?.()
 }
+const {
+    isReloading,
+    reloadHandler,
+    finishReload,
+} = useReloader(refTableEl);
 </script>
 
 <template>
@@ -36,18 +42,15 @@ const submitHandler = () => {
         <BtnCt>
             <template v-slot:botton>
                 <el-button :icon="Plus" @click="openAccountPanel">新增系统用户</el-button>
-                <el-button :icon="Upload" @click="openUploadPanel">导入学生信息</el-button>
+                <el-button :icon="Upload" @click="openUploadPanel" style="margin-right: 12px">导入学生信息</el-button>
+                <LoadBtn @reload="reloadHandler" :is-loding="isReloading" />
             </template>
         </BtnCt>
         <CreateAccountPanel ref="refCreateAccountEl" />
         <UploadStudentPanel ref="refUploadStudentEl" />
         <EditAccountPanel ref="refEditInfoEl" :account="account" @submit="submitHandler" />
-        <TablePage
-            :page-size="6"
-            :fetch-data="getAllAccoutInfo"
-            ref="refTableEl"
-            emptyDes="系统中暂无账户"
-        >
+        <TablePage :page-size="6" :fetch-data="getAllAccoutInfo" ref="refTableEl" emptyDes="系统中暂无账户"
+            @reloadend="finishReload" :no-tip="false">
             <template v-slot:tableColumns>
                 <el-table-column label="头像" min-width="60">
                     <template #default="scope">
@@ -64,11 +67,7 @@ const submitHandler = () => {
                 <el-table-column prop="organization" label="单位" min-width="100" />
                 <el-table-column label="操作" min-width="120">
                     <template #default="scope">
-                        <el-button
-                            type="danger"
-                            size="default"
-                            @click="editInfoHandler(scope.row)"
-                        >修改信息</el-button>
+                        <el-button type="danger" size="default" @click="editInfoHandler(scope.row)">修改信息</el-button>
                     </template>
                 </el-table-column>
             </template>

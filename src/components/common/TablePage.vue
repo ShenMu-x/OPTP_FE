@@ -6,11 +6,14 @@ const props = defineProps<{
     pageSize?: number,
     fetchData?: any,
     common?: any,
-    emptyDes?: string
+    emptyDes?: string,
+    noTip?: boolean
 }>()
 
 const pageSize = props.pageSize || 7;
 const common = toRef(props, 'common');
+const emits = defineEmits(['reloadend']);
+const emitReload = () => { emits('reloadend') }
 
 const {
     current,
@@ -24,7 +27,8 @@ const {
     fetchData: props.fetchData,
     failText: '获取列表失败,请稍后再试',
     common: props.common ?? {},
-    noTip: true
+    noTip: props.noTip ?? true,
+    emitReload
 });
 
 watch(common, (newV, _) => {
@@ -46,13 +50,8 @@ defineExpose({
         <el-table :data="list" stripe highlight-current-row style="width: 100%">
             <slot name="tableColumns"></slot>
         </el-table>
-        <el-pagination
-            v-model:currentPage="current"
-            layout="prev, pager, next"
-            :total="total"
-            :page-size="pageSize"
-            hide-on-single-page
-        ></el-pagination>
+        <el-pagination v-model:currentPage="current" layout="prev, pager, next" :total="total" :page-size="pageSize"
+            hide-on-single-page></el-pagination>
     </div>
     <el-empty v-else :description="props.emptyDes || '本课程暂无实验'" />
 </template>

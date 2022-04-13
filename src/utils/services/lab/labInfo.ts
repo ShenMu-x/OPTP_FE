@@ -39,9 +39,9 @@ export const editLab: (params: editLabReq) => ResType<''> = (params) => {
 export const deleteLab: (labId: number) => ResType<''> = (labId) => {
     return _axios({
         method: "DELETE",
-        url: '/web/lab/',
+        url: '/web/lab',
         data: {
-            lab: labId
+            labId
         }
     })
         .then(packEmptyData)
