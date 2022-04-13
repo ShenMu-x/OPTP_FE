@@ -11,9 +11,7 @@ export const getAllCourseList: (params: {
 }) => ResType<ListRes<CourseType>> = (params) => {
     return _axios.get(`/web/course?pageCurrent=${params.pageCurrent}&pageSize=${params.pageSize}`)
         .then(res => packPageRes(res, packCourse))
-        .catch(err => packErrorWrap(err, new Map<number, string>([
-            [-19999, '该课程不存在']
-        ])))
+        .catch(packError)
 }
 
 // 根据课程id获取课程信息
@@ -27,7 +25,9 @@ export const getCourseById: (params: {
                 data: packCourse(value.data.data)
             }
         })
-        .catch(packError)
+        .catch(err => packErrorWrap(err, new Map<number, string>([
+            [-19999, '该课程不存在']
+        ])))
 }
 
 // 根据课程名称模糊查询课程信息

@@ -9,7 +9,7 @@ import { editLab, getLabById } from '@/utils/services';
 const refFormEl = ref();
 const formLabelWidth = '80px';
 const labId = useLabId();
-const { routerBack } = useDirect();
+const { redirect } = useDirect();
 
 const form = reactive({
     title: '',
@@ -25,7 +25,7 @@ getLabById(labId).then(res => {
         form.attachmentUrl = res.data?.attachmentUrl || "";
         form.deadLine = fmatTimeFitServer(res.data?.deadLine || "");
     } else {
-        showFailWrap({ text: res.errorMsg, closeCb: routerBack })
+        showFailWrap({ text: res.errorMsg, closeCb: redirect('/404') })
     }
 })
 

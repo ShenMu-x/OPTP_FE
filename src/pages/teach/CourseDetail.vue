@@ -8,7 +8,7 @@ import CourseNotice from './comp/courseTab/CourseNotice.vue';
 import CourseState from './comp/courseTab/CourseState.vue';
 import CourseAttend from './comp/courseTab/courseAttend.vue';
 import QACard from '@/components/comment/QACard.vue';
-import { useCourseId, useDirect } from '@/utils/helper';
+import { useCourseId, useDirect, showFailWrap } from '@/utils/helper';
 import { getCourseById } from '@/utils/services';
 import { CourseType } from '@/type';
 
@@ -25,6 +25,7 @@ const focusTab = ref('lab');
 getCourseById({ courseId })
   .then(res => {
     if (res.code === 0 && res.data) Object.assign(data.course, res.data);
+    else showFailWrap({ text: res.errorMsg, closeCb: redirect('/404') })
   })
 </script>
 
@@ -63,6 +64,7 @@ getCourseById({ courseId })
   padding: 10px;
   background-color: #fff;
 }
+
 .qaCt {
   margin: 20px;
   margin-top: 0;
