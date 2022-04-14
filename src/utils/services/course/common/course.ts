@@ -25,9 +25,9 @@ export const getCourseById: (params: {
                 data: packCourse(value.data.data)
             }
         })
-        .catch(err => packErrorWrap(err, new Map<number, string>([
+        .catch(err => packErrorWrap(err, [
             [-19999, '该课程不存在']
-        ])))
+        ]))
 }
 
 // 根据课程名称模糊查询课程信息

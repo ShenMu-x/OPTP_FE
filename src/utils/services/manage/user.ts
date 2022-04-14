@@ -1,6 +1,6 @@
 import _axios from "../axios";
 import { ResType, ListRes } from "../type";
-import { packError, packEmptyData, packPageRes } from "../pack";
+import { packError, packErrorWrap, packEmptyData, packPageRes } from "../pack";
 import { exportCsv } from "../exportCsv";
 export interface accountType {
     userId: number,
@@ -46,11 +46,13 @@ interface addAccountReq {
 export const addAccount: (data: addAccountReq) => ResType<any> = (data) => {
     return _axios({
         method: "POST",
-        url: "/admin/distribute",
+        url: "/admin/user/distribute",
         data,
     })
         .then(packEmptyData)
-        .catch(packError)
+        .catch(err=> packErrorWrap(err, [
+            [-19999, '填写邮箱或学号已被注册']
+        ]))
 }
 // 修改用户信息
 interface editAccountReq {

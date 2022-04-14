@@ -4,7 +4,8 @@ export const packError = (err: any) => {
         errorMsg: err.response?.data?.message || '服务异常，请稍后再试',
     }
 }
-export const packErrorWrap = (err: any, errorMap: Map<number, string>) => {
+export const packErrorWrap = (err: any, map: Array<[number, string]>) => {
+    const errorMap = new Map<number, string>(map)
     return {
         code: err.response?.data?.code || -1,
         errorMsg: errorMap.get(err.response?.data?.code) || '服务异常，请稍后再试',

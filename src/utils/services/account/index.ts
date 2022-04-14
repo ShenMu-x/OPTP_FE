@@ -27,9 +27,9 @@ export const teachRegister: (params: RegisterReq) => ResType<''> = (params) => {
 export const getVerificationCode: (params: { email: string }) => ResType<boolean> = (params) => {
     return _axios.post('/web/user/verificationCode', params)
         .then(res => ({ code: res.data.code, data: res.data.data }))
-        .catch(err => packErrorWrap(err, new Map<number, string>([
+        .catch(err => packErrorWrap(err, [
             [10003, '查询不到该邮箱，请检查信息']
-        ])))
+        ]))
 }
 
 export const checkEmailUnique: (params: { email: string }) => ResType<{ isUnique: boolean }> = (params) => {
@@ -41,9 +41,9 @@ export const checkEmailUnique: (params: { email: string }) => ResType<{ isUnique
         }
     })
         .then(value => ({ code: 0, data: { isUnique: value.data.data } }))
-        .catch(err => packErrorWrap(err, new Map<number, string>([
+        .catch(err => packErrorWrap(err, [
             [10003, '查询不到该邮箱，请检查信息']
-        ])))
+        ]))
 }
 
 interface loginReq {
@@ -66,11 +66,11 @@ export const login: (params: loginReq) => ResType<loginRes> = (params) => {
             setLocalStorage(LocalVal.Role, role);
             return packEmptyData();
         })
-        .catch(err => packErrorWrap(err, new Map<number, string>([
+        .catch(err => packErrorWrap(err, [
             [-19998, '账号或密码过长，请重新输入'],
             [-19999, '账号或密码不为空，请重新输入'],
             [10002, '账号或密码错误，请重新输入'],
-        ])))
+        ]))
 }
 
 interface changePswReq {
@@ -85,8 +85,8 @@ export const changePsw: (params: changePswReq) => ResType<any> = (params) => {
         data: params
     })
         .then(packEmptyData)
-        .catch(err => packErrorWrap(err, new Map<number, string>([
+        .catch(err => packErrorWrap(err, [
             [10002, '验证码过期，请重新获取'],
             [10003, '该邮箱尚未注册，请检查信息']
-        ])))
+        ]))
 }

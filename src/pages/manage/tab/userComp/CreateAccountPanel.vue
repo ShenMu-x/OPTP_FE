@@ -2,6 +2,7 @@
 import { ref, reactive } from 'vue';
 import { comfirm, useDialog } from '@/utils/helper';
 import { addAccount } from '@/utils/services';
+import { createAccountRule } from './rules';
 
 const { isDialogOpen, openDialog, closeDialog } = useDialog();
 const refEl = ref();
@@ -12,6 +13,7 @@ const form = reactive({
     role: 0,
     name: ''
 })
+const rules = reactive(createAccountRule);
 const submit = () => {
     comfirm({
         type: 'submit',
@@ -38,20 +40,20 @@ defineExpose({
 
 <template>
     <el-dialog v-model="isDialogOpen" title="新建账户">
-        <el-form :model="form" ref="refEl">
-            <el-form-item label="账户身份" :label-width="labelWidth">
+        <el-form :model="form" ref="refEl" :rules="rules">
+            <el-form-item label="账户身份" :label-width="labelWidth" required>
                 <el-radio-group v-model="form.role" size="large">
                     <el-radio :label="0" border>我是学生</el-radio>
                     <el-radio :label="1" border>我是老师</el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="邮箱信息" :label-width="labelWidth">
+            <el-form-item label="邮箱信息" :label-width="labelWidth" prop="email">
                 <el-input v-model="form.email" placeholder="请输入账户邮箱"></el-input>
             </el-form-item>
-            <el-form-item label="姓名" :label-width="labelWidth">
+            <el-form-item label="姓名" :label-width="labelWidth" prop="name">
                 <el-input v-model="form.name" placeholder="请输入用户姓名"></el-input>
             </el-form-item>
-            <el-form-item :label="form.role === 0 ? '学号' : '职工号'" :label-width="labelWidth">
+            <el-form-item :label="form.role === 0 ? '学号' : '职工号'" :label-width="labelWidth" prop="number">
                 <el-input v-model="form.number" placeholder="请输入签到名称"></el-input>
             </el-form-item>
         </el-form>

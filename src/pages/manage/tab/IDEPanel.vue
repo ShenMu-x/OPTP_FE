@@ -61,7 +61,10 @@ const {
                 <el-table-column label="操作" min-width="120">
                     <template #default="scope">
                         <el-button :loading="scope.row.containerId === closingIdeId && isClosing" type="danger"
-                            size="default" @click="closeHandler(scope.row)">
+                            size="default" @click="closeHandler(scope.row)" v-if="!scope.row.labIsEnd">
+                            关闭IDE
+                        </el-button>
+                        <el-button disabled type="danger" size="default" @click="closeHandler(scope.row)" v-else>
                             关闭IDE
                         </el-button>
                     </template>

@@ -13,7 +13,9 @@ export const askJoinInCourse: (params: {
         data: params
     })
         .then(packEmptyData)
-        .catch(err => packErrorWrap(err, new Map<number, string>([[10002, '选课密码错误']])))
+        .catch(err => packErrorWrap(err, [
+            [10002, '选课密码错误']
+        ]))
 }
 
 // 退出课程

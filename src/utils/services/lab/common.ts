@@ -14,9 +14,9 @@ export const getLabById: (labId: number) => ResType<labType> = (labId) => {
             code: 0,
             data: packLab(res.data.data)
         }
-    }).catch(err => packErrorWrap(err, new Map<number, string>([
+    }).catch(err => packErrorWrap(err, [
         [-19999, '该实验不存在']
-    ])))
+    ]))
 }
 
 // 获取课程实验列表
