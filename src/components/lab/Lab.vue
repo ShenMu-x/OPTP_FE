@@ -4,7 +4,7 @@ import { InfoFilled } from '@element-plus/icons-vue';
 import Tag from '../common/Tag.vue';
 import BtnBlue from '../common/BtnBlue.vue';
 import { labType } from '@/type';
-import { fmatDate, useDirect,isAfterCurrentTime } from '@/utils/helper';
+import { fmatDate, useDirect, isAfterCurrentTime, ParamsEnum } from '@/utils/helper';
 import { setLabStatus } from '@/utils/services';
 import { getIDEUrl } from './logic';
 
@@ -24,7 +24,10 @@ const updateLabStatus = () => {
 const { directToWithParams } = useDirect();
 const toIDE = async () => {
     const url = await getIDEUrl(info.value.labId ?? 0);
-    if (url) directToWithParams('ide', { ide: url, end: isAfterCurrentTime(info?.value?.deadLine?? '') ? '' : 'true' })
+    if (url) directToWithParams('ide', {
+        [ParamsEnum.IdeUrl]: url,
+        [ParamsEnum.isLabFinish]: isAfterCurrentTime(info?.value?.deadLine ?? '') ? '' : 'true'
+    })
 }
 </script>
 
@@ -32,7 +35,7 @@ const toIDE = async () => {
     <div class="labCt" @click="openLabDrawer">
         <div class="titleCt">
             <div class="title">{{ info.title }}</div>
-            <Tag :type="isAfterCurrentTime(info.deadLine?? '') ? 'green' : 'red'" />
+            <Tag :type="isAfterCurrentTime(info.deadLine ?? '') ? 'green' : 'red'" />
         </div>
         <div class="content">{{ info.content }}</div>
         <div class="info">
@@ -60,27 +63,10 @@ const toIDE = async () => {
                 </template>
                 <div class="status" @click.stop="">
                     完成情况:
-                    <el-switch
-                        v-model="finishStatus"
-                        class="switch"
-                        active-color="#41da86"
-                        inactive-color="#e96262"
-                        @change="updateLabStatus"
-                    />
-                    <Tag
-                        class="tag"
-                        type="green"
-                        v-show="finishStatus"
-                        :green-text="'已完成'"
-                        :is-text="true"
-                    />
-                    <Tag
-                        class="tag"
-                        type="red"
-                        v-show="!finishStatus"
-                        :red-text="'未完成'"
-                        :is-text="true"
-                    />
+                    <el-switch v-model="finishStatus" class="switch" active-color="#41da86" inactive-color="#e96262"
+                        @change="updateLabStatus" />
+                    <Tag class="tag" type="green" v-show="finishStatus" :green-text="'已完成'" :is-text="true" />
+                    <Tag class="tag" type="red" v-show="!finishStatus" :red-text="'未完成'" :is-text="true" />
                 </div>
             </div>
             <div class="rightCt">
@@ -109,6 +95,7 @@ const toIDE = async () => {
 
 .titleCt {
     display: flex;
+
     .title {
         text-align: left;
         font-size: 22px;
@@ -152,6 +139,7 @@ const toIDE = async () => {
 .drawer {
     width: 600px;
 }
+
 .timeCourse {
     display: none;
 }
@@ -170,7 +158,7 @@ const toIDE = async () => {
     .timeCourse {
         display: flex;
 
-        & > div {
+        &>div {
             line-height: 40px;
             width: 140px;
             overflow: hidden;

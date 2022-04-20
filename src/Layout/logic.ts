@@ -1,49 +1,35 @@
 import { provide, reactive } from 'vue';
-import { getUserInfoByTk } from '@/utils/services';
+import { getUserInfoByToken } from '@/utils/services';
 import { DEFAULT_AVATAR } from "@/utils/option";
-import { userInfoType } from '@/type';
+import { ProvideKey, editUserInfoType, editAvatarType } from '@/utils/storage';
+import { userInfoType, emptyUserInfo } from '@/type';
+
+const initUserInfo: (user: userInfoType, res: { code: number, data?: userInfoType }) => void = (user, res) => {
+    if (res.code === 0) {
+        user.email = res.data?.email;
+        user.userId = res.data?.userId;
+        user.num = res.data?.num;
+        user.realName = res.data?.realName;
+        user.avatarUrl = res.data?.avatarUrl || DEFAULT_AVATAR;
+        user.gender = res.data?.gender;
+        user.major = res.data?.major;
+        user.organization = res.data?.organization;
+    }
+}
 
 export const provideUser = () => {
-    const user = reactive<userInfoType>({
-        email: '',
-        userId: 0,
-        num: '',
-        realName: '',
-        avatarUrl: '',
-        gender: 0,
-        major: '',
-        organization: ''
-    })
-    const editUserInfo = (params: {
-        realName?: string,
-        major?: string,
-        organization?: string,
-        gender?: number
-    }) => {
+    const user = reactive<userInfoType>(emptyUserInfo)
+    const editUserInfo: editUserInfoType = (params) => {
         user.realName = params.realName || "";
         user.gender = params.gender || 0;
         user.major = params.major || "";
         user.organization = params.organization || "";
     }
-    const editAvatar = (url: string) => {
-        user.avatarUrl = url;
-    }
+    const editAvatar: editAvatarType = (url) => { user.avatarUrl = url; }
 
-    provide('user', user);
-    provide('editUserInfo', editUserInfo);
-    provide('editAvatar', editAvatar);
+    provide(ProvideKey.USER, user);
+    provide(ProvideKey.EDIT_USER_INFO, editUserInfo);
+    provide(ProvideKey.EDIT_USER_AVATAR, editAvatar);
 
-    getUserInfoByTk()
-        .then(res => {
-            if (res.code === 0) {
-                user.email = res.data?.email;
-                user.userId = res.data?.userId;
-                user.num = res.data?.num;
-                user.realName = res.data?.realName;
-                user.avatarUrl = res.data?.avatarUrl || DEFAULT_AVATAR;
-                user.gender = res.data?.gender;
-                user.major = res.data?.major;
-                user.organization = res.data?.organization;
-            }
-        })
+    getUserInfoByToken().then(res => initUserInfo(user, res))
 }

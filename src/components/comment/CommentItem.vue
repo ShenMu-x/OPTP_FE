@@ -3,7 +3,7 @@ import { computed, ref, toRefs, inject } from 'vue';
 import Avatar from '../common/Avatar.vue';
 import CommentInput from './CommentInput.vue';
 import ReplyComment from './ReplyComment.vue';
-import { commentItemType, userInfoType } from '@/type';
+import { commentItemType } from '@/type';
 import { useFolder, useUser } from '@/utils/helper';
 
 const props = defineProps<{

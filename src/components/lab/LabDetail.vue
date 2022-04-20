@@ -3,7 +3,7 @@ import { ref, toRef, watch } from 'vue';
 import BtnBlue from '../common/BtnBlue.vue';
 import Tag from '../common/Tag.vue';
 import UploadFile from '../common/UploadFile.vue';
-import { useDirect, isAfterCurrentTime } from '@/utils/helper';
+import { useDirect, isAfterCurrentTime, ParamsEnum } from '@/utils/helper';
 import { getLabById } from '@/utils/services';
 import { labType } from '@/type';
 import { getIDEUrl } from './logic';
@@ -16,7 +16,7 @@ const id = ref(0);
 const { directToWithParams } = useDirect();
 const toIDE = async () => {
     const url = await getIDEUrl(lab.value.labId ?? 0);
-    if (url) directToWithParams('ide', { ide: url })
+    if (url) directToWithParams('ide', { [ParamsEnum.IdeUrl]: url })
 }
 const getLabInfo = () => {
     getLabById(id.value)
@@ -50,24 +50,13 @@ watch(info, (newV, _) => {
                 <div class="infoInnerCt">
                     <div class="info">
                         实验状态:
-                        <Tag
-                            v-if="isAfterCurrentTime(lab.deadLine ?? '')"
-                            type="green"
-                            :isText="true"
-                            class="infoText"
-                            greenText="进行中"
-                        />
+                        <Tag v-if="isAfterCurrentTime(lab.deadLine ?? '')" type="green" :isText="true" class="infoText"
+                            greenText="进行中" />
                         <Tag v-else type="red" :isText="true" class="infoText" redText="已结束" />
                     </div>
                     <div class="info">
                         完成情况:
-                        <Tag
-                            v-if="lab.isFinish"
-                            type="green"
-                            :isText="true"
-                            class="infoText"
-                            greenText="已完成"
-                        />
+                        <Tag v-if="lab.isFinish" type="green" :isText="true" class="infoText" greenText="已完成" />
                         <Tag v-else type="red" :isText="true" class="infoText" redText="未完成" />
                     </div>
                 </div>
@@ -108,22 +97,27 @@ watch(info, (newV, _) => {
     display: flex;
     flex-direction: column;
 }
+
 .card {
     margin: 15px 10px 15px 0;
     text-align: left;
     flex-direction: column;
+
     .infoInnerCt {
         display: flex;
         flex-wrap: wrap;
     }
 }
+
 .info {
     margin-right: 10px;
     display: inline-block;
+
     .infoText {
         font-weight: bold;
     }
 }
+
 .title {
     text-align: left;
     font-size: 20px;

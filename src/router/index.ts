@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { createRouter, createWebHistory } from "vue-router";
 import { getLocalStorage, LocalVal } from "../utils/storage";
-import { isTeacher, isStudent, isManager, isAllowedRole } from "@/utils/helper/is";
+import { isTeacher, isStudent, isManager, isAllowedRole, ParamsEnum } from "@/utils/helper";
 import { TeacherRole, ManagerRole, StudentRole } from "@/utils/option";
 
 const routes = [
@@ -41,7 +41,7 @@ const routes = [
                 component: () => import('../pages/user/EditInfo.vue')
             },
             {
-                path: '/course_detail/:courseId',
+                path: `/course_detail/:${ParamsEnum.CourseId}`,
                 meta: {
                     allowRole: [StudentRole]
                 },
@@ -69,21 +69,21 @@ const routes = [
                 component: () => import('../pages/user/TeacherCenter.vue')
             },
             {
-                path: '/teach/course_detail/:courseId',
+                path: `/teach/course_detail/:${ParamsEnum.CourseId}`,
                 meta: {
                     allowRole: [TeacherRole]
                 },
                 component: () => import('../pages/teach/CourseDetail.vue')
             },
             {
-                path: '/teach/course_coding/:courseId',
+                path: `/teach/course_coding/:${ParamsEnum.CourseId}`,
                 meta: {
                     allowRole: [TeacherRole]
                 },
                 component: () => import('../pages/teach/CourseCodingTime.vue')
             },
             {
-                path: '/teach/lab_detail/:labId',
+                path: `/teach/lab_detail/:${ParamsEnum.LabId}`,
                 meta: {
                     allowRole: [TeacherRole]
                 },
@@ -124,6 +124,8 @@ router.beforeEach((to, from, next) => {
         return;
     }
 
+    console.log(to);
+
     // 职能区分
     if (to.path === '/') {
         isTeacher() && (next('/teach/user_center'))
@@ -134,8 +136,8 @@ router.beforeEach((to, from, next) => {
 
     // 路由权限控制
     if (to.meta?.allowRole && !isAllowedRole(to.meta.allowRole)) {
-            next('/404');
-            return;
+        next('/404');
+        return;
     }
     next()
 })

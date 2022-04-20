@@ -24,3 +24,19 @@ export type labStatus = {
     review: string,
     score: number
 }
+
+export const emptyLab: labType = {
+    labId: 0,
+    courseId: 0,
+    courseName: '',
+    title: '',
+    content: '',
+    createdAt: '',
+    updatedAt: '',
+    deadLine: '',
+    score: 0,
+    isFinish: false,
+    commment: '',
+    attachmentUrl: '',
+    reportUrl: '',
+}

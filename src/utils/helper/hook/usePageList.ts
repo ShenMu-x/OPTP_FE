@@ -1,5 +1,6 @@
-import { ref, reactive, watch, onMounted, toRef } from 'vue';
-import { showSuccessWrap, showFailWrap, useLoader } from '@/utils/helper';
+import { ref, reactive, watch, toRef } from 'vue';
+import { showSuccessWrap, showFailWrap } from '../comfirm';
+import {  useLoader } from './useLoader';
 
 interface params {
     size: number,

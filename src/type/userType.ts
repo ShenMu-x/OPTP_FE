@@ -8,3 +8,14 @@ export type userInfoType = {
     gender?: number,
     avatarUrl?: string,
 }
+
+export const emptyUserInfo: userInfoType = {
+    email: '',
+    userId: 0,
+    num: '',
+    realName: '',
+    avatarUrl: '',
+    gender: 0,
+    major: '',
+    organization: ''
+}

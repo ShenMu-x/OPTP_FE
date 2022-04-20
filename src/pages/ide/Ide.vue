@@ -1,13 +1,11 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
 import BtnBlue from '@/components/common/BtnBlue.vue';
-import { useDirect } from '@/utils/helper';
+import { useDirect, useIdeUrl, useIsLabFinish } from '@/utils/helper';
 import { useWs } from './init';
 
-const route = useRoute();
-const url = ref(route?.params?.ide as string ?? "");
-const isFinish = ref(route?.params?.end as string ? true: false)
+const url = ref(useIdeUrl());
+const isFinish = ref(useIsLabFinish())
 const { routerBack } = useDirect();
 </script>
 

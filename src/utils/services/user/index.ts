@@ -3,7 +3,7 @@ import { ResType } from "../type";
 import { userInfoType } from '@/type';
 import { packError, packEmptyData } from "../pack";
 
-export const getUserInfoByTk: () => ResType<userInfoType> = () => {
+export const getUserInfoByToken: () => ResType<userInfoType> = () => {
     return _axios({
         method: 'GET',
         url: '/web/user'
