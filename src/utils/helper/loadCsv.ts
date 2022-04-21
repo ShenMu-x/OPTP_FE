@@ -1,4 +1,4 @@
-import { showFailWrap } from '@/utils/helper';
+import { showFailWrap } from './showMessage';
 export const loadCsv = async (refEl: any, fileName: string, fetchData: any, common?: any) => {
     const res = await fetchData(common);
     if (res.code === 0) {

@@ -1,5 +1,5 @@
 import { ref, reactive, watch, toRef } from 'vue';
-import { showSuccessWrap, showFailWrap } from '../comfirm';
+import { showSuccessWrap, showFailWrap } from '../showMessage';
 import {  useLoader } from './useLoader';
 
 interface params {

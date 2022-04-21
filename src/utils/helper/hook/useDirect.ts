@@ -1,4 +1,7 @@
 import { useRouter } from 'vue-router';
+import { ROUTE_NAME } from '@/router/routeName';
+import { RoleEnum, HomePageMap } from "@/utils/option";
+import { isTeacher, isStudent, isManager } from "@/utils/helper";
 import { ParamsType } from './useParam';
 export const useDirect = () => {
     const router = useRouter();
@@ -17,10 +20,16 @@ export const useDirect = () => {
     const routerBack = () => {
         router.back();
     }
+    const redirectToHome = () => {
+        isTeacher() && (router.push({ name: HomePageMap[RoleEnum.Teacher] }))
+        isStudent() && (router.push({ name: HomePageMap[RoleEnum.Student] }))
+        isManager() && (router.push({ name: HomePageMap[RoleEnum.Manager] }))
+    }
     return {
         redirect,
         directTo,
         directToWithParams,
         routerBack,
+        redirectToHome
     }
 }

@@ -1,0 +1,17 @@
+export enum ROUTE_NAME {
+    LOGIN = 'login',
+    REGISTER = 'register',
+    FORGET_PASSWORD = 'forget-password',
+    IDE = 'ide',
+    EDIT_INFO = 'edit-info',
+    ONLINE_OJ = 'online-oj',
+    STUDENT_CENTER = 'student-center',
+    STUDENT_COURSE_DETAIL = 'student-course-detail',
+    STUDENT_ATTEND = 'student-attend',
+    TEACHER_CENTER = 'teacher-center',
+    TEACHER_COURSE_DETAIL = 'teacher-course-detail',
+    TEACHER_COURSE_CODE_LIST = 'teacher-course-code-list',
+    TEACHER_LAB_DETAIL = 'teacher-lab-detail',
+    MANAGE_PLATFORM = 'manage-platform',
+    NOT_FOUND = 'not-found',
+}

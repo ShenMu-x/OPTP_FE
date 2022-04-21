@@ -1,5 +1,5 @@
 import { clearTokenAndRole } from '../../storage';
-import { showSuccessWrap } from '../comfirm';
+import { showSuccessWrap } from '../showMessage';
 export const useLogout = () => {
     clearTokenAndRole();
     showSuccessWrap({
