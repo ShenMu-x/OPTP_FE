@@ -3,8 +3,9 @@ import { ref, toRef, watch } from 'vue';
 import BtnBlue from '../common/BtnBlue.vue';
 import Tag from '../common/Tag.vue';
 import UploadFile from '../common/UploadFile.vue';
-import { useDirect, isAfterCurrentTime, ParamsEnum } from '@/utils/helper';
+import { useDirect, isAfterCurrentTime } from '@/utils/helper';
 import { getLabById } from '@/utils/services';
+import { ROUTE_NAME } from '@/router/routeName';
 import { labType } from '@/type';
 import { getIDEUrl } from './logic';
 
@@ -13,10 +14,10 @@ const info = toRef(props, 'info');
 const lab = ref<labType>(props.info);
 const id = ref(0);
 
-const { directToWithParams } = useDirect();
+const { routerToIDE } = useDirect();
 const toIDE = async () => {
     const url = await getIDEUrl(lab.value.labId ?? 0);
-    if (url) directToWithParams('ide', { [ParamsEnum.IdeUrl]: url })
+    if (url) routerToIDE('direct', { ideurl: url })
 }
 const getLabInfo = () => {
     getLabById(id.value)

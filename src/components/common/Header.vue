@@ -2,23 +2,19 @@
 import { ref, onUnmounted } from 'vue';
 import { HomeFilled, ArrowLeftBold, Avatar, AlarmClock } from '@element-plus/icons-vue';
 import SCNULogo from '../../assets/scnulogo.png';
-import { isTeacher, isStudent, useDirect, useLogout } from '@/utils/helper';
+import { isTeacher, isStudent, useDirect, logout } from '@/utils/helper';
 import { getMyAttendRecordsInProgress } from '@/utils/services';
 
-const { directTo } = useDirect();
+const { routerToHome, routerToStudentAttend } = useDirect();
 const isUserStudent = isStudent();
 const isUserTeacher = isTeacher();
 const hasAttendInProgress = ref(false);
 const cancleAttendTip = () => { hasAttendInProgress.value = false }
 const showAttendTip = () => { hasAttendInProgress.value = true }
 const commandHandler = (command: string) => {
-    if (command === 'toHome') {
-        directTo('/');
-    } else if (command === 'logout') {
-        useLogout()
-    } else if (command === 'attend') {
-        directTo('/user_attend')
-    }
+    if (command === 'toHome') routerToHome('direct');
+    else if (command === 'logout') logout()
+    else if (command === 'attend') routerToStudentAttend('direct')
 }
 let intreval: any = null;
 const requestAttend = () => {
@@ -62,7 +58,8 @@ onUnmounted(() => {
                     <el-dropdown-item :icon="ArrowLeftBold" command="logout">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
             </template>
-        </el-dropdown>  </div>
+        </el-dropdown>
+    </div>
 </template>
 
 <style scoped lang="less">

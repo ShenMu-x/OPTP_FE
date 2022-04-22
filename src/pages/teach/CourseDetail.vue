@@ -12,11 +12,9 @@ import { useCourseId, useDirect, showFailWrap } from '@/utils/helper';
 import { getCourseById } from '@/utils/services';
 import { CourseType } from '@/type';
 
-const { redirect } = useDirect();
+const { redirectNotFound } = useDirect();
 const courseId = useCourseId();
-const data = reactive<{
-  course: CourseType
-}>({
+const data = reactive<{ course: CourseType }>({
   course: {},
 })
 const { course } = toRefs(data);
@@ -25,7 +23,7 @@ const focusTab = ref('lab');
 getCourseById({ courseId })
   .then(res => {
     if (res.code === 0 && res.data) Object.assign(data.course, res.data);
-    else showFailWrap({ text: res.errorMsg, closeCb: redirect('/404') })
+    else showFailWrap({ text: res.errorMsg, closeCb: redirectNotFound })
   })
 </script>
 

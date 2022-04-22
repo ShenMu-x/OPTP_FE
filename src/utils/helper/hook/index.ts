@@ -2,7 +2,6 @@ export * from './useUser';
 export * from './useCountDownSec';
 export * from './useDialog';
 export * from './useDirect';
-export * from './useLogout';
 export * from './useFolder';
 export * from './useLoader';
 export * from './useReloader';

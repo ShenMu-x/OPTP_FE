@@ -12,9 +12,8 @@ import { createLab, getCourseLabList, deleteLab } from '@/utils/services';
 const refLabFormEl = ref();
 const refTableEl = ref();
 const courseId = useCourseId();
-const common = { courseId };
-const { directTo } = useDirect();
 const { isDialogOpen, openDialog, closeDialog } = useDialog();
+const { routerToLabDetail } = useDirect();
 
 const toCreateLab = () => {
     refLabFormEl.value?.resetForm?.()
@@ -26,6 +25,9 @@ const closeCreatePanel = () => {
 }
 const commitHandler = () => {
     refLabFormEl.value?.commitForm?.();
+}
+const clickToLabDetail = (labId: number) => {
+    routerToLabDetail('direct', { labId })
 }
 const deleteHandler = (labId: number) => {
     ElMessageBox.confirm(
@@ -71,7 +73,7 @@ const deleteHandler = (labId: number) => {
                 </span>
             </template>
         </el-dialog>
-        <TablePage :common="common" :fetch-data="getCourseLabList" ref="refTableEl">
+        <TablePage :common="{ courseId }" :fetch-data="getCourseLabList" ref="refTableEl">
             <template v-slot:tableColumns>
                 <el-table-column prop="labId" label="实验ID" min-width="80" />
                 <el-table-column prop="title" label="实验名称" min-width="140" />
@@ -84,7 +86,7 @@ const deleteHandler = (labId: number) => {
                 </el-table-column>
                 <el-table-column label="操作" min-width="180">
                     <template #default="scope">
-                        <BtnBlue @click="directTo(`/teach/lab_detail/${scope?.row?.labId}`)">详情</BtnBlue>
+                        <BtnBlue @click="clickToLabDetail(scope.row.labId)">详情</BtnBlue>
                         <el-button type="danger" size="default" @click="deleteHandler(scope?.row?.labId)">删除</el-button>
                     </template>
                 </el-table-column>

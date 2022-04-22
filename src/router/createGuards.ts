@@ -6,11 +6,12 @@ import { isTeacher, isStudent, isManager, isAllowedRole } from "@/utils/helper";
 
 export const createRouterGuards = (router: Router) => {
     router.beforeEach((to, from, next) => {
-        // 权限校验
-        let token = getLocalStorage(LocalVal.AccessToken) ?? '';
+        // 登录校验
+        let token = getLocalStorage(LocalVal.AccessToken);
         const pathsAllowNoLogin: ROUTE_NAME[] = [ROUTE_NAME.LOGIN, ROUTE_NAME.FORGET_PASSWORD, ROUTE_NAME.REGISTER];
-        if (!token && !pathsAllowNoLogin.filter(routeName => routeName == to.name).length) {
-            next({ name: ROUTE_NAME.LOGIN });
+        if (!token) {
+            if (!pathsAllowNoLogin.filter(routeName => routeName == to.name).length) next({ name: ROUTE_NAME.LOGIN });
+            else next();
             return;
         }
         // 主页引导

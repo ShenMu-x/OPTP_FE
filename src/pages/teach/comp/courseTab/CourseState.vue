@@ -3,16 +3,16 @@ import { ref } from 'vue';
 import { Download, Pointer } from '@element-plus/icons-vue';
 import BtnCt from '@/components/common/BtnCt.vue';
 import TablePage from '@/components/common/TablePage.vue';
-import { exportScore, getCourseScoreList } from '@/utils/services';
 import { useCourseId, useDirect, loadCsv } from '@/utils/helper';
+import { exportScore, getCourseScoreList } from '@/utils/services';
 
 const refEl = ref();
 const courseId = useCourseId();
-const common = { courseId }
-const { directTo } = useDirect();
-const exportScoreHandler = () => {
-    loadCsv(refEl?.value, '学生成绩表', exportScore, courseId);
-}
+const { routerToCourseCodingList } = useDirect();
+const exportScoreHandler = () => loadCsv(refEl?.value, '学生成绩表', exportScore, courseId);
+const clickToCodingTable = () => routerToCourseCodingList('direct', {
+    courseid: courseId
+})
 </script>
 
 <template>
@@ -20,13 +20,10 @@ const exportScoreHandler = () => {
         <BtnCt>
             <template v-slot:botton>
                 <el-button :icon="Download" @click="exportScoreHandler">导出成绩列表</el-button>
-                <el-button
-                    :icon="Pointer"
-                    @click="directTo(`/teach/course_coding/${courseId}`)"
-                >查看学生编码活跃度</el-button>
+                <el-button :icon="Pointer" @click="clickToCodingTable">查看学生编码活跃度</el-button>
             </template>
         </BtnCt>
-        <TablePage :common="common" :fetch-data="getCourseScoreList" text="本课程暂无学生">
+        <TablePage :common="{ courseId }" :fetch-data="getCourseScoreList" text="本课程暂无学生">
             <template v-slot:tableColumns>
                 <el-table-column prop="num" label="学生学号" min-width="180" />
                 <el-table-column prop="realName" label="学生姓名" min-width="140" />

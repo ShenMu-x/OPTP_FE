@@ -14,7 +14,7 @@ import { CourseType, userInfoType } from '@/type';
 const courseId = useCourseId();
 const data = reactive<{ course: CourseType, info: userInfoType }>({ course: {}, info: {} });
 const { course, info } = toRefs(data);
-const { redirect } = useDirect();
+const { redirectNotFound } = useDirect();
 
 scrollToPos(0);
 getCourseById({ courseId })
@@ -28,7 +28,10 @@ getCourseById({ courseId })
                     }
                 })
         } else {
-            showFailWrap({ text: res.errorMsg, closeCb: redirect('/404') })
+            showFailWrap({
+                text: res.errorMsg,
+                closeCb: redirectNotFound
+            })
         }
     })
 </script>

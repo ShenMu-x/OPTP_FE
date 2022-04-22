@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useDirect } from '@/utils/helper';
-const { routerBack, redirectToHome } = useDirect();
+const { routerBack, routerToHome } = useDirect();
+const redirectToHome = () => routerToHome('redirect');
 </script>
 <template>
     <div class="ct">

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { ref, toRef } from 'vue';
-import { CourseType } from '@/type';
+import { toRef } from 'vue';
 import Avatar from '../common/Avatar.vue';
 import Tag from '../common/Tag.vue';
-import { isTeacher, useDirect } from '@/utils/helper';
+import { useDirect } from '@/utils/helper';
+import { CourseType } from '@/type';
 
 const props = defineProps<{
     course: CourseType,
@@ -11,11 +11,8 @@ const props = defineProps<{
 }>();
 const course = toRef(props, 'course');
 
-const { directTo } = useDirect();
-const toCourseDetail = () => {
-    if (isTeacher()) directTo(`/teach/course_detail/${course.value.courseId}`);
-    else directTo(`/course_detail/${course.value.courseId}`);
-}
+const { routerToCourseDetail } = useDirect();
+const toCourseDetail = () => routerToCourseDetail('direct', { courseId: course.value.courseId ?? 0 })
 </script>
 
 <template>
@@ -28,11 +25,8 @@ const toCourseDetail = () => {
                 <Tag :type="course.isClose ? 'red' : 'green'" />
             </div>
         </div>
-        <div
-            :class="['courseDes', props.heightAuto ? '' : 'fixDes']"
-            class="courseDes"
-            :title="course?.courseDes || ''"
-        >课程描述: {{ course?.courseDes || '暂无描述' }}</div>
+        <div :class="['courseDes', props.heightAuto ? '' : 'fixDes']" class="courseDes"
+            :title="course?.courseDes || ''">课程描述: {{ course?.courseDes || '暂无描述' }}</div>
     </div>
 </template>
 
@@ -49,12 +43,14 @@ const toCourseDetail = () => {
     align-items: flex-start;
     padding: 20px;
 }
+
 .fixCt {
     height: 200px;
 }
 
 .courseMain {
     width: 100%;
+
     .cover {
         float: left;
         flex-basis: 80px;

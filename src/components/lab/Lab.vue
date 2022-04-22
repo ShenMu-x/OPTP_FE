@@ -4,7 +4,7 @@ import { InfoFilled } from '@element-plus/icons-vue';
 import Tag from '../common/Tag.vue';
 import BtnBlue from '../common/BtnBlue.vue';
 import { labType } from '@/type';
-import { fmatDate, useDirect, isAfterCurrentTime, ParamsEnum } from '@/utils/helper';
+import { fmatDate, useDirect, isAfterCurrentTime } from '@/utils/helper';
 import { setLabStatus } from '@/utils/services';
 import { getIDEUrl } from './logic';
 
@@ -21,12 +21,12 @@ const updateLabStatus = () => {
         labId: info.value?.labId ?? 0
     })
 }
-const { directToWithParams } = useDirect();
+const { routerToIDE } = useDirect();
 const toIDE = async () => {
     const url = await getIDEUrl(info.value.labId ?? 0);
-    if (url) directToWithParams('ide', {
-        [ParamsEnum.IdeUrl]: url,
-        [ParamsEnum.isLabFinish]: isAfterCurrentTime(info?.value?.deadLine ?? '') ? '' : 'true'
+    if (url) routerToIDE('direct', {
+        ideurl: url,
+        islabfinish: isAfterCurrentTime(info?.value?.deadLine ?? '') ? '' : 'true'
     })
 }
 </script>

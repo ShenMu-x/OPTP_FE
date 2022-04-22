@@ -9,4 +9,5 @@ export * from './loadCsv';
 export * from './loadAttachment';
 export * from './getGender';
 export * from './showMessage';
+export * from './logout';
 export * from './hook';

@@ -7,7 +7,6 @@ import BtnBlue from '@/components/common/BtnBlue.vue';
 import TextReturnBtn from '@/components/common/TextReturnBtn.vue';
 import { comfirm, useDirect } from '@/utils/helper';
 import { changePsw } from '@/utils/services';
-import { ROUTE_NAME } from '@/router/routeName';
 import { getAuthRule } from './rules';
 import { useCountDownWrap } from './logic';
 
@@ -27,7 +26,8 @@ const rules = reactive(getAuthRule({
   getPswCheck: () => form.passwordCheck
 }))
 
-const { redirect } = useDirect();
+const { routerToLogin } = useDirect();
+const redirectToLogin = () => routerToLogin('redirect')
 const { current, isCounting, fetchCode } = useCountDownWrap();
 const getVerificationCode = () => fetchCode(form.email);
 
@@ -35,7 +35,7 @@ const registerHandler = () => {
   comfirm({
     type: 'submit',
     refEl,
-    onSuccTipClose: () => { redirect(ROUTE_NAME.LOGIN) },
+    onSuccTipClose: redirectToLogin,
     fetchApi: changePsw,
     params: {
       email: form.email,
@@ -70,7 +70,7 @@ const registerHandler = () => {
         <BtnBlue size="large" @click="registerHandler" v-show="!isCounting" class="submitBtn">确认修改</BtnBlue>
         <div class="registerBtnCt">
           已有账号？
-          <TextBtn @click="redirect(ROUTE_NAME.LOGIN)">点击登录</TextBtn>
+          <TextBtn @click="redirectToLogin">点击登录</TextBtn>
         </div>
       </el-form>
     </FormCt>

@@ -27,7 +27,8 @@ const rules = reactive(getRegisterRule({
   pswCheck: () => { return model.password }
 }))
 
-const { redirect } = useDirect();
+const { routerToLogin } = useDirect();
+const redirectLogin = () => routerToLogin('redirect');
 const { current, isCounting, fetchCode } = useCountDownWrap();
 const getCode = () => fetchCode(model.email)
 
@@ -52,7 +53,7 @@ const registerHandler = () => {
       }).then(value => {
         if (value.code === 0) {
           showSuccessWrap({ text: '注册成功！ 请登录。' })
-          redirect('/login');
+          redirectLogin();
         }
       })
     }
@@ -86,7 +87,7 @@ const registerHandler = () => {
         <el-form-item label="真实姓名" prop="realName">
           <el-input v-model="model.realName" clearable></el-input>
         </el-form-item>
-        <el-form-item label="学号" prop="num">
+        <el-form-item label="学工号" prop="num">
           <el-input v-model="model.num" clearable></el-input>
         </el-form-item>
         <el-form-item label="专业" prop="major">
@@ -110,11 +111,11 @@ const registerHandler = () => {
         <BtnBlue size="large" @click="registerHandler" class="registerBtn">点击注册</BtnBlue>
         <div class="registerBtnCt">
           已有账号？
-          <TextBtn @click="redirect('/login')">点击登录</TextBtn>
+          <TextBtn @click="redirectLogin">点击登录</TextBtn>
         </div>
       </el-form>
     </FormCt>
-    </Layout>
+  </Layout>
 </template>
 <style lang="less" scoped>
 .RegisterFormCt {
