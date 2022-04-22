@@ -1,6 +1,6 @@
 import { ref, reactive, watch, toRef } from 'vue';
 import { showSuccessWrap, showFailWrap } from '../showMessage';
-import {  useLoader } from './useLoader';
+import { useLoader } from './useLoader';
 
 interface params {
     size: number,
@@ -22,11 +22,7 @@ export const usePageList = ({
 }: params) => {
     const current = ref(1);
     const total = ref(size);
-    const data = reactive<{
-        list: Array<any>
-    }>({
-        list: []
-    })
+    const data = reactive<{ list: any[] }>({ list: [] })
     const list = toRef(data, 'list');
     const isReload = ref(false);
     let commonIn: any = common;

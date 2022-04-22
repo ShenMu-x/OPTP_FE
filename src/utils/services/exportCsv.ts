@@ -3,7 +3,7 @@ import { ResType } from "./type";
 import { packError } from "./pack";
 
 // 导出签到表
-export const exportCsv: (url: string) => ResType<{ csvData: any }> = (url) => {
+export const exportCsv: (url: string) => ResType<{ csvData: Blob }> = (url) => {
     return _axios({
         responseType: "blob",
         headers: {
