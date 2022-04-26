@@ -3,8 +3,8 @@ import { ref } from 'vue';
 import TablePage from '@/components/common/TablePage.vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
 import Tag from '@/components/common/Tag.vue';
-import { useLabId, useDialog, showFailWrap, showSuccessWrap } from '@/utils/helper';
-import { getHomeworkStatus, setLabScore, homeworkType } from '@/utils/services';
+import { useLabId, useDialog, showFailWrap, showSuccessWrap, useDirect, ParamsEnum } from '@/utils/helper';
+import { getHomeworkStatus, setLabScore, getIDEtoCheckCode } from '@/utils/services';
 
 const labId = useLabId();
 const { isDialogOpen: isScoreDialogOpen, openDialog: openScoreDialog } = useDialog();
@@ -34,6 +34,20 @@ const changeScore = () => {
         })
     }
 }
+
+const { routerToIDE } = useDirect();
+const checkCode = (row: { labId: number; userId: number; }) => {
+    getIDEtoCheckCode({
+        labId: row.labId,
+        studentId: row.userId
+    }).then(res => {
+        if (res.code === 0 && res.data?.url) {
+            routerToIDE('direct', {
+                ideUrl: res.data.url
+            })
+        }
+    })
+}
 </script>
 
 <template>
@@ -43,13 +57,7 @@ const changeScore = () => {
             <el-table-column prop="name" label="学生姓名" min-width="100" />
             <el-table-column label="状态" min-width="100">
                 <template #default="scope">
-                    <Tag
-                        class="tag"
-                        type="green"
-                        :isText="true"
-                        greenText="点击下载"
-                        v-if="scope.row.isFinish"
-                    />
+                    <Tag class="tag" type="green" :isText="true" greenText="点击下载" v-if="scope.row.isFinish" />
                     <Tag class="tag" type="red" :isText="true" redText="尚未提交" v-else />
                 </template>
             </el-table-column>
@@ -70,7 +78,7 @@ const changeScore = () => {
             <el-table-column label="操作" min-width="240">
                 <template #default="scope">
                     <el-button size="default" @click="openScorePanel(scope.row)">修改评分</el-button>
-                    <BtnBlue>查看代码</BtnBlue>
+                    <BtnBlue @click="checkCode(scope.row)">查看代码</BtnBlue>
                 </template>
             </el-table-column>
         </template>
@@ -87,13 +95,7 @@ const changeScore = () => {
             </div>
             <div class="titleCt">
                 <span class="title">成绩:</span>
-                <el-input
-                    type="number"
-                    :min="0"
-                    :max="100"
-                    size="default"
-                    v-model.number="scoreInp"
-                ></el-input>
+                <el-input type="number" :min="0" :max="100" size="default" v-model.number="scoreInp"></el-input>
             </div>
         </div>
         <BtnBlue class="btn" @click="changeScore">修改成绩</BtnBlue>
@@ -104,11 +106,13 @@ const changeScore = () => {
 .tag {
     padding-left: 0;
 }
+
 .scoreDialogCt {
     margin: 20px;
     display: flex;
     flex-wrap: wrap;
 }
+
 .titleCt {
     text-align: left;
     display: flex;
@@ -117,6 +121,7 @@ const changeScore = () => {
     flex: 1 0 130px;
     margin-bottom: 10px;
 }
+
 .title {
     width: 40px;
     flex: 0 0 40px;

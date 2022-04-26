@@ -25,8 +25,8 @@ const { routerToIDE } = useDirect();
 const toIDE = async () => {
     const url = await getIDEUrl(info.value.labId ?? 0);
     if (url) routerToIDE('direct', {
-        ideurl: url,
-        islabfinish: isAfterCurrentTime(info?.value?.deadLine ?? '') ? '' : 'true'
+        ideUrl: url,
+        isLabFinish: isAfterCurrentTime(info?.value?.deadLine ?? '') ? '' : 'true'
     })
 }
 </script>

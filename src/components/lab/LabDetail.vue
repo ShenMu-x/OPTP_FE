@@ -17,7 +17,7 @@ const id = ref(0);
 const { routerToIDE } = useDirect();
 const toIDE = async () => {
     const url = await getIDEUrl(lab.value.labId ?? 0);
-    if (url) routerToIDE('direct', { ideurl: url })
+    if (url) routerToIDE('direct', { ideUrl: url })
 }
 const getLabInfo = () => {
     getLabById(id.value)
