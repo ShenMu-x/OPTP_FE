@@ -5,7 +5,9 @@ import CommentInput from '@/components/comment/CommentInput.vue';
 import CommentList from '@/components/comment/CommentList.vue';
 import { showFailWrap, showSuccessWrap, useCourseId } from '@/utils/helper';
 import { publishCourseComment, deleteCourseComment } from '@/utils/services';
+import { getCommentCount } from './useCommon';
 
+// 可拓展实验评论能力
 const props = defineProps<{
     type: 'lab' | 'course'
 }>();
@@ -56,23 +58,15 @@ const deleteComment = (common: { commentId: number }) => {
         })
         .catch(() => { })
 }
-
+defineExpose({
+    getCommentCount
+})
 </script>
 
 <template>
     <div class="qaCard">
-        <CommentInput
-            title="提出我的问题"
-            :submitComment="submitComment"
-            class="inputQue"
-            ref="refInputEl"
-        />
-        <CommentList
-            ref="refListEl"
-            :courseId="courseId"
-            :submitReply="submitComment"
-            :deleteReply="deleteComment"
-        />
+        <CommentInput title="提出我的问题" :submitComment="submitComment" class="inputQue" ref="refInputEl" />
+        <CommentList ref="refListEl" :courseId="courseId" :submitReply="submitComment" :deleteReply="deleteComment" />
     </div>
 </template>
 

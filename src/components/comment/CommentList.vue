@@ -3,6 +3,7 @@ import CommentItem from './CommentItem.vue';
 import { usePageList } from '@/utils/helper';
 import { fetchCourseComment } from '@/utils/services';
 import { watch } from 'vue';
+import { setCommentCount } from './useCommon';
 
 const props = defineProps<{
     courseId?: number,
@@ -35,12 +36,13 @@ watch(props, (newV, _) => {
 })
 props.courseId && fetch(1);
 
-const publishReplyWrap = (common: any) => {
-    props.submitReply?.({ ...common });
-}
-const deleteWrap = (common: any) => {
-    props.deleteReply?.({ ...common });
-}
+setCommentCount(total.value)
+watch(total, (newV, _) => {
+    setCommentCount(newV)
+})
+
+const publishReplyWrap = (common: any) => { props.submitReply?.({ ...common }) }
+const deleteWrap = (common: any) => { props.deleteReply?.({ ...common }) }
 
 defineExpose({
     reloadComment: reload,
@@ -49,21 +51,11 @@ defineExpose({
 
 <template>
     <template v-if="list.length">
-        <CommentItem
-            v-for="(commentItem, index) in list"
-            :key="commentItem.comment.courseCommentId"
-            :commentItem="commentItem"
-            :isLast="index + 1 === list?.length"
-            :publish-reply="publishReplyWrap"
-            :delete-reply="deleteWrap"
-        />
+        <CommentItem v-for="(commentItem, index) in list" :key="commentItem.comment.courseCommentId"
+            :commentItem="commentItem" :isLast="index + 1 === list?.length" :publish-reply="publishReplyWrap"
+            :delete-reply="deleteWrap" />
     </template>
     <el-empty v-else description="本课程暂无评论" style="flex: 1" />
-    <el-pagination
-        v-model:currentPage="current"
-        layout="prev, pager, next"
-        :total="total"
-        :page-size="pageSize"
-        hide-on-single-page
-    ></el-pagination>
+    <el-pagination v-model:currentPage="current" layout="prev, pager, next" :total="total" :page-size="pageSize"
+        hide-on-single-page></el-pagination>
 </template>

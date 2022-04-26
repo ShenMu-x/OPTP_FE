@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, toRefs } from 'vue';
+import { reactive, toRefs, ref } from 'vue';
 import PageHeader from '@/components/common/PageHeader.vue';
 import CourseItem from '@/components/course/CourseItem.vue';
 import QACard from '@/components/comment/QACard.vue';
@@ -15,6 +15,7 @@ const courseId = useCourseId();
 const data = reactive<{ course: CourseType, info: userInfoType }>({ course: {}, info: {} });
 const { course, info } = toRefs(data);
 const { redirectNotFound } = useDirect();
+const refQACardEl = ref();
 
 scrollToPos(0);
 getCourseById({ courseId })
@@ -48,8 +49,12 @@ getCourseById({ courseId })
                     <NoticeCard />
                 </div>
                 <div class="qaCard">
-                    <div class="cardTitle">课程问答(条)</div>
-                    <QACard type="course" />
+                    <div class="cardTitle">课程问答
+                        {{ refQACardEl?.getCommentCount?.() > 0 ?
+                                `(${refQACardEl?.getCommentCount?.()} 条)` : ''
+                        }}
+                    </div>
+                    <QACard type="course" ref="refQACardEl" />
                 </div>
             </div>
             <div class="rightCt">
