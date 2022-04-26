@@ -8,6 +8,8 @@ export const packCourse = (course: any): CourseType => {
         courseId: course.course_id,
         teacherId: course.teacher_id,
         teacherName: course.teacher_name,
+        teacherAvatar: course.teacher_avatar,
+        teacherEmail: course.teacher_email,
         courseName: course.course_name,
         courseDes: course.course_des,
         picUrl: course.pic_url,

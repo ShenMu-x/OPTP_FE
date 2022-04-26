@@ -8,11 +8,11 @@ import TeacherInfo from './comp/TeacherInfo.vue';
 import NoticeCard from './comp/NoticeCard.vue';
 import UnEnrollCourseDetail from './comp/UnEnrollCourseDetail.vue';
 import { scrollToPos, useCourseId, showFailWrap, useDirect } from '@/utils/helper';
-import { getCourseById, getUserInfoById } from '@/utils/services';
-import { CourseType, userInfoType } from '@/type';
+import { getCourseById } from '@/utils/services';
+import { CourseType, emptyCourseInfo, emptyUserInfo, userInfoType } from '@/type';
 
 const courseId = useCourseId();
-const data = reactive<{ course: CourseType, info: userInfoType }>({ course: {}, info: {} });
+const data = reactive<{ course: CourseType, info: userInfoType }>({ course: emptyCourseInfo, info: emptyUserInfo });
 const { course, info } = toRefs(data);
 const { redirectNotFound } = useDirect();
 const refQACardEl = ref();
@@ -22,12 +22,9 @@ getCourseById({ courseId })
     .then(res => {
         if (res.code === 0 && res.data) {
             Object.assign(data.course, res.data);
-            getUserInfoById({ userId: res.data.teacherId ?? -1 })
-                .then(infoRes => {
-                    if (infoRes.code === 0) {
-                        Object.assign(data.info, infoRes.data);
-                    }
-                })
+            info.value.avatarUrl = res.data.teacherAvatar;
+            info.value.realName = res.data.teacherName;
+            info.value.email = res.data.teacherEmail;
         } else {
             showFailWrap({
                 text: res.errorMsg,
