@@ -1,25 +1,29 @@
 import _axios from "../axios";
 import { ResType } from "../type";
-import { userInfoType } from '@/type';
 import { packError, packEmptyData } from "../pack";
+import { userInfoType } from '@/type';
+import { setUserInConfig } from "../../storage";
 
 export const getUserInfoByToken: () => ResType<userInfoType> = () => {
     return _axios({
         method: 'GET',
         url: '/web/user'
     }).then(value => {
+        const user = {
+            email: value.data.data.email,
+            userId: value.data.data.user_id,
+            num: value.data.data.num,
+            realName: value.data.data.real_name,
+            avatarUrl: value.data.data.avatar_url,
+            gender: value.data.data.gender,
+            major: value.data.data.major,
+            organization: value.data.data.organization,
+            role: value.data.data.role
+        }
+        setUserInConfig(user)
         return {
             code: 0,
-            data: {
-                email: value.data.data.email,
-                userId: value.data.data.user_id,
-                num: value.data.data.num,
-                realName: value.data.data.real_name,
-                avatarUrl: value.data.data.avatar_url,
-                gender: value.data.data.gender,
-                major: value.data.data.major,
-                organization: value.data.data.organization
-            }
+            data: user
         }
     }).catch(packError)
 }

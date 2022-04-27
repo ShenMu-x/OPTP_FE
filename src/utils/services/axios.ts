@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { getLocalStorage, LocalVal } from "../storage";
+import { getAccessToken } from "../storage";
 import { HttpCode, Code } from './code';
 import { baseURL } from "../option";
 import {
@@ -21,7 +21,7 @@ const _axios = axios.create(axiosConfig);
 // 请求拦截器
 _axios.interceptors.request.use(
     function (config: AxiosRequestConfig) {
-        if (config?.headers) config.headers['Authorization'] = `Bearer ${getLocalStorage(LocalVal.AccessToken)}`;
+        if (config?.headers) config.headers['Authorization'] = `Bearer ${getAccessToken()}`;
         return config;
     });
 
@@ -40,7 +40,7 @@ _axios.interceptors.response.use(
                         reject(error);
                     } else {
                         if (!getIsTokenRefreshing()) refreshAccessToken();
-                        pushRetryRequset(() =>  resolve(_axios(config)));
+                        pushRetryRequset(() => resolve(_axios(config)));
                     }
                 })
             } else if (statusCode === HttpCode.ServerError) {

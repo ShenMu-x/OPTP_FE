@@ -12,7 +12,7 @@ import { getCourseById } from '@/utils/services';
 import { CourseType, emptyCourseInfo, emptyUserInfo, userInfoType } from '@/type';
 
 const courseId = useCourseId();
-const data = reactive<{ course: CourseType, info: userInfoType }>({ course: emptyCourseInfo, info: emptyUserInfo });
+const data = reactive<{ course: CourseType, info: userInfoType }>({ course: { ...emptyCourseInfo }, info: { ...emptyUserInfo } });
 const { course, info } = toRefs(data);
 const { redirectNotFound } = useDirect();
 const refQACardEl = ref();

@@ -4,7 +4,7 @@ import { editUserInfoType, editAvatarType, emptyEditInfoMethod, emptyEditAvatarM
 import { userInfoType, emptyUserInfo } from '@/type';
 
 export const useUser = () => {
-    const user: userInfoType = inject(ProvideKey.USER, emptyUserInfo);
+    const user: userInfoType = inject(ProvideKey.USER, { ...emptyUserInfo });
     const editUserInfo: editUserInfoType = inject(ProvideKey.EDIT_USER_INFO, emptyEditInfoMethod);
     const editAvatar: editAvatarType = inject(ProvideKey.EDIT_USER_AVATAR, emptyEditAvatarMethod);
     return {

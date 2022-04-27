@@ -1,10 +1,11 @@
 import _axios from "./axios";
-import { getLocalStorage, clearTokenAndRole, LocalVal, setLocalStorage } from "../storage";
+import { clearTokens, refreshTokens } from '../helper';
+import { getRefreshToken } from "../storage";
 
 export const REQUEST_REFRESH_TOKEN_URL = '/web/refresh';
 
 export const clearAuthAndRedirect = () => {
-    clearTokenAndRole();
+    clearTokens();
     location.href = `${location.origin}/login`
 }
 
@@ -25,7 +26,7 @@ const refresh = () => {
         method: 'POST',
         url: REQUEST_REFRESH_TOKEN_URL,
         data: {
-            refresh_token: getLocalStorage(LocalVal.RefreshToken) || ""
+            refresh_token: getRefreshToken()
         }
     })
 }
@@ -35,8 +36,7 @@ export const refreshAccessToken = async () => {
         isTokenRefreshing = true;
         const res = await refresh();
         if (res.data) {
-            setLocalStorage(LocalVal.AccessToken, res.data?.data?.token)
-            setLocalStorage(LocalVal.RefreshToken, res.data?.data?.refresh_token)
+            refreshTokens(res.data?.data?.token, res.data?.data?.refresh_token)
             retryRequestQueue();
         }
     } catch (e) {

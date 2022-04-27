@@ -1,7 +1,7 @@
 import { useRouter } from 'vue-router';
 import { ROUTE_NAME } from '@/router/routeName';
 import { RoleEnum, HomePageMap } from "@/utils/option";
-import { isTeacher, isStudent, isManager, ParamsEnum } from "@/utils/helper";
+import { isTeacher, isStudent, isManager, ParamsEnum, isRoleDefined } from "@/utils/helper";
 import { ParamsType } from './useParam';
 
 type directType = 'direct' | 'redirect';
@@ -29,9 +29,12 @@ export const useDirect = () => {
     const routerToEditInfo: routerToSpecificPageType = type => routerToPage(type, ROUTE_NAME.EDIT_INFO)
     const routerToStudentAttend: routerToSpecificPageType = type => routerToPage(type, ROUTE_NAME.STUDENT_ATTEND)
     const routerToHome: routerToSpecificPageType = type => {
-        isTeacher() && (routerToPage(type, HomePageMap[RoleEnum.Teacher]))
-        isStudent() && (routerToPage(type, HomePageMap[RoleEnum.Student]))
-        isManager() && (routerToPage(type, HomePageMap[RoleEnum.Manager]))
+        if (!isRoleDefined()) router.push('/')
+        else {
+            isTeacher() && (routerToPage(type, HomePageMap[RoleEnum.Teacher]))
+            isStudent() && (routerToPage(type, HomePageMap[RoleEnum.Student]))
+            isManager() && (routerToPage(type, HomePageMap[RoleEnum.Manager]))
+        }
     }
     const routerToCourseDetail: routerWithCourseIdType = (type, params) => {
         isTeacher() && (routerToPage(type, ROUTE_NAME.TEACHER_COURSE_DETAIL, {

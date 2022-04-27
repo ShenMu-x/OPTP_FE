@@ -1,18 +1,24 @@
+import { getUserInfoByToken } from '@/utils/services';
 import { ROUTE_NAME } from '@/router/routeName';
 import { Router } from 'vue-router';
-import { getLocalStorage, LocalVal } from "../utils/storage";
+import { getAccessToken } from "@/utils/storage";
 import { RoleEnum, HomePageMap } from "@/utils/option";
-import { isTeacher, isStudent, isManager, isAllowedRole } from "@/utils/helper";
+import { isTeacher, isStudent, isManager, isAllowedRole, isRoleDefined } from "@/utils/helper";
 
 export const createRouterGuards = (router: Router) => {
-    router.beforeEach((to, from, next) => {
+    router.beforeEach(async (to, from, next) => {
+        const isToNameInPaths = (paths: any[]) => paths.filter(routeName => routeName == to.name).length > 0
         // 登录校验
-        let token = getLocalStorage(LocalVal.AccessToken);
+        let token = getAccessToken();
         const pathsAllowNoLogin: ROUTE_NAME[] = [ROUTE_NAME.LOGIN, ROUTE_NAME.FORGET_PASSWORD, ROUTE_NAME.REGISTER];
         if (!token) {
-            if (!pathsAllowNoLogin.filter(routeName => routeName == to.name).length) next({ name: ROUTE_NAME.LOGIN });
+            if (!isToNameInPaths(pathsAllowNoLogin)) next({ name: ROUTE_NAME.LOGIN });
             else next();
             return;
+        }
+        // 职能请求
+        if (!isRoleDefined()) {
+            await getUserInfoByToken();
         }
         // 主页引导
         if (to.path === '/') {
@@ -22,7 +28,7 @@ export const createRouterGuards = (router: Router) => {
             return
         }
         // 职能检查
-        if (to.meta?.accessRole && !isAllowedRole(to.meta.accessRole)) {
+        if (isRoleDefined() && to.meta?.accessRole && !isAllowedRole(to.meta.accessRole)) {
             next({ name: ROUTE_NAME.NOT_FOUND });
             return;
         }

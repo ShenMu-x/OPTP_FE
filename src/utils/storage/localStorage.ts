@@ -1,20 +1,16 @@
 export enum LocalVal {
-    AccessToken= '__ACCESS',
-    RefreshToken='__REFRESH',
-    Role = '__ROLE',
+    AccessToken = '__ACCESS',
+    RefreshToken = '__REFRESH',
 };
 
-export const getLocalStorage = (key: LocalVal) => {
-    return localStorage.getItem(key);
-}
-export const setLocalStorage = (key: LocalVal, value: string) => {
-    return localStorage.setItem(key, value);
-}
-export const removeLocalStorage = (key: LocalVal) => {
-    return localStorage.removeItem(key);
-}
-export const clearTokenAndRole = () => {
-    removeLocalStorage(LocalVal.AccessToken);
-    removeLocalStorage(LocalVal.RefreshToken);
-    removeLocalStorage(LocalVal.Role);
-}
+export const getLocalStorage = (key: LocalVal) => localStorage.getItem(key)
+export const setLocalStorage = (key: LocalVal, value: string) => localStorage.setItem(key, value)
+export const removeLocalStorage = (key: LocalVal) => localStorage.removeItem(key)
+
+export const getAccessToken = (defaultVal = "") => getLocalStorage(LocalVal.AccessToken) || defaultVal;
+export const setAccessToken = (value = "") => setLocalStorage(LocalVal.AccessToken, value)
+export const rmAccessToken = () => removeLocalStorage(LocalVal.AccessToken)
+
+export const getRefreshToken = (defaultVal = "") => getLocalStorage(LocalVal.RefreshToken) || defaultVal;
+export const setRefreshToken = (value = "") => setLocalStorage(LocalVal.RefreshToken, value)
+export const rmRefreshToken = () => removeLocalStorage(LocalVal.RefreshToken)

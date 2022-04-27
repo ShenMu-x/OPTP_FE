@@ -1,15 +1,13 @@
+import { userInfoType } from '@/type';
 export enum ConfigVal {
-    isShowPoint = 'isShowPoint'
+    USER = 'user'
 }
 type ConfigType = {
-    [propName in ConfigVal]?: any;
+    [ConfigVal.USER]?: userInfoType
 }
 
 const config: ConfigType = {};
 
-export const getConfig = (key: ConfigVal) => {
-    return config[key];
-}
-export const setConfig = (key: ConfigVal, value: any) => {
-    config[key] = value;
-}
+export const getRoleInConfig = () => config[ConfigVal.USER]?.role;
+export const getUserInConfig = () => config[ConfigVal.USER];
+export const setUserInConfig = (user: userInfoType) => config[ConfigVal.USER] = user;

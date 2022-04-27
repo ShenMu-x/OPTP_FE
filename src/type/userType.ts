@@ -1,3 +1,4 @@
+import { DEFAULT_AVATAR } from "@/utils/option"
 export type userInfoType = {
     userId?: number,
     email?: string,
@@ -7,6 +8,7 @@ export type userInfoType = {
     organization?: string,
     gender?: number,
     avatarUrl?: string,
+    role?: number
 }
 
 export const emptyUserInfo: userInfoType = {
@@ -14,8 +16,9 @@ export const emptyUserInfo: userInfoType = {
     userId: 0,
     num: '',
     realName: '',
-    avatarUrl: '',
+    avatarUrl: DEFAULT_AVATAR,
     gender: 0,
     major: '',
-    organization: ''
+    organization: '',
+    role: 0
 }

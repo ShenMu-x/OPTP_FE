@@ -1,7 +1,7 @@
 import { provide, reactive } from 'vue';
 import { getUserInfoByToken } from '@/utils/services';
 import { DEFAULT_AVATAR } from "@/utils/option";
-import { ProvideKey, editUserInfoType, editAvatarType } from '@/utils/storage';
+import { ProvideKey, editUserInfoType, editAvatarType, getUserInConfig } from '@/utils/storage';
 import { userInfoType, emptyUserInfo } from '@/type';
 
 const initUserInfo: (user: userInfoType, res: { code: number, data?: userInfoType }) => void = (user, res) => {
@@ -18,7 +18,7 @@ const initUserInfo: (user: userInfoType, res: { code: number, data?: userInfoTyp
 }
 
 export const provideUser = () => {
-    const user = reactive<userInfoType>(emptyUserInfo)
+    const user = reactive<userInfoType>({ ...emptyUserInfo })
     const editUserInfo: editUserInfoType = (params) => {
         user.realName = params.realName || "";
         user.gender = params.gender || 0;
@@ -31,5 +31,7 @@ export const provideUser = () => {
     provide(ProvideKey.EDIT_USER_INFO, editUserInfo);
     provide(ProvideKey.EDIT_USER_AVATAR, editAvatar);
 
-    getUserInfoByToken().then(res => initUserInfo(user, res))
+    // 从config中获取，兜底从getUserInfoByToken请求
+    if (getUserInConfig()) Object.assign(user, getUserInConfig())
+    else getUserInfoByToken().then(res => initUserInfo(user, res))
 }
