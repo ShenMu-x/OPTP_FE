@@ -8,3 +8,4 @@ export * from './useReloader';
 export * from './useParam';
 export * from './useParamsWrap';
 export * from './usePageList';
+export * from './useQuery';

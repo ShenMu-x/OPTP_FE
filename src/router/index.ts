@@ -10,6 +10,7 @@ declare module 'vue-router' {
         accessRole: RoleEnum[]
     }
 }
+// 存在目录修改，不完全是约定式路由，以配置为准
 const routes = [
     {
         path: '/login',
@@ -39,7 +40,7 @@ const routes = [
         component: () => import('../pages/login/Authentication.vue'),
     },
     {
-        path: '/ide',
+        path: `/course_detail/:${ParamsEnum.LabId}`,
         name: ROUTE_NAME.IDE,
         meta: {
             title: '在线编程页',
@@ -58,7 +59,7 @@ const routes = [
                     title: '学生主页',
                     accessRole: [RoleEnum.Student]
                 },
-                component: () => import('../pages/user/StudCenter.vue')
+                component: () => import('../pages/user/StudentCenter.vue')
             },
             {
                 path: '/edit_info',

@@ -6,14 +6,12 @@ import BtnBlue from '../common/BtnBlue.vue';
 import { labType } from '@/type';
 import { fmatDate, useDirect, isAfterCurrentTime } from '@/utils/helper';
 import { setLabStatus } from '@/utils/services';
-import { getIDEUrl } from './logic';
 
 const props = defineProps<{ info: labType }>();
 const emits = defineEmits(['openDrawer'])
 const info = toRef(props, 'info');
-const openLabDrawer = () => {
-    emits('openDrawer', info.value);
-}
+const openLabDrawer = () => emits('openDrawer', info.value);
+
 const finishStatus = ref(info.value.isFinish ?? false);
 const updateLabStatus = () => {
     setLabStatus({
@@ -22,13 +20,10 @@ const updateLabStatus = () => {
     })
 }
 const { routerToIDE } = useDirect();
-const toIDE = async () => {
-    const url = await getIDEUrl(info.value.labId ?? 0);
-    if (url) routerToIDE('direct', {
-        ideUrl: url,
-        isLabFinish: isAfterCurrentTime(info?.value?.deadLine ?? '') ? '' : 'true'
-    })
-}
+const toIDE = () => routerToIDE({
+    type: 'direct',
+    params: { labId: info.value.labId ?? 0 }
+})
 </script>
 
 <template>

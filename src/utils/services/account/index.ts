@@ -1,6 +1,6 @@
 import _axios from "../axios";
 import { ResType } from '../type';
-import { packError, packErrorWrap, packEmptyData } from "../pack";
+import { packErrorWrap, packEmptyData } from "../pack";
 import { setTokens } from '../../helper';
 interface RegisterReq {
     email: string;
@@ -12,16 +12,20 @@ interface RegisterReq {
     organization: string;
     verificationCode: string;
 }
-export const stuRegister: (params: RegisterReq) => ResType<''> = (params) => {
+export const registerStudentAccount: (params: RegisterReq) => ResType<''> = (params) => {
     return _axios.post('/web/user/signup/stu', params)
         .then(packEmptyData)
-        .catch(packError);
+        .catch(err => packErrorWrap(err, [
+            [10002, '验证码过期或有误']
+        ]));
 }
 
-export const teachRegister: (params: RegisterReq) => ResType<''> = (params) => {
+export const registerTeacherAccount: (params: RegisterReq) => ResType<''> = (params) => {
     return _axios.post('web/user/signup/teacher', params)
         .then(packEmptyData)
-        .catch(packError);
+        .catch(err => packErrorWrap(err, [
+            [10002, '验证码过期或有误']
+        ]));
 }
 
 export const getVerificationCode: (params: { email: string }) => ResType<boolean> = (params) => {
@@ -58,7 +62,7 @@ interface loginRes {
 export const login: (params: loginReq) => ResType<loginRes> = (params) => {
     return _axios.post('/web/login', params)
         .then(value => {
-            setTokens(value.data.data.token, value.data.data.refresh_token, value.data.data.role);
+            setTokens(value.data.data.token, value.data.data.refresh_token);
             return packEmptyData();
         })
         .catch(err => packErrorWrap(err, [

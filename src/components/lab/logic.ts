@@ -1,8 +1,8 @@
 import { showFailWrap } from '@/utils/helper';
-import { fetchIdeUrl } from '@/utils/services';
+import { getIDEtoCode } from '@/utils/services';
 
 export const getIDEUrl = async (labId: number) => {
-    return fetchIdeUrl(labId)
+    return getIDEtoCode(labId)
         .then(res => {
             if (res.code === 0) {
                 return res?.data?.url || "";

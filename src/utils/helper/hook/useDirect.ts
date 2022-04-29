@@ -3,11 +3,12 @@ import { ROUTE_NAME } from '@/router/routeName';
 import { RoleEnum, HomePageMap } from "@/utils/option";
 import { isTeacher, isStudent, isManager, ParamsEnum, isRoleDefined } from "@/utils/helper";
 import { ParamsType } from './useParam';
+import { queryType } from './useQuery';
 
 type directType = 'direct' | 'redirect';
-type directMethodType = (routeName: ROUTE_NAME, params?: ParamsType) => void;
-type routerToPageMethodType = (type: directType, routeName: ROUTE_NAME, params?: ParamsType) => void;
-type routerToSpecificPageType = (type: directType, params?: ParamsType) => void;
+type directMethodType = (routeName: ROUTE_NAME, params?: ParamsType, query?: queryType) => void;
+type routerToPageMethodType = (type: directType, routeName: ROUTE_NAME, params?: ParamsType, query?: queryType) => void;
+type routerToSpecificPageType = (type: directType, params?: ParamsType, query?: queryType) => void;
 type routerWithCourseIdType = (type: directType, params: { courseId: number }) => void;
 type routerWithLabIdType = (type: directType, params: { labId: number }) => void;
 type routerToIDEType = (type: directType, params: { ideUrl: string, isLabFinish?: string }) => void;
@@ -15,11 +16,11 @@ type routerToIDEType = (type: directType, params: { ideUrl: string, isLabFinish?
 export const useDirect = () => {
     const router = useRouter();
     const routerBack = () => router.back()
-    const redirectTo: directMethodType = (routeName, params) => router.replace({ name: routeName, params })
-    const directTo: directMethodType = (routeName, params) => router.push({ name: routeName, params })
-    const routerToPage: routerToPageMethodType = (type, routeName, params) => {
-        type === 'direct' && (directTo(routeName, params));
-        type === 'redirect' && (redirectTo(routeName, params));
+    const redirectTo: directMethodType = (routeName, params, query) => router.replace({ name: routeName, params, query })
+    const directTo: directMethodType = (routeName, params, query) => router.push({ name: routeName, params, query })
+    const routerToPage: routerToPageMethodType = (type, routeName, params, query) => {
+        type === 'direct' && (directTo(routeName, params, query));
+        type === 'redirect' && (redirectTo(routeName, params, query));
     }
     const redirectNotFound = () => redirectTo(ROUTE_NAME.NOT_FOUND)
     const routerToLogin: routerToSpecificPageType = type => routerToPage(type, ROUTE_NAME.LOGIN)
@@ -54,11 +55,8 @@ export const useDirect = () => {
             [ParamsEnum.CourseId]: params.courseId
         })
     }
-    const routerToIDE: routerToIDEType = (type, params) => {
-        routerToPage(type, ROUTE_NAME.IDE, {
-            [ParamsEnum.IdeUrl]: params.ideUrl,
-            [ParamsEnum.isLabFinish]: params.isLabFinish ?? ''
-        })
+    const routerToIDE: (config: { type: directType, params: { labId: number }, query?: { student: number } }) => void = ({ type, params, query }) => {
+        routerToPage(type, ROUTE_NAME.IDE, { [ParamsEnum.LabId]: params.labId }, query ? { student: query?.student } : {})
     }
     return {
         routerBack,

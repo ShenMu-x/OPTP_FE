@@ -5,8 +5,8 @@ import FormCt from './comp/FormCt.vue';
 import TextBtn from './comp/TextBtn.vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
 import TextReturnBtn from '@/components/common/TextReturnBtn.vue';
-import { stuRegister, teachRegister } from '@/utils/services';
-import { showSuccessWrap, useDirect } from '@/utils/helper';
+import { registerStudentAccount, registerTeacherAccount } from '@/utils/services';
+import { showFailWrap, showSuccessWrap, useDirect } from '@/utils/helper';
 import { getRegisterRule } from './rules';
 import { useCountDownWrap } from './logic'
 
@@ -33,9 +33,9 @@ const { current, isCounting, fetchCode } = useCountDownWrap();
 const getCode = () => fetchCode(model.email)
 
 // 用户身份类型切换
-let register = stuRegister;
+let register = registerStudentAccount;
 const changeRole = () => {
-  register = model.role === 1 ? teachRegister : stuRegister;
+  register = model.role === 1 ? registerTeacherAccount : registerStudentAccount;
 }
 
 const registerHandler = () => {
@@ -54,6 +54,8 @@ const registerHandler = () => {
         if (value.code === 0) {
           showSuccessWrap({ text: '注册成功！ 请登录。' })
           redirectLogin();
+        } else {
+          showFailWrap({ text: value.errorMsg })
         }
       })
     }

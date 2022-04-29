@@ -36,18 +36,12 @@ const changeScore = () => {
 }
 
 const { routerToIDE } = useDirect();
-const checkCode = (row: { labId: number; userId: number; }) => {
-    getIDEtoCheckCode({
-        labId: row.labId,
-        studentId: row.userId
-    }).then(res => {
-        if (res.code === 0 && res.data?.url) {
-            routerToIDE('direct', {
-                ideUrl: res.data.url
-            })
-        }
+const checkCode = (row: { labId: number; userId: number; }) =>
+    routerToIDE({
+        type: 'direct',
+        params: { labId: row.labId },
+        query: { student: row.userId }
     })
-}
 </script>
 
 <template>
