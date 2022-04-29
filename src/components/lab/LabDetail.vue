@@ -5,9 +5,7 @@ import Tag from '../common/Tag.vue';
 import UploadFile from '../common/UploadFile.vue';
 import { useDirect, isAfterCurrentTime } from '@/utils/helper';
 import { getLabById } from '@/utils/services';
-import { ROUTE_NAME } from '@/router/routeName';
 import { labType } from '@/type';
-import { getIDEUrl } from './logic';
 
 const props = defineProps<{ info: labType }>();
 const info = toRef(props, 'info');
