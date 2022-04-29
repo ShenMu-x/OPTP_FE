@@ -10,9 +10,7 @@ const refEl = ref();
 const courseId = useCourseId();
 const { routerToCourseCodingList } = useDirect();
 const exportScoreHandler = () => loadCsv(refEl?.value, '学生成绩表', exportScore, courseId);
-const clickToCodingTable = () => routerToCourseCodingList('direct', {
-    courseid: courseId
-})
+const clickToCodingTable = () => routerToCourseCodingList('direct', { courseId })
 </script>
 
 <template>
