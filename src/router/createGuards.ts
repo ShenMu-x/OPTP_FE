@@ -5,12 +5,12 @@ import { getAccessToken } from "@/utils/storage";
 import { RoleEnum, HomePageMap } from "@/utils/option";
 import { isTeacher, isStudent, isManager, isAllowedRole, isRoleDefined } from "@/utils/helper";
 
+const pathsAllowNoLogin: ROUTE_NAME[] = [ROUTE_NAME.LOGIN, ROUTE_NAME.FORGET_PASSWORD, ROUTE_NAME.REGISTER];
 export const createRouterGuards = (router: Router) => {
     router.beforeEach(async (to, from, next) => {
         const isToNameInPaths = (paths: any[]) => paths.filter(routeName => routeName == to.name).length > 0
         // 登录校验
         let token = getAccessToken();
-        const pathsAllowNoLogin: ROUTE_NAME[] = [ROUTE_NAME.LOGIN, ROUTE_NAME.FORGET_PASSWORD, ROUTE_NAME.REGISTER];
         if (!token) {
             if (!isToNameInPaths(pathsAllowNoLogin)) next({ name: ROUTE_NAME.LOGIN });
             else next();

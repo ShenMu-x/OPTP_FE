@@ -8,8 +8,8 @@ import { fmatDate, useDirect, isAfterCurrentTime } from '@/utils/helper';
 import { setLabStatus } from '@/utils/services';
 
 const props = defineProps<{ info: labType }>();
-const emits = defineEmits(['openDrawer'])
 const info = toRef(props, 'info');
+const emits = defineEmits(['openDrawer'])
 const openLabDrawer = () => emits('openDrawer', info.value);
 
 const finishStatus = ref(info.value.isFinish ?? false);

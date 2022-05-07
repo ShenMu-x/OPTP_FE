@@ -22,7 +22,7 @@ const routes = [
         component: () => import('../pages/login/Login.vue')
     },
     {
-        path: '/register',
+        path: '/login/register',
         name: ROUTE_NAME.REGISTER,
         meta: {
             title: '注册页',
@@ -31,7 +31,7 @@ const routes = [
         component: () => import('../pages/login/Register.vue'),
     },
     {
-        path: '/auth',
+        path: '/login/authentication',
         name: ROUTE_NAME.FORGET_PASSWORD,
         meta: {
             title: '密码修改页',
@@ -40,10 +40,10 @@ const routes = [
         component: () => import('../pages/login/Authentication.vue'),
     },
     {
-        path: `/course_detail/:${ParamsEnum.LabId}`,
+        path: `/ide/:${ParamsEnum.LabId}`,
         name: ROUTE_NAME.IDE,
         meta: {
-            title: '在线编程页',
+            title: '在线编程环境',
             accessRole: [RoleEnum.Student, RoleEnum.Teacher]
         },
         component: () => import('../pages/ide/Ide.vue'),
@@ -53,7 +53,7 @@ const routes = [
         component: () => import("../layout/index.vue"),
         children: [
             {
-                path: '/user_center',
+                path: '/user/user-center',
                 name: ROUTE_NAME.STUDENT_CENTER,
                 meta: {
                     title: '学生主页',
@@ -62,7 +62,7 @@ const routes = [
                 component: () => import('../pages/user/StudentCenter.vue')
             },
             {
-                path: '/edit_info',
+                path: '/user/edit-info',
                 name: ROUTE_NAME.EDIT_INFO,
                 meta: {
                     title: '个人信息修改',
@@ -71,7 +71,7 @@ const routes = [
                 component: () => import('../pages/user/EditInfo.vue')
             },
             {
-                path: `/course_detail/:${ParamsEnum.CourseId}`,
+                path: `/course/course-detail/:${ParamsEnum.CourseId}`,
                 name: ROUTE_NAME.STUDENT_COURSE_DETAIL,
                 meta: {
                     title: '课程详情',
@@ -80,7 +80,7 @@ const routes = [
                 component: () => import('../pages/course/CourseDetail.vue')
             },
             {
-                path: '/user_attend',
+                path: '/user/user-attend',
                 name: ROUTE_NAME.STUDENT_ATTEND,
                 meta: {
                     title: '个人签到',
@@ -89,7 +89,7 @@ const routes = [
                 component: () => import('../pages/user/UserAttend.vue')
             },
             {
-                path: '/online_oj',
+                path: '/online-oj',
                 name: ROUTE_NAME.ONLINE_OJ,
                 meta: {
                     title: '语法练习',
@@ -98,7 +98,7 @@ const routes = [
                 component: () => import('../pages/oj/OnlineOJ.vue'),
             },
             {
-                path: '/teach/user_center',
+                path: '/user/teaacher-center',
                 name: ROUTE_NAME.TEACHER_CENTER,
                 meta: {
                     title: '教师主页',
@@ -107,7 +107,7 @@ const routes = [
                 component: () => import('../pages/user/TeacherCenter.vue')
             },
             {
-                path: `/teach/course_detail/:${ParamsEnum.CourseId}`,
+                path: `/teach/course-detail/:${ParamsEnum.CourseId}`,
                 name: ROUTE_NAME.TEACHER_COURSE_DETAIL,
                 meta: {
                     title: '课程详情',
@@ -116,7 +116,7 @@ const routes = [
                 component: () => import('../pages/teach/CourseDetail.vue')
             },
             {
-                path: `/teach/course_coding/:${ParamsEnum.CourseId}`,
+                path: `/teach/course-coding/:${ParamsEnum.CourseId}`,
                 name: ROUTE_NAME.TEACHER_COURSE_CODE_LIST,
                 meta: {
                     title: '编程活跃度',
@@ -125,7 +125,7 @@ const routes = [
                 component: () => import('../pages/teach/CourseCodingTime.vue')
             },
             {
-                path: `/teach/lab_detail/:${ParamsEnum.LabId}`,
+                path: `/teach/lab-detail/:${ParamsEnum.LabId}`,
                 name: ROUTE_NAME.TEACHER_LAB_DETAIL,
                 meta: {
                     title: '实验详情',
@@ -143,7 +143,7 @@ const routes = [
                 component: () => import('../pages/manage/ManageHome.vue'),
             },
             {
-                path: '/404',
+                path: '/not-found',
                 name: ROUTE_NAME.NOT_FOUND,
                 meta: {
                     title: '无法访问',

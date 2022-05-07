@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useCreateEditor } from './manaco';
 import LoadBtn from '@/components/common/LoadBtn.vue';
 import { langs, CodeLangs } from '@/utils/option';
-import { useDirect, useLoader } from '@/utils/helper';
+import { useDirect } from '@/utils/helper';
 import { fetchCodeResult } from '@/utils/services';
 
 const refEditorEl = ref();

@@ -3,7 +3,8 @@ export const useReloader = (refEl: any) => {
     const isReloading = ref(false);
     const reloadHandler = () => {
         isReloading.value = true;
-        refEl?.value?.reload?.();
+        if(refEl?.value?.reload) refEl.value.reload?.();
+        else isReloading.value = false;
     }
     const finishReload = () => {
         isReloading.value = false;
