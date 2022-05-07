@@ -34,7 +34,8 @@ const { isDialogOpen, openDialog } = useDialog();
         </div>
         <div class="detailCt">
             <div class="label">附件</div>
-            <a class="link" :href="info.attachmentUrl">点击下载附件</a>
+            <a class="link" :href="info.attachmentUrl" v-if="info.attachmentUrl">点击下载附件</a>
+            <div v-else>本公告下暂无附件</div>
         </div>
     </el-dialog>
 </template>
@@ -52,6 +53,7 @@ const { isDialogOpen, openDialog } = useDialog();
         cursor: pointer;
         background-color: #f5f5f5;
     }
+
     .itemTitle {
         width: 25%;
         margin-right: 20px;
@@ -61,6 +63,7 @@ const { isDialogOpen, openDialog } = useDialog();
         white-space: nowrap;
         text-align: left;
     }
+
     .content {
         flex: 1;
         margin-right: 20px;
@@ -74,6 +77,7 @@ const { isDialogOpen, openDialog } = useDialog();
         width: 82px;
     }
 }
+
 .detailCt {
     display: flex;
     text-align: left;
@@ -85,9 +89,11 @@ const { isDialogOpen, openDialog } = useDialog();
         margin-right: 20px;
         font-weight: bold;
     }
+
     .link {
         text-decoration: none;
         color: #002d54;
+
         &:hover {
             font-weight: 500;
         }
