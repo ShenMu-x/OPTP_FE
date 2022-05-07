@@ -37,9 +37,9 @@ const toIDE = () => routerToIDE({
             <div class="leftCt">
                 <!-- 宽屏 -->
                 <template class="timeCourse">
-                    <div :title="info.createdAt">创建日期: {{ fmatDate(info.createdAt || "") }}</div>
-                    <div :title="info.deadLine">截止日期: {{ fmatDate(info.deadLine || "") }}</div>
-                    <div class="course" title="info.isBelongTo">所属课程: {{ info.courseName }}</div>
+                    <div class="courseDate" :title="info.createdAt">创建日期: {{ fmatDate(info.createdAt || "") }}</div>
+                    <div class="courseDate" :title="info.deadLine">截止日期: {{ fmatDate(info.deadLine || "") }}</div>
+                    <div class="course" :title="info.courseName">所属课程: {{ info.courseName }}</div>
                 </template>
                 <!-- 小屏兼容(底部信息收起) -->
                 <template class="infoIcon">
@@ -149,21 +149,27 @@ const toIDE = () => routerToIDE({
     }
 }
 
-@media screen and (min-width: 1060px) {
+@media screen and (min-width: 1200px) {
     .timeCourse {
         display: flex;
 
-        &>div {
+        .courseDate,
+        .course {
             line-height: 40px;
-            width: 140px;
+            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             margin-right: 10px;
             text-align: left;
         }
 
+        .courseDate {
+            width: 140px;
+        }
+
         .course {
-            width: 160px;
+            min-width: 160px;
+            max-width: 350px;
         }
     }
 
