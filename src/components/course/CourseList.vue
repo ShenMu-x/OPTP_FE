@@ -44,14 +44,9 @@ onMounted(() => {
             <CourseItem v-for="item in list" :key="item.courseId" :course="item" class="courseCt" />
         </template>
         <el-empty v-else v-show="!isLoading" description="暂无课程" style="flex: 1" />
+        <el-pagination v-model:currentPage="current" layout="prev, pager, next" :total="total" :page-size="pageSize"
+            hide-on-single-page></el-pagination>
     </div>
-    <el-pagination
-        v-model:currentPage="current"
-        layout="prev, pager, next"
-        :total="total"
-        :page-size="pageSize"
-        hide-on-single-page
-    ></el-pagination>
 </template>
 
 <style lang="less" scoped>
@@ -61,12 +56,14 @@ onMounted(() => {
     min-height: 480px;
     padding-top: 20px;
 }
+
 .courseCt {
     flex-basis: 100%;
     width: 100%;
     background-color: #fff;
     border: 1px solid #e4e7ed;
     border-radius: 4px;
+
     &:hover {
         cursor: pointer;
         box-shadow: 0 0 5px #5151e51e;

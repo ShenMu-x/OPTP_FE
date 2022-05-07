@@ -38,7 +38,6 @@ export const usePageList = ({
     }
 
     const fetch = (nowPage: number) => {
-        isLoading.value = true;
         showLoading();
         fetchData?.({
             pageSize: size,

@@ -2,7 +2,7 @@
 import CommentItem from './CommentItem.vue';
 import { usePageList } from '@/utils/helper';
 import { fetchCourseComment } from '@/utils/services';
-import { watch } from 'vue';
+import { onMounted, watch } from 'vue';
 import { setCommentCount } from './useCommon';
 
 const props = defineProps<{
@@ -34,7 +34,9 @@ watch(props, (newV, _) => {
         fetch(1);
     }
 })
-props.courseId && fetch(1);
+onMounted(() => {
+    props.courseId && fetch(1);
+})
 
 setCommentCount(total.value)
 watch(total, (newV, _) => {
