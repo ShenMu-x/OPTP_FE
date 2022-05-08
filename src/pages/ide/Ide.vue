@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
-import { useDirect, useIdeUrl, useIsLabFinish } from '@/utils/helper';
+import { useDirect, useIsLabFinish } from '@/utils/helper';
 import { useGetIDEAndCheckBeat } from './logic';
 
 const isFinish = ref(useIsLabFinish())

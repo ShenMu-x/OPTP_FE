@@ -2,6 +2,7 @@ import _axios from '../../axios';
 import { ResType, ListRes } from '../../type';
 import { packError, packPageRes } from "../../pack";
 import { exportCsv } from '../../exportCsv';
+import { packCodingTime } from '../../packCommon';
 
 export type ScoreType = {
     userId: number,
@@ -61,7 +62,7 @@ export const packCoding = (item: any) => ({
     userId: item.user_id,
     name: item.name,
     number: item.number,
-    codingTime: item.coding_time ?? [],
+    codingTime: packCodingTime(item.coding_time) ?? [],
 })
 // 获取课程学生编码时间表
 export const getCourseCodingTime: (params: { courseId: number, pageSize: number, pageCurrent: number }) => ResType<any> = (params) => {

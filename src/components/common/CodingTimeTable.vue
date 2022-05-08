@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, reactive } from 'vue';
+import { onMounted, watch, toRef } from 'vue';
 import * as echarts from 'echarts/core';
 import {
   TitleComponent,
@@ -23,12 +23,19 @@ echarts.use([
 ]);
 
 const props = defineProps<{ list: any[], id?: string }>();
+const list = toRef(props, 'list');
 const id = `echartEl_${props.id}` ?? 'echartEl';
+let myChart: echarts.ECharts | null = null;
 onMounted(() => {
-  let myChart = echarts.init(document.getElementById(id) as HTMLElement);
+  myChart = echarts.init(document.getElementById(id) as HTMLElement);
   getConfig && myChart.setOption(getConfig(props.list ?? []));
 })
-
+watch(list, (newv) => {
+  if (myChart) {
+    console.log('new val', newv)
+    getConfig && myChart.setOption(getConfig(newv ?? []));
+  }
+})
 </script>
 
 <template>

@@ -1,6 +1,7 @@
 import _axios from "../axios";
 import { ResType } from "../type";
-import { packError, packEmptyData } from "../pack";
+import { packError, packEmptyData } from "../pack"
+import { packCodingTime } from '../packCommon';
 import { userInfoType } from '@/type';
 import { setUserInConfig } from "../../storage";
 
@@ -74,7 +75,7 @@ export const getMyCodingTime: () => ResType<costTimeRes> = () => {
                     userId: value.data.data.user_id,
                     name: value.data.data.name,
                     number: value.data.data.number,
-                    codingTime: value.data.data.coding_time ?? []
+                    codingTime: packCodingTime(value.data.data.coding_time) ?? []
                 }
             }
         })

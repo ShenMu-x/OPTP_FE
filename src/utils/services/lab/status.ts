@@ -75,8 +75,8 @@ const packPlagiarism = (item: { user_id_1: number; user_id_2: number; real_name_
     url: item.url,
     similarity: item.similarity
 })
-// 获取实验编译失败记录
-type plagiarismType = {
+// 获取实验查重记录
+export type plagiarismType = {
     userId1: number,
     userId2: number,
     realName1: string,
@@ -95,6 +95,19 @@ export const getLabPlagiarism: (labId: number) => ResType<plagiarismType[]> = (l
             code: 0,
             data: res.data.data.map(packPlagiarism)
         }))
+        .catch(packError)
+}
+export const requestPlagiarismURL: (url: string) => ResType<string> = (url) => {
+    return _axios({
+        method: "GET",
+        url,
+    })
+        .then(res => {
+            return {
+                code: 0,
+                data: res.data
+            }
+        })
         .catch(packError)
 }
 
