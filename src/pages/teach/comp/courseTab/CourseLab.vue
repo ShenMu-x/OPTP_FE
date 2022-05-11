@@ -21,7 +21,8 @@ const toCreateLab = () => {
 }
 const closeCreatePanel = () => {
     closeDialog();
-    refTableEl.value.reload?.()
+    // refTableEl.value.reload?.() 
+    // 存在对话框展示收起，列表触发刷新问题
 }
 const commitHandler = () => {
     refLabFormEl.value?.commitForm?.();
