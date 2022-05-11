@@ -17,8 +17,8 @@ export const packPageRes = (res: { data: { data: { records: any[]; page_info: { 
     return {
         code: 0,
         data: {
-            records: res.data?.data?.records?.map((item: any) => pack(item)) || [],
-            pageInfo: res.data?.data?.page_info || { total: 0 }
+            records: res.data?.data?.records?.map((item: any) => pack(item)) ?? [],
+            pageInfo: res.data?.data?.page_info ?? { total: 0 }
         }
     }
 }

@@ -5,16 +5,16 @@ import { useCourseId } from '@/utils/helper';
 import { getCourseStudents, getAskForAdmissionStudents } from '@/utils/services';
 
 const props = defineProps<{
-    type: 'default' | 'verify'
+    type: 'default' | 'verify';
 }>();
 const fetch = props.type === 'verify' ? getAskForAdmissionStudents : getCourseStudents;
 const des = props.type === 'verify' ? '本课程暂无待审核成员' : '本课程暂无成员';
 const courseId = useCourseId();
-const common = { courseId }
+const common = { courseId };
 const refTableEl = ref();
 defineExpose({
-    reload: refTableEl?.value?.reload
-})
+    reload: () => refTableEl?.value?.reload?.(),
+});
 </script>
 
 <template>

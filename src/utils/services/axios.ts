@@ -13,7 +13,7 @@ import {
 
 const axiosConfig = {
     baseURL,
-    timeout: 5000,
+    timeout: 8 * 1000,
     headers: {},
 }
 const _axios = axios.create(axiosConfig);

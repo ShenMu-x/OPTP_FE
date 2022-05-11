@@ -36,7 +36,7 @@ const openDetail = (url: string) => {
 
 <template>
     <div v-if="list.length">
-        <el-dialog v-model="isDialogOpen" title="创建实验" width="80%">
+        <el-dialog v-model="isDialogOpen" title="实验代码查重记录" width="80%">
             <LabPlagiarismDialog :url="dialogUrl" />
             <template #footer>
                 <span class="dialog-footer">

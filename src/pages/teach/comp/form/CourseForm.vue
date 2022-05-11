@@ -101,8 +101,8 @@ defineExpose({
                 show-word-limit
             ></el-input>
         </el-form-item>
-        <el-form-item label="加入密码" :label-width="formLabelWidth" prop="secretKey">
-            <el-input v-model="form.secretKey" autocomplete="off" placeholder="请输入课程加入密码（6位）"></el-input>
+        <el-form-item label="修改密码" :label-width="formLabelWidth" prop="secretKey">
+            <el-input v-model="form.secretKey" autocomplete="off" placeholder="请输入修改的课程加入密码（6位）"></el-input>
         </el-form-item>
         <el-form-item label="课程语言" :label-width="formLabelWidth" prop="language">
             <el-radio-group v-model="form.language">

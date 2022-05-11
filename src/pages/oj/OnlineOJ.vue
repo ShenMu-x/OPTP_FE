@@ -28,7 +28,9 @@ const run = () => {
         code: getValue()
     }).then(res => {
         if (res.code === 0) {
-            textarea.value = res.data?.status === 0 ? `运行成功\n${res.data?.description}` : `运行出错\n${res.data?.description}`;
+            textarea.value = res.data?.status === 0 ?
+             `运行成功\n${res.data?.description}` :
+              `运行失败。错误原因：${res.data?.title}\n${res.data?.description}`;
         } else {
             textarea.value =  `运行失败\n${res.errorMsg}`;
         }

@@ -13,9 +13,9 @@ export const fetchCodeResult: (params: { language: number, code: string }) => Re
     }).then(res => ({
         code: 0,
         data: {
-            status: res.data.status,
-            title: res.data.title,
-            description: res.data.description
+            status: res.data.status ?? 1,
+            title: res.data.title ?? '执行超时',
+            description: res.data.description ?? ''
         }
     })
     ).catch(_ => ({

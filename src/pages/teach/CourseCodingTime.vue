@@ -42,7 +42,7 @@ defineExpose({
         <template v-if="list?.length > 0">
             <CodingTableItem v-for="item in list" :key="item.userId" :info="item" />
         </template>
-        <el-empty v-else v-show="!isLoading" description="该课程暂无学生" style="flex: 1" />
+        <el-empty v-else v-show="!isLoading" description="该课程暂无学生编码记录" style="flex: 1" />
     </div>
     <el-pagination
         class="pagination"

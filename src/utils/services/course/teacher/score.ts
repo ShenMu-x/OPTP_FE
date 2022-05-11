@@ -64,6 +64,15 @@ export const packCoding = (item: any) => ({
     number: item.number,
     codingTime: packCodingTime(item.coding_time) ?? [],
 })
+
+const packCourseCodingTime = (item: any) => {
+    return {
+        userId: item.user_id,
+        name: item.name,
+        number: item.number,
+        codingTime: packCodingTime(item.coding_time ?? [])
+    }
+}
 // 获取课程学生编码时间表
 export const getCourseCodingTime: (params: { courseId: number, pageSize: number, pageCurrent: number }) => ResType<any> = (params) => {
     return _axios({
@@ -74,6 +83,6 @@ export const getCourseCodingTime: (params: { courseId: number, pageSize: number,
             pageSize: params.pageSize
         }
     })
-        .then(res => packPageRes(res, packCoding))
+        .then(res => packPageRes(res, packCourseCodingTime))
         .catch(packError)
 }

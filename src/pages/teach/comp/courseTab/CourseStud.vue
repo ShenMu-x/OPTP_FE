@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
 import BtnCt from '@/components/common/BtnCt.vue';
@@ -9,32 +9,34 @@ import { useDialog, useCourseId, showFailWrap, loadCsv, showSuccessWrap } from '
 import { checkJoinInApplication, fetchImportMemberTemplate } from '@/utils/services';
 import { UPLOAD_CSV_STUDENT_TEMPLATE_URL } from '@/utils/option';
 
-const { isDialogOpen, openDialog, closeDialog } = useDialog()
+const { isDialogOpen, openDialog, closeDialog } = useDialog();
 const courseId = useCourseId();
 
 const refEl = ref();
 const getMemberTemplate = () => {
     loadCsv(refEl?.value, '导入学生模板', fetchImportMemberTemplate, {});
-}
+};
 
 const focusTab = ref('member');
-const refMemberList = ref()
-const refVerityList = ref()
+const refMemberList = ref();
+const refVerityList = ref();
+const reloadMemberList = () => refMemberList?.value?.reload?.();
+const reloadVerityList = () => refVerityList?.value?.reload?.();
 const check = (userId: number, isPass: boolean) => {
     checkJoinInApplication({
         courseId,
         stuIds: [userId],
         isPermitted: isPass,
-    }).then(res => {
+    }).then((res) => {
         if (res.code === 0) {
-            showSuccessWrap({ text: '通过学生申请' })
-            refMemberList?.value?.reload?.();
-            refVerityList?.value?.reload?.();
+            showSuccessWrap({ text: '通过学生申请' });
+            reloadMemberList();
+            reloadVerityList();
         } else {
-            showFailWrap({ text: '服务出错，请稍后再试' })
+            showFailWrap({ text: '服务出错，请稍后再试' });
         }
-    })
-}
+    });
+};
 </script>
 
 <template>
@@ -45,7 +47,11 @@ const check = (userId: number, isPass: boolean) => {
             </template>
         </BtnCt>
         <el-dialog v-model="isDialogOpen" title="导入学生列表">
-            <UploadCsv @upload="closeDialog" :data="{courseId}" :upload-url="UPLOAD_CSV_STUDENT_TEMPLATE_URL"/>
+            <UploadCsv
+                @upload="closeDialog"
+                :data="{ courseId }"
+                :upload-url="UPLOAD_CSV_STUDENT_TEMPLATE_URL"
+            />
             <template #footer>
                 <span class="dialog-footer">
                     <BtnBlue size="large" @click="getMemberTemplate">下载模板文件</BtnBlue>
@@ -68,12 +74,16 @@ const check = (userId: number, isPass: boolean) => {
                                         type="success"
                                         size="default"
                                         @click="check(scope?.row?.userId, true)"
-                                    >通过</el-button>
+                                    >
+                                        通过
+                                    </el-button>
                                     <el-button
                                         type="danger"
                                         size="default"
                                         @click="check(scope?.row?.userId, false)"
-                                    >拒绝</el-button>
+                                    >
+                                        拒绝
+                                    </el-button>
                                 </div>
                             </template>
                         </el-table-column>
