@@ -55,6 +55,7 @@ onMounted(() => {
     flex-wrap: wrap;
     min-height: 480px;
     padding-top: 20px;
+    justify-content: center;
 }
 
 .courseCt {
@@ -63,7 +64,6 @@ onMounted(() => {
     background-color: #fff;
     border: 1px solid #e4e7ed;
     border-radius: 4px;
-    justify-content: center;
 
     &:hover {
         cursor: pointer;
