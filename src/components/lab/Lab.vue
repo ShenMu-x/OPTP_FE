@@ -9,21 +9,22 @@ import { setLabStatus } from '@/utils/services';
 
 const props = defineProps<{ info: labType }>();
 const info = toRef(props, 'info');
-const emits = defineEmits(['openDrawer'])
+const emits = defineEmits(['openDrawer']);
 const openLabDrawer = () => emits('openDrawer', info.value);
 
 const finishStatus = ref(info.value.isFinish ?? false);
 const updateLabStatus = () => {
     setLabStatus({
         isFinish: finishStatus.value,
-        labId: info.value?.labId ?? 0
-    })
-}
+        labId: info.value?.labId ?? 0,
+    });
+};
 const { routerToIDE } = useDirect();
-const toIDE = () => routerToIDE({
-    type: 'direct',
-    params: { labId: info.value.labId ?? 0 }
-})
+const toIDE = () =>
+    routerToIDE({
+        type: 'direct',
+        params: { labId: info.value.labId ?? 0 },
+    });
 </script>
 
 <template>
@@ -37,9 +38,15 @@ const toIDE = () => routerToIDE({
             <div class="leftCt">
                 <!-- 宽屏 -->
                 <template class="timeCourse">
-                    <div class="courseDate" :title="info.createdAt">创建日期: {{ fmatDate(info.createdAt || "") }}</div>
-                    <div class="courseDate" :title="info.deadLine">截止日期: {{ fmatDate(info.deadLine || "") }}</div>
-                    <div class="course" :title="info.courseName">所属课程: {{ info.courseName }}</div>
+                    <div class="courseDate" :title="info.createdAt">
+                        创建日期: {{ fmatDate(info.createdAt || '') }}
+                    </div>
+                    <div class="courseDate" :title="info.deadLine">
+                        截止日期: {{ fmatDate(info.deadLine || '') }}
+                    </div>
+                    <div v-if="info.courseName" class="course" :title="info.courseName">
+                        所属课程: {{ info.courseName }}
+                    </div>
                 </template>
                 <!-- 小屏兼容(底部信息收起) -->
                 <template class="infoIcon">
@@ -49,19 +56,36 @@ const toIDE = () => routerToIDE({
                             <br />
                             截止日期: {{ info.deadLine }}
                             <br />
-                            所属课程: {{ info.courseName }}
+                            <span v-if="info.courseName">所属课程: {{ info.courseName }}</span>
                         </template>
                         <span class="tipCt">
-                            <InfoFilled style="height: 1.2em;width:1.2em;color: #606266" />
+                            <InfoFilled style="height: 1.2em; width: 1.2em; color: #606266" />
                         </span>
                     </el-tooltip>
                 </template>
                 <div class="status" @click.stop="">
                     完成情况:
-                    <el-switch v-model="finishStatus" class="switch" active-color="#41da86" inactive-color="#e96262"
-                        @change="updateLabStatus" />
-                    <Tag class="tag" type="green" v-show="finishStatus" :green-text="'已完成'" :is-text="true" />
-                    <Tag class="tag" type="red" v-show="!finishStatus" :red-text="'未完成'" :is-text="true" />
+                    <el-switch
+                        v-model="finishStatus"
+                        class="switch"
+                        active-color="#41da86"
+                        inactive-color="#e96262"
+                        @change="updateLabStatus"
+                    />
+                    <Tag
+                        class="tag"
+                        type="green"
+                        v-show="finishStatus"
+                        :green-text="'已完成'"
+                        :is-text="true"
+                    />
+                    <Tag
+                        class="tag"
+                        type="red"
+                        v-show="!finishStatus"
+                        :red-text="'未完成'"
+                        :is-text="true"
+                    />
                 </div>
             </div>
             <div class="rightCt">

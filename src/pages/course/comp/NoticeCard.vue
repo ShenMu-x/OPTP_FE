@@ -5,19 +5,12 @@ import { getCourseNotice } from '@/utils/services';
 
 const courseId = useCourseId();
 const pageSize = 7;
-const {
-    current,
-    total,
-    list,
-    fetch,
-    setCommon,
-    reload,
-} = usePageList({
+const { current, total, list, fetch, setCommon, reload } = usePageList({
     size: pageSize,
     fetchData: getCourseNotice,
     failText: '获取公告列表失败,请稍后再试',
     noTip: true,
-    common: { courseId }
+    common: { courseId },
 });
 
 courseId && fetch(1);
@@ -29,12 +22,12 @@ courseId && fetch(1);
         <template v-if="total > 0">
             <NoticeItem v-for="item in list" :info="item" :key="item.resourceId" />
             <el-pagination
-            v-model:currentPage="current"
-            layout="prev, pager, next"
-            :total="total"
-            :page-size="pageSize"
-            hide-on-single-page
-        ></el-pagination>
+                v-model:currentPage="current"
+                layout="prev, pager, next"
+                :total="total"
+                :page-size="pageSize"
+                hide-on-single-page
+            ></el-pagination>
         </template>
         <div class="empty" v-else>该课程下暂无公告</div>
     </div>

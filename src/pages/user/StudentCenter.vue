@@ -8,17 +8,13 @@ import CodingTimeTable from '@/components/common/CodingTimeTable.vue';
 import CourseList from '@/components/course/CourseList.vue';
 import LabList from '@/components/lab/LabList.vue';
 import { useReloader } from '@/utils/helper';
-import { getStudyCourseList, getMyCodingTime } from '@/utils/services';
+import { getStudyCourseList, getMyCodingTime, getMyLabs } from '@/utils/services';
 
 const activeName = ref('join');
 const list = ref<any>([]);
 
 const refCreateList = ref();
-const {
-    isReloading,
-    reloadHandler,
-    finishReload,
-} = useReloader(refCreateList);
+const { isReloading, reloadHandler, finishReload } = useReloader(refCreateList);
 
 const refAllList = ref();
 const {
@@ -27,10 +23,9 @@ const {
     finishReload: finishReloadAll,
 } = useReloader(refAllList);
 
-getMyCodingTime()
-    .then(res => {
-        if (res.code === 0) list.value = res.data?.codingTime;
-    })
+getMyCodingTime().then((res) => {
+    if (res.code === 0) list.value = res.data?.codingTime;
+});
 </script>
 
 <template>
@@ -60,7 +55,11 @@ getMyCodingTime()
                     <div class="btnCt">
                         <LoadBtn @reload="reloadHandlerAll" :is-loding="isReloadingAll" />
                     </div>
-                    <LabList ref="refAllList" @reloadend="finishReloadAll" />
+                    <LabList
+                        ref="refAllList"
+                        @reloadend="finishReloadAll"
+                        :fetch-lab-list="getMyLabs"
+                    />
                 </el-tab-pane>
                 <el-tab-pane label="其他功能" name="other" lazy>
                     <OtherFeatures></OtherFeatures>

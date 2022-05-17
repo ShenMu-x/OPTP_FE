@@ -2,51 +2,55 @@
 import { ref, onMounted } from 'vue';
 import Lab from './Lab.vue';
 import LabDetail from './LabDetail.vue';
-import { usePageList } from '@/utils/helper';
-import { getMyLabs } from '@/utils/services';
-import { labType } from '@/type';
+import { usePageList, useDrawer } from '@/utils/helper';
+import { labType, emptyLab } from '@/type';
 
-const pageSize = 6;
+const props = defineProps<{
+    fetchLabList: any;
+    common?: any;
+    pageSize?: number;
+}>();
+
+const pageSize = props.pageSize ?? 6;
 const refEl = ref();
-const emits = defineEmits(['reloadend']);
-const emitReload = () => { emits('reloadend') }
 
-const {
-    current,
-    isLoading,
-    isReload,
-    total,
-    list,
-    reload,
-    fetch,
-} = usePageList({
+const emits = defineEmits(['reloadend']);
+const emitReload = () => emits('reloadend');
+
+const { current, isLoading, isReload, total, list, reload, fetch } = usePageList({
     size: pageSize,
-    fetchData: getMyLabs,
+    fetchData: props.fetchLabList,
     failText: '获取实验列表失败,请稍后再试',
     refEl,
-    emitReload
+    emitReload,
+    common: props.common,
 });
-defineExpose({
-    reload
-})
-
-const info = ref<labType>({});
-const isDrawerOpen = ref(false);
-const clickLabDrawer = (infoIn: labType) => {
-    info.value = infoIn;
-    isDrawerOpen.value = !isDrawerOpen.value;
-}
 
 onMounted(() => {
     fetch(1);
 });
 
+defineExpose({
+    reload
+});
+
+const {
+    isDrawerOpen,
+    drawerDetailValue: labInfo,
+    openDrawer,
+} = useDrawer<labType>({ drawerDetailValue: { ...emptyLab } });
 </script>
 
 <template>
     <div class="ct" ref="refEl">
         <template v-if="list?.length">
-            <Lab v-for="lab in list" :key="lab.labId" :info="lab" class="labCt" @open-drawer="clickLabDrawer"></Lab>
+            <Lab
+                class="labCt"
+                v-for="labItem in list"
+                :key="labItem.labId"
+                :info="labItem"
+                @open-drawer="openDrawer"
+            ></Lab>
         </template>
         <el-empty v-else v-show="!isLoading" description="暂无实验" style="flex: 1" />
     </div>
@@ -58,8 +62,8 @@ onMounted(() => {
         :page-size="pageSize"
         hide-on-single-page
     ></el-pagination>
-    <el-drawer v-model="isDrawerOpen" :title="info?.title" size="40%">
-        <LabDetail :info="info" style="cursor: default;" />
+    <el-drawer v-model="isDrawerOpen" :title="labInfo?.title" size="40%">
+        <LabDetail :info="labInfo" :lab-id="labInfo.labId ?? 0" style="cursor: default" />
     </el-drawer>
 </template>
 

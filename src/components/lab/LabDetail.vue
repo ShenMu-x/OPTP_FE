@@ -1,35 +1,37 @@
 <script lang="ts" setup>
-import { ref, toRef, watch } from 'vue';
+import { ref, watch } from 'vue';
 import BtnBlue from '../common/BtnBlue.vue';
 import Tag from '../common/Tag.vue';
 import UploadFile from '../common/UploadFile.vue';
 import { useDirect, isAfterCurrentTime } from '@/utils/helper';
 import { getLabById } from '@/utils/services';
-import { labType } from '@/type';
+import { labType, emptyLab } from '@/type';
 
-const props = defineProps<{ info: labType }>();
-const info = toRef(props, 'info');
-const lab = ref<labType>(props.info);
-const id = ref(0);
+const props = defineProps<{ labId: number }>();
+const currentLabInfo = ref<labType>({ ...emptyLab });
+const currentLabId = ref(props.labId ?? 0);
+
+const setCurrentLabInfo = () => {
+    getLabById(currentLabId.value).then((res) => {
+        if (res.code === 0) currentLabInfo.value = res.data as labType;
+        console.log(currentLabInfo.value)
+    });
+};
+setCurrentLabInfo();
+watch(props, (newV, _) => {
+    if (currentLabId.value !== newV.labId) {
+        currentLabId.value = newV.labId ?? 0;
+        setCurrentLabInfo();
+    }
+});
 
 const { routerToIDE } = useDirect();
-const toIDE = () => routerToIDE({
-    type: 'direct',
-    params: { labId: info.value.labId ?? 0 }
-})
-
-const getLabInfo = () => {
-    getLabById(id.value)
-        .then(res => {
-            if (res.code === 0) lab.value = res.data as labType;
-        })
-}
-watch(info, (newV, _) => {
-    if (id.value !== newV.labId) {
-        id.value = newV.labId ?? 0;
-        getLabInfo();
-    }
-})
+const toIDE = () => {
+    routerToIDE({
+        type: 'direct',
+        params: { labId: props.labId ?? 0 },
+    });
+};
 </script>
 
 <template>
@@ -40,23 +42,34 @@ watch(info, (newV, _) => {
                 <div class="infoInnerCt">
                     <div class="info">
                         创建日期:
-                        <span class="infoText">{{ lab.createdAt }}</span>
+                        <span class="infoText">{{ currentLabInfo.createdAt }}</span>
                     </div>
                     <div class="info">
                         截止日期:
-                        <span class="infoText">{{ lab.deadLine }}</span>
+                        <span class="infoText">{{ currentLabInfo.deadLine }}</span>
                     </div>
                 </div>
                 <div class="infoInnerCt">
                     <div class="info">
                         实验状态:
-                        <Tag v-if="isAfterCurrentTime(lab.deadLine ?? '')" type="green" :isText="true" class="infoText"
-                            greenText="进行中" />
+                        <Tag
+                            v-if="isAfterCurrentTime(currentLabInfo.deadLine ?? '')"
+                            type="green"
+                            :isText="true"
+                            class="infoText"
+                            greenText="进行中"
+                        />
                         <Tag v-else type="red" :isText="true" class="infoText" redText="已结束" />
                     </div>
                     <div class="info">
                         完成情况:
-                        <Tag v-if="lab.isFinish" type="green" :isText="true" class="infoText" greenText="已完成" />
+                        <Tag
+                            v-if="currentLabInfo.isFinish"
+                            type="green"
+                            :isText="true"
+                            class="infoText"
+                            greenText="已完成"
+                        />
                         <Tag v-else type="red" :isText="true" class="infoText" redText="未完成" />
                     </div>
                 </div>
@@ -64,7 +77,7 @@ watch(info, (newV, _) => {
         </div>
         <div>
             <div class="title">实验描述</div>
-            <div class="card">{{ lab.content || '暂无描述' }}</div>
+            <div class="card">{{ currentLabInfo.content || '暂无描述' }}</div>
         </div>
         <div>
             <div class="title">开始实验</div>
@@ -75,7 +88,13 @@ watch(info, (newV, _) => {
         <div>
             <div class="title">实验附件</div>
             <div class="card">
-                <el-link v-if="lab.attachmentUrl" :href="lab.attachmentUrl" type="primary">点此下载附件</el-link>
+                <el-link
+                    v-if="currentLabInfo.attachmentUrl"
+                    :href="currentLabInfo.attachmentUrl"
+                    type="primary"
+                >
+                    点此下载附件
+                </el-link>
                 <div v-else>暂无附件</div>
             </div>
         </div>
@@ -87,7 +106,7 @@ watch(info, (newV, _) => {
         </div>
         <div>
             <div class="title">教师评语</div>
-            <div class="card">{{ lab.commment || '暂无评语' }}</div>
+            <div class="card">{{ currentLabInfo.commment || '暂无评语' }}</div>
         </div>
     </div>
 </template>

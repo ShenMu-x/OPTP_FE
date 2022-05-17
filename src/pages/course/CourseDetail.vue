@@ -2,36 +2,37 @@
 import { reactive, toRefs, ref } from 'vue';
 import PageHeader from '@/components/common/PageHeader.vue';
 import CourseItem from '@/components/course/CourseItem.vue';
-import QACard from '@/components/comment/QACard.vue';
 import QuitCourse from './comp/QuitCourse.vue';
 import TeacherInfo from './comp/TeacherInfo.vue';
 import NoticeCard from './comp/NoticeCard.vue';
 import UnEnrollCourseDetail from './comp/UnEnrollCourseDetail.vue';
+import CourseLabAndQAPanel from './comp/CourseLabAndQAPanel.vue';
 import { scrollToPos, useCourseId, showFailWrap, useDirect } from '@/utils/helper';
 import { getCourseById } from '@/utils/services';
 import { CourseType, emptyCourseInfo, emptyUserInfo, userInfoType } from '@/type';
 
 const courseId = useCourseId();
-const data = reactive<{ course: CourseType, info: userInfoType }>({ course: { ...emptyCourseInfo }, info: { ...emptyUserInfo } });
+const data = reactive<{ course: CourseType; info: userInfoType }>({
+    course: { ...emptyCourseInfo },
+    info: { ...emptyUserInfo },
+});
 const { course, info } = toRefs(data);
 const { redirectNotFound } = useDirect();
-const refQACardEl = ref();
 
 scrollToPos(0);
-getCourseById({ courseId })
-    .then(res => {
-        if (res.code === 0 && res.data) {
-            Object.assign(data.course, res.data);
-            info.value.avatarUrl = res.data.teacherAvatar;
-            info.value.realName = res.data.teacherName;
-            info.value.email = res.data.teacherEmail;
-        } else {
-            showFailWrap({
-                text: res.errorMsg,
-                closeCb: redirectNotFound
-            })
-        }
-    })
+getCourseById({ courseId }).then((res) => {
+    if (res.code === 0 && res.data) {
+        Object.assign(data.course, res.data);
+        info.value.avatarUrl = res.data.teacherAvatar;
+        info.value.realName = res.data.teacherName;
+        info.value.email = res.data.teacherEmail;
+    } else {
+        showFailWrap({
+            text: res.errorMsg,
+            closeCb: redirectNotFound,
+        });
+    }
+});
 </script>
 
 <template>
@@ -45,14 +46,7 @@ getCourseById({ courseId })
                     <TeacherInfo :info="info" />
                     <NoticeCard />
                 </div>
-                <div class="qaCard">
-                    <div class="cardTitle">课程问答
-                        {{ refQACardEl?.getCommentCount?.() > 0 ?
-                                `(${refQACardEl?.getCommentCount?.()} 条)` : ''
-                        }}
-                    </div>
-                    <QACard type="course" ref="refQACardEl" />
-                </div>
+                <CourseLabAndQAPanel class="labAndQaPanel" />
             </div>
             <div class="rightCt">
                 <el-affix :offset="0">
@@ -67,7 +61,7 @@ getCourseById({ courseId })
 </template>
 
 <style lang="less" scoped>
-@import url("@/styles/var.less");
+@import url('@/styles/var.less');
 
 .ct {
     margin: 40px 90px 100px;
@@ -87,16 +81,8 @@ getCourseById({ courseId })
 
 .leftCt {
     width: 100%;
-
-    .cardTitle {
-        font-size: 25px;
-        margin-bottom: 10px;
-    }
-
-    .qaCard {
+    .labAndQaPanel {
         margin-top: 20px;
-        padding: 20px;
-        background-color: #fff;
     }
 }
 
