@@ -16,11 +16,17 @@ const updateUserInject = (url: string) => editAvatar(url);
  
 <template>
     <div class="userInfoCt">
-        <UploadAvatar :avatarUrl="user.avatarUrl" :submit-api="editUserAvatar" :afterSubmit="updateUserInject" />
+        <UploadAvatar
+            :avatarUrl="user.avatarUrl"
+            :submit-api="editUserAvatar"
+            :afterSubmit="updateUserInject"
+        />
         <div class="info">
             <div class="name">
                 {{ user.realName }}
-                <el-button type="text" :icon="Edit" class="editBtn" @click="directToEditInfo">编辑个人信息</el-button>
+                <el-button type="text" :icon="Edit" class="editBtn" @click="directToEditInfo">
+                    编辑个人信息
+                </el-button>
             </div>
             <div>学工号: {{ user.num }}</div>
         </div>

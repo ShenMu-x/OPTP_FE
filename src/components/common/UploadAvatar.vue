@@ -6,15 +6,15 @@ import type {
     UploadFile,
     ElUploadProgressEvent,
     ElFile,
-} from 'element-plus/es/components/upload/src/upload.type'
+} from 'element-plus/es/components/upload/src/upload.type';
 import { wrapHeaderWithToken, showSuccess, showFail } from '@/utils/helper';
 import { UPLOAD_PIC_URL } from '@/utils/option';
 
 const props = defineProps<{
-    avatarUrl?: string,
-    submitApi?: any,
-    afterSubmit?: any,
-    afterUpload?: any,
+    avatarUrl?: string;
+    submitApi?: any;
+    afterSubmit?: any;
+    afterUpload?: any;
 }>();
 
 const avatar = toRef(props, 'avatarUrl');
@@ -23,36 +23,40 @@ const avatarUrl = computed(() => {
     if (imageUrl.value !== '') return imageUrl.value;
     else if (avatar.value) return avatar.value;
     else return '';
-})
+});
 
-const handleAvatarSuccess = (res: { code: number, data: { url: string } }, file: UploadFile) => {
+const handleAvatarSuccess = (res: { code: number; data: { url: string } }, file: UploadFile) => {
     imageUrl.value = URL.createObjectURL(file.raw);
     props.afterUpload?.(res.data.url);
     props.submitApi?.({ avatar_url: res.data.url }).then((value: any) => {
         if (value.code === 0) {
             showSuccess();
             props.afterSubmit?.(res.data.url);
+        } else {
+            showFail();
         }
-        else showFail();
-    })
-}
+    });
+};
 const beforeAvatarUpload = (file: ElFile) => {
-    console.log(file.type)
-    const isAllow = file.type === 'image/jpeg' || 'image/png' || 'image/jpg' || 'image/gif'
-    const isLt2M = file.size / 1024 / 1024 < 2
+    const isAllow = file.type === 'image/jpeg' || 'image/png' || 'image/jpg' || 'image/gif';
+    const isLt2M = file.size / 1024 / 1024 < 2;
 
     if (!isAllow) {
-        ElMessage.error('请上传JPEG/JPG/PNG/GIF格式图片')
+        ElMessage.error('请上传JPEG/JPG/PNG/GIF格式图片');
     }
     if (!isLt2M) {
-        ElMessage.error('头像大小不能超过 2MB!')
+        ElMessage.error('头像大小不能超过 2MB!');
     }
-    return isAllow && isLt2M
-}
+    return isAllow && isLt2M;
+};
 
 const isHover = ref(false);
-const hover = () => { isHover.value = true; }
-const leave = () => { isHover.value = false; }
+const hover = () => {
+    isHover.value = true;
+};
+const leave = () => {
+    isHover.value = false;
+};
 </script>
 
 <template>
@@ -69,7 +73,7 @@ const leave = () => { isHover.value = false; }
     >
         <img v-if="avatarUrl" :src="avatarUrl" class="avatar" />
         <div v-else class="noImg">
-            <Plus style="height: 2em; width: 2em;" />
+            <Plus style="height: 2em; width: 2em" />
         </div>
         <div
             :class="['maskCt', isHover ? 'mask' : 'opacity0']"

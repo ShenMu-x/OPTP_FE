@@ -4,6 +4,7 @@ import { packError, packEmptyData } from "../pack"
 import { packCodingTime } from '../packCommon';
 import { userInfoType } from '@/type';
 import { setUserInConfig } from "../../storage";
+import { DEFAULT_AVATAR } from "../../option";
 
 export const getUserInfoByToken: () => ResType<userInfoType> = () => {
     return _axios({
@@ -15,7 +16,7 @@ export const getUserInfoByToken: () => ResType<userInfoType> = () => {
             userId: value.data.data.user_id,
             num: value.data.data.num,
             realName: value.data.data.real_name,
-            avatarUrl: value.data.data.avatar_url,
+            avatarUrl: value.data.data.avatar_url || DEFAULT_AVATAR,
             gender: value.data.data.gender,
             major: value.data.data.major,
             organization: value.data.data.organization,
