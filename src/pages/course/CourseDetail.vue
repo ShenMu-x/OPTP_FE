@@ -1,13 +1,17 @@
 <script lang="ts" setup>
-import { reactive, toRefs, ref } from 'vue';
+import { reactive, toRefs } from 'vue';
 import PageHeader from '@/components/common/PageHeader.vue';
 import CourseItem from '@/components/course/CourseItem.vue';
-import QuitCourse from './comp/QuitCourse.vue';
-import TeacherInfo from './comp/TeacherInfo.vue';
-import NoticeCard from './comp/NoticeCard.vue';
+import CourseCommonInfoPanel from './comp/CourseCommonInfoPanel.vue';
 import UnEnrollCourseDetail from './comp/UnEnrollCourseDetail.vue';
 import CourseLabAndQAPanel from './comp/CourseLabAndQAPanel.vue';
-import { scrollToPos, useCourseId, showFailWrap, useDirect } from '@/utils/helper';
+import {
+    scrollToPos,
+    useCourseId,
+    showFailWrap,
+    useDirect,
+    useListenPageWidth,
+} from '@/utils/helper';
 import { getCourseById } from '@/utils/services';
 import { CourseType, emptyCourseInfo, emptyUserInfo, userInfoType } from '@/type';
 
@@ -17,6 +21,9 @@ const data = reactive<{ course: CourseType; info: userInfoType }>({
     info: { ...emptyUserInfo },
 });
 const { course, info } = toRefs(data);
+
+// @min-width: 920px 页面因布局存在两个CourseCommonInfoPanel，根据组件是否显示去请求数据
+const { isShowPanel } = useListenPageWidth(920);
 const { redirectNotFound } = useDirect();
 
 scrollToPos(0);
@@ -42,17 +49,13 @@ getCourseById({ courseId }).then((res) => {
             <div class="leftCt">
                 <CourseItem :course="course" class="courseCard" :heightAuto="true" />
                 <div class="leftInnerCt">
-                    <QuitCourse :courseId="course.courseId ?? 0" />
-                    <TeacherInfo :info="info" />
-                    <NoticeCard />
+                    <CourseCommonInfoPanel :teacherInfo="info" :isShow="!isShowPanel" />
                 </div>
                 <CourseLabAndQAPanel class="labAndQaPanel" />
             </div>
             <div class="rightCt">
                 <el-affix :offset="0">
-                    <QuitCourse :courseId="course.courseId ?? 0" />
-                    <TeacherInfo :info="info" />
-                    <NoticeCard />
+                    <CourseCommonInfoPanel :teacherInfo="info" :isShow="isShowPanel" />
                 </el-affix>
             </div>
         </div>

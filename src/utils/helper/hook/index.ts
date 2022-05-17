@@ -10,3 +10,4 @@ export * from './useParamsWrap';
 export * from './usePageList';
 export * from './useQuery';
 export * from './useDrawer';
+export * from './useListenPageWidth';
