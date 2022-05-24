@@ -5,14 +5,14 @@ import { getAccessToken } from "@/utils/storage";
 import { RoleEnum, HomePageMap } from "@/utils/option";
 import { isTeacher, isStudent, isManager, isAllowedRole, isRoleDefined } from "@/utils/helper";
 
-const pathsAllowNoLogin: ROUTE_NAME[] = [ROUTE_NAME.LOGIN, ROUTE_NAME.FORGET_PASSWORD, ROUTE_NAME.REGISTER];
+const pathsAllowNoLogin: ROUTE_NAME[] = [ROUTE_NAME.LOGIN, ROUTE_NAME.FORGET_PASSWORD];
 export const createRouterGuards = (router: Router) => {
     router.beforeEach(async (to, from, next) => {
-        const isToNameInPaths = (paths: any[]) => paths.filter(routeName => routeName == to.name).length > 0
+        const isToPathInPathArray = (paths: any[]) => paths.filter(routeName => routeName == to.name).length > 0;
         // 登录校验
         let token = getAccessToken();
         if (!token) {
-            if (!isToNameInPaths(pathsAllowNoLogin)) next({ name: ROUTE_NAME.LOGIN });
+            if (!isToPathInPathArray(pathsAllowNoLogin)) next({ name: ROUTE_NAME.LOGIN });
             else next();
             return;
         }

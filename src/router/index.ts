@@ -22,15 +22,6 @@ const routes = [
         component: () => import('../pages/login/Login.vue')
     },
     {
-        path: '/login/register',
-        name: ROUTE_NAME.REGISTER,
-        meta: {
-            title: '注册页',
-            accessRole: RoleList
-        },
-        component: () => import('../pages/login/Register.vue'),
-    },
-    {
         path: '/login/authentication',
         name: ROUTE_NAME.FORGET_PASSWORD,
         meta: {
@@ -98,7 +89,7 @@ const routes = [
                 component: () => import('../pages/oj/OnlineOJ.vue'),
             },
             {
-                path: '/user/teaacher-center',
+                path: '/user/teacher-center',
                 name: ROUTE_NAME.TEACHER_CENTER,
                 meta: {
                     title: '教师主页',
@@ -155,7 +146,7 @@ const routes = [
     },
     {
         path: '/:pathMatch(.*)*',
-        redirect: '/404'
+        redirect: '/not-found'
     },
 ];
 

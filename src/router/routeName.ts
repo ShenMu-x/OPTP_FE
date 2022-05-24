@@ -1,6 +1,5 @@
 export enum ROUTE_NAME {
     LOGIN = 'login',
-    REGISTER = 'register',
     FORGET_PASSWORD = 'forget-password',
     IDE = 'ide',
     EDIT_INFO = 'edit-info',

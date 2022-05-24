@@ -24,7 +24,6 @@ export const useDirect = () => {
     }
     const redirectNotFound = () => redirectTo(ROUTE_NAME.NOT_FOUND)
     const routerToLogin: routerToSpecificPageType = type => routerToPage(type, ROUTE_NAME.LOGIN)
-    const routerToRegister: routerToSpecificPageType = type => routerToPage(type, ROUTE_NAME.REGISTER)
     const routerToForgetPassword: routerToSpecificPageType = type => routerToPage(type, ROUTE_NAME.FORGET_PASSWORD)
     const routerToOnlineOJ: routerToSpecificPageType = type => routerToPage(type, ROUTE_NAME.ONLINE_OJ)
     const routerToEditInfo: routerToSpecificPageType = type => routerToPage(type, ROUTE_NAME.EDIT_INFO)
@@ -62,7 +61,6 @@ export const useDirect = () => {
         routerBack,
         redirectNotFound,
         routerToLogin,
-        routerToRegister,
         routerToForgetPassword,
         routerToHome,
         routerToCourseDetail,
