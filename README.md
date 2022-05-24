@@ -5,6 +5,8 @@
   - release为分支开发，master为稳定分支
 - 项目安装说明 
   - 使用 git clone 拉取代码
+  - 安装nodejs，开发使用版本为16.0.0
+  - 使用npm i yarn -g 安装管理工具yarn
   - 进入optp_fe目录，使用yarn install安装依赖
   - 使用yarn run dev运行项目，进入 http://localhost:3600/ 访问
 - 项目结构说明 
