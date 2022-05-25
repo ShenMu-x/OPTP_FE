@@ -29,14 +29,15 @@ export const showSuccessWrap = ({ text, closeCb, duration }: {
     })
 }
 
-export const showFailWrap = ({ text, closeCb }: {
+export const showFailWrap = ({ text, closeCb, duration }: {
     text?: string,
-    closeCb?: any
+    closeCb?: any,
+    duration?: number
 }) => {
     ElMessage({
         type: 'error',
         message: text ?? '操作失败, 请重试',
-        duration: 1000,
+        duration: duration ?? 1000,
         onClose: closeCb
     })
 }

@@ -18,3 +18,7 @@ export const fmatTimeFitServer = (time: string) => {
 export const isAfterCurrentTime = (time: string) => {
     return dayjs(time).isAfter(dayjs())
 }
+
+export const getCurrentTime = () => {
+    return dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')
+}

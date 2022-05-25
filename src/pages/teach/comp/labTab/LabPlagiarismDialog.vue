@@ -1,16 +1,14 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { requestPlagiarismURL } from '@/utils/services';
+import { requestPlagiarismDetailURL } from '@/utils/services';
 
 const props = defineProps<{ url: string }>();
 const htmlData = ref('');
-requestPlagiarismURL(props.url.split('8081')[1])
-    .then(res => {
-        if (res.code === 0) {
-            htmlData.value = res.data || ''
-        }
-    })
-
+requestPlagiarismDetailURL(props.url).then((res) => {
+    if (res.code === 0) {
+        htmlData.value = res.data || '';
+    }
+});
 </script>
 
 <template>

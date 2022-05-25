@@ -6,3 +6,4 @@ export * from './user';
 export * from './course';
 export * from './onlineoj';
 export * from './manage';
+export * from './type';
