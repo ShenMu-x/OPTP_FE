@@ -4,7 +4,7 @@ import BtnBlue from '@/components/common/BtnBlue.vue';
 import Layout from './index.vue';
 import FormCt from './comp/FormCt.vue';
 import TextBtn from './comp/TextBtn.vue';
-import { login } from '@/utils/services';
+import { login as loginApi } from '@/utils/services';
 import { showFailWrap, useDirect } from '@/utils/helper';
 import { getLoginRule } from './rules';
 
@@ -15,6 +15,7 @@ const form = reactive({
 });
 
 const rules = reactive(getLoginRule());
+const labelWidth = ref('80px')
 const { routerToForgetPassword, routerToHome } = useDirect();
 const directToForgetPassword = () => routerToForgetPassword('direct');
 const loginHandler = () => {
@@ -22,7 +23,7 @@ const loginHandler = () => {
         // 通过表单检查
         if (isPass) {
             // 请求登录
-            login({ username: form.userName, password: form.password }).then((res) => {
+            loginApi({ username: form.userName, password: form.password }).then((res) => {
                 if (res.code === 0) routerToHome('redirect');
                 else showFailWrap({ text: res.errorMsg });
             });
@@ -41,8 +42,8 @@ const loginHandler = () => {
                 :rules="rules"
                 ref="refFomeEl"
             >
-                <el-form-item label="邮箱" size="large" prop="userName">
-                    <el-input v-model="form.userName" placeholder="请输入邮箱"></el-input>
+                <el-form-item label="学工号" size="large" prop="userName" :label-width="labelWidth">
+                    <el-input v-model="form.userName" placeholder="请输入学工号"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" size="large" class="psw" prop="password">
                     <el-input

@@ -66,9 +66,9 @@ export const login: (params: loginReq) => ResType<loginRes> = (params) => {
             return packEmptyData();
         })
         .catch(err => packErrorWrap(err, [
-            [-19998, '账号或密码过长，请重新输入'],
-            [-19999, '账号或密码不为空，请重新输入'],
-            [10002, '账号或密码错误，请重新输入'],
+            [-19998, '学工号或密码过长，请重新输入'],
+            [-19999, '学工号或密码不为空，请重新输入'],
+            [10002, '学工号或密码错误，请重新输入'],
         ]))
 }
 
