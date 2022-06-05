@@ -2,7 +2,7 @@ import _axios from "../axios"
 import { ResType } from "../type";
 import { packError } from "../pack";
 
-export const getIDEtoCode: (labId: number) => ResType<{ url: string }> = (labId) => {
+export const getIDEUrlForStudent: (labId: number) => ResType<{ url: string, authToken: string }> = (labId) => {
     return _axios({
         method: 'POST',
         url: '/web/ide',
@@ -10,13 +10,14 @@ export const getIDEtoCode: (labId: number) => ResType<{ url: string }> = (labId)
     }).then(res => ({
         code: 0,
         data: {
-            url: res.data?.data?.url
+            url: res.data?.data?.url,
+            authToken: res.data?.data?.token
         }
     })
     ).catch(packError)
 }
 
-export const getIDEtoCheckCode: (params: { labId: number, studentId: number }) => ResType<{url: string}> = (params) => {
+export const getIDEUrlForTeacher: (params: { labId: number, studentId: number }) => ResType<{ url: string }> = (params) => {
     return _axios({
         method: 'POST',
         url: '/web/lab/check_code',

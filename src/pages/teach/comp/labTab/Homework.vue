@@ -4,7 +4,7 @@ import TablePage from '@/components/common/TablePage.vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
 import Tag from '@/components/common/Tag.vue';
 import { useLabId, useDialog, showFailWrap, showSuccessWrap, useDirect, ParamsEnum } from '@/utils/helper';
-import { getHomeworkStatus, setLabScore, getIDEtoCheckCode } from '@/utils/services';
+import { getHomeworkStatus, setLabScore } from '@/utils/services';
 
 const labId = useLabId();
 const { isDialogOpen: isScoreDialogOpen, openDialog: openScoreDialog } = useDialog();

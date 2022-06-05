@@ -4,7 +4,7 @@ import BtnBlue from '@/components/common/BtnBlue.vue';
 import { useDirect, useIsLabFinish } from '@/utils/helper';
 import { useGetIDEAndCheckBeat } from './logic';
 
-const isFinish = ref(useIsLabFinish())
+const isFinish = ref(useIsLabFinish());
 const { routerBack } = useDirect();
 const refEl = ref();
 const { url, isLoading } = useGetIDEAndCheckBeat(refEl);
@@ -18,9 +18,7 @@ const { url, isLoading } = useGetIDEAndCheckBeat(refEl);
             <div class="finishTip" v-if="isFinish">实验已结束，无法再进行修改</div>
         </div>
         <iframe :src="url" frameborder="0" v-if="!isLoading && url" class="iFrameCt"></iframe>
-        <div class="errorCt" v-else-if="isLoading" ref="refEl">
-            加载中
-        </div>
+        <div class="errorCt" v-else-if="isLoading" ref="refEl">加载中</div>
         <div class="errorCt" v-else>
             系统出错，请稍后再试
             <BtnBlue @click="routerBack">点击返回上一级</BtnBlue>
