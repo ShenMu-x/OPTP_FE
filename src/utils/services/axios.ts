@@ -14,7 +14,8 @@ import {
 const axiosConfig = {
     baseURL,
     timeout: 8 * 1000,
-    headers: {},
+    withCredentials: true,
+    headers: {}
 }
 const _axios = axios.create(axiosConfig);
 
