@@ -2,15 +2,15 @@
 import { ref, reactive, toRef, watch } from 'vue';
 import UploadAvatar from '@/components/common/UploadAvatar.vue';
 import { comfirm, useDialog } from '@/utils/helper';
-import { editAccountInfo, accountType } from '@/utils/services';
-import { emptyAccount } from '../default';
+import { editAccountInfo } from '@/utils/services';
+import { emptyUserInfo, userInfoType } from '@/type';
 
 const { isDialogOpen, openDialog, closeDialog } = useDialog();
 const refEl = ref();
 const labelWidth = '80px';
-const props = defineProps<{ account: accountType }>();
+const props = defineProps<{ account: userInfoType }>();
 const account = toRef(props, 'account');
-const form = reactive(emptyAccount)
+const form = reactive({ ...emptyUserInfo });
 const refreshInfo = () => {
     form.userId = account.value.userId;
     form.email = account.value.email;
@@ -20,17 +20,23 @@ const refreshInfo = () => {
     form.major = account.value?.major;
     form.organization = account.value?.organization;
     form.gender = account.value?.gender;
-}
+    form.college = account.value?.college;
+    form.grade = account.value?.grade;
+};
 watch(account, (newV, oldV) => {
-    if (newV.userId !== oldV.userId) refreshInfo()
-})
-const emits = defineEmits(['submit'])
-const getUrl = (url: string) => { form.avatarUrl = url; }
+    if (newV.userId !== oldV.userId) refreshInfo();
+});
+const emits = defineEmits(['submit']);
+const getUrl = (url: string) => {
+    form.avatarUrl = url;
+};
 const submit = () => {
     comfirm({
         type: 'edit',
         refEl,
-        successCb: () => { emits('submit') },
+        successCb: () => {
+            emits('submit');
+        },
         finallyCb: closeDialog,
         fetchApi: editAccountInfo,
         params: {
@@ -42,16 +48,18 @@ const submit = () => {
             organization: form.organization,
             avatar: form.avatarUrl,
             gender: form.gender,
-        }
-    })
-}
+            college: form.college,
+            grade: form.grade,
+        },
+    });
+};
 const cancle = () => {
     refEl?.value?.resetFields?.();
-    closeDialog()
-}
+    closeDialog();
+};
 defineExpose({
-    openPanel: openDialog
-})
+    openPanel: openDialog,
+});
 </script>
 
 <template>
@@ -71,6 +79,12 @@ defineExpose({
             </el-form-item>
             <el-form-item label="单位" prop="organization" :label-width="labelWidth">
                 <el-input v-model="form.organization" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="学院" prop="college" :label-width="labelWidth" >
+                <el-input v-model.trim="form.college" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="年级" prop="grade" :label-width="labelWidth" >
+                <el-input v-model.number="form.grade" type="number" min="0" clearable></el-input>
             </el-form-item>
             <el-form-item label="性别" :label-width="labelWidth">
                 <el-radio-group v-model="form.gender">

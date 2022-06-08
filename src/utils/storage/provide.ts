@@ -2,7 +2,9 @@ interface editInfoParams {
     realName?: string,
     major?: string,
     organization?: string,
-    gender?: number
+    gender?: number,
+    grade?: number,
+    college?: string
 }
 export enum ProvideKey {
     USER = 'user',
@@ -11,9 +13,9 @@ export enum ProvideKey {
 }
 export type editUserInfoType = (params: editInfoParams) => void;
 export type editAvatarType = (url: string) => void;
-export const emptyEditInfoMethod = (params: editInfoParams) => {
+export const emptyEditInfoMethod: editUserInfoType = params => {
     console.log('error for empty editUserInfo')
 }
-export const emptyEditAvatarMethod = (url: string) => {
+export const emptyEditAvatarMethod: editAvatarType = url => {
     console.log('error for empty editUserInfo')
 }

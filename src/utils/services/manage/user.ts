@@ -1,7 +1,9 @@
 import _axios from "../axios";
 import { ResType, ListRes } from "../type";
 import { packError, packErrorWrap, packEmptyData, packPageRes } from "../pack";
+import { packAccountInfo } from "../packCommon";
 import { exportCsv } from "../exportCsv";
+import { userInfoType } from "@/type";
 export interface accountType {
     userId: number,
     email: string,
@@ -12,16 +14,6 @@ export interface accountType {
     major: string,
     organization: string
 }
-const packAccount = (info: { user_id: any; email: any; num: any; real_name: any; avatar_url: any; gender: any; major: any; organization: any; }) => ({
-    userId: info.user_id,
-    email: info.email,
-    num: info.num,
-    realName: info.real_name,
-    avatarUrl: info.avatar_url,
-    gender: info.gender,
-    major: info.major,
-    organization: info.organization
-})
 
 // 获取系统账户列表
 export const getAllAccoutInfo: (params: {
@@ -33,7 +25,7 @@ export const getAllAccoutInfo: (params: {
         url: "/admin/user",
         params,
     })
-        .then(res => packPageRes(res, packAccount))
+        .then(res => packPageRes(res, packAccountInfo))
         .catch(packError)
 }
 // 新增系统用户
@@ -50,7 +42,7 @@ export const addAccount: (data: addAccountReq) => ResType<any> = (data) => {
         data,
     })
         .then(packEmptyData)
-        .catch(err=> packErrorWrap(err, [
+        .catch(err => packErrorWrap(err, [
             [-19999, '填写邮箱或学号已被注册']
         ]))
 }
@@ -64,6 +56,8 @@ interface editAccountReq {
     organization: string,
     avatar: string,
     gender: 0 | 1;
+    college: string;
+    grade: number;
 }
 export const editAccountInfo: (data: editAccountReq) => ResType<any> = (data) => {
     return _axios({

@@ -8,7 +8,9 @@ export type userInfoType = {
     organization?: string,
     gender?: number,
     avatarUrl?: string,
-    role?: number
+    role?: number,
+    college?: string,
+    grade?: number
 }
 
 export const emptyUserInfo: userInfoType = {
@@ -20,5 +22,7 @@ export const emptyUserInfo: userInfoType = {
     gender: 0,
     major: '',
     organization: '',
-    role: 0
+    role: 0,
+    college: '',
+    grade: 0
 }

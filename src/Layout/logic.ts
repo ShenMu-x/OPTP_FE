@@ -24,6 +24,8 @@ export const provideUser = () => {
         user.gender = params.gender || 0;
         user.major = params.major || "";
         user.organization = params.organization || "";
+        user.grade = params.grade || 0;
+        user.college = params.college || "";
     }
     const editAvatar: editAvatarType = (url) => { user.avatarUrl = url; }
 

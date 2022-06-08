@@ -3,42 +3,37 @@ import { reactive, ref } from 'vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
 import TextReturnBtn from '@/components/common/TextReturnBtn.vue';
 import { comfirm, useUser, useDirect } from '@/utils/helper';
-import { editUserInfo } from '@/utils/services';
+import { editUserInfo as editUserApi } from '@/utils/services';
 import { userInfoType } from '@/type';
 import { editRules } from './rules';
 
 const refEl = ref();
 const { routerBack } = useDirect();
-const { user, editUserInfo: editUser } = useUser();
+const { user, editUserInfo: updateUserInject } = useUser();
 const editModel = reactive<userInfoType>({ ...user });
 const rules = reactive(editRules);
 
-const updateUserInject = () => {
-    editUser?.({
-        realName: editModel.realName,
-        major: editModel.major,
-        organization: editModel.organization,
-        gender: editModel.gender
-    })
-}
+const getModel = () => ({
+    realName: editModel.realName,
+    major: editModel.major,
+    organization: editModel.organization,
+    gender: editModel.gender,
+    college: editModel.college,
+    grade: editModel.grade,
+});
 
 const editHandler = () => {
     comfirm({
         type: 'edit',
         refEl: refEl,
         onSuccTipClose: () => {
-            updateUserInject();
+            updateUserInject(getModel());
             routerBack();
         },
-        fetchApi: editUserInfo,
-        params: {
-            real_name: editModel.realName,
-            major: editModel.major,
-            organization: editModel.organization,
-            gender: editModel.gender
-        }
+        fetchApi: editUserApi,
+        params: getModel(),
     });
-}
+};
 </script>
 
 <template>
@@ -60,6 +55,12 @@ const editHandler = () => {
             </el-form-item>
             <el-form-item label="单位" prop="organization">
                 <el-input v-model.trim="editModel.organization" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="学院" prop="college">
+                <el-input v-model.trim="editModel.college" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="年级" prop="grade">
+                <el-input v-model.number="editModel.grade" type="number" min="0" clearable></el-input>
             </el-form-item>
             <el-form-item label="性别" class="flex justify-start">
                 <el-radio-group v-model="editModel.gender">

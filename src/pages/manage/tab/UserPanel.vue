@@ -65,6 +65,8 @@ const {
                 </el-table-column>
                 <el-table-column prop="major" label="专业" min-width="100" />
                 <el-table-column prop="organization" label="单位" min-width="100" />
+                <el-table-column prop="college" label="学院" min-width="100" />
+                <el-table-column prop="grade" label="年级" min-width="100" />
                 <el-table-column label="操作" min-width="120">
                     <template #default="scope">
                         <el-button type="danger" size="default" @click="editInfoHandler(scope.row)">修改信息</el-button>
