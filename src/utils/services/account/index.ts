@@ -28,11 +28,11 @@ export const registerTeacherAccount: (params: RegisterReq) => ResType<''> = (par
         ]));
 }
 
-export const getVerificationCode: (params: { email: string }) => ResType<boolean> = (params) => {
+export const fetchVerificationCode: (params: { number: string }) => ResType<boolean> = (params) => {
     return _axios.post('/web/user/verificationCode', params)
-        .then(res => ({ code: res.data.code, data: res.data.data }))
+        .then(packEmptyData)
         .catch(err => packErrorWrap(err, [
-            [10003, '查询不到该邮箱，请检查信息']
+            [10003, '查询不到该学号，请检查信息']
         ]))
 }
 
@@ -72,20 +72,19 @@ export const login: (params: loginReq) => ResType<loginRes> = (params) => {
         ]))
 }
 
-interface changePswReq {
-    email: string;
+interface changePasswordReq {
+    number: string;
     password: string;
     verificationCode: string
 }
-export const changePsw: (params: changePswReq) => ResType<any> = (params) => {
+export const changePassword: (params: changePasswordReq) => ResType<any> = (params) => {
     return _axios({
-        method: 'POST',
+        method: 'PUT',
         url: '/web/user/password',
         data: params
     })
         .then(packEmptyData)
         .catch(err => packErrorWrap(err, [
-            [10002, '验证码过期，请重新获取'],
-            [10003, '该邮箱尚未注册，请检查信息']
+            [10002, '验证码已过期，请重新获取']
         ]))
 }

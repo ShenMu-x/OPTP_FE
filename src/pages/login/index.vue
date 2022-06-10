@@ -20,7 +20,7 @@
 }
 .title {
   color: #ffffff;
-  margin-top: 40px;
+  margin-top: 30px;
   .school {
     font-size: 25px;
   }

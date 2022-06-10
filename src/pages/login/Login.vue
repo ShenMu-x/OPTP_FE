@@ -15,7 +15,7 @@ const form = reactive({
 });
 
 const rules = reactive(getLoginRule());
-const labelWidth = ref('80px')
+const labelWidth = ref('80px');
 const { routerToForgetPassword, routerToHome } = useDirect();
 const directToForgetPassword = () => routerToForgetPassword('direct');
 const loginHandler = () => {
@@ -55,8 +55,7 @@ const loginHandler = () => {
                 </el-form-item>
                 <BtnBlue size="large" @click="loginHandler" class="loginBtn">立即登录</BtnBlue>
                 <div class="registerBtnCt">
-                    忘记密码？
-                    <TextBtn @click="directToForgetPassword">点击修改密码</TextBtn>
+                    <TextBtn @click="directToForgetPassword">忘记密码？</TextBtn>
                 </div>
             </el-form>
         </FormCt>
@@ -66,8 +65,7 @@ const loginHandler = () => {
 <style lang="less" scoped>
 .loginFormCt {
     width: 480px;
-    height: 450px;
-    padding: 0 46px;
+    padding: 30px 46px;
     margin-top: 25px;
 
     .formTitle {

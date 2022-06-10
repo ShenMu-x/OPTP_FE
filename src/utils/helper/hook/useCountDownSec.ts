@@ -12,8 +12,10 @@ export const useCountDownSec = (start: number) => {
     const startDown = (num?: number) => {
         destoryDown();
         current.value = num || start;
+        isCounting.value = true;
         ins = setInterval(() => {
-            current.value > 0 ? (current.value -= 1) : destoryDown()
+            current.value -= 1;
+            current.value <= 0 && destoryDown();
         }, 1000);
     }
 

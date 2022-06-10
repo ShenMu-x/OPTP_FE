@@ -1,22 +1,12 @@
-import { validateEmail } from '@/utils/helper';
 export const getAuthRule = (params: {
-    getPswCheck: any
+    getPasswordFirstInput: any
 }) => {
     return {
-        email: [
+        number: [
             {
                 required: true,
-                message: '请输入邮箱',
+                message: '请输入学号',
                 trigger: 'blur',
-            },
-            {
-                pattern: '^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$',
-                message: '请输入正确格式的邮箱',
-                trigger: 'blur'
-            },
-            {
-                validator: validateEmail,
-                trigger: 'blur'
             }
         ],
         verificationCode: [
@@ -24,13 +14,7 @@ export const getAuthRule = (params: {
                 required: true,
                 message: '请输入验证码',
                 trigger: 'blur',
-            },
-            {
-                min: 4,
-                max: 4,
-                message: '请输入4位验证码',
-                trigger: 'blur',
-            },
+            }
         ],
         password: [
             {
@@ -49,8 +33,8 @@ export const getAuthRule = (params: {
                 validator: (rule: any, value: any, callback: any) => {
                     if (value === '') {
                         callback(new Error('请再次输入密码'))
-                    } else if (value !== params.getPswCheck?.()) {
-                        callback(new Error("密码确认错误"))
+                    } else if (value !== params.getPasswordFirstInput?.()) {
+                        callback(new Error("两次密码不一致,请检查输入"))
                     } else {
                         callback()
                     }
