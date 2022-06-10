@@ -3,41 +3,36 @@ import { ref } from 'vue';
 import { useCreateEditor } from './manaco';
 import LoadBtn from '@/components/common/LoadBtn.vue';
 import { langs, CodeLangs } from '@/utils/option';
-import { useDirect } from '@/utils/helper';
+import { useDirect, useLoader } from '@/utils/helper';
 import { fetchCodeResult } from '@/utils/services';
 
 const refEditorEl = ref();
 const { routerBack } = useDirect();
-const isLoading = ref(false);
-const showLoading = () => isLoading.value = true;
-const cancelLoading = () => isLoading.value = false;
+const { isLoading, setIsLoading } = useLoader();
 const language = ref(CodeLangs.python);
 const { changeLang, getValue } = useCreateEditor({
     refEditorEl,
-})
-const change = () => {
-    console.log('change', language.value)
-    changeLang(language.value)
-}
+});
+const change = () => changeLang(language.value);
 
 const textarea = ref('');
 const run = () => {
-    showLoading();
+    setIsLoading(true);
     fetchCodeResult({
         language: language.value as number,
-        code: getValue()
-    }).then(res => {
+        code: getValue(),
+    }).then((res) => {
         if (res.code === 0) {
-            textarea.value = res.data?.status === 0 ?
-             `运行成功\n${res.data?.description}` :
-              `运行失败。错误原因：${res.data?.title}\n${res.data?.description}`;
+            textarea.value =
+                res.data?.status === 0
+                    ? `运行成功\n${res.data?.description}`
+                    : `运行失败。错误原因：${res.data?.title}\n${res.data?.description}`;
         } else {
-            textarea.value =  `运行失败\n${res.errorMsg}`;
+            textarea.value = `运行失败\n${res.errorMsg}`;
         }
-        cancelLoading();
-    })
-}
-
+        setIsLoading(false);
+    });
+};
 </script>
 
 <template>
@@ -52,7 +47,7 @@ const run = () => {
                     :value="item.value"
                 ></el-option>
             </el-select>
-            <LoadBtn title="运行" :is-loding="isLoading" class="btn" @reload="run"/>
+            <LoadBtn title="运行" :is-loding="isLoading" class="btn" @reload="run" />
             <el-button class="btn" @click="routerBack">返回上一页</el-button>
         </div>
         <div class="editorCt">
@@ -67,7 +62,7 @@ const run = () => {
                     resize="none"
                     :input-style="{
                         height: '500px',
-                        color: '#5e5e5e'
+                        color: '#5e5e5e',
                     }"
                 />
             </div>
@@ -125,7 +120,7 @@ const run = () => {
 
     .textArea {
         height: 600px;
-        color: "#5e5e5e";
+        color: '#5e5e5e';
     }
 }
 </style>

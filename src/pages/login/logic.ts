@@ -1,11 +1,14 @@
-import { showFailWrap, showSuccessWrap, useCountDownSec } from '@/utils/helper';
+import { showFailWrap, showSuccessWrap, useCountDownSec, useLoader } from '@/utils/helper';
 import { fetchVerificationCode } from '@/utils/services';
 
 export const useCountDownWrap = () => {
     const { current, startDown, isCounting } = useCountDownSec(60);
+    const { isLoading, setIsLoading } = useLoader();
 
     const fetchCode = (number: string) => {
+        setIsLoading(true);
         fetchVerificationCode({ number }).then(res => {
+            setIsLoading(false);
             if (res.code === 0) {
                 isCounting.value = true;
                 showSuccessWrap({ text: '验证码已发送' })
@@ -18,5 +21,6 @@ export const useCountDownWrap = () => {
         current,
         isCounting,
         fetchCode,
+        isLoading
     }
 }

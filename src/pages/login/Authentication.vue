@@ -25,7 +25,7 @@ const rules = reactive(getAuthRule({ getPasswordFirstInput: () => form.password 
 
 const { routerToLogin } = useDirect();
 const redirectToLogin = () => routerToLogin('redirect');
-const { current, isCounting, fetchCode } = useCountDownWrap();
+const { current, isCounting, fetchCode, isLoading } = useCountDownWrap();
 const requestVerificationCode = () => {
     if (form.number.trim().length === 0) showFailWrap({ text: '请先填写学号' });
     else fetchCode(form.number);
@@ -60,12 +60,13 @@ const registerHandler = () => {
                             placeholder="请输入验证码"
                             v-model="form.verificationCode"
                         />
-                        <BtnBlue size="large" @click="requestVerificationCode" v-show="!isCounting">
-                            获取验证码
+                        <BtnBlue
+                            size="large"
+                            @click="requestVerificationCode"
+                            :disabled="isLoading || isCounting"
+                        >
+                            {{ isCounting ? `${current}秒后重新获取` : '获取验证码' }}
                         </BtnBlue>
-                        <el-button type="primary" disabled v-show="isCounting">
-                            {{ current }}s后重新获取
-                        </el-button>
                     </div>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">

@@ -1,11 +1,11 @@
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { ElLoading } from 'element-plus';
 
-export const useLoader = (refEl: any, fullscreen?: boolean, defaultStatus?: boolean) => {
+export const useLoader = (refEl?: any, fullscreen?: boolean, defaultStatus?: boolean) => {
     const isLoading = ref(defaultStatus || false);
     const ins = ref();
     const showLoading = () => {
-        isLoading.value = true;
+        setIsLoading(true)
         if (refEl?.value) {
             ins.value = ElLoading.service({
                 target: refEl.value,
@@ -16,12 +16,16 @@ export const useLoader = (refEl: any, fullscreen?: boolean, defaultStatus?: bool
     }
     const closeLoading = () => {
         isLoading.value = false;
-        ins.value?.close?.();
+        ins?.value?.close?.();
+    }
+    const setIsLoading = (value: boolean) => {
+        isLoading.value = value;
     }
 
     return {
         isLoading,
         showLoading,
-        closeLoading
+        closeLoading,
+        setIsLoading
     }
 }
