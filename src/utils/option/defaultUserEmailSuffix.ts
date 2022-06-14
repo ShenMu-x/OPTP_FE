@@ -1,0 +1,1 @@
+export const defaultUserEmailSuffix = '@m.scnu.edu.cn';

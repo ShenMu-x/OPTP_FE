@@ -3,6 +3,7 @@ import { ref, reactive, toRef, watch } from 'vue';
 import UploadAvatar from '@/components/common/UploadAvatar.vue';
 import { comfirm, useDialog } from '@/utils/helper';
 import { editAccountInfo } from '@/utils/services';
+import { defaultUserEmailSuffix } from '@/utils/option';
 import { emptyUserInfo, userInfoType } from '@/type';
 
 const { isDialogOpen, openDialog, closeDialog } = useDialog();
@@ -41,7 +42,7 @@ const submit = () => {
         fetchApi: editAccountInfo,
         params: {
             user_id: form.userId,
-            email: form.email,
+            email: `${form.num}${defaultUserEmailSuffix}`,
             number: form.num,
             name: form.realName,
             major: form.major,
@@ -65,26 +66,51 @@ defineExpose({
 <template>
     <el-dialog v-model="isDialogOpen" title="新建账户">
         <el-form :model="form" ref="refEl">
-            <el-form-item label="邮箱信息" :label-width="labelWidth" required>
-                <el-input v-model="form.email" placeholder="请输入账户邮箱"></el-input>
-            </el-form-item>
-            <el-form-item label="姓名" :label-width="labelWidth" required>
-                <el-input v-model="form.realName" placeholder="请输入用户姓名"></el-input>
-            </el-form-item>
-            <el-form-item label="学工号" :label-width="labelWidth" required>
-                <el-input v-model="form.num" placeholder="请输入签到名称"></el-input>
-            </el-form-item>
-            <el-form-item label="专业" prop="major" :label-width="labelWidth">
-                <el-input v-model="form.major"></el-input>
-            </el-form-item>
-            <el-form-item label="单位" prop="organization" :label-width="labelWidth">
-                <el-input v-model="form.organization" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="学院" prop="college" :label-width="labelWidth" >
-                <el-input v-model.trim="form.college" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="年级" prop="grade" :label-width="labelWidth" >
-                <el-input v-model.number="form.grade" type="number" min="0" clearable></el-input>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="姓名" :label-width="labelWidth" required>
+                        <el-input v-model="form.realName" placeholder="请输入用户姓名"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="学工号" :label-width="labelWidth" required>
+                        <el-input v-model="form.num" placeholder="请输入签到名称"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="专业" prop="major" :label-width="labelWidth">
+                        <el-input v-model="form.major"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="单位" prop="organization" :label-width="labelWidth">
+                        <el-input v-model="form.organization" clearable></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="学院" prop="college" :label-width="labelWidth">
+                        <el-input v-model.trim="form.college" clearable></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="年级" prop="grade" :label-width="labelWidth">
+                        <el-input
+                            v-model.number="form.grade"
+                            type="number"
+                            min="0"
+                            clearable
+                        ></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-form-item label="邮箱信息" :label-width="labelWidth" prop="number">
+                <el-input v-model="form.num" placeholder="账户邮箱为M邮箱" disabled>
+                    <template #append>{{ defaultUserEmailSuffix }}</template>
+                </el-input>
             </el-form-item>
             <el-form-item label="性别" :label-width="labelWidth">
                 <el-radio-group v-model="form.gender">

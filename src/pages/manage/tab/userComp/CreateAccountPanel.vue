@@ -1,18 +1,19 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue';
+import FormTip from '@/components/common/FormTip.vue';
 import { comfirm, useDialog } from '@/utils/helper';
 import { addAccount } from '@/utils/services';
+import { defaultUserEmailSuffix, initialAccountPassword } from '@/utils/option';
 import { createAccountRule } from './rules';
 
 const { isDialogOpen, openDialog, closeDialog } = useDialog();
 const refEl = ref();
 const labelWidth = '80px';
 const form = reactive({
-    email: '',
     number: '',
     role: 0,
-    name: ''
-})
+    name: '',
+});
 const rules = reactive(createAccountRule);
 const submit = () => {
     comfirm({
@@ -21,25 +22,31 @@ const submit = () => {
         finallyCb: closeDialog,
         fetchApi: addAccount,
         params: {
-            email: form.email,
+            email: `${form.number}${defaultUserEmailSuffix}`,
             name: form.name,
             number: form.number,
             role: form.role,
-        }
-    })
-}
+        },
+    });
+};
 const cancle = () => {
     refEl?.value?.resetFields?.();
-    closeDialog()
-}
+    closeDialog();
+};
 
 defineExpose({
-    openPanel: openDialog
-})
+    openPanel: openDialog,
+});
 </script>
 
 <template>
-    <el-dialog v-model="isDialogOpen" title="新建账户">
+    <el-dialog v-model="isDialogOpen" title="新建账户" class="dialog">
+        <FormTip>
+            <template #tipinfo>
+                账户初始密码为
+                <strong>{{ initialAccountPassword }}</strong>
+            </template>
+        </FormTip>
         <el-form :model="form" ref="refEl" :rules="rules">
             <el-form-item label="账户身份" :label-width="labelWidth" required>
                 <el-radio-group v-model="form.role" size="large">
@@ -47,14 +54,16 @@ defineExpose({
                     <el-radio :label="1" border>我是老师</el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="邮箱信息" :label-width="labelWidth" prop="email">
-                <el-input v-model="form.email" placeholder="请输入账户邮箱"></el-input>
-            </el-form-item>
             <el-form-item label="姓名" :label-width="labelWidth" prop="name">
                 <el-input v-model="form.name" placeholder="请输入用户姓名"></el-input>
             </el-form-item>
-            <el-form-item :label="form.role === 0 ? '学号' : '职工号'" :label-width="labelWidth" prop="number">
-                <el-input v-model="form.number" placeholder="请输入签到名称"></el-input>
+            <el-form-item :label="'学工号'" :label-width="labelWidth" prop="number">
+                <el-input v-model="form.number" placeholder="请输入用户学工号"></el-input>
+            </el-form-item>
+            <el-form-item label="邮箱信息" :label-width="labelWidth" prop="number">
+                <el-input v-model="form.number" placeholder="账户邮箱为M邮箱" disabled>
+                    <template #append>{{ defaultUserEmailSuffix }}</template>
+                </el-input>
             </el-form-item>
         </el-form>
         <template #footer>
