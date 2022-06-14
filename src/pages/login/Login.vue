@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
+import FormTip from '@/components/common/FormTip.vue';
 import Layout from './index.vue';
 import FormCt from './comp/FormCt.vue';
-import TextBtn from './comp/TextBtn.vue';
 import { login as loginApi } from '@/utils/services';
 import { showFailWrap, useDirect } from '@/utils/helper';
+import { initialAccountPassword } from '@/utils/option';
 import { getLoginRule } from './rules';
 
 const refFomeEl = ref();
@@ -15,14 +16,13 @@ const form = reactive({
 });
 
 const rules = reactive(getLoginRule());
-const labelWidth = ref('80px');
+const labelWidth = ref('70px');
 const { routerToForgetPassword, routerToHome } = useDirect();
 const directToForgetPassword = () => routerToForgetPassword('direct');
 const loginHandler = () => {
     refFomeEl.value.validate((isPass: boolean) => {
         // 通过表单检查
         if (isPass) {
-            // 请求登录
             loginApi({ username: form.userName, password: form.password }).then((res) => {
                 if (res.code === 0) routerToHome('redirect');
                 else showFailWrap({ text: res.errorMsg });
@@ -45,7 +45,21 @@ const loginHandler = () => {
                 <el-form-item label="学工号" size="large" prop="userName" :label-width="labelWidth">
                     <el-input v-model="form.userName" placeholder="请输入学工号"></el-input>
                 </el-form-item>
-                <el-form-item label="密码" size="large" class="psw" prop="password">
+                <el-form-item
+                    label="密码"
+                    size="large"
+                    class="psw"
+                    prop="password"
+                    :label-width="labelWidth"
+                >
+                    <template #label>
+                        <div class="passwordLabel">
+                            密码
+                            <div class="forgetPasswordBtn" @click="directToForgetPassword">
+                                修改密码
+                            </div>
+                        </div>
+                    </template>
                     <el-input
                         v-model="form.password"
                         show-password
@@ -54,15 +68,18 @@ const loginHandler = () => {
                     ></el-input>
                 </el-form-item>
                 <BtnBlue size="large" @click="loginHandler" class="loginBtn">立即登录</BtnBlue>
-                <div class="registerBtnCt">
-                    <TextBtn @click="directToForgetPassword">忘记密码？</TextBtn>
-                </div>
+                <FormTip border-color="#f5f5f9">
+                    <template #tipinfo>
+                        账户初始密码为{{ initialAccountPassword }},请及时修改
+                    </template>
+                </FormTip>
             </el-form>
         </FormCt>
     </Layout>
 </template>
 
 <style lang="less" scoped>
+@import url('@/styles/var.less');
 .loginFormCt {
     width: 480px;
     padding: 30px 46px;
@@ -82,14 +99,24 @@ const loginHandler = () => {
     position: relative;
 }
 
-.registerBtnCt {
-    font-size: 14px;
-    margin-top: 10px;
+.passwordLabel {
+    display: inline-block;
+    width: calc(100% - 12px);
+}
+.forgetPasswordBtn {
     float: right;
+    position: relative;
+    transform: translateX(12px);
+    font-size: 14px;
+    color: @text-button-primary-color;
+    &:hover {
+        cursor: pointer;
+        color: @text-button-primary-hover-color;
+    }
 }
 
 .loginBtn {
     width: 100%;
-    margin-top: 30px;
+    margin: 10px 0;
 }
 </style>

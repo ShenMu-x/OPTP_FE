@@ -7,47 +7,51 @@ import { commentItemType } from '@/type';
 import { useFolder, useUser } from '@/utils/helper';
 
 const props = defineProps<{
-    commentItem?: commentItemType,
-    isLast?: boolean,
-    publishReply?: any,
-    deleteReply?: any,
+    commentItem?: commentItemType;
+    isLast?: boolean;
+    publishReply?: any;
+    deleteReply?: any;
 }>();
 const { commentItem, isLast } = toRefs(props);
 const { user } = useUser();
 const refInputEl = ref();
 
-const { isFold: isReplyPanelShow, click: handleReplyPanel } = useFolder();// 回复面板
-const { isFold: isListShow, click: handleListPanel } = useFolder();// 评论列表面板
+const { isFold: isReplyPanelShow, click: handleReplyPanel } = useFolder(); // 回复面板
+const { isFold: isListShow, click: handleListPanel } = useFolder(); // 评论列表面板
 
 const isSelf = computed(() => user.userId === commentItem?.value?.comment.userId);
-const hasReplys = computed(() => (commentItem?.value?.replyComments?.length || 0) > 0)
+const hasReplys = computed(() => (commentItem?.value?.replyComments?.length || 0) > 0);
 
 const submitCb = () => {
     refInputEl?.value?.resetInput();
     isReplyPanelShow.value && handleReplyPanel();
     !isListShow.value && handleListPanel();
-}
+};
 
 // 两个params，用于replyItem传递参数
 const replyWrap = (params: any) => {
-    props.publishReply?.({ replyId: commentItem?.value?.comment.courseCommentId, cb: submitCb, ...params })
-}
+    props.publishReply?.({
+        replyId: commentItem?.value?.comment.courseCommentId,
+        cb: submitCb,
+        ...params,
+    });
+};
 const deleteHandler = (params: any) => {
-    props.deleteReply?.({ commentId: commentItem?.value?.comment.courseCommentId, ...params })
-}
+    props.deleteReply?.({ commentId: commentItem?.value?.comment.courseCommentId, ...params });
+};
 
 // 回复输入框重置
 const reset = () => {
     refInputEl?.value?.resetInput?.();
-}
+};
 
 defineExpose({
     reset,
-})
+});
 </script>
 
 <template>
-    <div :class="['ct', { 'noBorder': isLast }]">
+    <div :class="['ct', { noBorder: isLast }]">
         <div class="avatar">
             <Avatar type="small" :src="commentItem?.comment.userAvatarUrl" />
         </div>
@@ -62,10 +66,9 @@ defineExpose({
                     <span v-show="!isReplyPanelShow">回复</span>
                 </div>
                 <div class="btn blue" v-if="hasReplys">
-                    <span
-                        v-if="!isListShow"
-                        @click="handleListPanel"
-                    >展开{{ commentItem?.replyComments?.length }}条回复</span>
+                    <span v-if="!isListShow" @click="handleListPanel">
+                        展开{{ commentItem?.replyComments?.length }}条回复
+                    </span>
                     <span v-if="isListShow" @click="handleListPanel">收起列表</span>
                 </div>
                 <div class="btn red" v-if="isSelf" @click="deleteHandler">删除</div>
@@ -88,6 +91,7 @@ defineExpose({
 </template>
 
 <style lang="less" scoped>
+@import url('@/styles/var.less');
 .ct {
     min-height: 100px;
     margin: 20px;
@@ -166,16 +170,16 @@ defineExpose({
 }
 
 .red {
-    color: #e42b50;
+    color: @text-button-warining-color;
     &:hover {
-        color: #af1e3b;
+        color: @text-button-warining-hover-color;
     }
 }
 
 .blue {
-    color: #3f9eff;
+    color: @text-button-primary-color;
     &:hover {
-        color: #1f88f1;
+        color: @text-button-primary-hover-color;
     }
 }
 </style>

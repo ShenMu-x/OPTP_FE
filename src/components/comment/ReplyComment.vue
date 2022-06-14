@@ -7,10 +7,10 @@ import { commentReplyType } from '@/type';
 import { useFolder, useUser } from '@/utils/helper';
 
 const props = defineProps<{
-    reply?: commentReplyType,
-    isLast?: boolean,
-    publishReply?: any,
-    deleteReply?: any,
+    reply?: commentReplyType;
+    isLast?: boolean;
+    publishReply?: any;
+    deleteReply?: any;
 }>();
 
 const { reply, isLast } = toRefs(props);
@@ -24,19 +24,18 @@ const isSelf = computed(() => user.userId === reply?.value?.userId);
 const submitCb = () => {
     refInputEl?.value?.resetInput();
     isReplyPanelShow.value && handleReplyPanel();
-}
+};
 
 const submitReply = (params: any) => {
-    props.publishReply?.({ replyId: reply?.value?.courseCommentId, cb: submitCb, ...params })
-}
+    props.publishReply?.({ replyId: reply?.value?.courseCommentId, cb: submitCb, ...params });
+};
 const deleteHandler = () => {
-    props.deleteReply?.({ commentId: reply?.value?.courseCommentId })
-}
-
+    props.deleteReply?.({ commentId: reply?.value?.courseCommentId });
+};
 </script>
 
 <template>
-    <div :class="['replyCt', { 'noBorder': isLast }]">
+    <div :class="['replyCt', { noBorder: isLast }]">
         <div class="avatar">
             <Avatar type="small" :src="reply?.userAvatarUrl" />
         </div>
@@ -66,6 +65,7 @@ const deleteHandler = () => {
 </template>
 
 <style lang="less" scoped>
+@import url('@/styles/var.less');
 .replyCt {
     margin: 20px 0;
     min-height: 100px;
@@ -137,16 +137,16 @@ const deleteHandler = () => {
 }
 
 .red {
-    color: #e42b50;
+    color: @text-button-warining-color;
     &:hover {
-        color: #af1e3b;
+        color: @text-button-warining-hover-color;
     }
 }
 
 .blue {
-    color: #3f9eff;
+    color: @text-button-primary-color;
     &:hover {
-        color: #1f88f1;
+        color: @text-button-primary-hover-color;
     }
 }
 

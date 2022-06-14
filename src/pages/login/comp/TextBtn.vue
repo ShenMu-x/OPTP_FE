@@ -1,19 +1,17 @@
 <template>
-    <el-button
-        class="textBtn"
-        type="text"
-    >
+    <el-button class="textBtn" type="text">
         <slot></slot>
     </el-button>
 </template>
 
 <style lang="less" scoped>
+@import url('@/styles/var.less');
 .textBtn {
     font-size: 14px;
-    color: #3f9eff;
+    color: @text-button-primary-color;
     &:hover {
         cursor: pointer;
-        color: #1f88f1;
+        color: @text-button-primary-hover-color;
     }
 }
 </style>
