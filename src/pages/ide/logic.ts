@@ -15,7 +15,6 @@ export const useGetIDEAndCheckBeat = (refEl: any) => {
             .then(res => {
                 if (res.code === 0) url.value = res?.data?.url || '';
                 else showFailWrap({ text: '系统异常，请稍后再试' })
-                console.log(res)
                 closeLoading()
             })
     } else if (isTeacher() && labId && studentId) {

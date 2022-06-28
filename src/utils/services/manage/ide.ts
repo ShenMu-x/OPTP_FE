@@ -19,7 +19,7 @@ export interface IdeType {
     labIsEnd: boolean,
     port: number //IDE端口号
 }
-const packIde = (info: { container_id: any; lab_id: any; lab_name: any; course_id: any; course_name: any; student_id: any; student_name: any; created_at: string; size: any; teacher_id: any; teacher_name: any; lab_is_end: any; port: any; }) => ({
+const packIde = (info: { container_id: any; lab_id: any; lab_name: any; course_id: any; course_name: any; student_id: any; student_name: any; created_at: string; size: any; teacher_info: { teacher_id: any; teacher_name: any; }; lab_is_end: any; port: any; cpu_perc: any; mem_usage: any; }) => ({
     containerId: info.container_id,
     labId: info.lab_id,
     labName: info.lab_name,
@@ -30,17 +30,26 @@ const packIde = (info: { container_id: any; lab_id: any; lab_name: any; course_i
     createdAt: fmatTime(info.created_at),
     size: info.size,//IDE占用磁盘空间
     teacherInfo: {
-        teacherId: info.teacher_id,
-        teacherName: info.teacher_name
+        teacherId: info.teacher_info.teacher_id,
+        teacherName: info.teacher_info.teacher_name
     },
     labIsEnd: info.lab_is_end,
-    port: info.port //IDE端口号
+    port: info.port, //IDE端口号
+    cpuPerc: info.cpu_perc, // CPU占用率
+    memUsage: info.mem_usage // 内存使用情况
 })
-
+export enum ideOrderEnum {
+    CreatedAt,
+    MemoryUsage,
+    CpuPerc,
+    Size
+}
 // 获取系统课程列表
 export const getAllIdeContainer: (params: {
     pageCurrent: number,
-    pageSize: number
+    pageSize: number,
+    order: ideOrderEnum,
+    isReverse: boolean
 }) => ResType<ListRes<IdeType>> = (params) => {
     return _axios({
         method: "GET",
