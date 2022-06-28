@@ -29,10 +29,10 @@ const packIde = (info: { container_id: any; lab_id: any; lab_name: any; course_i
     studentName: info.student_name,
     createdAt: fmatTime(info.created_at),
     size: info.size,//IDE占用磁盘空间
-    teacherInfo: {
+    teacherInfo: info.teacher_info ? {
         teacherId: info.teacher_info.teacher_id,
         teacherName: info.teacher_info.teacher_name
-    },
+    } : null,
     labIsEnd: info.lab_is_end,
     port: info.port, //IDE端口号
     cpuPerc: info.cpu_perc, // CPU占用率

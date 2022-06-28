@@ -48,7 +48,7 @@ getMyCodingTime().then((res) => {
                         @reloadend="finishReload"
                     />
                 </el-tab-pane>
-                <el-tab-pane label="搜索课程" name="all" lazy>
+                <el-tab-pane label="所有课程" name="all" lazy>
                     <SearchPanel />
                 </el-tab-pane>
                 <el-tab-pane label="我的实验" name="labs" lazy>
@@ -61,7 +61,7 @@ getMyCodingTime().then((res) => {
                         :fetch-lab-list="getMyLabs"
                     />
                 </el-tab-pane>
-                <el-tab-pane label="其他功能" name="other" lazy>
+                <el-tab-pane label="练习场" name="other" lazy>
                     <OtherFeatures></OtherFeatures>
                 </el-tab-pane>
             </el-tabs>

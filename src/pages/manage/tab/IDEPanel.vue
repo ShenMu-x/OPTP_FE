@@ -66,13 +66,18 @@ const orderChangeHandler = (orderInfo: { orderValue: ideOrderEnum; isReverse: bo
                 <el-table-column label="实验名称" prop="labName" min-width="100" />
                 <el-table-column label="课程名称" prop="courseName" min-width="100" />
                 <el-table-column label="学生姓名" prop="studentName" min-width="100" />
-                <el-table-column label="内存占用" prop="size" min-width="90" />
+                <el-table-column label="磁盘占用" prop="size" min-width="90" />
+                <el-table-column label="内存占用" prop="memUsage" min-width="130" />
+                <el-table-column label="CPU占用" prop="cpuPerc" min-width="90" />
                 <el-table-column label="教师姓名" min-width="120">
                     <template #default="scope">
-                        <span v-if="scope.row.teacherInfo?.teacherName">
-                            {{ scope.row.teacherInfo.teacherName }}
+                        <span>
+                            {{
+                                scope.row.teacherInfo
+                                    ? scope.row.teacherInfo.teacherName
+                                    : '本ide非教师开启'
+                            }}
                         </span>
-                        <span v-else>本ide非教师开启</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="createdAt" label="创建时间" min-width="170" />
@@ -84,15 +89,6 @@ const orderChangeHandler = (orderInfo: { orderValue: ideOrderEnum; isReverse: bo
                             size="default"
                             @click="closeHandler(scope.row)"
                             v-if="!scope.row.labIsEnd"
-                        >
-                            关闭IDE
-                        </el-button>
-                        <el-button
-                            disabled
-                            type="danger"
-                            size="default"
-                            @click="closeHandler(scope.row)"
-                            v-else
                         >
                             关闭IDE
                         </el-button>
