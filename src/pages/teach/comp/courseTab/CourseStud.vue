@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
 import BtnCt from '@/components/common/BtnCt.vue';
@@ -37,6 +37,10 @@ const check = (userId: number, isPass: boolean) => {
         }
     });
 };
+const uploadSuccessHandler = () => {
+    reloadMemberList()
+    closeDialog();
+}
 </script>
 
 <template>
@@ -48,7 +52,7 @@ const check = (userId: number, isPass: boolean) => {
         </BtnCt>
         <el-dialog v-model="isDialogOpen" title="导入学生列表">
             <UploadCsv
-                @upload="closeDialog"
+                @upload="uploadSuccessHandler"
                 :data="{ courseId }"
                 :upload-url="UPLOAD_CSV_STUDENT_TEMPLATE_URL"
             />

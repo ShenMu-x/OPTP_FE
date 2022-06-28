@@ -45,7 +45,6 @@ export const useCreateEditor = ({
     }
 
     const createEditor = () => {
-        console.log('create')
         disposeEditor()
         if (refEditorEl.value) {
             instance = monaco.editor.create(refEditorEl.value, {
@@ -57,10 +56,6 @@ export const useCreateEditor = ({
                 scrollBeyondLastLine: false,
                 theme: 'vs-dark',
             });
-
-            instance.onDidChangeModelContent(() => {
-                // console.log('INPUT:: ', instance.getValue());
-            })
         }
     }
 

@@ -20,7 +20,6 @@ const refreshInfo = () => {
     form.secretKey = course.value?.secretKey;
     form.picUrl = course.value?.picUrl;
     form.isClosed = course.value?.isClosed;
-    console.log('refreshInfo', form.isClosed)
 }
 watch(course, (newV, oldV) => {
     if (newV.courseId !== oldV.courseId) refreshInfo()
@@ -54,7 +53,7 @@ defineExpose({
 </script>
 
 <template>
-    <el-dialog v-model="isDialogOpen" title="新建账户">
+    <el-dialog v-model="isDialogOpen" title="修改课程信息">
         <el-form :model="form" ref="refEl" :rules="rules">
             <el-form-item label="课程名称" :label-width="labelWidth" prop="name">
                 <el-input v-model="form.name" placeholder="请输入课程名称"></el-input>

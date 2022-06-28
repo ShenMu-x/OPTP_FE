@@ -4,7 +4,7 @@ export const createAccountRule = {
     number: [
         {
             required: true,
-            message: '请输入学工号',
+            message: '请输入账号',
             trigger: 'blur',
         }
     ],

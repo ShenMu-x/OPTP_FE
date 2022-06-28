@@ -14,7 +14,6 @@ const currentLabId = ref(props.labId ?? 0);
 const setCurrentLabInfo = () => {
     getLabById(currentLabId.value).then((res) => {
         if (res.code === 0) currentLabInfo.value = res.data as labType;
-        console.log(currentLabInfo.value)
     });
 };
 setCurrentLabInfo();

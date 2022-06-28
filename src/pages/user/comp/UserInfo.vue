@@ -28,7 +28,7 @@ const updateUserInject = (url: string) => editAvatar(url);
                     编辑个人信息
                 </el-button>
             </div>
-            <div>学工号: {{ user.num }}</div>
+            <div>账号: {{ user.num }}</div>
         </div>
         <BtnBlue size="large" @click="logout">退出登录</BtnBlue>
     </div>

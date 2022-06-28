@@ -6,55 +6,61 @@ import type {
     UploadFile,
     ElUploadProgressEvent,
     ElFile,
-} from 'element-plus/es/components/upload/src/upload.type'
+} from 'element-plus/es/components/upload/src/upload.type';
 import { wrapHeaderWithToken, showFailWrap, showSuccessWrap } from '@/utils/helper';
 
-const props = defineProps<{ uploadUrl: string, data?: any }>();
+const props = defineProps<{ uploadUrl: string; data?: any }>();
 const refUploadEl = ref();
-let allowType = ref(['text/csv'])
+let allowType = ref(['text/csv']);
 let fileType = ref(['csv']);
-let uploadUrl = props.uploadUrl;
 
 const emits = defineEmits(['upload']);
 
-const handleFileSuccess = (res: { code: number, data: { url: string } }, file: UploadFile) => {
-    emits('upload', res.data.url);
+const handleFileSuccess = () => {
+    emits('upload');
     showSuccessWrap({
-        text: '导入成功'
-    })
-}
-const handleFileError = () => {
+        text: '导入成功',
+    });
+    resetUpload();
+};
+const handleFileError = (res: Error) => {
+    let code = -1;
+    try {
+        code = JSON.parse(res.message)?.code ?? -1;
+    } catch (err) {
+        console.log(err);
+    }
     showFailWrap({
-        text: '上传失败，请稍后再试'
-    })
-}
+        text: code === -19999 ? '文件内信息有误，请检查文件' : '上传失败，请稍后再试',
+    });
+};
 const handleRemove = () => {
     emits('upload', '');
-}
+};
 const beforeFileUpload = (file: ElFile) => {
     const isAllow = allowType.value.includes(file.type);
-    const isLt2M = file.size / 1024 / 1024 < 2
+    const isLt30M = file.size / 1024 / 1024 < 30;
 
     if (!isAllow) {
-        ElMessage.error(`请上传${fileType.value.join('/')}格式文件`)
+        ElMessage.error(`请上传${fileType.value.join('/')}格式文件`);
     }
-    if (!isLt2M) {
-        ElMessage.error('文件大小不能超过 2MB!')
+    if (!isLt30M) {
+        ElMessage.error('文件大小不能超过 30MB!');
     }
-    return isAllow && isLt2M
-}
+    return isAllow && isLt30M;
+};
 const handleExceed = () => {
     showFailWrap({
-        text: '限制上传 1 个文件'
-    })
-}
+        text: '限制上传 1 个文件',
+    });
+};
 
 const resetUpload = () => {
-    refUploadEl?.value?.clearFiles()
-}
+    refUploadEl?.value?.clearFiles();
+};
 defineExpose({
     resetUpload,
-})
+});
 </script>
 
 <template>
@@ -62,7 +68,7 @@ defineExpose({
         drag
         ref="refUploadEl"
         :limit="1"
-        :action="uploadUrl"
+        :action="props.uploadUrl"
         :headers="wrapHeaderWithToken()"
         :accept="allowType.join(',')"
         :on-success="handleFileSuccess"
@@ -82,7 +88,7 @@ defineExpose({
         </div>
         <template #tip>
             <div class="el-upload__tip">只能上传{{ fileType.join('/') }}类型文件</div>
-            <div class="el-upload__tip">个数限制1个,大小不超过 2M</div>
+            <div class="el-upload__tip">个数限制1个,大小不超过 30M</div>
         </template>
     </el-upload>
 </template>

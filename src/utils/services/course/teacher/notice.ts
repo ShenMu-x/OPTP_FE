@@ -17,10 +17,10 @@ export const createNotice: (params: {
         .catch(packError)
 }
 
-export const deleteNotice: (courseResourceId: number, courseId: number) => ResType<''> = (courseResourceId, courseId) => {
+export const deleteNotice: (courseResourceId: number) => ResType<''> = (courseResourceId) => {
     return _axios({
         method: "DELETE",
-        url: `/web/course/resource/${courseId}`,
+        url: `/web/course/resource/${courseResourceId}`,
         data: { courseResourceId }
     })
         .then(packEmptyData)

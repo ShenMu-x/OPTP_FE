@@ -57,8 +57,8 @@ defineExpose({
             <el-form-item label="姓名" :label-width="labelWidth" prop="name">
                 <el-input v-model="form.name" placeholder="请输入用户姓名"></el-input>
             </el-form-item>
-            <el-form-item :label="'学工号'" :label-width="labelWidth" prop="number">
-                <el-input v-model="form.number" placeholder="请输入用户学工号"></el-input>
+            <el-form-item :label="'账号'" :label-width="labelWidth" prop="number">
+                <el-input v-model="form.number" placeholder="请输入用户账号"></el-input>
             </el-form-item>
             <el-form-item label="邮箱信息" :label-width="labelWidth" prop="number">
                 <el-input v-model="form.number" placeholder="账户邮箱为M邮箱" disabled>

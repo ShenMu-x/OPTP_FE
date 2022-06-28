@@ -5,53 +5,44 @@ import { usePageList } from '@/utils/helper';
 import { searchCourseByName } from '@/utils/services';
 
 const props = defineProps<{
-    keyword?: string,
+    keyword?: string;
 }>();
 
 const pageSize = 6;
 const refEl = ref();
 const emits = defineEmits(['reloadend']);
-const emitReload = () => { emits('reloadend') }
+const emitReload = () => {
+    emits('reloadend');
+};
 
-const {
-    current,
-    isLoading,
-    isReload,
-    total,
-    list,
-    reload,
-    fetch,
-    setCommon,
-} = usePageList({
+const { current, isLoading, isReload, total, list, reload, fetch, setCommon } = usePageList({
     size: pageSize,
     fetchData: searchCourseByName,
     failText: '搜索课程失败,请稍后再试',
     refEl,
     emitReload,
     noTip: true,
-    common: { courseName: props.keyword }
+    common: { courseName: props.keyword },
 });
 
 defineExpose({
-    reload
-})
+    reload,
+});
 
 watch(props, (newV) => {
-    if (newV.keyword !== "") {
+    if (newV.keyword !== '') {
         setCommon({ courseName: newV.keyword });
-        fetch(1)
+        fetch(1);
     }
-})
+});
 
 onMounted(() => {
-    props.keyword && fetch(1)
-})
-
-const click = () => { console.log(props.keyword) }
+    props.keyword && fetch(1);
+});
 </script>
 
 <template>
-    <div class="coursesCt" ref="refEl" @click="click">
+    <div class="coursesCt" ref="refEl">
         <template v-if="list?.length > 0">
             <CourseItem v-for="item in list" :key="item.courseId" :course="item" class="courseCt" />
         </template>

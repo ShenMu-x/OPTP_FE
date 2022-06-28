@@ -1,12 +1,10 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import BtnBlue from '@/components/common/BtnBlue.vue';
-import FormTip from '@/components/common/FormTip.vue';
 import Layout from './index.vue';
 import FormCt from './comp/FormCt.vue';
 import { login as loginApi } from '@/utils/services';
 import { showFailWrap, useDirect } from '@/utils/helper';
-import { initialAccountPassword } from '@/utils/option';
 import { getLoginRule } from './rules';
 
 const refFomeEl = ref();
@@ -21,7 +19,6 @@ const { routerToForgetPassword, routerToHome } = useDirect();
 const directToForgetPassword = () => routerToForgetPassword('direct');
 const loginHandler = () => {
     refFomeEl.value.validate((isPass: boolean) => {
-        // 通过表单检查
         if (isPass) {
             loginApi({ username: form.userName, password: form.password }).then((res) => {
                 if (res.code === 0) routerToHome('redirect');
@@ -42,8 +39,8 @@ const loginHandler = () => {
                 :rules="rules"
                 ref="refFomeEl"
             >
-                <el-form-item label="学工号" size="large" prop="userName" :label-width="labelWidth">
-                    <el-input v-model="form.userName" placeholder="请输入学工号"></el-input>
+                <el-form-item label="账号" size="large" prop="userName" :label-width="labelWidth">
+                    <el-input v-model="form.userName" placeholder="请输入账号"></el-input>
                 </el-form-item>
                 <el-form-item
                     label="密码"
@@ -68,11 +65,6 @@ const loginHandler = () => {
                     ></el-input>
                 </el-form-item>
                 <BtnBlue size="large" @click="loginHandler" class="loginBtn">立即登录</BtnBlue>
-                <FormTip border-color="#f5f5f9">
-                    <template #tipinfo>
-                        账户初始密码为{{ initialAccountPassword }},请及时修改
-                    </template>
-                </FormTip>
             </el-form>
         </FormCt>
     </Layout>
@@ -117,6 +109,6 @@ const loginHandler = () => {
 
 .loginBtn {
     width: 100%;
-    margin: 10px 0;
+    margin: 30px 0 10px;
 }
 </style>

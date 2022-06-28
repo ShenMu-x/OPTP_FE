@@ -1,31 +1,26 @@
 <template>
-  <div class="loginCt">
-    <div class="title">
-      <div class="school">华南师范大学</div>
-      <div class="webName">在线编程教学平台</div>
+    <div class="loginCt">
+        <div class="title">
+            <div>华南师范大学</div>
+            <div>在线编程教学平台</div>
+        </div>
+        <slot></slot>
     </div>
-    <slot></slot>
-  </div>
 </template>
 
 <style lang="less" scoped>
 .loginCt {
-  width: 100%;
-  min-height: 100%;
-  background: #002d54;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+    width: 100%;
+    min-height: 100%;
+    background: #002d54;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 .title {
-  color: #ffffff;
-  margin-top: 30px;
-  .school {
-    font-size: 25px;
-  }
-  .webName {
+    color: #ffffff;
+    margin-top: 30px;
     font-size: 30px;
-  }
 }
 </style>

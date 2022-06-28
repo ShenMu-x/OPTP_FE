@@ -64,7 +64,7 @@ defineExpose({
 </script>
 
 <template>
-    <el-dialog v-model="isDialogOpen" title="新建账户">
+    <el-dialog v-model="isDialogOpen" title="修改账户信息">
         <el-form :model="form" ref="refEl">
             <el-row>
                 <el-col :span="12">
@@ -73,7 +73,7 @@ defineExpose({
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="学工号" :label-width="labelWidth" required>
+                    <el-form-item label="账号" :label-width="labelWidth" required>
                         <el-input v-model="form.num" placeholder="请输入签到名称"></el-input>
                     </el-form-item>
                 </el-col>

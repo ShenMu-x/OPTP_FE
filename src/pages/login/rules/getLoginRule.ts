@@ -2,7 +2,7 @@ export const getLoginRule = () => ({
     userName: [
         {
             required: true,
-            message: '请输入学工号',
+            message: '请输入账号',
             trigger: 'blur',
         },
     ],

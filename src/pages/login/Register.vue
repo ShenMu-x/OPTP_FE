@@ -89,7 +89,7 @@ const registerHandler = () => {
         <el-form-item label="真实姓名" prop="realName">
           <el-input v-model="model.realName" clearable></el-input>
         </el-form-item>
-        <el-form-item label="学工号" prop="num">
+        <el-form-item label="账号" prop="num">
           <el-input v-model="model.num" clearable></el-input>
         </el-form-item>
         <el-form-item label="专业" prop="major">

@@ -88,7 +88,6 @@ const orderChangeHandler = (orderInfo: { orderValue: ideOrderEnum; isReverse: bo
                             type="danger"
                             size="default"
                             @click="closeHandler(scope.row)"
-                            v-if="!scope.row.labIsEnd"
                         >
                             关闭IDE
                         </el-button>

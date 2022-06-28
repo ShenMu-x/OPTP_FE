@@ -9,34 +9,37 @@ const { routerToHome, routerToStudentAttend } = useDirect();
 const isUserStudent = isStudent();
 const isUserTeacher = isTeacher();
 const hasAttendInProgress = ref(false);
-const cancleAttendTip = () => { hasAttendInProgress.value = false }
-const showAttendTip = () => { hasAttendInProgress.value = true }
+const cancleAttendTip = () => {
+    hasAttendInProgress.value = false;
+};
+const showAttendTip = () => {
+    hasAttendInProgress.value = true;
+};
 const commandHandler = (command: string) => {
     if (command === 'toHome') routerToHome('direct');
-    else if (command === 'logout') logout()
-    else if (command === 'attend') routerToStudentAttend('direct')
-}
+    else if (command === 'logout') logout();
+    else if (command === 'attend') routerToStudentAttend('direct');
+};
 let intreval: any = null;
 const requestAttend = () => {
-    getMyAttendRecordsInProgress()
-        .then(res => {
-            if (res.code === 0 && res?.data?.length) showAttendTip();
-            else cancleAttendTip()
-        })
-}
+    getMyAttendRecordsInProgress().then((res) => {
+        if (res.code === 0 && res?.data?.length) showAttendTip();
+        else cancleAttendTip();
+    });
+};
 if (isUserStudent) {
     requestAttend();
-    intreval = setInterval(requestAttend, 4 * 1000)// 轮询请求签到信息
+    intreval = setInterval(requestAttend, 4 * 1000); // 轮询请求签到信息
 }
 
 onUnmounted(() => {
     intreval && clearInterval(intreval);
-})
+});
 </script>
 
 <template>
     <div class="container">
-        <div class="logo">
+        <div class="logo" @click="() => routerToHome('direct')">
             <img :src="SCNULogo" />
         </div>
         <div class="title">在线编程教学平台</div>
@@ -47,15 +50,24 @@ onUnmounted(() => {
             </span>
             <template #dropdown>
                 <el-dropdown-menu>
-                    <el-dropdown-item :icon="HomeFilled" command="toHome" v-if="isUserTeacher || isUserStudent">
+                    <el-dropdown-item
+                        :icon="HomeFilled"
+                        command="toHome"
+                        v-if="isUserTeacher || isUserStudent"
+                    >
                         我的主页
                     </el-dropdown-item>
                     <el-dropdown-item :icon="AlarmClock" command="attend" v-if="isUserStudent">
-                        <span :class="['attendCt', { 'point': hasAttendInProgress }]" @click="cancleAttendTip">
+                        <span
+                            :class="['attendCt', { point: hasAttendInProgress }]"
+                            @click="cancleAttendTip"
+                        >
                             我的签到
                         </span>
                     </el-dropdown-item>
-                    <el-dropdown-item :icon="ArrowRightBold" command="logout">退出登录</el-dropdown-item>
+                    <el-dropdown-item :icon="ArrowRightBold" command="logout">
+                        退出登录
+                    </el-dropdown-item>
                 </el-dropdown-menu>
             </template>
         </el-dropdown>
@@ -78,6 +90,9 @@ onUnmounted(() => {
     img {
         height: 50px;
         margin-top: 5px;
+    }
+    &:hover {
+        cursor: pointer;
     }
 }
 
@@ -119,7 +134,7 @@ onUnmounted(() => {
 
 .point {
     &::after {
-        content: "";
+        content: '';
         display: inline-block;
         position: relative;
         left: 4px;

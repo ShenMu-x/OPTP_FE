@@ -19,11 +19,11 @@ defineExpose({
 
 <template>
     <el-dialog v-model="isDialogOpen" title="导入学生信息">
-        <UploadCsv :uploadUrl="MANAGE_UPLOAD_CSV_STUDENT_TEMPLATE_URL" />
+        <UploadCsv :uploadUrl="MANAGE_UPLOAD_CSV_STUDENT_TEMPLATE_URL" @upload="closeDialog"/>
         <template #footer>
             <span class="dialog-footer">
                 <div ref="refEl"></div>
-                <BtnBlue @click="loadTemplate">下载导入模板</BtnBlue>
+                <BtnBlue @click="loadTemplate" size="large">下载导入模板</BtnBlue>
                 <el-button @click="closeDialog">取消</el-button>
             </span>
         </template>
