@@ -6,34 +6,29 @@ import CourseForm from '../teach/comp/form/CourseForm.vue';
 import CourseList from '@/components/course/CourseList.vue';
 import LoadBtn from '@/components/common/LoadBtn.vue';
 import { createCourse, getCoursesCreated } from '@/utils/services';
-import { useReloader } from '@/utils/helper';
+import { useReloader, useDialog } from '@/utils/helper';
 
 const activeTabName = ref('coursesCreated');
 
-// form
+const { isDialogOpen, openDialog, closeDialog } = useDialog();
+
 const refCourseFormEl = ref();
-const dialogFormVisible = ref(false);
-const openDialog = () => {
-    dialogFormVisible.value = true;
-}
-const closeDialog = () => {
-    dialogFormVisible.value = false;
-}
 const commitHandler = () => {
     refCourseFormEl.value.commitForm();
-}
+};
 const resetHandler = () => {
     refCourseFormEl.value.resetForm();
     closeDialog();
-}
+};
 
-// reload
 const refListEl = ref();
-const {
-    isReloading,
-    reloadHandler,
-    finishReload,
-} = useReloader(refListEl);
+const { isReloading, reloadHandler, finishReload } = useReloader(refListEl);
+
+const successCommitHandler = () => {
+    resetHandler();
+    closeDialog();
+    refListEl?.value?.reload?.();
+};
 </script>
 
 <template>
@@ -47,7 +42,11 @@ const {
                 <el-tab-pane label="我的课程" name="coursesCreated">
                     <div class="btnCt">
                         <el-button :icon="Plus" @click="openDialog">创建课程</el-button>
-                        <LoadBtn @reload="reloadHandler" :is-loding="isReloading" class="loadButton" />
+                        <LoadBtn
+                            @reload="reloadHandler"
+                            :is-loding="isReloading"
+                            class="loadButton"
+                        />
                     </div>
                     <CourseList
                         :fetchData="getCoursesCreated"
@@ -57,8 +56,13 @@ const {
                 </el-tab-pane>
             </el-tabs>
         </div>
-        <el-dialog v-model="dialogFormVisible" title="创建课程" :lock-scroll="false">
-            <CourseForm :fetchApi="createCourse" ref="refCourseFormEl" :closeDialog="closeDialog" />
+        <el-dialog v-model="isDialogOpen" title="创建课程" :lock-scroll="false">
+            <CourseForm
+                type="create"
+                :fetchApi="createCourse"
+                ref="refCourseFormEl"
+                @success-commit="successCommitHandler"
+            />
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="resetHandler">取消</el-button>

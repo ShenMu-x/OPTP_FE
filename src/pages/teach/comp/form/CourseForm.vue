@@ -4,16 +4,16 @@ import UploadAvatar from '@/components/common/UploadAvatar.vue';
 import { courseRules } from './rule';
 import { CourseType } from '@/type';
 import { comfirm } from '@/utils/helper';
-import { createCourse } from '@/utils/services';
 
 const refEl = ref();
 const props = defineProps<{
-    closeDialog?: () => void,
-    fetchApi: any,
-    data?: CourseType
+    type: 'edit' | 'create';
+    fetchApi: any;
+    data?: CourseType;
 }>();
 
 const formLabelWidth = '80px';
+const emits = defineEmits(['successCommit']);
 
 const form = reactive({
     courseId: -1,
@@ -21,8 +21,8 @@ const form = reactive({
     courseDes: '',
     secretKey: '',
     picUrl: '',
-    language: 0
-})
+    language: 0,
+});
 
 const setForm = () => {
     form.courseId = props.data?.courseId || -1;
@@ -30,16 +30,18 @@ const setForm = () => {
     form.courseDes = props.data?.courseDes || '';
     form.secretKey = props.data?.secretKey || '';
     form.picUrl = props.data?.picUrl || '';
-    form.language = props.data?.language || 0
-}
+    form.language = props.data?.language || 0;
+};
 
 props.data && watch(props.data, setForm);
 setForm();
 
 const formRules = reactive(courseRules);
-const getUrl = (url: string) => { form.picUrl = url; }
+const getUrl = (url: string) => {
+    form.picUrl = url;
+};
 
-// edit / create 参数判断
+// edit / create 传递参数存在courseId差异
 const getParams = () => {
     let obj = {
         courseName: form.courseName,
@@ -47,16 +49,13 @@ const getParams = () => {
         secretKey: form.secretKey,
         picUrl: form.picUrl,
         language: form.language,
-    }
-    if (form.courseId > 0) {
-        return Object.assign(
-            { courseId: form.courseId },
-            obj
-        )
+    };
+    if (props.type === 'edit') {
+        return Object.assign({ courseId: form.courseId }, obj);
     } else {
         return obj;
     }
-}
+};
 
 const commitForm = () => {
     refEl.value.validate((isPass: boolean, obj: any) => {
@@ -65,31 +64,33 @@ const commitForm = () => {
                 type: 'submit',
                 refEl: refEl,
                 onSuccTipClose: () => {
-                    props.closeDialog?.();
+                    emits('successCommit');
                 },
                 fetchApi: props.fetchApi,
-                params: getParams()
+                params: getParams(),
             });
         }
     });
-}
+};
 
 const resetForm = () => {
     refEl.value.resetFields();
-}
+};
 
 defineExpose({
     commitForm,
-    resetForm
-})
-
-
+    resetForm,
+});
 </script>
 
 <template>
     <el-form :model="form" :rules="formRules" ref="refEl">
         <el-form-item label="课程名称" :label-width="formLabelWidth" prop="courseName">
-            <el-input v-model="form.courseName" autocomplete="off" placeholder="请输入课程名称"></el-input>
+            <el-input
+                v-model="form.courseName"
+                autocomplete="off"
+                placeholder="请输入课程名称"
+            ></el-input>
         </el-form-item>
         <el-form-item label="课程描述" :label-width="formLabelWidth" prop="courseDes">
             <el-input
@@ -102,7 +103,11 @@ defineExpose({
             ></el-input>
         </el-form-item>
         <el-form-item label="修改密码" :label-width="formLabelWidth" prop="secretKey">
-            <el-input v-model="form.secretKey" autocomplete="off" placeholder="请输入修改的课程加入密码（6位）"></el-input>
+            <el-input
+                v-model="form.secretKey"
+                autocomplete="off"
+                placeholder="请输入修改的课程加入密码（6位）"
+            ></el-input>
         </el-form-item>
         <el-form-item label="课程语言" :label-width="formLabelWidth" prop="language">
             <el-radio-group v-model="form.language">
