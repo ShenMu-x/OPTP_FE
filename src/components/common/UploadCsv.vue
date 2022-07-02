@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { UploadFilled } from '@element-plus/icons-vue';
 import type {
     UploadFile,
     ElUploadProgressEvent,
     ElFile,
 } from 'element-plus/es/components/upload/src/upload.type';
-import { wrapHeaderWithToken, showFailWrap, showSuccessWrap } from '@/utils/helper';
+import { wrapHeaderWithToken, showFailWrap } from '@/utils/helper';
 
 const props = defineProps<{ uploadUrl: string; data?: any }>();
 const refUploadEl = ref();
@@ -18,8 +18,10 @@ const emits = defineEmits(['upload']);
 
 const handleFileSuccess = () => {
     emits('upload');
-    showSuccessWrap({
-        text: '导入成功',
+    ElMessageBox.alert('文件导入成功', '操作提示', {
+        confirmButtonText: '确定',
+        type: 'success',
+        lockScroll: false,
     });
     resetUpload();
 };
