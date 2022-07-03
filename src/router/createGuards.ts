@@ -5,7 +5,7 @@ import { getAccessToken } from "@/utils/storage";
 import { RoleEnum, HomePageMap } from "@/utils/option";
 import { isTeacher, isStudent, isManager, isAllowedRole, isRoleDefined } from "@/utils/helper";
 
-const pathsAllowNoLogin: ROUTE_NAME[] = [ROUTE_NAME.LOGIN, ROUTE_NAME.FORGET_PASSWORD];
+const pathsAllowNoLogin: ROUTE_NAME[] = [ROUTE_NAME.LOGIN];
 export const createRouterGuards = (router: Router) => {
     router.beforeEach(async (to, from, next) => {
         const isToPathInPathArray = (paths: any[]) => paths.filter(routeName => routeName == to.name).length > 0;

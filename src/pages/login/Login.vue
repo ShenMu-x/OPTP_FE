@@ -15,8 +15,7 @@ const form = reactive({
 
 const rules = reactive(getLoginRule());
 const labelWidth = ref('70px');
-const { routerToForgetPassword, routerToHome } = useDirect();
-const directToForgetPassword = () => routerToForgetPassword('direct');
+const { routerToHome } = useDirect();
 const loginHandler = () => {
     refFomeEl.value.validate((isPass: boolean) => {
         if (isPass) {
@@ -49,14 +48,6 @@ const loginHandler = () => {
                     prop="password"
                     :label-width="labelWidth"
                 >
-                    <template #label>
-                        <div class="passwordLabel">
-                            密码
-                            <div class="forgetPasswordBtn" @click="directToForgetPassword">
-                                修改密码
-                            </div>
-                        </div>
-                    </template>
                     <el-input
                         v-model="form.password"
                         show-password
@@ -89,22 +80,6 @@ const loginHandler = () => {
 
 .psw {
     position: relative;
-}
-
-.passwordLabel {
-    display: inline-block;
-    width: calc(100% - 12px);
-}
-.forgetPasswordBtn {
-    float: right;
-    position: relative;
-    transform: translateX(12px);
-    font-size: 14px;
-    color: @text-button-primary-color;
-    &:hover {
-        cursor: pointer;
-        color: @text-button-primary-hover-color;
-    }
 }
 
 .loginBtn {

@@ -22,15 +22,6 @@ const routes = [
         component: () => import('../pages/login/Login.vue')
     },
     {
-        path: '/login/authentication',
-        name: ROUTE_NAME.FORGET_PASSWORD,
-        meta: {
-            title: '密码修改页',
-            accessRole: RoleList
-        },
-        component: () => import('../pages/login/Authentication.vue'),
-    },
-    {
         path: `/ide/:${ParamsEnum.LabId}`,
         name: ROUTE_NAME.IDE,
         meta: {
