@@ -71,3 +71,17 @@ export const editAccountInfo: (data: editAccountReq) => ResType<any> = (data) =>
 export const getStudentCsvTemplate = () => {
     return exportCsv('/admin/user/export/template');
 }
+
+// 修改用户登录密码
+export const editAccountPassword: (data: {
+    user_id: number,
+    password: string
+}) => ResType<any> = (data) => {
+    return _axios({
+        method: "POST",
+        url: "/admin/user/password",
+        data,
+    })
+        .then(packEmptyData)
+        .catch(packError)
+}

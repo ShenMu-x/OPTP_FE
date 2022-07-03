@@ -74,7 +74,7 @@ defineExpose({
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="账号" :label-width="labelWidth" required>
-                        <el-input v-model="form.num" placeholder="请输入签到名称"></el-input>
+                        <el-input v-model="form.num" placeholder="请输入用户账号"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>

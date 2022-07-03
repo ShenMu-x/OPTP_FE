@@ -1,5 +1,3 @@
-import { validateEmail } from '@/utils/helper';
-
 export const createAccountRule = {
     number: [
         {
@@ -16,3 +14,13 @@ export const createAccountRule = {
         },
     ]
 };
+
+export const editAccountPasswordRule = {
+    password: [
+        {
+            required: true,
+            message: '请输入密码，6-8位，包含字母或数字',
+            trigger: 'blur',
+        }
+    ]
+}
