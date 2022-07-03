@@ -14,6 +14,7 @@ export const packCourse = (course: any): CourseType => {
         courseDes: course.course_des,
         picUrl: course.pic_url,
         secretKey: course.secret_key,
+        needAudit: course.need_audit,
         isClose: course.is_close,
         isEnroll: course.is_enroll,
         language: course.language,

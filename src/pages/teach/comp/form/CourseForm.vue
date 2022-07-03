@@ -22,6 +22,7 @@ const form = reactive({
     secretKey: '',
     picUrl: '',
     language: 0,
+    needAudit: true,
 });
 
 const setForm = () => {
@@ -29,6 +30,7 @@ const setForm = () => {
     form.courseName = props.data?.courseName || '';
     form.courseDes = props.data?.courseDes || '';
     form.secretKey = props.data?.secretKey || '';
+    form.needAudit = props.data?.needAudit ?? true;
     form.picUrl = props.data?.picUrl || '';
     form.language = props.data?.language || 0;
 };
@@ -46,9 +48,10 @@ const getParams = () => {
     let obj = {
         courseName: form.courseName,
         courseDes: form.courseDes,
-        secretKey: form.secretKey,
+        secretkey: form.secretKey,
         picUrl: form.picUrl,
         language: form.language,
+        needAudit: form.needAudit,
     };
     if (props.type === 'edit') {
         return Object.assign({ courseId: form.courseId }, obj);
@@ -84,7 +87,7 @@ defineExpose({
 </script>
 
 <template>
-    <el-form :model="form" :rules="formRules" ref="refEl">
+    <el-form :model="form" :rules="formRules" ref="refEl" label-position="left">
         <el-form-item label="课程名称" :label-width="formLabelWidth" prop="courseName">
             <el-input
                 v-model="form.courseName"
@@ -118,6 +121,14 @@ defineExpose({
         </el-form-item>
         <el-form-item label="课程封面" :label-width="formLabelWidth">
             <UploadAvatar :after-upload="getUrl" :avatarUrl="form.picUrl" />
+        </el-form-item>
+        <el-form-item label="是否需要对选课学生进行审核" label-width="230px">
+            <el-switch
+                v-model="form.needAudit"
+                style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                active-text="是"
+                inactive-text="否"
+            />
         </el-form-item>
     </el-form>
 </template>

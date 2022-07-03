@@ -11,12 +11,20 @@ interface createCourseReq {
     courseName: string,
     picUrl: string,
     language: number,
+    needAudit: boolean
 }
 export const createCourse: (params: createCourseReq) => ResType<any> = (params) => {
     return _axios({
         method: "POST",
         url: "/web/course",
-        data: params,
+        data: {
+            courseDes: params.courseDes,
+            secretkey: params.secretkey,
+            courseName: params.courseName,
+            picUrl: params.picUrl,
+            language: params.language,
+            need_audit: params.needAudit
+        },
     })
         .then(packEmptyData)
         .catch(packError)
@@ -30,12 +38,21 @@ interface editCourseReq {
     courseName: string,
     picUrl: string,
     language: number,
+    needAudit: boolean
 }
 export const editCourse: (params: editCourseReq) => ResType<any> = (params) => {
     return _axios({
         method: "PUT",
         url: "/web/course",
-        data: params,
+        data: {
+            courseId: params.courseId,
+            courseDes: params.courseDes,
+            secretkey: params.secretkey,
+            courseName: params.courseName,
+            picUrl: params.picUrl,
+            language: params.language,
+            need_audit: params.needAudit
+        },
     })
         .then(packEmptyData)
         .catch(packError)

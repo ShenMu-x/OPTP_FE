@@ -14,7 +14,7 @@ const { course, info } = toRefs(props);
         <CourseItem :course="course" class="courseCard" :heightAuto="true" />
         <TeacherInfo :info="info" class="teachInfo" />
     </div>
-    <ChooseCourse :courseId="course.courseId ?? 0" :isClose="course.isClose ?? false" />
+    <ChooseCourse :courseId="course.courseId ?? 0" :isClose="course.isClose ?? false" :needAudit="course.needAudit ?? true" />
 </template>
 
 <style lang="less" scoped>

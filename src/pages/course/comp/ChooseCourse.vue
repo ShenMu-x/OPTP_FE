@@ -4,34 +4,41 @@ import { askJoinInCourse } from '@/utils/services';
 import { showFailWrap, showSuccessWrap } from '@/utils/helper';
 
 const props = defineProps<{
-    courseId: number,
-    isClose: boolean,
+    courseId: number;
+    isClose: boolean;
+    needAudit: boolean;
 }>();
 const key = ref('');
 
 const submit = () => {
     if (key.value === '') {
         showFailWrap({
-            text: '选课密码不为空'
-        })
+            text: '选课密码不为空',
+        });
     } else {
         askJoinInCourse({
             courseId: props.courseId,
-            secretKey: key.value
-        }).then(res => {
+            secretKey: key.value,
+        }).then((res) => {
             if (res.code === 0) {
-                showSuccessWrap({
-                    text: '选课申请已发送'
-                })
+                if (props.needAudit) {
+                    showSuccessWrap({ text: '选课申请已发送' });
+                } else {
+                    showSuccessWrap({
+                        text: '选课成功！你已成功加入该课程！',
+                        closeCb: () => {
+                            window.document.location.reload();
+                        },
+                    });
+                }
             } else {
                 showFailWrap({
-                    text: res.errorMsg || '服务器出现问题，请稍后重试'
-                })
+                    text: res.errorMsg || '服务器出现问题，请稍后重试',
+                });
             }
-        })
+        });
     }
-}
-
+};
 </script>
 
 <template>
@@ -40,10 +47,16 @@ const submit = () => {
         <div v-if="props.isClose">本课程已结束，无法选课</div>
         <div class="courseKey" v-else>
             <div class="desc">请输入6位选课密码:</div>
-            <el-input type="text" maxlength="6" minlength="6" class="pswInput" v-model="key"></el-input>
+            <el-input
+                type="text"
+                maxlength="6"
+                minlength="6"
+                class="pswInput"
+                v-model="key"
+            ></el-input>
             <el-button class="submitBtn" type="primary" @click="submit">选课</el-button>
         </div>
-</div>
+    </div>
 </template>
 
 <style lang="less" scoped>
