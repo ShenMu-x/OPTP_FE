@@ -2,7 +2,7 @@ import _axios from "../axios";
 import { ResType, ListRes } from "../type";
 import { packError, packEmptyData, packPageRes } from "../pack";
 import { fmatTime } from "@/utils/helper";
-export interface courseType {
+export interface manageCourseType {
     courseId: number,
     name: string,
     description: string,
@@ -12,13 +12,15 @@ export interface courseType {
     isClosed: boolean,
     createdAt: string,
     updatedAt: string,
+    needAudit: boolean
 }
-const packCourse = (info: { course_id: any; name: any; description: any; language: any; secret_key: any; pic_url: any; is_close: any; created_at: any; updated_at: any; }) => ({
+const packCourse = (info: { course_id: any; name: any; description: any; language: any; secret_key: any; pic_url: any; is_close: any; created_at: any; updated_at: any; need_audit: any; }) => ({
     courseId: info.course_id,
     name: info.name,
     description: info.description,
     language: info.language,
     secretKey: info.secret_key,
+    needAudit: info.need_audit,
     picUrl: info.pic_url,
     isClosed: info.is_close,
     createdAt: fmatTime(info.created_at),
@@ -29,7 +31,7 @@ const packCourse = (info: { course_id: any; name: any; description: any; languag
 export const getAllCourse: (params: {
     pageCurrent: number,
     pageSize: number
-}) => ResType<ListRes<courseType>> = (params) => {
+}) => ResType<ListRes<manageCourseType>> = (params) => {
     return _axios({
         method: "GET",
         url: "/admin/course",
@@ -46,6 +48,7 @@ interface editCourseReq {
     secret_key: string,
     pic_url: string,
     is_closed: boolean;
+    need_aduit: boolean;
 }
 export const editCourseInfo: (data: editCourseReq) => ResType<any> = (data) => {
     return _axios({

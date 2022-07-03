@@ -2,17 +2,17 @@
 import { ref, reactive, toRef, watch } from 'vue';
 import UploadAvatar from '@/components/common/UploadAvatar.vue';
 import { comfirm, useDialog } from '@/utils/helper';
-import { editCourseInfo, courseType } from '@/utils/services';
+import { editCourseInfo, manageCourseType } from '@/utils/services';
 import { emptyCourse } from '../default';
 import { getCourseRule } from '../rules';
 
 const { isDialogOpen, openDialog, closeDialog } = useDialog();
 const refEl = ref();
 const labelWidth = '80px';
-const props = defineProps<{ course: courseType }>();
+const props = defineProps<{ course: manageCourseType }>();
 const course = toRef(props, 'course');
 const rules = ref(getCourseRule());
-const form = reactive(emptyCourse)
+const form = reactive({ ...emptyCourse });
 const refreshInfo = () => {
     form.courseId = course.value.courseId;
     form.name = course.value.name;
@@ -20,17 +20,22 @@ const refreshInfo = () => {
     form.secretKey = course.value?.secretKey;
     form.picUrl = course.value?.picUrl;
     form.isClosed = course.value?.isClosed;
-}
+    form.needAudit = course.value?.needAudit;
+};
 watch(course, (newV, oldV) => {
-    if (newV.courseId !== oldV.courseId) refreshInfo()
-})
-const emits = defineEmits(['submit'])
-const getUrl = (url: string) => { form.picUrl = url; }
+    if (newV.courseId !== oldV.courseId) refreshInfo();
+});
+const emits = defineEmits(['submit']);
+const getUrl = (url: string) => {
+    form.picUrl = url;
+};
 const submit = () => {
     comfirm({
         type: 'edit',
         refEl,
-        successCb: () => { emits('submit') },
+        successCb: () => {
+            emits('submit');
+        },
         finallyCb: closeDialog,
         fetchApi: editCourseInfo,
         params: {
@@ -40,16 +45,17 @@ const submit = () => {
             secret_key: form.secretKey,
             pic_url: form.picUrl,
             is_closed: form.isClosed,
-        }
-    })
-}
+            need_aduit: form.needAudit,
+        },
+    });
+};
 const cancle = () => {
     refEl?.value?.resetFields?.();
-    closeDialog()
-}
+    closeDialog();
+};
 defineExpose({
-    openPanel: openDialog
-})
+    openPanel: openDialog,
+});
 </script>
 
 <template>
@@ -72,6 +78,14 @@ defineExpose({
             </el-form-item>
             <el-form-item label="头像" :label-width="labelWidth">
                 <UploadAvatar :after-upload="getUrl" :avatarUrl="form.picUrl" />
+            </el-form-item>
+            <el-form-item label="是否需要对选课学生进行审核" label-width="230px">
+                <el-switch
+                    v-model="form.needAudit"
+                    style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                    active-text="是"
+                    inactive-text="否"
+                />
             </el-form-item>
         </el-form>
         <template #footer>

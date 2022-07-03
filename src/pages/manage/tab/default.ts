@@ -1,3 +1,4 @@
+// 管理员中Account与course部分数据字段与教师/学生端不同
 export const emptyAccount = {
     userId: 0,
     email: '',
@@ -18,4 +19,5 @@ export const emptyCourse = {
     isClosed: false,
     createdAt: '',
     updatedAt: '',
+    needAudit: true
 }
