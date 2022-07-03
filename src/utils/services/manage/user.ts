@@ -3,7 +3,6 @@ import { ResType, ListRes } from "../type";
 import { packError, packErrorWrap, packEmptyData, packPageRes } from "../pack";
 import { packAccountInfo } from "../packCommon";
 import { exportCsv } from "../exportCsv";
-import { userInfoType } from "@/type";
 export interface accountType {
     userId: number,
     email: string,

@@ -3,7 +3,8 @@ import { ref } from 'vue';
 import UserPanel from './tab/UserPanel.vue';
 import CoursePanel from './tab/CoursePanel.vue';
 import IDEPanel from './tab/IDEPanel.vue';
-const focusTab = ref('user')
+import MonitorPanel from './tab/MonitorPanel.vue';
+const focusTab = ref('user');
 </script>
 <template>
     <div class="courseCtrCt">
@@ -17,7 +18,11 @@ const focusTab = ref('user')
             <el-tab-pane label="实验管理" name="lab" lazy>
                 <IDEPanel />
             </el-tab-pane>
-        </el-tabs>  </div>
+            <el-tab-pane label="系统监控" name="monitor" lazy>
+                <MonitorPanel />
+            </el-tab-pane>
+        </el-tabs>
+    </div>
 </template>
 <style lang="less" scoped>
 .courseCtrCt {
